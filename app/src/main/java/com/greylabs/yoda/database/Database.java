@@ -1,0 +1,56 @@
+package com.greylabs.yoda.database;
+
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+import com.greylabs.yoda.models.TimeBox;
+
+import static com.greylabs.yoda.database.MetaData.*;
+
+/**
+ * Created by Jaybhay Vijay on 6/30/2015.
+ */
+public class Database extends SQLiteOpenHelper {
+    /**********************************************************************************************/
+    //Database Details
+    /**********************************************************************************************/
+    private static final String DATABASE_NAME="yoda";
+    private static final int DATABASE_VERSION=1;
+
+    /**********************************************************************************************/
+    //Instance and class variables
+    /**********************************************************************************************/
+    private static Database database;
+
+
+    /**********************************************************************************************/
+    //Database Init
+    /**********************************************************************************************/
+    private Database(Context context){
+        super(context,DATABASE_NAME,null,DATABASE_VERSION);
+    }
+
+    public static Database getInstance(Context context){
+        if(database==null)
+            database=new Database(context);
+        return database;
+    }
+
+    @Override
+    public void onCreate(SQLiteDatabase sqLiteDatabase) {
+        sqLiteDatabase.execSQL(TableTimeBoxOn.createTimeBoxOnTable);
+        sqLiteDatabase.execSQL(TableTimeBoxWhen.createTimeBoxWhenTable);
+        sqLiteDatabase.execSQL(TableTimeBox.createTimeBoxTable);
+        sqLiteDatabase.execSQL(TableGoal.createGoalTable);
+        sqLiteDatabase.execSQL(TableGoal.createTrigger);
+        sqLiteDatabase.execSQL(TablePendingStep.createPendingStepTable);
+        sqLiteDatabase.execSQL(TableCompletedStep.createCompletedStepTable);
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
+
+    }
+
+}
