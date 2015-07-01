@@ -49,7 +49,7 @@ public enum Month  implements SubValue{
     /**********************************************************************************************/
     // Methods
     /**********************************************************************************************/
-    public Month getIntegerToEnumType(int id){
+    public static Month getIntegerToEnumType(int id){
         Month month=null;
         switch (id){
             case 0: month= WEEK1;break;
@@ -60,7 +60,7 @@ public enum Month  implements SubValue{
         return month;
     }
 
-    public int getEnumToIntegerType(Month month){
+    public static int getEnumToIntegerType(Month month){
         int intValue=0;
         switch (month){
             case WEEK1:intValue=0;break;

@@ -19,7 +19,7 @@ public class MetaData {
         public static final String reward="reward";
         public static final String buddyEmail="buddyEmail";
         public static final String status="status";
-        public static final String order="order";
+        public static final String order="orderValue";
         public static final String dueDate="dueDate";
         public static final String timeBoxId="timeBoxId";//FK to timebox
 
@@ -52,7 +52,7 @@ public class MetaData {
                 "begin" +
                 "    delete from  "+TablePendingStep.pendingStep+" " +
                 "    where "+goal+"."+id+"="+ TablePendingStep.pendingStep+"."+TablePendingStep.goalId+"" +
-                "end  ";
+                " end  ";
     }
 
     public static class TablePendingStep{
@@ -100,8 +100,8 @@ public class MetaData {
         public static final String timeBox="timeBox";//table name
         public static final String id="id";
         public static final String nickName="nickName";
-        public static final String on="on";
-        public static final String till="till";
+        public static final String on="onType";
+        public static final String till="tillType";
 
         public static final String createTimeBoxTable="" +
                 "create table  "+timeBox+" ( " +
@@ -117,12 +117,12 @@ public class MetaData {
     public static class TableTimeBoxOn{
         public static final String timeBoxOn="timeBoxOn";//table name
         public static final String id="id";//FK to TimeBox
-        public static final String on="on";
+        public static final String on="onType";
 
 
         public static final String createTimeBoxOnTable="" +
                 "create table  "+timeBoxOn+" ( " +
-                " "+id+" integer primary key autoincrement, " +
+                " "+id+" integer , " +
                 " "+on+" integer ," +
                 " "+"foreign key("+id+") references "+ TableTimeBox.timeBox+"("+ TableTimeBox.id+") " +
                 ")";
@@ -131,7 +131,7 @@ public class MetaData {
     public static class TableTimeBoxWhen{
         public static final String timeBoxWhen="timeBoxWhen";//table name
         public static final String id="id";//FK to TimeBox
-        public static final String when="when";
+        public static final String when="whenType";
 
         public static final String createTimeBoxWhenTable="" +
                 "create table  "+timeBoxWhen+" ( " +

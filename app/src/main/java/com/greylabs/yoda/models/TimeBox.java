@@ -9,14 +9,7 @@ import com.greylabs.yoda.database.Database;
 import com.greylabs.yoda.database.MetaData.TableTimeBox;
 import com.greylabs.yoda.database.MetaData.TableTimeBoxOn;
 import com.greylabs.yoda.database.MetaData.TableTimeBoxWhen;
-
-import com.greylabs.yoda.enums.SubValue;
-import com.greylabs.yoda.enums.TimeBoxOn;
-import com.greylabs.yoda.enums.TimeBoxTill;
-import com.greylabs.yoda.enums.TimeBoxWhen;
-
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -66,6 +59,7 @@ public class TimeBox {
         this.timeBoxTillType = timeBoxTillType;
     }
 
+
     /**********************************************************************************************/
     // Constructors
     /**********************************************************************************************/
@@ -105,7 +99,7 @@ public class TimeBox {
                 " "+" from "+ TableTimeBox.timeBox+" " +
                 " "+"where "+TableTimeBox.id+" = "+id;
 
-        Cursor c=db.rawQuery(query,null);
+        Cursor c=db.rawQuery(query, null);
         if(c.moveToFirst()){
             timeBoxes=new ArrayList<>();
             do{
@@ -134,7 +128,7 @@ public class TimeBox {
 
         long rowId=db.insertWithOnConflict(TableTimeBox.timeBox, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         db.close();
-
+        this.id=rowId;
         return rowId;
     }
 
@@ -167,6 +161,23 @@ public class TimeBox {
         return timeBoxOnSubValues;
     }
 
+    public long saveTimeBoxOn(long timeBoxId,List<Integer> timeBoxOns){
+        SQLiteDatabase db=database.getWritableDatabase();
+        long rowId=0;
+        for(int val:timeBoxOns) {
+            ContentValues values = new ContentValues();
+            values.put(TableTimeBoxOn.id, timeBoxId);
+            values.put(TableTimeBoxOn.on, val);
+            rowId += db.insertWithOnConflict(TableTimeBoxOn.timeBoxOn, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        }
+        db.close();
+        return rowId;
+    }
+
+
+
+
+
     public List<Integer> getTimeBoxWhen(long timeBoxId){
         ArrayList<Integer> timeBoxWhenSubValues=null;
         SQLiteDatabase db=database.getReadableDatabase();
@@ -189,7 +200,17 @@ public class TimeBox {
         return timeBoxWhenSubValues;
     }
 
-
-
+    public long saveTimeBoxWhen(long timeBoxId,List<Integer> timeBoxWhens){
+        SQLiteDatabase db=database.getWritableDatabase();
+        long rowId=0;
+        for(int val:timeBoxWhens) {
+            ContentValues values = new ContentValues();
+            values.put(TableTimeBoxOn.id, timeBoxId);
+            values.put(TableTimeBoxOn.on, val);
+            rowId += db.insertWithOnConflict(TableTimeBoxWhen.timeBoxWhen, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        }
+        db.close();
+        return rowId;
+    }
 
 }

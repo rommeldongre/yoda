@@ -61,7 +61,7 @@ public enum WeekDay implements SubValue {
     /**********************************************************************************************/
     // Methods
     /**********************************************************************************************/
-    public WeekDay getIntegerToEnumType(int id){
+    public static  WeekDay getIntegerToEnumType(int id){
         WeekDay weekDay=null;
         switch (id){
             case 0: weekDay= SUNDAY;break;
@@ -75,7 +75,7 @@ public enum WeekDay implements SubValue {
         return weekDay;
     }
 
-    public int getEnumToIntegerType(WeekDay weekDay){
+    public static int getEnumToIntegerType(WeekDay weekDay){
         int intValue=0;
         switch (weekDay){
             case SUNDAY:intValue=0;break;

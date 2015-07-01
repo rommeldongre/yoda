@@ -71,7 +71,7 @@ public enum TimeBoxWhen {
     /**********************************************************************************************/
     // Methods
     /**********************************************************************************************/
-    public TimeBoxWhen getIntegerToEnumType(int id){
+    public static  TimeBoxWhen getIntegerToEnumType(int id){
         TimeBoxWhen timeBoxWhen=null;
         switch (id){
             case 0: timeBoxWhen= EARLY_MORNING;break;
@@ -84,7 +84,7 @@ public enum TimeBoxWhen {
         return timeBoxWhen;
     }
 
-    public int getEnumToIntegerType(TimeBoxWhen timeBoxWhen){
+    public static int getEnumToIntegerType(TimeBoxWhen timeBoxWhen){
         int intValue=0;
         switch (timeBoxWhen){
             case EARLY_MORNING:intValue=0;break;

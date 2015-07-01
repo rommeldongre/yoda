@@ -49,7 +49,7 @@ public enum Quarter implements SubValue {
     /**********************************************************************************************/
     // Methods
     /**********************************************************************************************/
-    public Quarter getIntegerToEnumType(int id){
+    public static Quarter getIntegerToEnumType(int id){
         Quarter quarter=null;
         switch (id){
             case 0: quarter= MONTH1;break;
@@ -59,7 +59,7 @@ public enum Quarter implements SubValue {
         return quarter;
     }
 
-    public int getEnumToIntegerType(Quarter quarter){
+    public static int getEnumToIntegerType(Quarter quarter){
         int intValue=0;
         switch (quarter){
             case MONTH1:intValue=0;break;

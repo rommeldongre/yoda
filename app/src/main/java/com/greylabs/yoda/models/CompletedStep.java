@@ -114,7 +114,7 @@ public class CompletedStep {
 
         long rowId=db.insertWithOnConflict(TableCompletedStep.completedStep, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         db.close();
-
+        this.id=rowId;
         return rowId;
     }
 

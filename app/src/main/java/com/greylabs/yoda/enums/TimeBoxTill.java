@@ -50,7 +50,7 @@ public enum TimeBoxTill {
     /**********************************************************************************************/
     // Methods
     /**********************************************************************************************/
-    public TimeBoxTill getIntegerToEnumType(int id){
+    public static TimeBoxTill getIntegerToEnumType(int id){
         TimeBoxTill timeBoxTill=null;
         switch (id){
             case 0: timeBoxTill= WEEK;break;
@@ -62,7 +62,7 @@ public enum TimeBoxTill {
         return timeBoxTill;
     }
 
-    public int getEnumToIntegerType(TimeBoxTill timeBoxTill){
+    public static int getEnumToIntegerType(TimeBoxTill timeBoxTill){
         int intValue=0;
         switch (timeBoxTill){
             case WEEK:intValue=0;break;

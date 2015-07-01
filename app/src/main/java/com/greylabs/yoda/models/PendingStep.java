@@ -178,7 +178,7 @@ public class PendingStep {
 
         long rowId=db.insertWithOnConflict(TablePendingStep.pendingStep, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         db.close();
-
+        this.id=rowId;
         return rowId;
     }
 

@@ -60,7 +60,7 @@ public enum TimeBoxOn {
     /**********************************************************************************************/
     // Methods
     /**********************************************************************************************/
-    public TimeBoxOn getIntegerToEnumType(int id){
+    public static TimeBoxOn getIntegerToEnumType(int id){
         TimeBoxOn timeBoxOn=null;
         switch (id){
             case 0: timeBoxOn= DAILY;break;
@@ -72,7 +72,7 @@ public enum TimeBoxOn {
         return timeBoxOn;
     }
 
-    public int getEnumToIntegerType(TimeBoxOn timeBoxOn){
+    public static int getEnumToIntegerType(TimeBoxOn timeBoxOn){
         int intValue=0;
         switch (timeBoxOn){
             case DAILY:intValue=0;break;

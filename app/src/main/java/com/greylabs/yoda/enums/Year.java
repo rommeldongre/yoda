@@ -69,7 +69,7 @@ public enum Year implements SubValue{
     /**********************************************************************************************/
     // Methods
     /**********************************************************************************************/
-    public Year getIntegerToEnumType(int id){
+    public static  Year getIntegerToEnumType(int id){
         Year year=null;
         switch (id){
             case 0: year= JANUARY;break;
@@ -89,7 +89,7 @@ public enum Year implements SubValue{
         return year;
     }
 
-    public int getEnumToIntegerType(Year year){
+    public static  int getEnumToIntegerType(Year year){
         int intValue=0;
         switch (year){
             case JANUARY:intValue=0;break;

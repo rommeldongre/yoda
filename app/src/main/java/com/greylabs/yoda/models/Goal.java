@@ -132,6 +132,7 @@ public class Goal {
     public Goal(Context context){
         this.database=Database.getInstance(context);
         this.context=context;
+        dueDate=new Timestamp(new Date().getTime());
     }
 
     /**********************************************************************************************/
@@ -189,7 +190,7 @@ public class Goal {
         return goals;
     }
 
-    public long save(){
+    public long save() {
         SQLiteDatabase db=database.getWritableDatabase();
 
         ContentValues values=new ContentValues();
@@ -206,7 +207,7 @@ public class Goal {
         values.put(TableGoal.timeBoxId, this.timeBoxId);
         long rowId=db.insertWithOnConflict(TableGoal.goal, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         db.close();
-
+        this.id=rowId;
         return rowId;
     }
 
