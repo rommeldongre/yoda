@@ -2,6 +2,8 @@ package com.greylabs.yoda.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 
@@ -9,12 +11,17 @@ import com.greylabs.yoda.R;
 import com.greylabs.yoda.views.GoalView;
 import com.greylabs.yoda.views.MyArcProgress;
 
-public class ActHome extends Activity{
+import net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu;
+
+public class ActHome extends Activity implements View.OnClickListener {
 
     HorizontalScrollView scrollView;
     LinearLayout linearLayout;
     GoalView btnAddGoal;
     MyArcProgress arcTotalProgress;
+    FloatingActionButton btnAddStep;
+    FloatingActionsMenu btnSettings;
+    FloatingActionButton btnFilters;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,11 +39,17 @@ public class ActHome extends Activity{
     private void initialize() {
         scrollView = (HorizontalScrollView) findViewById(R.id.scrollViewActHome);
         arcTotalProgress = (MyArcProgress) findViewById(R.id.arcTotalProgressActHome);
-        setStyleToArcTotalProgress();
-        linearLayout = new LinearLayout(this);
-        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+        btnAddStep = (FloatingActionButton) findViewById(R.id.btnAddStepActHome);
+        btnFilters = (FloatingActionButton) findViewById(R.id.btnFilterActHome);
+        btnSettings = (FloatingActionsMenu) findViewById(R.id.btnSettingsActHome);
 
+
+        setStyleToArcTotalProgress();
         getGoalsFromLocalAndPopulate();
+        arcTotalProgress.setOnClickListener(this);
+        btnAddStep.setOnClickListener(this);
+        btnFilters.setOnClickListener(this);
+        btnSettings.setOnClickListener(this);
     }
 
     private void setStyleToArcTotalProgress() {
@@ -63,6 +76,9 @@ public class ActHome extends Activity{
     }
 
     private void getGoalsFromLocalAndPopulate() {
+        linearLayout = new LinearLayout(this);
+        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+
         //add all the goals from db here loop
         for(int i=0; i<7; i++){
             GoalView goalView = new GoalView(this);
@@ -74,5 +90,22 @@ public class ActHome extends Activity{
         linearLayout.addView(btnAddGoal);
 
         scrollView.addView(linearLayout);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.arcTotalProgressActHome :
+                break;
+
+            case R.id.btnAddStepActHome :
+                break;
+
+            case R.id.btnFilterActHome :
+                break;
+
+            case R.id.btnSettingsActHome :
+                break;
+        }
     }
 }

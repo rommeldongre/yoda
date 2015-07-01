@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="10dip"
-    android:background="@drawable/background_temp"
-    >
+    android:background="@drawable/background_temp">
     <HorizontalScrollView
         android:id="@+id/scrollViewActHome"
         android:layout_width="match_parent"
@@ -16,14 +17,44 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        ></LinearLayout>
+        android:layout_alignParentBottom="true"
+        >
+        <!--<net.i2p.android.ext.floatingactionbutton.AddFloatingActionButton-->
+            <!--android:id="@+id/btnAddStepActHome"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:layout_height="wrap_content"/>-->
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btnAddStepActHome"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+
+            app:elevation="4dp"
+            app:borderWidth="5dp"
+            />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/btnFilterActHome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+
+        <net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu
+            android:id="@+id/btnSettingsActHome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"/>
+    </LinearLayout>
 
     <com.greylabs.yoda.views.MyArcProgress
         android:id="@+id/arcTotalProgressActHome"
         android:background="@color/transperent"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:layout_below="@id/scrollViewActHome"
+        android:layout_width="200dip"
+        android:layout_height="200dip"
+        android:layout_above="@id/BottomLayoutActHome"
+        android:layout_margin="15dip"
         />
 
 </RelativeLayout>

@@ -13,7 +13,6 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.github.lzyzsd.circleprogress.CircleProgress;
 import com.github.lzyzsd.circleprogress.Utils;
 import com.greylabs.yoda.R;
 
@@ -320,11 +319,11 @@ public class MyArcProgress extends View {
         // divider line
         Paint paintLine = new Paint();
         paintLine.setColor(this.dividerColor);
-        canvas.drawLine(this.rectF.left+this.getStrokeWidth(), this.rectF.centerY(), this.rectF.right-this.getStrokeWidth(),this.rectF.centerY(), paintLine);
+        canvas.drawLine(this.rectF.left + this.getStrokeWidth(), this.rectF.centerY(), this.rectF.right - this.getStrokeWidth(), this.rectF.centerY(), paintLine);
 
         // two arcs
         this.paint.setColor(this.unfinishedStrokeColor);
-//        this.paint.getStrokeCap();se
+        this.paint.setStrokeCap(Paint.Cap.BUTT);
         canvas.drawArc(this.rectF, startAngle, this.arcAngle, false, this.paint);
         this.paint.setColor(this.finishedStrokeColor);
         canvas.drawArc(this.rectF, startAngle, finishedSweepAngle, false, this.paint);
