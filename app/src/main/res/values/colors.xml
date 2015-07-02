@@ -2,6 +2,9 @@
 <resources>
     <color name="ColorPrimary">#E64A19</color>
     <color name="ColorPrimaryDark">#000000</color>
+    <color name="transperent_less">#55000000</color>
+    <color name="transperent_more">#22000000</color>
+
     <color name="white">#FFFF</color>
     <color name="gray">#939393</color>
     <color name="luminous_green">#7CFC00</color>
@@ -9,6 +12,17 @@
     <color name="dark_transperent">#44000000</color>
     <color name="black">#000000</color>
     <color name="gray_unfinished_progress">#837d7b</color>
-    <color name="temp_transperent">#33000000</color>
+    <color name="transperent_total_arc_background">#33000000</color>
+    <color name="transperent_white">#33ffffff</color>
     <!--<color name="temp_transperent">#44FFFFFF</color>-->
+
+    <color name="black_semi_transparent">#B2000000</color>
+    <color name="background">#e5e5e5</color>
+    <color name="half_black">#808080</color>
+    <color name="white_pressed">#f1f1f1</color>
+    <color name="pink">#e91e63</color>
+    <color name="pink_pressed">#ec407a</color>
+    <color name="blue_semi_transparent">#805677fc</color>
+    <color name="blue_semi_transparent_pressed">#80738ffe</color>
+    <color name="transperent_dark_white">#88ffffff</color>
 </resources>

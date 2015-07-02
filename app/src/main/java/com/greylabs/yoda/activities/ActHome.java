@@ -2,26 +2,33 @@ package com.greylabs.yoda.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.views.GoalView;
 import com.greylabs.yoda.views.MyArcProgress;
+import com.greylabs.yoda.views.MyFloatingActionsMenu;
 
+import net.i2p.android.ext.floatingactionbutton.FloatingActionButton;
 import net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu;
 
-public class ActHome extends Activity implements View.OnClickListener {
+
+public class ActHome extends Activity implements View.OnClickListener, FloatingActionsMenu.OnFloatingActionsMenuUpdateListener, MyFloatingActionsMenu.OnFloatingActionsMenuUpdateListener {
 
     HorizontalScrollView scrollView;
     LinearLayout linearLayout;
+    RelativeLayout backgroundLayout;
     GoalView btnAddGoal;
     MyArcProgress arcTotalProgress;
     FloatingActionButton btnAddStep;
-    FloatingActionsMenu btnSettings;
-    FloatingActionButton btnFilters;
+//    FloatingActionsMenu btnSettings;
+
+    MyFloatingActionsMenu btnSettings;
+//    FloatingActionButton btnFilters;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,19 +44,21 @@ public class ActHome extends Activity implements View.OnClickListener {
     }
 
     private void initialize() {
+        backgroundLayout = (RelativeLayout) findViewById(R.id.LayoutToBeHidden);
         scrollView = (HorizontalScrollView) findViewById(R.id.scrollViewActHome);
         arcTotalProgress = (MyArcProgress) findViewById(R.id.arcTotalProgressActHome);
         btnAddStep = (FloatingActionButton) findViewById(R.id.btnAddStepActHome);
-        btnFilters = (FloatingActionButton) findViewById(R.id.btnFilterActHome);
-        btnSettings = (FloatingActionsMenu) findViewById(R.id.btnSettingsActHome);
+//        btnFilters = (FloatingActionButton) findViewById(R.id.btnFilterActHome);
+        btnSettings = (MyFloatingActionsMenu) findViewById(R.id.btnSettingsActHome);
 
 
         setStyleToArcTotalProgress();
         getGoalsFromLocalAndPopulate();
         arcTotalProgress.setOnClickListener(this);
         btnAddStep.setOnClickListener(this);
-        btnFilters.setOnClickListener(this);
-        btnSettings.setOnClickListener(this);
+//        btnFilters.setOnClickListener(this);
+//        btnSettings.setOnClickListener(this);
+        btnSettings.setOnFloatingActionsMenuUpdateListener(this);
     }
 
     private void setStyleToArcTotalProgress() {
@@ -57,7 +66,7 @@ public class ActHome extends Activity implements View.OnClickListener {
         arcTotalProgress.setStrokeWidth(30);
         arcTotalProgress.setFinishedStrokeColor(getResources().getColor(R.color.luminous_green));
         arcTotalProgress.setUnfinishedStrokeColor(getResources().getColor(R.color.gray_unfinished_progress));
-        arcTotalProgress.setBackgroundCircleColor(getResources().getColor(R.color.temp_transperent));
+        arcTotalProgress.setBackgroundCircleColor(getResources().getColor(R.color.transperent_total_arc_background));
         arcTotalProgress.setDividerColor(getResources().getColor(R.color.gray));
 //        arcTotalProgress.setArcAngle(330);
 
@@ -101,11 +110,27 @@ public class ActHome extends Activity implements View.OnClickListener {
             case R.id.btnAddStepActHome :
                 break;
 
-            case R.id.btnFilterActHome :
-                break;
+//            case R.id.btnFilterActHome :
+//                break;
 
-            case R.id.btnSettingsActHome :
-                break;
+//            case R.id.btnSettingsActHome :
+//                if(btnSettings.isExpanded()){
+//                    backgroundLayout.setBackgroundColor(getResources().getColor(R.color.transperent_dark_white));
+//                    Toast.makeText(this, "hshs", Toast.LENGTH_SHORT).show();
+//                }else {
+//                    backgroundLayout.setBackgroundColor(getResources().getColor(R.color.transperent));
+//                }
+//                break;
         }
+    }
+
+    @Override
+    public void onMenuExpanded() {
+        backgroundLayout.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onMenuCollapsed() {
+        backgroundLayout.setVisibility(View.VISIBLE);
     }
 }

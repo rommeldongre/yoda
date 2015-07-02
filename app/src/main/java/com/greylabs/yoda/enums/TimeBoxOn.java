@@ -2,9 +2,6 @@ package com.greylabs.yoda.enums;
 
 import java.util.List;
 
-/**
- * Created by Jaybhay Vijay on 6/30/2015.
- */
 public enum TimeBoxOn {
     /**********************************************************************************************/
     // Enum Constants

@@ -1,8 +1,5 @@
 package com.greylabs.yoda.enums;
 
-/**
- * Created by Jaybhay Vijay on 6/30/2015.
- */
 public enum WeekDay implements SubValue {
     /**********************************************************************************************/
     // Enum Constants
