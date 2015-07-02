@@ -111,6 +111,21 @@ public class PendingStep {
     /**********************************************************************************************/
     // Methods
     /**********************************************************************************************/
+
+    @Override
+    public String toString() {
+        return "PendingStep{" +
+                "id=" + id +
+                ", nickName='" + nickName + '\'' +
+                ", priority=" + priority +
+                ", time=" + time +
+                ", series=" + series +
+                ", stepCount=" + stepCount +
+                ", skipCount=" + skipCount +
+                ", goalId=" + goalId +
+                '}';
+    }
+
     public PendingStep get(long id){
         SQLiteDatabase db=database.getReadableDatabase();
         String query="select * " +
@@ -167,7 +182,6 @@ public class PendingStep {
         SQLiteDatabase db=database.getWritableDatabase();
 
         ContentValues values=new ContentValues();
-        values.put(TablePendingStep.id,this.id);
         values.put(TablePendingStep.nickName,this.nickName);
         values.put(TablePendingStep.priority,this.priority);
         values.put(TablePendingStep.time,this.time);
@@ -175,8 +189,11 @@ public class PendingStep {
         values.put(TablePendingStep.stepCount,this.stepCount);
         values.put(TablePendingStep.skipCount,this.skipCount);
         values.put(TablePendingStep.goalId, this.goalId);
-
-        long rowId=db.insertWithOnConflict(TablePendingStep.pendingStep, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        long rowId;
+        if(this.id!=0){
+            values.put(TablePendingStep.id,this.id);
+        }
+        rowId=db.insertWithOnConflict(TablePendingStep.pendingStep, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         db.close();
         this.id=rowId;
         return rowId;

@@ -138,6 +138,23 @@ public class Goal {
     /**********************************************************************************************/
     // Methods
     /**********************************************************************************************/
+
+    @Override
+    public String toString() {
+        return "Goal{" +
+                "id=" + id +
+                ", nickName='" + nickName + '\'' +
+                ", objective='" + objective + '\'' +
+                ", keyResult='" + keyResult + '\'' +
+                ", reason='" + reason + '\'' +
+                ", reward='" + reward + '\'' +
+                ", buddyEmail='" + buddyEmail + '\'' +
+                ", status=" + status +
+                ", order=" + order +
+                ", dueDate=" + dueDate +
+                ", timeBoxId=" + timeBoxId +
+                '}';
+    }
     public Goal get(long id){
         SQLiteDatabase db=database.getReadableDatabase();
         String query="select * " +
@@ -194,7 +211,6 @@ public class Goal {
         SQLiteDatabase db=database.getWritableDatabase();
 
         ContentValues values=new ContentValues();
-        values.put(TableGoal.id,this.id);
         values.put(TableGoal.nickName,this.nickName);
         values.put(TableGoal.objective,this.objective);
         values.put(TableGoal.keyResult,this.keyResult);
@@ -205,7 +221,11 @@ public class Goal {
         values.put(TableGoal.order,this.order);
         values.put(TableGoal.dueDate,this.dueDate.toString());
         values.put(TableGoal.timeBoxId, this.timeBoxId);
-        long rowId=db.insertWithOnConflict(TableGoal.goal, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        long rowId;
+        if (this.id!=0){
+            values.put(TableGoal.id,this.id);
+        }
+        rowId=db.insertWithOnConflict(TableGoal.goal, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         db.close();
         this.id=rowId;
         return rowId;

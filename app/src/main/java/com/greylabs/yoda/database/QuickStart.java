@@ -16,6 +16,7 @@ import java.util.ArrayList;
  */
 public final class QuickStart {
 
+    //static int rowsAdded=0;
     ArrayList<Long> timeBoxIds;
     ArrayList<Long> goalIds;
 
@@ -28,6 +29,7 @@ public final class QuickStart {
     public void quickStart(){
         addDefaultTimeBoxes();
         addDefaultsGoals();
+        addDefaultSteps();
     }
 
     private void addDefaultTimeBoxes(){

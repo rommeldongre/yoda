@@ -72,6 +72,17 @@ public class TimeBox {
     /**********************************************************************************************/
     // Methods
     /**********************************************************************************************/
+
+    @Override
+    public String toString() {
+        return "TimeBox{" +
+                "id=" + id +
+                ", nickName='" + nickName + '\'' +
+                ", timeBoxOnType=" + timeBoxOnType +
+                ", timeBoxTillType=" + timeBoxTillType +
+                '}';
+    }
+
     public TimeBox get(long id){
         SQLiteDatabase db=database.getReadableDatabase();
         String query="select * " +
@@ -96,8 +107,7 @@ public class TimeBox {
         ArrayList<TimeBox> timeBoxes=null;
         SQLiteDatabase db=database.getReadableDatabase();
         String query="select * " +
-                " "+" from "+ TableTimeBox.timeBox+" " +
-                " "+"where "+TableTimeBox.id+" = "+id;
+                " "+" from "+ TableTimeBox.timeBox+" ";
 
         Cursor c=db.rawQuery(query, null);
         if(c.moveToFirst()){
@@ -121,12 +131,14 @@ public class TimeBox {
         SQLiteDatabase db=database.getWritableDatabase();
 
         ContentValues values=new ContentValues();
-        values.put(TableTimeBox.id,this.id);
         values.put(TableTimeBox.nickName,this.nickName);
-        values.put(TableTimeBox.on,this.timeBoxOnType);
+        values.put(TableTimeBox.on, this.timeBoxOnType);
         values.put(TableTimeBox.till, this.timeBoxTillType);
-
-        long rowId=db.insertWithOnConflict(TableTimeBox.timeBox, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        long rowId;
+        if(this.id!=0){
+            values.put(TableTimeBox.id,this.id);
+        }
+        rowId=db.insertWithOnConflict(TableTimeBox.timeBox, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         db.close();
         this.id=rowId;
         return rowId;
@@ -205,8 +217,8 @@ public class TimeBox {
         long rowId=0;
         for(int val:timeBoxWhens) {
             ContentValues values = new ContentValues();
-            values.put(TableTimeBoxOn.id, timeBoxId);
-            values.put(TableTimeBoxOn.on, val);
+            values.put(TableTimeBoxWhen.id, timeBoxId);
+            values.put(TableTimeBoxWhen.when, val);
             rowId += db.insertWithOnConflict(TableTimeBoxWhen.timeBoxWhen, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         }
         db.close();

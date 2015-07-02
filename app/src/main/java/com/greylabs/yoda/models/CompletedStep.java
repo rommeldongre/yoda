@@ -64,6 +64,15 @@ public class CompletedStep {
     /**********************************************************************************************/
     // Methods
     /**********************************************************************************************/
+    @Override
+    public String toString() {
+        return "CompletedStep{" +
+                "id=" + id +
+                ", series=" + series +
+                ", stepCount=" + stepCount +
+                '}';
+    }
+
     public CompletedStep get(long id){
         SQLiteDatabase db=database.getReadableDatabase();
         String query="select * " +
@@ -111,8 +120,11 @@ public class CompletedStep {
         ContentValues values=new ContentValues();
         values.put(TableCompletedStep.series,this.series);
         values.put(TableCompletedStep.stepCount,this.stepCount);
-
-        long rowId=db.insertWithOnConflict(TableCompletedStep.completedStep, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+        long rowId;
+        if(this.id!=0){
+            values.put(TableCompletedStep.id,this.id);
+        }
+        rowId=db.insertWithOnConflict(TableCompletedStep.completedStep, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         db.close();
         this.id=rowId;
         return rowId;
