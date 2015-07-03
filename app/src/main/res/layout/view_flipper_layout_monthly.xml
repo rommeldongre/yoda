@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:id="@+id/llActCreateTimeBoxOnMonthly"
+    android:visibility="gone"
+    >
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1 Week"
+        android:id="@+id/cbActCreateTimeBoxOnMonthly1Week"
+        android:checked="false" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2 Week"
+        android:id="@+id/cbActCreateTimeBoxOnMonthly2Week"
+        android:checked="false" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="3 Week"
+        android:id="@+id/cbActCreateTimeBoxOnMonthly3Week"
+        android:checked="false" />
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="4 Week"
+        android:id="@+id/cbActCreateTimeBoxOnMonthly4Week"
+        android:layout_gravity="center_horizontal"
+        android:checked="false" />
+</LinearLayout>

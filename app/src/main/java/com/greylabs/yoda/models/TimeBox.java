@@ -9,6 +9,7 @@ import com.greylabs.yoda.database.Database;
 import com.greylabs.yoda.database.MetaData.TableTimeBox;
 import com.greylabs.yoda.database.MetaData.TableTimeBoxOn;
 import com.greylabs.yoda.database.MetaData.TableTimeBoxWhen;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +26,8 @@ public class TimeBox {
     private int  timeBoxTillType;
     private Context context;
     private Database database;
+    private TimeBoxOn timeBoxOn;
+    private TimeBoxWhen timeBoxWhen;
 
     /**********************************************************************************************/
     //Getters and Setters
@@ -59,6 +62,20 @@ public class TimeBox {
         this.timeBoxTillType = timeBoxTillType;
     }
 
+    public TimeBoxOn getTimeBoxOn() {
+        return timeBoxOn;
+    }
+    public void setTimeBoxOn(TimeBoxOn timeBoxOn) {
+        this.timeBoxOn = timeBoxOn;
+    }
+
+    public TimeBoxWhen getTimeBoxWhen() {
+        return timeBoxWhen;
+    }
+
+    public void setTimeBoxWhen(TimeBoxWhen timeBoxWhen) {
+        this.timeBoxWhen = timeBoxWhen;
+    }
 
     /**********************************************************************************************/
     // Constructors
@@ -100,6 +117,10 @@ public class TimeBox {
         }
         c.close();
         db.close();
+        this.timeBoxOn=new TimeBoxOn(context,this.id,this.timeBoxOnType);
+        this.timeBoxOn.setSubValues(this.timeBoxOn.get());
+        this.timeBoxWhen=new TimeBoxWhen(context,this.id);
+        this.timeBoxWhen.setWhenValues(this.timeBoxWhen.get());
         return this;
     }
 
@@ -118,6 +139,10 @@ public class TimeBox {
                 timeBox.nickName=c.getString(c.getColumnIndex(TableTimeBox.nickName));
                 timeBox.timeBoxOnType=c.getInt(c.getColumnIndex(TableTimeBox.on));
                 timeBox.timeBoxTillType=c.getInt(c.getColumnIndex(TableTimeBox.till));
+                this.timeBoxOn=new TimeBoxOn(context,this.id,this.timeBoxOnType);
+                this.timeBoxOn.setSubValues(this.timeBoxOn.get());
+                this.timeBoxWhen=new TimeBoxWhen(context,this.id);
+                this.timeBoxWhen.setWhenValues(this.timeBoxWhen.get());
                 timeBoxes.add(timeBox);
 
             }while (c.moveToNext());
@@ -140,6 +165,8 @@ public class TimeBox {
         }
         rowId=db.insertWithOnConflict(TableTimeBox.timeBox, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         db.close();
+        this.timeBoxOn.save();
+        this.timeBoxWhen.save();
         this.id=rowId;
         return rowId;
     }
@@ -148,6 +175,8 @@ public class TimeBox {
         SQLiteDatabase db=database.getWritableDatabase();
         int numOfRowAffected=db.delete(TableTimeBox.timeBox, TableTimeBox.id + "=" + id, null);
         db.close();
+        this.timeBoxOn.delete();
+        this.timeBoxWhen.delete();
         return numOfRowAffected;
     }
 
@@ -224,5 +253,4 @@ public class TimeBox {
         db.close();
         return rowId;
     }
-
 }
