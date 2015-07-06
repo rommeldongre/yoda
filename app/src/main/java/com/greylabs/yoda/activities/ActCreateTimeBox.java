@@ -124,5 +124,4 @@ public class ActCreateTimeBox extends ActionBarActivity implements RadioGroup.On
                 break;
         }
     }
-
 }

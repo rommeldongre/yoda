@@ -1,9 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layoutWallpaperActHome"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_temp">
+
+    <RelativeLayout
+        android:id="@+id/layoutSettingsBackgroundActHome"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <com.greylabs.yoda.views.MyFloatingActionsMenu
         android:id="@+id/btnSettingsActHome"
@@ -25,39 +31,39 @@
         <!--fab:fab_addButtonPlusIconColor="@color/half_black"-->
 
         <com.greylabs.yoda.views.MyFloatingActionButton
-            android:id="@+id/btnDefaultDuration"
+            android:id="@+id/btnDefaultDurationActHome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             fab:fab_size="mini"
-            fab:fab_colorNormal="@color/white"
-            fab:fab_colorPressed="@color/white_pressed"
+            fab:fab_colorNormal="@color/transperent_total_arc_background"
+            fab:fab_colorPressed="@color/transperent_more"
             fab:fab_title="Default Duration"/>
 
         <com.greylabs.yoda.views.MyFloatingActionButton
-            android:id="@+id/btnExprtToGoogleCal"
+            android:id="@+id/btnAutosyncWithGoogleActHome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             fab:fab_size="mini"
-            fab:fab_colorNormal="@color/white"
-            fab:fab_colorPressed="@color/white_pressed"
+            fab:fab_colorNormal="@color/transperent_total_arc_background"
+            fab:fab_colorPressed="@color/transperent_more"
             fab:fab_title="Autosync with Google"/>
 
         <com.greylabs.yoda.views.MyFloatingActionButton
-            android:id="@+id/btnExportToGoogleCal"
+            android:id="@+id/btnExportToGoogleCalActHome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             fab:fab_size="mini"
-            fab:fab_colorNormal="@color/white"
-            fab:fab_colorPressed="@color/white_pressed"
+            fab:fab_colorNormal="@color/transperent_total_arc_background"
+            fab:fab_colorPressed="@color/transperent_more"
             fab:fab_title="Export To Google Calender"/>
 
         <com.greylabs.yoda.views.MyFloatingActionButton
-            android:id="@+id/btnImportGoogleTasks"
+            android:id="@+id/btnImportGoogleTasksActHome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             fab:fab_size="mini"
-            fab:fab_colorNormal="@color/white"
-            fab:fab_colorPressed="@color/white_pressed"
+            fab:fab_colorNormal="@color/transperent_total_arc_background"
+            fab:fab_colorPressed="@color/transperent_more"
             fab:fab_title="Import from Google Tasks"/>
 
         <com.greylabs.yoda.views.MyFloatingActionButton
@@ -65,14 +71,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             fab:fab_size="mini"
-            fab:fab_colorNormal="@color/white"
-            fab:fab_colorPressed="@color/white_pressed"
+            fab:fab_colorNormal="@color/transperent_total_arc_background"
+            fab:fab_colorPressed="@color/transperent_more"
             fab:fab_title="Change Home Screen Wallpaper"
             />
     </com.greylabs.yoda.views.MyFloatingActionsMenu>
 
     <RelativeLayout
-        android:id="@+id/LayoutToBeHidden"
+        android:id="@+id/LayoutToBeHiddenActHome"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="10dip"
@@ -80,6 +86,7 @@
 
         <HorizontalScrollView
             android:id="@+id/scrollViewActHome"
+            android:layout_centerHorizontal="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dip"/>
@@ -93,10 +100,11 @@
             android:layout_marginLeft="5dip"
             android:layout_alignParentBottom="true">
 
-            <net.i2p.android.ext.floatingactionbutton.AddFloatingActionButton
+            <com.greylabs.yoda.views.MyFloatingActionButton
                 android:id="@+id/btnAddStepActHome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                fab:fab_icon="@drawable/ic_btn_plus_sign"
                 fab:fab_colorNormal="@color/transperent_total_arc_background"
                 fab:fab_colorPressed="@color/transperent_more"
                 android:layout_alignParentLeft="true"
@@ -105,7 +113,7 @@
             <!--fab:fab_addButtonColorPressed="@color/white_pressed"-->
             <!--fab:fab_addButtonPlusIconColor="@color/half_black"-->
 
-            <net.i2p.android.ext.floatingactionbutton.FloatingActionButton
+            <com.greylabs.yoda.views.MyFloatingActionButton
                 android:id="@+id/btnFilterActHome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -118,10 +126,20 @@
         <com.greylabs.yoda.views.MyArcProgress
             android:id="@+id/arcTotalProgressActHome"
             android:background="@color/transperent"
-            android:layout_width="200dip"
-            android:layout_height="200dip"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_above="@id/BottomLayoutActHome"
+            android:layout_below="@id/scrollViewActHome"
             android:layout_margin="15dip"
             />
+
+        <RelativeLayout
+            android:id="@+id/layoutOverlappingActHome"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:background="@color/overlapping_background_act_home"
+            />
         </RelativeLayout>
+    </RelativeLayout>
 </RelativeLayout>

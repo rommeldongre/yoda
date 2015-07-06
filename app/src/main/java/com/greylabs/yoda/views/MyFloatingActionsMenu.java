@@ -68,20 +68,20 @@ public class MyFloatingActionsMenu extends ViewGroup {
 
     public MyFloatingActionsMenu(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.mExpandAnimation = (new AnimatorSet()).setDuration(300L);
-        this.mCollapseAnimation = (new AnimatorSet()).setDuration(300L);
+        this.mExpandAnimation = (new AnimatorSet()).setDuration(600L);
+        this.mCollapseAnimation = (new AnimatorSet()).setDuration(600L);
         this.init(context, attrs);
     }
 
     public MyFloatingActionsMenu(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        this.mExpandAnimation = (new AnimatorSet()).setDuration(300L);
-        this.mCollapseAnimation = (new AnimatorSet()).setDuration(300L);
+        this.mExpandAnimation = (new AnimatorSet()).setDuration(600L);
+        this.mCollapseAnimation = (new AnimatorSet()).setDuration(600L);
         this.init(context, attrs);
     }
 
     private void init(Context context, AttributeSet attributeSet) {
-        this.mButtonSpacing = (int)(this.getResources().getDimension(net.i2p.android.ext.floatingactionbutton.R.dimen.fab_actions_spacing) - this.getResources().getDimension(net.i2p.android.ext.floatingactionbutton.R.dimen.fab_shadow_radius) - this.getResources().getDimension(net.i2p.android.ext.floatingactionbutton.R.dimen.fab_shadow_offset));
+        this.mButtonSpacing = 0;//(int)(this.getResources().getDimension(net.i2p.android.ext.floatingactionbutton.R.dimen.fab_actions_spacing) - this.getResources().getDimension(net.i2p.android.ext.floatingactionbutton.R.dimen.fab_shadow_radius) - this.getResources().getDimension(net.i2p.android.ext.floatingactionbutton.R.dimen.fab_shadow_offset));
         this.mLabelsMargin = this.getResources().getDimensionPixelSize(net.i2p.android.ext.floatingactionbutton.R.dimen.fab_labels_margin);
         this.mLabelsVerticalOffset = this.getResources().getDimensionPixelSize(net.i2p.android.ext.floatingactionbutton.R.dimen.fab_shadow_offset);
         this.mTouchDelegateGroup = new TouchDelegateGroup(this);

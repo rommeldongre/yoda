@@ -1,6 +1,7 @@
 package com.greylabs.yoda.views;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -9,6 +10,7 @@ import android.widget.Toast;
 
 import com.github.lzyzsd.circleprogress.DonutProgress;
 import com.greylabs.yoda.R;
+import com.greylabs.yoda.activities.ActNowFilter;
 
 public class GoalView extends LinearLayout implements View.OnClickListener {
 
@@ -67,25 +69,27 @@ public class GoalView extends LinearLayout implements View.OnClickListener {
 //        donutProgress.setInnerBottomTextColor(int innerBottomTextColor);
     }
 
-    public void setIsAddButton(boolean b) {
-        if(b){
-            isAddButton = b;
-            donutProgress.setProgress(100);
-            donutProgress.setTextColor(getResources().getColor(R.color.white));
-            donutProgress.setTextSize(40);
-            donutProgress.setSuffixText("+");
-            donutProgress.setFinishedStrokeWidth(7);
-            donutProgress.setUnfinishedStrokeWidth(7);
-            donutProgress.setFinishedStrokeColor(getResources().getColor(R.color.luminous_green));
-        }
-    }
+//    public void setIsAddButton(boolean b) {
+//        if(b){
+//            isAddButton = b;
+//            donutProgress.setProgress(100);
+//            donutProgress.setTextColor(getResources().getColor(R.color.white));
+//            donutProgress.setTextSize(40);
+//            donutProgress.setSuffixText("+");
+//            donutProgress.setFinishedStrokeWidth(7);
+//            donutProgress.setUnfinishedStrokeWidth(7);
+//            donutProgress.setFinishedStrokeColor(getResources().getColor(R.color.luminous_green));
+//        }
+//    }
 
     @Override
     public void onClick(View v) {
-        if(isAddButton){
-            Toast.makeText(context, "add goal", Toast.LENGTH_SHORT).show();
-        }else {
-            Toast.makeText(context, "hehe", Toast.LENGTH_SHORT).show();
-        }
+//        if(isAddButton){
+//            Toast.makeText(context, "add goal", Toast.LENGTH_SHORT).show();
+//        }else {
+
+        //put goal object in intent
+        context.startActivity(new Intent(context, ActNowFilter.class));
+//        }
     }
 }

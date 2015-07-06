@@ -1,19 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="ColorPrimary">#E64A19</color>
+    <color name="white">#FFFF</color>
+    <color name="transperent">#00000000</color>
+    <color name="transperent_total_arc_background">#33000000</color>
+    <color name="transperent_white">#33ffffff</color>
+
+    <color name="ColorPrimary">#7CFC00</color>
     <color name="ColorPrimaryDark">#000000</color>
     <color name="transperent_less">#55000000</color>
     <color name="transperent_more">#22000000</color>
+    <color name="settings_background_act_home">#55ffffff</color>
+    <color name="overlapping_background_act_home">#BBFFFFFF</color>
+    <color name="textolor_settings_buttons">#545454</color>
 
-    <color name="white">#FFFF</color>
+
     <color name="gray">#939393</color>
     <color name="luminous_green">#7CFC00</color>
-    <color name="transperent">#00000000</color>
     <color name="dark_transperent">#44000000</color>
     <color name="black">#000000</color>
     <color name="gray_unfinished_progress">#837d7b</color>
-    <color name="transperent_total_arc_background">#33000000</color>
-    <color name="transperent_white">#33ffffff</color>
+
     <!--<color name="temp_transperent">#44FFFFFF</color>-->
 
     <color name="black_semi_transparent">#B2000000</color>

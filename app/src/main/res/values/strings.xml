@@ -4,4 +4,22 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="tvObjectiveActAddNewGoal">Objective</string>
+    <string name="edtObjectiveHintActAddNewGoal">What is your final objective?</string>
+    <string name="tvKeyResultActAddNewGoal">Key Result</string>
+    <string name="edtKeyResultHintActAddNewGoal">What is the key result of this goal?</string>
+    <string name="tvTimeActAddNewGoal">Time</string>
+    <string name="edtTimeHintActAddNewGoal">Time you want to spend on this?</string>
+    <string name="tvNickNameActAddNewGoal">Nick Name</string>
+    <string name="edtNickNameHintActAddNewGoal">Goal Nick Name</string>
+    <string name="btnAdvancedActAddNewGoal">Advanced</string>
+    <string name="btnHideAdvancedActAddNewGoal">Advanced ^</string>
+    <string name="tvGoalReasonActAddNewGoal">Goal Reason</string>
+    <string name="edtGoalReasonHintActAddNewGoal">Why do you want to do this?</string>
+    <string name="tvGoalRewardActAddNewGoal">Goal Reward</string>
+    <string name="edtGoalRewardHintActAddNewGoal">How will you reward yourself on acomplishing this?</string>
+    <string name="tvGoalBuddyActAddNewGoal">Goal Buddy</string>
+    <string name="edtGoalBuddyHintActAddNewGoal">Pick a Buddy to keep informed about your progress?</string>
+    <string name="titleActAddNewGoal">New Goal</string>
+    <string name="actionSaveActAddNewGoal">Save</string>
 </resources>

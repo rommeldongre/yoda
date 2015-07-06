@@ -1,6 +1,7 @@
 package com.greylabs.yoda.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.HorizontalScrollView;
@@ -10,25 +11,21 @@ import android.widget.RelativeLayout;
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.views.GoalView;
 import com.greylabs.yoda.views.MyArcProgress;
+import com.greylabs.yoda.views.MyFloatingActionButton;
 import com.greylabs.yoda.views.MyFloatingActionsMenu;
 
-import net.i2p.android.ext.floatingactionbutton.FloatingActionButton;
 import net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu;
 
 
 public class ActHome extends Activity implements View.OnClickListener, FloatingActionsMenu.OnFloatingActionsMenuUpdateListener, MyFloatingActionsMenu.OnFloatingActionsMenuUpdateListener {
 
     HorizontalScrollView scrollView;
-    LinearLayout linearLayout;
-    RelativeLayout backgroundLayout;
-    GoalView btnAddGoal;
+    LinearLayout linearLayout ;
+    RelativeLayout layoutToBeHidden, layoutWallpaper, layoutSettingsBackground, layoutOverlapping;
     MyArcProgress arcTotalProgress;
-    FloatingActionButton btnAddStep;
-//    FloatingActionsMenu btnSettings;
-
     MyFloatingActionsMenu btnSettings;
-//    FloatingActionButton btnFilters;
-
+    MyFloatingActionButton btnAddGoal, btnDefaultDuration, btnAutosyncWithGoogle,
+            btnExportToGoogleCalender, btnImportGoogleTasks, btnChangeWallpaper, btnFilters, btnAddStep;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,21 +41,35 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
     }
 
     private void initialize() {
-        backgroundLayout = (RelativeLayout) findViewById(R.id.LayoutToBeHidden);
+        layoutToBeHidden = (RelativeLayout) findViewById(R.id.LayoutToBeHiddenActHome);
+        layoutSettingsBackground = (RelativeLayout) findViewById(R.id.layoutSettingsBackgroundActHome);
+        layoutWallpaper = (RelativeLayout) findViewById(R.id.layoutWallpaperActHome);
+        layoutOverlapping = (RelativeLayout) findViewById(R.id.layoutOverlappingActHome);
+
         scrollView = (HorizontalScrollView) findViewById(R.id.scrollViewActHome);
         arcTotalProgress = (MyArcProgress) findViewById(R.id.arcTotalProgressActHome);
-        btnAddStep = (FloatingActionButton) findViewById(R.id.btnAddStepActHome);
-//        btnFilters = (FloatingActionButton) findViewById(R.id.btnFilterActHome);
+        btnAddStep = (MyFloatingActionButton) findViewById(R.id.btnAddStepActHome);
+        btnFilters = (MyFloatingActionButton) findViewById(R.id.btnFilterActHome);
         btnSettings = (MyFloatingActionsMenu) findViewById(R.id.btnSettingsActHome);
 
+        btnDefaultDuration = (MyFloatingActionButton) findViewById(R.id.btnDefaultDurationActHome);
+        btnAutosyncWithGoogle = (MyFloatingActionButton) findViewById(R.id.btnAutosyncWithGoogleActHome);
+        btnExportToGoogleCalender = (MyFloatingActionButton) findViewById(R.id.btnExportToGoogleCalActHome);
+        btnImportGoogleTasks = (MyFloatingActionButton) findViewById(R.id.btnImportGoogleTasksActHome);
+        btnChangeWallpaper = (MyFloatingActionButton) findViewById(R.id.btnChangeWallpaperActHome);
 
         setStyleToArcTotalProgress();
         getGoalsFromLocalAndPopulate();
         arcTotalProgress.setOnClickListener(this);
         btnAddStep.setOnClickListener(this);
-//        btnFilters.setOnClickListener(this);
-//        btnSettings.setOnClickListener(this);
+        btnFilters.setOnClickListener(this);
         btnSettings.setOnFloatingActionsMenuUpdateListener(this);
+
+        btnDefaultDuration.setOnClickListener(this);
+        btnAutosyncWithGoogle.setOnClickListener(this);
+        btnExportToGoogleCalender.setOnClickListener(this);
+        btnImportGoogleTasks.setOnClickListener(this);
+        btnChangeWallpaper.setOnClickListener(this);
     }
 
     private void setStyleToArcTotalProgress() {
@@ -94,8 +105,12 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
             linearLayout.addView(goalView);
         }
         // init btnAddGoal
-        btnAddGoal = new GoalView(this);
-        btnAddGoal.setIsAddButton(true);
+        btnAddGoal = new MyFloatingActionButton(this);
+        btnAddGoal.setId(R.id.addNewGoalActHome);
+        btnAddGoal.setIcon(R.drawable.ic_btn_plus_sign);
+        btnAddGoal.setColorNormal(getResources().getColor(R.color.transperent_total_arc_background));
+        btnAddGoal.setColorPressed(getResources().getColor(R.color.transperent_more));
+        btnAddGoal.setOnClickListener(this);
         linearLayout.addView(btnAddGoal);
 
         scrollView.addView(linearLayout);
@@ -104,21 +119,53 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
     @Override
     public void onClick(View v) {
         switch (v.getId()){
+            case R.id.addNewGoalActHome:
+                startActivity(new Intent(this, ActAddNewGoal.class));
+                break;
+
             case R.id.arcTotalProgressActHome :
+                startActivity(new Intent(this, ActNowFilter.class));
                 break;
 
             case R.id.btnAddStepActHome :
+                startActivity(new Intent(this, ActAddStep.class));
                 break;
 
-//            case R.id.btnFilterActHome :
-//                break;
+            case R.id.btnFilterActHome :
+                startActivity(new Intent(this, ActTodayFilter.class));
+                break;
+
+            case R.id.btnDefaultDurationActHome :
+                startActivity(new Intent(this, ActSettingDefaultDuration.class));
+                btnSettings.collapse();
+                break;
+
+            case R.id.btnAutosyncWithGoogleActHome :
+                startActivity(new Intent(this, ActSettingAutosyncWithGoogle.class));
+                btnSettings.collapse();
+                break;
+
+            case R.id.btnExportToGoogleCalActHome :
+                startActivity(new Intent(this, ActSettingExportToGoogleCal.class));
+                btnSettings.collapse();
+                break;
+
+            case R.id.btnImportGoogleTasksActHome :
+                startActivity(new Intent(this, ActSettingImportGoogleTasks.class));
+                btnSettings.collapse();
+                break;
+
+            case R.id.btnChangeWallpaperActHome :
+                startActivity(new Intent(this, ActSettingChangeWallpaper.class));
+                btnSettings.collapse();
+                break;
 
 //            case R.id.btnSettingsActHome :
 //                if(btnSettings.isExpanded()){
-//                    backgroundLayout.setBackgroundColor(getResources().getColor(R.color.transperent_dark_white));
+//                    layoutToBeHidden.setBackgroundColor(getResources().getColor(R.color.transperent_dark_white));
 //                    Toast.makeText(this, "hshs", Toast.LENGTH_SHORT).show();
 //                }else {
-//                    backgroundLayout.setBackgroundColor(getResources().getColor(R.color.transperent));
+//                    layoutToBeHidden.setBackgroundColor(getResources().getColor(R.color.transperent));
 //                }
 //                break;
         }
@@ -126,11 +173,15 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
 
     @Override
     public void onMenuExpanded() {
-        backgroundLayout.setVisibility(View.GONE);
+        layoutOverlapping.setVisibility(View.VISIBLE);
+//        layoutToBeHidden.setVisibility(View.GONE);
+//        layoutSettingsBackground.setBackgroundColor(getResources().getColor(R.color.settings_background_act_home));
     }
 
     @Override
     public void onMenuCollapsed() {
-        backgroundLayout.setVisibility(View.VISIBLE);
+        layoutOverlapping.setVisibility(View.GONE);
+//        layoutToBeHidden.setVisibility(View.VISIBLE);
+//        layoutSettingsBackground.setBackgroundColor(getResources().getColor(R.color.transperent));
     }
 }
