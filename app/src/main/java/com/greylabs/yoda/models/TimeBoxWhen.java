@@ -10,6 +10,8 @@ import com.greylabs.yoda.database.MetaData.TableTimeBoxWhen;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Created by Jaybhay Vijay on 7/3/2015.
@@ -20,7 +22,7 @@ public class TimeBoxWhen {
     // Instance variables
     /**********************************************************************************************/
     private long timeBoxId;
-    private List<com.greylabs.yoda.enums.TimeBoxWhen> whenValues;
+    private Set<com.greylabs.yoda.enums.TimeBoxWhen> whenValues;
     private Database database;
     private Context context;
 
@@ -35,15 +37,14 @@ public class TimeBoxWhen {
         this.timeBoxId = timeBoxId;
     }
 
-
-
-    public List<com.greylabs.yoda.enums.TimeBoxWhen> getWhenValues() {
-        return whenValues;
-    }
-
-    public void setWhenValues(List<com.greylabs.yoda.enums.TimeBoxWhen> whenValues) {
+    public void setWhenValues(Set<com.greylabs.yoda.enums.TimeBoxWhen> whenValues) {
         this.whenValues = whenValues;
     }
+
+    public Set<com.greylabs.yoda.enums.TimeBoxWhen> getWhenValues(){
+        return this.whenValues;
+    }
+
 
 
 
@@ -59,8 +60,8 @@ public class TimeBoxWhen {
     /**********************************************************************************************/
     // Methods
     /**********************************************************************************************/
-    public  List<com.greylabs.yoda.enums.TimeBoxWhen> get(){
-        List<com.greylabs.yoda.enums.TimeBoxWhen> whenValues=null;
+    public  Set<com.greylabs.yoda.enums.TimeBoxWhen> get(){
+        Set<com.greylabs.yoda.enums.TimeBoxWhen> whenValues=null;
         SQLiteDatabase db=database.getReadableDatabase();
         String query="select * " +
                 " "+" from "+ TableTimeBoxWhen.timeBoxWhen+" " +
@@ -68,7 +69,7 @@ public class TimeBoxWhen {
 
         Cursor c=db.rawQuery(query,null);
         if(c.moveToFirst()){
-            whenValues=new ArrayList();
+            whenValues=new TreeSet<>();
             do{
                 int value=c.getInt(c.getColumnIndex(TableTimeBoxWhen.when));
                 whenValues.add(com.greylabs.yoda.enums.TimeBoxWhen.getIntegerToEnumType(value));
@@ -99,8 +100,6 @@ public class TimeBoxWhen {
         db.close();
         return numOfRowAffected;
     }
-
-
 
     /**********************************************************************************************/
     // Utils

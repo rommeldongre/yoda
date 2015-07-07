@@ -180,28 +180,6 @@ public class TimeBox {
         return numOfRowAffected;
     }
 
-    public List<Integer> getTimeBoxOn(long timeBoxId){
-        ArrayList<Integer> timeBoxOnSubValues=null;
-        SQLiteDatabase db=database.getReadableDatabase();
-        String query="select * " +
-                " "+" from "+ TableTimeBoxOn.timeBoxOn+" " +
-                " "+"where "+TableTimeBoxOn.id+" = "+timeBoxId;
-
-        Cursor c=db.rawQuery(query,null);
-        if(c.moveToFirst()){
-            timeBoxOnSubValues=new ArrayList<>();
-            do{
-                this.id=c.getInt(c.getColumnIndex(TableTimeBoxOn.id));
-                int on=c.getInt(c.getColumnIndex(TableTimeBoxOn.on));
-                timeBoxOnSubValues.add(new Integer(on));
-
-            }while (c.moveToNext());
-        }
-        c.close();
-        db.close();
-        return timeBoxOnSubValues;
-    }
-
     public long saveTimeBoxOn(long timeBoxId,List<Integer> timeBoxOns){
         SQLiteDatabase db=database.getWritableDatabase();
         long rowId=0;
@@ -213,32 +191,6 @@ public class TimeBox {
         }
         db.close();
         return rowId;
-    }
-
-
-
-
-
-    public List<Integer> getTimeBoxWhen(long timeBoxId){
-        ArrayList<Integer> timeBoxWhenSubValues=null;
-        SQLiteDatabase db=database.getReadableDatabase();
-        String query="select * " +
-                " "+" from "+ TableTimeBoxWhen.timeBoxWhen+" " +
-                " "+"where "+TableTimeBoxWhen.id+" = "+timeBoxId;
-
-        Cursor c=db.rawQuery(query,null);
-        if(c.moveToFirst()){
-            timeBoxWhenSubValues=new ArrayList<>();
-            do{
-                this.id=c.getInt(c.getColumnIndex(TableTimeBoxOn.id));
-                int on=c.getInt(c.getColumnIndex(TableTimeBoxOn.on));
-                timeBoxWhenSubValues.add(new Integer(on));
-
-            }while (c.moveToNext());
-        }
-        c.close();
-        db.close();
-        return timeBoxWhenSubValues;
     }
 
     public long saveTimeBoxWhen(long timeBoxId,List<Integer> timeBoxWhens){

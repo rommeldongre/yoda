@@ -12,10 +12,8 @@ import com.greylabs.yoda.enums.Quarter;
 import com.greylabs.yoda.enums.SubValue;
 import com.greylabs.yoda.enums.WeekDay;
 import com.greylabs.yoda.enums.Year;
-
-import java.util.ArrayList;
-import java.util.List;
-import static com.greylabs.yoda.enums.TimeBoxOn.*;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Created by Jaybhay Vijay on 7/3/2015.
@@ -26,21 +24,19 @@ public class TimeBoxOn {
     /**********************************************************************************************/
     private long timeBoxId;
     private int onType;
-    private List<SubValue> subValues;
+    private Set<SubValue> subValues;
     private Database database;
     private Context context;
 
     /**********************************************************************************************/
     // Geters and Setters
     /**********************************************************************************************/
-    public List<SubValue> getSubValues() {
-        return subValues;
-    }
-
-    public void setSubValues(List<SubValue> subValues) {
+    public void setSubValues(Set<SubValue> subValues) {
         this.subValues = subValues;
     }
-
+    public Set<SubValue> getSubValues(){
+        return this.subValues;
+    }
     public int getOnType() {
         return onType;
     }
@@ -70,8 +66,8 @@ public class TimeBoxOn {
     // Methods
     /**********************************************************************************************/
 
-    public List<SubValue> get(){
-        List<SubValue> subValues=null;
+    public Set<SubValue> get(){
+        Set<SubValue> subValues=null;
         SQLiteDatabase db=database.getReadableDatabase();
         String query="select * " +
                 " "+" from "+ TableTimeBoxOn.timeBoxOn+" " +
@@ -79,7 +75,7 @@ public class TimeBoxOn {
 
         Cursor c=db.rawQuery(query,null);
         if(c.moveToFirst()){
-            subValues=new ArrayList();
+            subValues=new TreeSet<>();
             do{
                 int value=c.getInt(c.getColumnIndex(TableTimeBoxOn.id));
                 subValues.add(getEnumTypeFromInteger(value, com.greylabs.yoda.enums.TimeBoxOn.getIntegerToEnumType(onType)));
@@ -158,4 +154,6 @@ public class TimeBoxOn {
         }
         return value;
     }
+
+
 }
