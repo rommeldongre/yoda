@@ -175,7 +175,6 @@ public class Goal {
             }while (c.moveToNext());
         }
         c.close();
-        db.close();
         return this;
     }
 
@@ -203,7 +202,6 @@ public class Goal {
             }while (c.moveToNext());
         }
         c.close();
-        db.close();
         return goals;
     }
 
@@ -226,7 +224,6 @@ public class Goal {
             values.put(TableGoal.id,this.id);
         }
         rowId=db.insertWithOnConflict(TableGoal.goal, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-        db.close();
         this.id=rowId;
         return rowId;
     }
@@ -234,7 +231,6 @@ public class Goal {
     public int delete(long id){
         SQLiteDatabase db=database.getWritableDatabase();
         int numOfRowAffected=db.delete(TableGoal.goal,TableGoal.id+"="+id,null);
-        db.close();
         return numOfRowAffected;
     }
 

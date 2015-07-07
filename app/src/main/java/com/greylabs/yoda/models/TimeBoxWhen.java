@@ -7,9 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.greylabs.yoda.database.Database;
 import com.greylabs.yoda.database.MetaData.TableTimeBoxWhen;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -76,7 +73,6 @@ public class TimeBoxWhen {
             }while (c.moveToNext());
         }
         c.close();
-        db.close();
         return whenValues;
     }
 
@@ -90,14 +86,12 @@ public class TimeBoxWhen {
             values.put(TableTimeBoxWhen.id, timeBoxId);
             rowId += db.insert(TableTimeBoxWhen.timeBoxWhen, null, values);
         }
-        db.close();
         return rowId;
     }
 
     public int delete(){
         SQLiteDatabase db=database.getWritableDatabase();
         int numOfRowAffected=db.delete(TableTimeBoxWhen.timeBoxWhen,TableTimeBoxWhen.id + "=" + timeBoxId, null);
-        db.close();
         return numOfRowAffected;
     }
 

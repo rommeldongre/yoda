@@ -12,6 +12,8 @@ import com.greylabs.yoda.enums.Quarter;
 import com.greylabs.yoda.enums.SubValue;
 import com.greylabs.yoda.enums.WeekDay;
 import com.greylabs.yoda.enums.Year;
+import com.greylabs.yoda.utils.Logger;
+
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -82,7 +84,6 @@ public class TimeBoxOn {
             }while (c.moveToNext());
         }
         c.close();
-        db.close();
         return subValues;
     }
 
@@ -96,14 +97,12 @@ public class TimeBoxOn {
             values.put(TableTimeBoxOn.id, timeBoxId);
             rowId += db.insert(TableTimeBoxOn.timeBoxOn, null, values);
         }
-            db.close();
         return rowId;
     }
 
     public int delete(){
         SQLiteDatabase db=database.getWritableDatabase();
         int numOfRowAffected=db.delete(TableTimeBoxOn.timeBoxOn, TableTimeBoxOn.id + "=" + timeBoxId, null);
-        db.close();
         return numOfRowAffected;
     }
 

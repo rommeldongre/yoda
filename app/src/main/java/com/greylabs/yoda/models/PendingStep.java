@@ -146,7 +146,6 @@ public class PendingStep {
             }while (c.moveToNext());
         }
         c.close();
-        db.close();
         return this;
     }
 
@@ -174,7 +173,6 @@ public class PendingStep {
             }while (c.moveToNext());
         }
         c.close();
-        db.close();
         return pendingSteps;
     }
 
@@ -194,7 +192,6 @@ public class PendingStep {
             values.put(TablePendingStep.id,this.id);
         }
         rowId=db.insertWithOnConflict(TablePendingStep.pendingStep, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-        db.close();
         this.id=rowId;
         return rowId;
     }
@@ -202,7 +199,6 @@ public class PendingStep {
     public int delete(long id){
         SQLiteDatabase db=database.getWritableDatabase();
         int numOfRowAffected=db.delete(TablePendingStep.pendingStep, TablePendingStep.id + "=" + id, null);
-        db.close();
         return numOfRowAffected;
     }
 

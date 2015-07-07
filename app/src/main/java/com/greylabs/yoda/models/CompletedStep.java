@@ -88,7 +88,6 @@ public class CompletedStep {
             }while (c.moveToNext());
         }
         c.close();
-        db.close();
         return this;
     }
 
@@ -110,7 +109,6 @@ public class CompletedStep {
             }while (c.moveToNext());
         }
         c.close();
-        db.close();
         return completedSteps;
     }
 
@@ -125,7 +123,6 @@ public class CompletedStep {
             values.put(TableCompletedStep.id,this.id);
         }
         rowId=db.insertWithOnConflict(TableCompletedStep.completedStep, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-        db.close();
         this.id=rowId;
         return rowId;
     }
@@ -133,7 +130,6 @@ public class CompletedStep {
     public int delete(long id){
         SQLiteDatabase db=database.getWritableDatabase();
         int numOfRowAffected=db.delete(TableCompletedStep.completedStep,TableCompletedStep.id+"="+id,null);
-        db.close();
         return numOfRowAffected;
     }
 

@@ -116,7 +116,7 @@ public class TimeBox {
             }while (c.moveToNext());
         }
         c.close();
-        db.close();
+        //db.close();
         this.timeBoxOn=new TimeBoxOn(context,this.id,this.timeBoxOnType);
         this.timeBoxOn.setSubValues(this.timeBoxOn.get());
         this.timeBoxWhen=new TimeBoxWhen(context,this.id);
@@ -148,7 +148,7 @@ public class TimeBox {
             }while (c.moveToNext());
         }
         c.close();
-        db.close();
+        //db.close();
         return timeBoxes;
     }
 
@@ -164,8 +164,10 @@ public class TimeBox {
             values.put(TableTimeBox.id,this.id);
         }
         rowId=db.insertWithOnConflict(TableTimeBox.timeBox, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-        db.close();
+        //db.close();
+        this.timeBoxOn.setTimeBoxId(rowId);
         this.timeBoxOn.save();
+        this.timeBoxWhen.setTimeBoxId(rowId);
         this.timeBoxWhen.save();
         this.id=rowId;
         return rowId;
@@ -174,7 +176,7 @@ public class TimeBox {
     public int delete(long id){
         SQLiteDatabase db=database.getWritableDatabase();
         int numOfRowAffected=db.delete(TableTimeBox.timeBox, TableTimeBox.id + "=" + id, null);
-        db.close();
+        //db.close();
         this.timeBoxOn.delete();
         this.timeBoxWhen.delete();
         return numOfRowAffected;
