@@ -6,14 +6,14 @@
     android:layout_height="match_parent">
 
     <include
-        android:id="@+id/toolBarActAddNewGoal"
+        android:id="@+id/toolBarActAddNewStep"
         layout="@layout/tool_bar"></include>
 
     <ScrollView
-        android:id="@+id/scrollViewAvtAddNewGoal"
+        android:id="@+id/scrollViewAvtAddNewStep"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/toolBarActAddNewGoal"
+        android:layout_below="@id/toolBarActAddNewStep"
         >
 
         <LinearLayout
@@ -24,7 +24,6 @@
 
             <android.support.v7.widget.CardView
                 xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/card_view"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp">
@@ -47,16 +46,16 @@
                             android:layout_height="wrap_content"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                             android:textStyle="bold"
-                            android:text="@string/tvNickNameActAddNewGoal"
+                            android:text="@string/tvStepNameActAddNewStep"
                             />
 
                         <EditText
-                            android:id="@+id/edtNickNameActAddNewGoal"
+                            android:id="@+id/edtStepNameActAddNewStep"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dip"
                             android:maxLines="4"
-                            android:hint="@string/edtNickNameHintActAddNewGoal"
+                            android:hint="@string/edtStepNameHintActAddNewStep"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small"
                             android:background="@color/transperent"
                             android:layout_marginTop="8dip"
@@ -83,30 +82,17 @@
                             android:layout_height="wrap_content"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                             android:textStyle="bold"
-                            android:text="@string/tvTimeActAddNewGoal"
+                            android:text="@string/tvGoalNameActAddNewStep"
                             />
 
                         <Spinner
-                            android:id="@+id/spinnerTimeActAddNewGoal"
+                            android:id="@+id/spinnerGoalNameActAddNewStep"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_horizontal"
-                            android:prompt="@string/edtTimeHintActAddNewGoal"
+                            android:prompt="@string/edtGoalNameHintActAddNewStep"
                             android:layout_marginLeft="20dip"
                             android:layout_marginTop="8dip" />
-
-                        <!--<EditText-->
-                            <!--android:id="@+id/edtTimeActAddNewGoal"-->
-                            <!--android:layout_width="match_parent"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:layout_marginLeft="20dip"-->
-                            <!--android:maxLines="4"-->
-                            <!--android:editable="false"-->
-                            <!--android:hint="@string/edtTimeHintActAddNewGoal"-->
-                            <!--android:textAppearance="@style/TextAppearance.AppCompat.Small"-->
-                            <!--android:background="@color/transperent"-->
-                            <!--android:layout_marginTop="8dip"-->
-                            <!--/>-->
 
                         <View
                             android:layout_width="match_parent"
@@ -123,11 +109,11 @@
                         android:layout_margin="10dip"
                         >
                         <Button
-                            android:id="@+id/btnShowAdvancedActAddNewGoal"
+                            android:id="@+id/btnShowAdvancedActAddNewStep"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@color/transperent"
-                            android:text="@string/btnAdvancedActAddNewGoal"
+                            android:text="@string/btnAdvancedActAddNewStep"
                             android:textStyle="bold"
                             android:textColor="@color/ColorPrimary"
                             />
@@ -137,7 +123,7 @@
 
             <android.support.v7.widget.CardView
                 xmlns:android="http://schemas.android.com/apk/res/android"
-                android:id="@+id/cardViewAdvancedActAddNewGoal"
+                android:id="@+id/cardViewAdvancedActAddNewStep"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -156,11 +142,11 @@
                         android:layout_margin="10dip"
                         >
                         <Button
-                            android:id="@+id/btnHideAdvancedActAddNewGoal"
+                            android:id="@+id/btnHideAdvancedActAddNewStep"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@color/transperent"
-                            android:text="@string/btnHideAdvancedActAddNewGoal"
+                            android:text="@string/btnHideAdvancedActAddNewStep"
                             android:textStyle="bold"
                             android:textColor="@color/ColorPrimary"
                             />
@@ -178,21 +164,19 @@
                             android:layout_height="wrap_content"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                             android:textStyle="bold"
-                            android:text="@string/tvObjectiveActAddNewGoal"
+                            android:text="@string/tvPriorityActAddNewStep"
                             />
-
-                        <EditText
-                            android:id="@+id/edtObjectiveActAddNewGoal"
+                        <Spinner
+                            android:id="@+id/spinnerPriorityActAddNewStep"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:prompt="@string/edtPriorityHintActAddNewStep"
                             android:layout_marginLeft="20dip"
-                            android:maxLines="4"
-                            android:hint="@string/edtObjectiveHintActAddNewGoal"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                            android:background="@color/transperent"
                             android:layout_marginTop="8dip"
-                            android:singleLine="true"
+                            android:entries="@array/arrayStepPriorityActAddNewStep"
                             />
+                        <!--android:entries="@array/arrayStepTypeActAddNewStep"-->
 
                         <View
                             android:layout_width="match_parent"
@@ -214,21 +198,86 @@
                             android:layout_height="wrap_content"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                             android:textStyle="bold"
-                            android:text="@string/tvKeyResultActAddNewGoal"
+                            android:text="@string/tvStepTypeActAddNewStep"
                             />
+                        <Spinner
+                            android:id="@+id/spinnerStepTypeActAddNewStep"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:prompt="@string/edtStepTypeHintActAddNewStep"
+                            android:layout_marginLeft="20dip"
+                            android:layout_marginTop="8dip"
+                            android:entries="@array/arrayStepTypeActAddNewStep" />
 
-                        <EditText
-                            android:id="@+id/edtKeyResultActAddNewGoal"
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginLeft="20dip"
+                            android:background="@color/button_material_light" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_margin="10dip"
+                        android:id="@+id/SingleStepPanelActAddNewStep"
+                        android:visibility="gone" >
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                            android:textStyle="bold"
+                            android:text="@string/tvSingleStepTimeActAddNewStep"
+                            />
+                        <SeekBar
+                            android:id="@+id/seekbarSingleStepTimeActAddNewStep"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dip"
-                            android:maxLines="4"
-                            android:hint="@string/edtKeyResultHintActAddNewGoal"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                            android:background="@color/transperent"
                             android:layout_marginTop="8dip"
-                            android:singleLine="true"
+                            android:max="9"
                             />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginLeft="20dip"
+                            android:background="@color/button_material_light" />
+                    </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/SeriesPanelActAddNewStep"
+                    android:visibility="gone" >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_margin="10dip"
+                        >
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                            android:textStyle="bold"
+                            android:text="@string/tvStepsInSeriesActAddNewStep"
+                            />
+                        <SeekBar
+                            android:id="@+id/seekbarStepsInSeriesActAddNewStep"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dip"
+                            android:layout_marginTop="8dip"
+                            android:max="99" />
 
                         <View
                             android:layout_width="match_parent"
@@ -250,20 +299,15 @@
                             android:layout_height="wrap_content"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                             android:textStyle="bold"
-                            android:text="@string/tvGoalReasonActAddNewGoal"
+                            android:text="@string/tvTimeForEachStepActAddNewStep"
                             />
-
-                        <EditText
-                            android:id="@+id/edtGoalReasonActAddNewGoal"
+                        <SeekBar
+                            android:id="@+id/seekbarTimeForEachStepActAddNewStep"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dip"
-                            android:maxLines="4"
-                            android:hint="@string/edtGoalReasonHintActAddNewGoal"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                            android:background="@color/transperent"
                             android:layout_marginTop="8dip"
-                            android:singleLine="true"
+                            android:max="9"
                             />
 
                         <View
@@ -274,96 +318,9 @@
                             android:background="@color/button_material_light" />
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_margin="10dip"
-                        >
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                            android:textStyle="bold"
-                            android:text="@string/tvGoalRewardActAddNewGoal"
-                            />
-
-                        <EditText
-                            android:id="@+id/edtGoalRewardHintActAddNewGoal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dip"
-                            android:maxLines="4"
-                            android:hint="@string/edtGoalRewardHintActAddNewGoal"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                            android:background="@color/transperent"
-                            android:layout_marginTop="8dip"
-                            android:singleLine="true"
-                            />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginLeft="20dip"
-                            android:background="@color/button_material_light" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_margin="10dip"
-                        >
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                            android:textStyle="bold"
-                            android:text="@string/tvGoalBuddyActAddNewGoal"
-                            />
-
-                        <EditText
-                            android:id="@+id/edtGoalBuddyActAddNewGoal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="20dip"
-                            android:maxLines="4"
-                            android:hint="@string/edtGoalBuddyHintActAddNewGoal"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                            android:background="@color/transperent"
-                            android:layout_marginTop="8dip"
-                            android:inputType="textWebEmailAddress"
-                            android:singleLine="true"
-                            />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginLeft="20dip"
-                            android:background="@color/button_material_light" />
-                    </LinearLayout>
+                </LinearLayout>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
         </LinearLayout>
     </ScrollView>
-
-    <com.greylabs.yoda.views.MyFloatingActionButton
-        android:id="@+id/btnAddFirstStepActAddNewGoal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:elevation="4dip"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="15dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginEnd="15dp"
-        fab:fab_icon="@drawable/ic_btn_plus_sign"
-        fab:fab_colorNormal="@color/ColorPrimary"
-        fab:fab_colorPressed="@color/ColorPrimaryDark"
-    />
 </RelativeLayout>

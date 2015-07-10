@@ -5,8 +5,8 @@
     <color name="transperent_total_arc_background">#33000000</color>
     <color name="transperent_white">#33ffffff</color>
 
-    <color name="ColorPrimary">#7CFC00</color>
-    <color name="ColorPrimaryDark">#000000</color>
+    <color name="ColorPrimary">#4CAF50</color>
+    <color name="ColorPrimaryDark">#388E3C</color>
     <color name="transperent_less">#55000000</color>
     <color name="transperent_more">#22000000</color>
     <color name="settings_background_act_home">#55ffffff</color>

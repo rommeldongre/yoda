@@ -1,5 +1,6 @@
 package com.greylabs.yoda.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.CardView;
@@ -7,21 +8,39 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
+import android.widget.Spinner;
 
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.models.Goal;
+import com.greylabs.yoda.models.TimeBox;
+import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Logger;
+import com.greylabs.yoda.views.MyFloatingActionButton;
 
-public class ActAddNewGoal extends ActionBarActivity implements View.OnClickListener {
+import java.util.ArrayList;
+import java.util.List;
 
-    EditText edtObjective, edtKeyResult, edtTime, edtNickName, edtGoalReason, edtGoalReward, edtGoalBuddy;
+public class ActAddNewGoal extends ActionBarActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+
+    EditText edtObjective, edtKeyResult, edtNickName, edtGoalReason, edtGoalReward, edtGoalBuddy;//edtTime,
     Button btnShowAdvanced, btnHideAdvanced;
     CardView cardViewAdvanced;
     ScrollView scrollView;
     Toolbar toolbar;
+    MyFloatingActionButton btnAddFirstStep;
+    Spinner timeSpinner;
+    ArrayAdapter<String> spinnerArrayAdapter;
+    List<TimeBox> timeBoxList;
+    ArrayList<String> timeBoxNames = new ArrayList<>();
+//    boolean timeSelected = false;
+    Goal goal;
+    boolean isSaved = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +57,7 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
 
         edtObjective = (EditText) findViewById(R.id.edtObjectiveActAddNewGoal);
         edtKeyResult = (EditText) findViewById(R.id.edtKeyResultActAddNewGoal);
-        edtTime = (EditText) findViewById(R.id.edtTimeActAddNewGoal);
+//        edtTime = (EditText) findViewById(R.id.edtTimeActAddNewGoal);
         edtNickName = (EditText) findViewById(R.id.edtNickNameActAddNewGoal);
         cardViewAdvanced = (CardView) findViewById(R.id.cardViewAdvancedActAddNewGoal);
         edtGoalReason = (EditText) findViewById(R.id.edtGoalReasonActAddNewGoal);
@@ -46,11 +65,30 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
         edtGoalBuddy = (EditText) findViewById(R.id.edtGoalBuddyActAddNewGoal);
         btnShowAdvanced = (Button) findViewById(R.id.btnShowAdvancedActAddNewGoal);
         btnHideAdvanced = (Button) findViewById(R.id.btnHideAdvancedActAddNewGoal);
+        btnAddFirstStep = (MyFloatingActionButton) findViewById(R.id.btnAddFirstStepActAddNewGoal);
+        timeSpinner = (Spinner) findViewById(R.id.spinnerTimeActAddNewGoal);
         scrollView = (ScrollView) findViewById(R.id.scrollViewAvtAddNewGoal);
 
-        edtTime.setOnClickListener(this);
+        getTimeBoxListAndPopulate();
+
+//        edtTime.setOnClickListener(this);
         btnShowAdvanced.setOnClickListener(this);
         btnHideAdvanced.setOnClickListener(this);
+        btnAddFirstStep.setOnClickListener(this);
+        timeSpinner.setOnItemSelectedListener(this);
+    }
+
+    private void getTimeBoxListAndPopulate() {
+        TimeBox timeBox  = new TimeBox(this);
+        timeBoxList = timeBox.getAll();
+        for(int i=0; i<timeBoxList.size();i++){
+            timeBoxNames.add(timeBoxList.get(i).getNickName());
+        }
+        timeBoxNames.add(getResources().getString(R.string.addNewTimeBoxSpinnerItemActAddNewGoal));//add new TB option
+        spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, timeBoxNames);
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        timeSpinner.setAdapter(spinnerArrayAdapter);
+        timeSpinner.setSelection(0);
     }
 
     @Override
@@ -67,29 +105,45 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
                 break;
             case R.id.actionSaveActAddNewGoal :
                 saveGoal();
-
+                if(isSaved)
+                    this.finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void saveGoal() {
-        Goal goal = new Goal(this);
-        goal.setObjective(edtObjective.getText().toString());
-        goal.setKeyResult(edtKeyResult.getText().toString());
-//        goal.setTimeBoxId();
-        goal.setNickName(edtNickName.getText().toString());
-        goal.setReason(edtGoalReason.getText().toString());
-        goal.setReward(edtGoalReward.getText().toString());
-        goal.setBuddyEmail(edtGoalBuddy.getText().toString());
-        goal.save();
+        goal = new Goal(this);
+        if(edtNickName.getText() != null && edtNickName.getText().length() > 0){
+            goal.setNickName(edtNickName.getText().toString());
+            goal.setTimeBoxId(timeBoxList.get(timeSpinner.getSelectedItemPosition()).getId());
+            goal.setObjective(edtObjective.getText().toString());
+            goal.setKeyResult(edtKeyResult.getText().toString());
+            goal.setReason(edtGoalReason.getText().toString());
+            goal.setReward(edtGoalReward.getText().toString());
+            goal.setBuddyEmail(edtGoalBuddy.getText().toString());
+            goal.save();
+
+            isSaved = true;
+            Logger.showMsg(this, getResources().getString(R.string.msgGoalSavedActAddNewGoal));
+        }else {
+            Logger.showMsg(this, getResources().getString(R.string.msgEnterGoalNickNameActAddNewGoal));
+        }
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.edtTimeActAddNewGoal :
-                Logger.showMsg(this, "enter time");
+
+            case R.id.btnAddFirstStepActAddNewGoal :
+                saveGoal();
+                if(isSaved){
+                    Intent i = new Intent(this, ActAddNewStep.class);
+                    i.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, Constants.GOAL_ATTACHED_TRUE);
+                    i.putExtra(Constants.GOAL_OBJECT, goal);
+                    startActivity(i);
+                    this.finish();
+                }
                 break;
 
             case R.id.btnShowAdvancedActAddNewGoal:
@@ -112,5 +166,22 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
                 });
                 break;
         }
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if(position+1 == timeBoxNames.size()){
+            startActivity(new Intent(this, ActCreateTimeBox.class));
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        timeSpinner.setSelection(0);
     }
 }

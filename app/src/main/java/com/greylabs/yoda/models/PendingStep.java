@@ -12,9 +12,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by Jaybhay Vijay on 6/30/2015.
- */
 public class PendingStep {
     /**********************************************************************************************/
     // Instance variables

@@ -9,9 +9,6 @@ import com.greylabs.yoda.utils.Logger;
 
 import static com.greylabs.yoda.database.MetaData.*;
 
-/**
- * Created by Jaybhay Vijay on 6/30/2015.
- */
 public class Database extends SQLiteOpenHelper {
     /**********************************************************************************************/
     //Database Details
@@ -60,5 +57,4 @@ public class Database extends SQLiteOpenHelper {
         sqLiteDatabase.delete(DATABASE_NAME, null, null);
         onCreate(sqLiteDatabase);
     }
-
 }

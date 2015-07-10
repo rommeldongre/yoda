@@ -14,12 +14,67 @@
     <string name="edtNickNameHintActAddNewGoal">Goal Nick Name</string>
     <string name="btnAdvancedActAddNewGoal">Advanced</string>
     <string name="btnHideAdvancedActAddNewGoal">Advanced ^</string>
-    <string name="tvGoalReasonActAddNewGoal">Goal Reason</string>
+    <string name="tvGoalReasonActAddNewGoal">Reason</string>
     <string name="edtGoalReasonHintActAddNewGoal">Why do you want to do this?</string>
-    <string name="tvGoalRewardActAddNewGoal">Goal Reward</string>
+    <string name="tvGoalRewardActAddNewGoal">Reward</string>
     <string name="edtGoalRewardHintActAddNewGoal">How will you reward yourself on acomplishing this?</string>
-    <string name="tvGoalBuddyActAddNewGoal">Goal Buddy</string>
+    <string name="tvGoalBuddyActAddNewGoal">Buddy</string>
     <string name="edtGoalBuddyHintActAddNewGoal">Pick a Buddy to keep informed about your progress?</string>
     <string name="titleActAddNewGoal">New Goal</string>
     <string name="actionSaveActAddNewGoal">Save</string>
+    <string name="msgGoalSavedActAddNewGoal">Goal Saved Successfully</string>
+    <string name="msgEnterGoalNickNameActAddNewGoal">Please Enter Goal Nick Name</string>
+    <string name="titleActAddNewStep">New Step</string>
+    <string name="actionSaveActAddNewStep">Save</string>
+    <string name="msgStepSavedActAddNewStep">Step Saved Successfully</string>
+    <string name="msgEnterStepNameActAddNewStep">Please Enter Step Name</string>
+
+
+    <string name="tvStepNameActAddNewStep">Nick Name</string>
+    <string name="edtStepNameHintActAddNewStep">Enter Step Nick Name</string>
+    <string name="tvGoalNameActAddNewStep">Goal Name</string>
+    <string name="edtGoalNameHintActAddNewStep">Select Goal</string>
+    <string name="btnAdvancedActAddNewStep">Advanced</string>
+    <string name="btnHideAdvancedActAddNewStep">Advanced ^</string>
+    <string name="tvStepTypeActAddNewStep">Step Type</string>
+    <string name="edtStepTypeHintActAddNewStep">Select Step Type</string>
+    <string name="tvPriorityActAddNewStep">Priority</string>
+    <string name="edtPriorityHintActAddNewStep">Select Priority</string>
+    <string name="tvSingleStepTimeActAddNewStep">How long would it take to do this?</string>
+    <string name="tvStepsInSeriesActAddNewStep">No of steps in series</string>
+    <string name="tvTimeForEachStepActAddNewStep">Time for each step in series</string>
+    <string name="addNewTimeBoxSpinnerItemActAddNewGoal">Add New Time Box</string>
+    <string name="addNewGoalSpinnerItemActAddNewStep">Add New Goal</string>
+    <string name="tvDefaultStepDurationActSettingsDefaultDuration">Default Step Duration (Hrs)</string>
+    <string name="tvDefaultSessionDurationActSettingsDefaultDuration">DefaultSession Duration (Hrs)</string>
+    <string name="tvDefaultYodaSaysNotificationActSettingsDefaultDuration">Default Yoda Says Notification (Hrs)</string>
+    <string name="tvDefaultExportToCalendarActSettingsDefaultDuration">Default Export to Calendar Period (Days)</string>
+    <string name="tvDefaultPriorityOfNewStepActSettingsDefaultDuration">Default Priority of New Step</string>
+    <string name="tvDefaultBehaviourForPassedStepsActSettingsDefaultDuration">Default Behaviour for Passed Steps</string>
+    <string name="titleActSettingDefaultDuration">Settings</string>
+    <string name="rbDontExpireActSettingsDefaultDuration">Do not Expire</string>
+    <string name="rbExpireActSettingsDefaultDuration">Expire</string>
+    <string name="rbBottomMostActSettingsDefaultDuration">Bottom-most</string>
+    <string name="rbTopMostActSettingsDefaultDuration">Top-most</string>
+    <string-array name="arrayStepTypeActAddNewStep">
+        <item>Single Step</item>
+        <item>Series</item>
+    </string-array>
+    <string-array name="arrayStepPriorityActAddNewStep">
+        <item>Top-most</item>
+        <item>Bottom-most</item>
+        <item>Change Manually</item>
+    </string-array>
+
+    <!--<string name=""></string>-->
+    <!--<string name=""></string>-->
+    <!--<string name=""></string>-->
+    <!--<string name=""></string>-->
+    <!--<string name=""></string>-->
+    <!--<string name=""></string>-->
+    <!--<string name=""></string>-->
+    <!--<string name=""></string>-->
+    <!--<string name=""></string>-->
+
+
 </resources>

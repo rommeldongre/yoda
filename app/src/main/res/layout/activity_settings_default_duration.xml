@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/toolBarActSettingsDefaultDuration"
+        layout="@layout/tool_bar"></include>
+
+    <ScrollView
+        android:id="@+id/scrollViewActSettingsDefaultDuration"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolBarActSettingsDefaultDuration" >
+
+        <android.support.v7.widget.CardView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_margin="10dip" >
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                        android:textStyle="bold"
+                        android:text="@string/tvDefaultStepDurationActSettingsDefaultDuration"
+                        />
+                    <SeekBar
+                        android:id="@+id/sbDefaultStepDurationActSettingsDefaultDuration"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dip"
+                        android:layout_marginTop="8dip"
+                        android:max="9"
+                        />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginLeft="20dip"
+                        android:background="@color/button_material_light" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_margin="10dip" >
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                        android:textStyle="bold"
+                        android:text="@string/tvDefaultSessionDurationActSettingsDefaultDuration"
+                        />
+                    <SeekBar
+                        android:id="@+id/sbDefaultSessionDurationActSettingsDefaultDuration"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dip"
+                        android:layout_marginTop="8dip"
+                        android:max="9"
+                        />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginLeft="20dip"
+                        android:background="@color/button_material_light" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_margin="10dip" >
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                        android:textStyle="bold"
+                        android:text="@string/tvDefaultYodaSaysNotificationActSettingsDefaultDuration"
+                        />
+                    <SeekBar
+                        android:id="@+id/sbDefaultYodaSaysNotificationActSettingsDefaultDuration"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dip"
+                        android:layout_marginTop="8dip"
+                        android:max="9"
+                        />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginLeft="20dip"
+                        android:background="@color/button_material_light" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_margin="10dip" >
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                        android:textStyle="bold"
+                        android:text="@string/tvDefaultExportToCalendarActSettingsDefaultDuration"
+                        />
+                    <SeekBar
+                        android:id="@+id/sbDefaultExportToCalendarActSettingsDefaultDuration"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dip"
+                        android:layout_marginTop="8dip"
+                        android:max="9"
+                        />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginLeft="20dip"
+                        android:background="@color/button_material_light" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_margin="10dip" >
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                        android:textStyle="bold"
+                        android:text="@string/tvDefaultPriorityOfNewStepActSettingsDefaultDuration"
+                        />
+
+                    <RadioGroup
+                        android:id="@+id/rgPriorityNewStepSettingsDefaultDuration"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dip"
+                        android:layout_marginTop="8dip">
+
+                        <RadioButton
+                            android:id="@+id/rbBottomMostActSettingsDefaultDuration"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/rbBottomMostActSettingsDefaultDuration"
+                            />
+
+                        <RadioButton
+                            android:id="@+id/rbTopMostActSettingsDefaultDuration"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/rbTopMostActSettingsDefaultDuration" />
+
+                    </RadioGroup>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginLeft="20dip"
+                        android:background="@color/button_material_light" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_margin="10dip" >
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                        android:textStyle="bold"
+                        android:text="@string/tvDefaultBehaviourForPassedStepsActSettingsDefaultDuration"
+                        />
+
+                    <RadioGroup
+                        android:id="@+id/rgBehaviourOfExpiredStepsSettingsDefaultDuration"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dip"
+                        android:layout_marginTop="8dip">
+
+                        <RadioButton
+                            android:id="@+id/rbDontExpireActSettingsDefaultDuration"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/rbDontExpireActSettingsDefaultDuration"
+                            />
+
+                        <RadioButton
+                            android:id="@+id/rbExpireActSettingsDefaultDuration"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/rbExpireActSettingsDefaultDuration"
+                            />
+
+                    </RadioGroup>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginLeft="20dip"
+                        android:background="@color/button_material_light" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+    </ScrollView>
+</RelativeLayout>

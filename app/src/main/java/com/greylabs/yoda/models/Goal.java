@@ -6,18 +6,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.greylabs.yoda.database.Database;
-import com.greylabs.yoda.database.MetaData.TableTimeBox;
 import com.greylabs.yoda.database.MetaData.TableGoal;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by Jaybhay Vijay on 6/30/2015.
- */
-public class Goal {
+public class Goal implements Serializable{
     /**********************************************************************************************/
     // Instance variables
     /**********************************************************************************************/
@@ -32,8 +29,8 @@ public class Goal {
     private int order;
     private Timestamp dueDate;
     private long timeBoxId;
-    private Database database;
-    private Context context;
+    transient private Database database;
+    transient private Context context;
 
 
     /**********************************************************************************************/
