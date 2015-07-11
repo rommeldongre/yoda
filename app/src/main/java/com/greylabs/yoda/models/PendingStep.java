@@ -173,6 +173,36 @@ public class PendingStep {
         return pendingSteps;
     }
 
+    public List<PendingStep> getAll(long goalId){
+        ArrayList<PendingStep> pendingSteps=null;
+        SQLiteDatabase db=database.getReadableDatabase();
+        String query="select * " +
+                " "+" from "+ TablePendingStep.pendingStep+" " +
+                " "+" where "+TablePendingStep.goalId+" = "+goalId;
+
+        Cursor c=db.rawQuery(query,null);
+        if(c.moveToFirst()){
+            pendingSteps=new ArrayList<>();
+            do{
+                PendingStep pendingStep=new PendingStep(context);
+                pendingStep.id=c.getInt(c.getColumnIndex(TablePendingStep.id));
+                pendingStep.nickName=c.getString(c.getColumnIndex(TablePendingStep.nickName));
+                pendingStep.priority=c.getInt(c.getColumnIndex(TablePendingStep.priority));
+                pendingStep.time=c.getInt(c.getColumnIndex(TablePendingStep.time));
+                pendingStep.series=(c.getInt(c.getColumnIndex(TablePendingStep.series))==0)?false:true;
+                pendingStep.stepCount=c.getInt(c.getColumnIndex(TablePendingStep.stepCount));
+                pendingStep.skipCount=c.getInt(c.getColumnIndex(TablePendingStep.skipCount));
+                pendingStep.goalId=c.getInt(c.getColumnIndex(TablePendingStep.goalId));
+
+                pendingSteps.add(pendingStep);
+            }while (c.moveToNext());
+        }
+        c.close();
+        return pendingSteps;
+    }
+
+
+
     public long save(){
         SQLiteDatabase db=database.getWritableDatabase();
 
