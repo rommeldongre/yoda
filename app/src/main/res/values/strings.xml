@@ -46,7 +46,7 @@
     <string name="addNewTimeBoxSpinnerItemActAddNewGoal">Add New Time Box</string>
     <string name="addNewGoalSpinnerItemActAddNewStep">Add New Goal</string>
     <string name="tvDefaultStepDurationActSettingsDefaultDuration">Default Step Duration (Hrs)</string>
-    <string name="tvDefaultSessionDurationActSettingsDefaultDuration">DefaultSession Duration (Hrs)</string>
+    <string name="tvDefaultSessionDurationActSettingsDefaultDuration">Default Session Duration (Hrs)</string>
     <string name="tvDefaultYodaSaysNotificationActSettingsDefaultDuration">Default Yoda Says Notification (Hrs)</string>
     <string name="tvDefaultExportToCalendarActSettingsDefaultDuration">Default Export to Calendar Period (Days)</string>
     <string name="tvDefaultPriorityOfNewStepActSettingsDefaultDuration">Default Priority of New Step</string>
@@ -56,6 +56,8 @@
     <string name="rbExpireActSettingsDefaultDuration">Expire</string>
     <string name="rbBottomMostActSettingsDefaultDuration">Bottom-most</string>
     <string name="rbTopMostActSettingsDefaultDuration">Top-most</string>
+    <string name="titleActChangeStepPriority">Change Step Priority</string>
+    <string name="tvEmptyViewActChangeStepPriority">No Steps to Show</string>
     <string-array name="arrayStepTypeActAddNewStep">
         <item>Single Step</item>
         <item>Series</item>

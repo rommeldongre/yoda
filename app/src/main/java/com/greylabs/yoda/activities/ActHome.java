@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.greylabs.yoda.R;
+import com.greylabs.yoda.database.QuickStart;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.views.GoalView;
 import com.greylabs.yoda.views.MyArcProgress;
@@ -39,8 +40,8 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
 
         setContentView(R.layout.activity_home);
 
-//        QuickStart quickStart = new QuickStart(this);
-//        quickStart.quickStart();
+        QuickStart quickStart = new QuickStart(this);
+        quickStart.quickStart();
 
         initialize();
     }

@@ -35,7 +35,13 @@
                 android:layout_height="wrap_content"
                 android:text="Early Morning"
                 android:id="@+id/cbActCreateTimeBoxEarlyMorning"
-                android:checked="false" />
+                android:checked="false"
+                android:background="@drawable/selector_radio_btn"
+                android:button="@null"
+                android:gravity="center"
+                android:padding="5dp"
+                android:textColor="@drawable/selector_radio_btn_text"
+                />
 
             <CheckBox
                 android:layout_width="wrap_content"
@@ -43,6 +49,11 @@
                 android:text="Afternoon"
                 android:id="@+id/cbActCreateTimeBoxAfternoon"
                 android:checked="false"
+                android:background="@drawable/selector_radio_btn"
+                android:button="@null"
+                android:gravity="center"
+                android:padding="5dp"
+                android:textColor="@drawable/selector_radio_btn_text"
                 />
 
             <CheckBox
@@ -50,7 +61,12 @@
                 android:layout_height="wrap_content"
                 android:text="Night"
                 android:id="@+id/cbActCreateTimeBoxNight"
-                android:checked="false" />
+                android:checked="false"
+                android:background="@drawable/selector_radio_btn"
+                android:button="@null"
+                android:gravity="center"
+                android:padding="5dp"
+                android:textColor="@drawable/selector_radio_btn_text" />
 
         </LinearLayout>
 
@@ -67,6 +83,11 @@
                 android:text="Morning"
                 android:id="@+id/cbActCreateTimeBoxMorning"
                 android:checked="false"
+                android:background="@drawable/selector_radio_btn"
+                android:button="@null"
+                android:gravity="center"
+                android:padding="5dp"
+                android:textColor="@drawable/selector_radio_btn_text"
                 />
 
             <CheckBox
@@ -74,7 +95,12 @@
                 android:layout_height="wrap_content"
                 android:text="Late Night"
                 android:id="@+id/cbActCreateTimeBoxLateNight"
-                android:checked="false" />
+                android:checked="false"
+                android:background="@drawable/selector_radio_btn"
+                android:button="@null"
+                android:gravity="center"
+                android:padding="5dp"
+                android:textColor="@drawable/selector_radio_btn_text" />
 
             <CheckBox
                 android:layout_width="wrap_content"
@@ -82,8 +108,11 @@
                 android:text="Evening"
                 android:id="@+id/cbActCreateTimeBoxEvening"
                 android:checked="false"
-
-                />
+                android:background="@drawable/selector_radio_btn"
+                android:button="@null"
+                android:gravity="center"
+                android:padding="5dp"
+                android:textColor="@drawable/selector_radio_btn_text" />
         </LinearLayout>
 
     </LinearLayout>
@@ -129,6 +158,11 @@
                 android:text="Daily"
                 android:id="@+id/rbActCreateTimeBoxOnDaily"
                 android:layout_below="@+id/textView2"
+                android:background="@drawable/selector_radio_btn"
+                android:button="@null"
+                android:gravity="center"
+                android:padding="5dp"
+                android:textColor="@drawable/selector_radio_btn_text"
                 android:checked="false" />
 
             <RadioButton
@@ -136,28 +170,48 @@
                 android:layout_height="wrap_content"
                 android:text="Weekly"
                 android:id="@+id/rbActCreateTimeBoxOnWeekly"
-                android:checked="false" />
+                android:checked="false"
+                android:background="@drawable/selector_radio_btn"
+                android:button="@null"
+                android:gravity="center"
+                android:padding="5dp"
+                android:textColor="@drawable/selector_radio_btn_text" />
 
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Monthly"
                 android:id="@+id/rbActCreateTimeBoxOnMonthly"
-                android:checked="false" />
+                android:checked="false"
+                android:background="@drawable/selector_radio_btn"
+                android:button="@null"
+                android:gravity="center"
+                android:padding="5dp"
+                android:textColor="@drawable/selector_radio_btn_text" />
 
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Quaterly"
                 android:id="@+id/rbActCreateTimeBoxOnQuaterly"
-                android:checked="false" />
+                android:checked="false"
+                android:background="@drawable/selector_radio_btn"
+                android:button="@null"
+                android:gravity="center"
+                android:padding="5dp"
+                android:textColor="@drawable/selector_radio_btn_text" />
 
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Yearly"
                 android:id="@+id/rbActCreateTimeBoxOnYearly"
-                android:checked="false" />
+                android:checked="false"
+                android:background="@drawable/selector_radio_btn"
+                android:button="@null"
+                android:gravity="center"
+                android:padding="5dp"
+                android:textColor="@drawable/selector_radio_btn_text" />
             </RadioGroup>
         </LinearLayout>
 

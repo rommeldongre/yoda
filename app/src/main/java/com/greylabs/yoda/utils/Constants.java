@@ -26,4 +26,10 @@ public class Constants {
     public static final boolean PRIORITY_NEW_STEP_BOTTOM_MOST_VALUE = false;
     public static final String BEHAVIOUR_DO_NOT_EXPIRE = "BEHAVIOUR_DO_NOT_EXPIRE";
     public static final boolean BEHAVIOUR_DO_NOT_EXPIRE_VALUE = false;
+    public static final String OPERATION_DELETE = "DELETE";
+    public static final String OPERATION_EDIT = "EDIT";
+    public static final String MSG_DELETE_STEP = "Are you sure you want to delete the step?";
+    public static final String MSG_STEP_DELETED = "Step Deleted";
+    public static final String PRIORITY_CHANGED = "PRIORITY_CHANGED";
+    public static final String STEPS_ARRAY_LIST_WITH_NEW_PRIORITIES = "STEP_ARRAY_LIST";
 }

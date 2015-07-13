@@ -81,8 +81,10 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
     private void getTimeBoxListAndPopulate() {
         TimeBox timeBox  = new TimeBox(this);
         timeBoxList = timeBox.getAll();
-        for(int i=0; i<timeBoxList.size();i++){
-            timeBoxNames.add(timeBoxList.get(i).getNickName());
+        if(timeBoxList != null && !timeBoxList.isEmpty()){
+            for(int i=0; i<timeBoxList.size();i++){
+                timeBoxNames.add(timeBoxList.get(i).getNickName());
+            }
         }
         timeBoxNames.add(getResources().getString(R.string.addNewTimeBoxSpinnerItemActAddNewGoal));//add new TB option
         spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, timeBoxNames);
@@ -101,12 +103,19 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home :
+                Intent intent1 = new Intent();
+                intent1.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, false);
+                setResult(1, intent1);
                 this.finish();
                 break;
             case R.id.actionSaveActAddNewGoal :
                 saveGoal();
-                if(isSaved)
-                    this.finish();
+                if(isSaved){
+                    Intent intent2 = new Intent();
+                    intent2.putExtra(Constants.GOAL_OBJECT, goal);
+                    intent2.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, true);
+                    setResult(1, intent2);
+                    this.finish();}
                 break;
         }
         return super.onOptionsItemSelected(item);

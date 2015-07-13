@@ -24,9 +24,9 @@ public class Prefs {
         this.editor = systemPrefs.edit();
     }
 
-    public void commit() {
-        editor.commit();
-    }
+//    public void commit() {
+//        editor.commit();
+//    }
 
     public int getDefaultStepDuration(){
         return systemPrefs.getInt(Constants.DEFAULT_STEP_DURATION, Constants.DEFAULT_STEP_DURATION_VALUE);
@@ -64,41 +64,41 @@ public class Prefs {
         editor.commit();
     }
 
-    public boolean getBottomMostPriorityOfNewStep(){
-        return systemPrefs.getBoolean(Constants.BOTTOM_MOST_PRIORITY_OF_NEW_STEP, Constants.BOTTOM_MOST_PRIORITY_OF_NEW_STEP_VALUE);
-    }
-
-    public void setBottomMostPriorityOfNewStep(boolean isChecked){
-        editor.putBoolean(Constants.BOTTOM_MOST_PRIORITY_OF_NEW_STEP, isChecked);
-        editor.commit();
-    }
-
-    public boolean getTopMostPriorityOfNewStep(){
-        return systemPrefs.getBoolean(Constants.TOP_MOST_PRIORITY_OF_NEW_STEP, Constants.TOP_MOST_PRIORITY_OF_NEW_STEP_VALUE);
-    }
-
-    public void setTopMostPriorityOfNewStep(boolean isChecked){
-        editor.putBoolean(Constants.TOP_MOST_PRIORITY_OF_NEW_STEP, isChecked);
-        editor.commit();
-    }
-
-    public boolean getDontExpireBehaviour(){
-        return systemPrefs.getBoolean(Constants.DONT_EXPIRE_BEHAVIOUR, Constants.DONT_EXPIRE_BEHAVIOUR_VALUE);
-    }
-
-    public void setDontExpireBehaviour(boolean isChecked){
-        editor.putBoolean(Constants.DONT_EXPIRE_BEHAVIOUR, isChecked);
-        editor.commit();
-    }
-
-    public boolean getExpireBehaviour(){
-        return systemPrefs.getBoolean(Constants.EXPIRE_BEHAVIOUR, Constants.EXPIRE_BEHAVIOUR_VALUE);
-    }
-
-    public void setExpireBehaviour(boolean isChecked){
-        editor.putBoolean(Constants.EXPIRE_BEHAVIOUR, isChecked);
-        editor.commit();
-    }
+//    public boolean getBottomMostPriorityOfNewStep(){
+//        return systemPrefs.getBoolean(Constants.BOTTOM_MOST_PRIORITY_OF_NEW_STEP, Constants.BOTTOM_MOST_PRIORITY_OF_NEW_STEP_VALUE);
+//    }
+//
+//    public void setBottomMostPriorityOfNewStep(boolean isChecked){
+//        editor.putBoolean(Constants.BOTTOM_MOST_PRIORITY_OF_NEW_STEP, isChecked);
+//        editor.commit();
+//    }
+//
+//    public boolean getTopMostPriorityOfNewStep(){
+//        return systemPrefs.getBoolean(Constants.TOP_MOST_PRIORITY_OF_NEW_STEP, Constants.TOP_MOST_PRIORITY_OF_NEW_STEP_VALUE);
+//    }
+//
+//    public void setTopMostPriorityOfNewStep(boolean isChecked){
+//        editor.putBoolean(Constants.TOP_MOST_PRIORITY_OF_NEW_STEP, isChecked);
+//        editor.commit();
+//    }
+//
+//    public boolean getDontExpireBehaviour(){
+//        return systemPrefs.getBoolean(Constants.DONT_EXPIRE_BEHAVIOUR, Constants.DONT_EXPIRE_BEHAVIOUR_VALUE);
+//    }
+//
+//    public void setDontExpireBehaviour(boolean isChecked){
+//        editor.putBoolean(Constants.DONT_EXPIRE_BEHAVIOUR, isChecked);
+//        editor.commit();
+//    }
+//
+//    public boolean getExpireBehaviour(){
+//        return systemPrefs.getBoolean(Constants.EXPIRE_BEHAVIOUR, Constants.EXPIRE_BEHAVIOUR_VALUE);
+//    }
+//
+//    public void setExpireBehaviour(boolean isChecked){
+//        editor.putBoolean(Constants.EXPIRE_BEHAVIOUR, isChecked);
+//        editor.commit();
+//    }
 
     public boolean isPriorityNewStepBottomMost(){
         return systemPrefs.getBoolean(Constants.PRIORITY_NEW_STEP_BOTTOM_MOST, Constants.PRIORITY_NEW_STEP_BOTTOM_MOST_VALUE);

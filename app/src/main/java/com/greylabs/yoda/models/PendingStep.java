@@ -8,11 +8,12 @@ import android.database.sqlite.SQLiteDatabase;
 import com.greylabs.yoda.database.Database;
 import com.greylabs.yoda.database.MetaData.TablePendingStep;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class PendingStep {
+public class PendingStep implements Serializable{
     /**********************************************************************************************/
     // Instance variables
     /**********************************************************************************************/
