@@ -225,7 +225,7 @@ public class Goal implements Serializable{
         return rowId;
     }
 
-    public int delete(long id){
+    public int delete(){
         SQLiteDatabase db=database.getWritableDatabase();
         int numOfRowAffected=db.delete(TableGoal.goal,TableGoal.id+"="+id,null);
         return numOfRowAffected;

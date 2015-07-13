@@ -223,7 +223,7 @@ public class PendingStep {
         return rowId;
     }
 
-    public int delete(long id){
+    public int delete(){
         SQLiteDatabase db=database.getWritableDatabase();
         int numOfRowAffected=db.delete(TablePendingStep.pendingStep, TablePendingStep.id + "=" + id, null);
         return numOfRowAffected;

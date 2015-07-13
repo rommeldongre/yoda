@@ -173,7 +173,7 @@ public class TimeBox {
         return rowId;
     }
 
-    public int delete(long id){
+    public int delete(){
         SQLiteDatabase db=database.getWritableDatabase();
         int numOfRowAffected=db.delete(TableTimeBox.timeBox, TableTimeBox.id + "=" + id, null);
         //db.close();

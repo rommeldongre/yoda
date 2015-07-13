@@ -127,7 +127,7 @@ public class CompletedStep {
         return rowId;
     }
 
-    public int delete(long id){
+    public int delete(){
         SQLiteDatabase db=database.getWritableDatabase();
         int numOfRowAffected=db.delete(TableCompletedStep.completedStep,TableCompletedStep.id+"="+id,null);
         return numOfRowAffected;

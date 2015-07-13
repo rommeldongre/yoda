@@ -43,5 +43,9 @@
         <activity
             android:name=".activities.ActTodayFilter" />
 
+
+        <service android:name=".schedular.AlarmService"/>
+        <receiver android:name=".schedular.AlarmBroadcastReceiver"/>
+
     </application>
 </manifest>
