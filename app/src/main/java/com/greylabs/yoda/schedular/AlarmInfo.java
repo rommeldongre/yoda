@@ -86,12 +86,12 @@ public class AlarmInfo implements Serializable{
      */
     public void setAlarm(){
 
-        Calendar calTarget=Calendar.getInstance();
-        calTarget.setTime(alarmDate);
-        Logger.log(TAG,"Target date:"+calTarget.getTime().toString());
-        Intent broadcastReceiver = new Intent(context, AlarmBroadcastReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int)stepId,broadcastReceiver,0);
-        alarmManager.set(AlarmManager.RTC_WAKEUP,calTarget.getTimeInMillis(),pendingIntent);
+//        Calendar calTarget=Calendar.getInstance();
+//        calTarget.setTime(alarmDate);
+//        Logger.log(TAG,"Target date:"+calTarget.getTime().toString());
+//        Intent broadcastReceiver = new Intent(context, AlarmBroadcastReceiver.class);
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int)stepId,broadcastReceiver,0);
+//        alarmManager.set(AlarmManager.RTC_WAKEUP,calTarget.getTimeInMillis(),pendingIntent);
 
     }
 
@@ -101,9 +101,9 @@ public class AlarmInfo implements Serializable{
      * @return None
      */
     public void cancel(){
-        Intent broadcastReceiver = new Intent(context, AlarmBroadcastReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int)stepId,broadcastReceiver,0);
-        alarmManager.cancel(pendingIntent);
+//        Intent broadcastReceiver = new Intent(context, AlarmBroadcastReceiver.class);
+//        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int)stepId,broadcastReceiver,0);
+//        alarmManager.cancel(pendingIntent);
     }
 
 }

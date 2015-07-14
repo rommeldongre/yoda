@@ -40,8 +40,8 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
 
         setContentView(R.layout.activity_home);
 
-        QuickStart quickStart = new QuickStart(this);
-        quickStart.quickStart();
+//        QuickStart quickStart = new QuickStart(this);
+//        quickStart.quickStart();
 
         initialize();
     }

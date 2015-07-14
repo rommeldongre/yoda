@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.adapters.DragSortRecycler;
 import com.greylabs.yoda.adapters.RecyclerViewActChangeStepPriority;
-import com.greylabs.yoda.interfaces.OnClickOfRecyclerViewActChangeStepPriority;
+import com.greylabs.yoda.interfaces.onClickOfRecyclerViewActChangeStepPriority;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.utils.Constants;
@@ -25,7 +25,7 @@ import com.greylabs.yoda.utils.Logger;
 import java.util.ArrayList;
 
 
-public class ActChangeStepPriority extends ActionBarActivity implements OnClickOfRecyclerViewActChangeStepPriority {
+public class ActChangeStepPriority extends ActionBarActivity implements onClickOfRecyclerViewActChangeStepPriority {
 
     private Toolbar toolbar;
     TextView emptyViewActChangeStepPriority;
@@ -164,7 +164,7 @@ public class ActChangeStepPriority extends ActionBarActivity implements OnClickO
                 alertLogout.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        stepArrayList.get(Position).delete(stepArrayList.get(Position).getId());
+                        stepArrayList.get(Position).delete();
                         Logger.showMsg(ActChangeStepPriority.this, Constants.MSG_STEP_DELETED);
                         getStepArrayFromLocal();
                         mAdapter.notifyDataSetChanged();
