@@ -1,4 +1,4 @@
-package com.greylabs.yoda.schedular;
+package com.greylabs.yoda.scheduler;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

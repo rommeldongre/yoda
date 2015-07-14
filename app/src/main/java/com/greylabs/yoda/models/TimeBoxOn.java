@@ -53,7 +53,9 @@ public class TimeBoxOn {
     public void setTimeBoxId(long timeBoxId) {
         this.timeBoxId = timeBoxId;
     }
-
+    public void initDatabase(Context context){
+        this.database=Database.getInstance(context);
+    }
     /**********************************************************************************************/
     // Constructors
     /**********************************************************************************************/

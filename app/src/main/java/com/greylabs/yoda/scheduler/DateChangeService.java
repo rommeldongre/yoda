@@ -1,4 +1,4 @@
-package com.greylabs.yoda.schedular;
+package com.greylabs.yoda.scheduler;
 
 import android.app.Service;
 import android.content.Intent;

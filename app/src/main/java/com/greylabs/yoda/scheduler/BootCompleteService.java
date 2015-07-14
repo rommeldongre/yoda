@@ -1,6 +1,5 @@
-package com.greylabs.yoda.schedular;
+package com.greylabs.yoda.scheduler;
 
-import android.app.Notification;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
@@ -10,39 +9,32 @@ import android.widget.Toast;
 import com.greylabs.yoda.utils.Logger;
 
 /**
- * Created by Jaybhay Vijay on 7/13/2015.
+ * Created by Jaybhay Vijay on 7/14/2015.
  */
-public class AlarmService extends Service {
-    private static final String TAG="AlarmService";
+public class BootCompleteService extends Service {
+    private static final String TAG="BootCompleteService";
 
     private final IBinder iBinder = new LocalBinder();
     public class LocalBinder extends Binder {
-        AlarmService getService() {
-            return AlarmService.this;
+        BootCompleteService getService() {
+            return BootCompleteService.this;
         }
     }
     @Override
     public void onCreate() {
         super.onCreate();
-        Logger.log(TAG,"Alarm Service created.");
+        Logger.log(TAG, "BootCompleteService created.");
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(this, "Alarm on start comman...", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "BootCompleteService on start command...", Toast.LENGTH_SHORT).show();
         return START_STICKY;
-    }
-
-    @Override
-    public void onDestroy() {
-
-
-        // Tell the user we stopped.
-
     }
 
     @Override
     public IBinder onBind(Intent intent) {
         return iBinder;
     }
+
 }
