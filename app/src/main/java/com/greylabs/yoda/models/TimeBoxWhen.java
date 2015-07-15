@@ -37,6 +37,9 @@ public class TimeBoxWhen {
     public void setWhenValues(Set<com.greylabs.yoda.enums.TimeBoxWhen> whenValues) {
         this.whenValues = whenValues;
     }
+    public void initDatabase(Context context){
+        this.database=Database.getInstance(context);
+    }
 
     public Set<com.greylabs.yoda.enums.TimeBoxWhen> getWhenValues(){
         return this.whenValues;

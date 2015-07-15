@@ -227,7 +227,7 @@ public final class QuickStart {
 
         //5
         goal=new Goal(context);
-        goal.setNickName("Wise");
+        goal.setNickName("Wise1");
         goal.setObjective("");
         goal.setKeyResult("");
         goal.setTimeBoxId(timeBoxIds.get(4));
@@ -245,14 +245,12 @@ public final class QuickStart {
 
         //7
         goal=new Goal(context);
-        goal.setNickName("Wise");
+        goal.setNickName("Wise2");
         goal.setObjective("");
         goal.setKeyResult("");
         goal.setTimeBoxId(timeBoxIds.get(6));
         goal.save();
         goalIds.add(goal.getId());
-
-
 
     }
 
@@ -378,8 +376,6 @@ public final class QuickStart {
         pendingStep.setTime(3);
         pendingStep.setGoalId(goalIds.get(6));
         pendingStep.save();
-
-
 
     }
 

@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.greylabs.yoda.database.Database;
+import com.greylabs.yoda.database.MetaData;
 import com.greylabs.yoda.database.MetaData.TablePendingStep;
 
 import java.io.Serializable;
@@ -95,7 +96,9 @@ public class PendingStep implements Serializable{
     public void setGoalId(long goalId) {
         this.goalId = goalId;
     }
-
+    public void initDatabase(Context context){
+        this.database=Database.getInstance(context);
+    }
 
     /**********************************************************************************************/
     // Constructors
@@ -107,7 +110,7 @@ public class PendingStep implements Serializable{
 
 
     /**********************************************************************************************/
-    // Methods
+    //Core Methods
     /**********************************************************************************************/
 
     @Override
@@ -229,5 +232,23 @@ public class PendingStep implements Serializable{
         int numOfRowAffected=db.delete(TablePendingStep.pendingStep, TablePendingStep.id + "=" + id, null);
         return numOfRowAffected;
     }
-
+    /**********************************************************************************************/
+    //Thin Result Methods
+    /**********************************************************************************************/
+    public long getPendingStepCount(long goalId){
+        long pendingStepCount=0;
+        SQLiteDatabase db=database.getReadableDatabase();
+        //this query returns sum of time of all steps that are present in the Complpeted Step table
+        String pendingStepCountQuery=" select count(*) as stepCount " +
+                " "+"from "+ MetaData.TablePendingStep.pendingStep+" " +
+                " "+"where "+ MetaData.TablePendingStep.goalId+"="+id;
+        Cursor c=db.rawQuery(pendingStepCountQuery,null);
+        if(c.moveToFirst()){
+            do{
+                pendingStepCount=c.getInt(c.getColumnIndex("stepCount"));
+            }while(c.moveToNext());
+        }
+        c.close();
+        return pendingStepCount;
+    }
 }

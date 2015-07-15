@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.greylabs.yoda.database.Database;
+import com.greylabs.yoda.database.MetaData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +53,10 @@ public class CompletedStep {
         this.stepCount = stepCount;
     }
 
+    public void initDatabase(Context context){
+        this.database=Database.getInstance(context);
+    }
+
     /**********************************************************************************************/
     // Constructors
     /**********************************************************************************************/
@@ -59,7 +64,6 @@ public class CompletedStep {
         this.database=Database.getInstance(context);
         this.context=context;
     }
-
 
     /**********************************************************************************************/
     // Methods
@@ -133,5 +137,25 @@ public class CompletedStep {
         return numOfRowAffected;
     }
 
+    /**********************************************************************************************/
+    //Thin Result Methods
+    /**********************************************************************************************/
+    public long getCompletedStepCount(long goalId){
+        long completedStepCount=0;
+        SQLiteDatabase db=database.getReadableDatabase();
+        //this query returns sum of time of all steps that are present in the Complpeted Step table
+        String completedStepCountQuery=" select count(*) as stepCount" +
+                " "+ MetaData.TableCompletedStep.completedStep+" as c join "+" "+ MetaData.TablePendingStep.pendingStep+" as p " +
+                " "+"on ( c."+ MetaData.TablePendingStep.id+" = "+ MetaData.TableCompletedStep.id+" )" +
+                " "+"where p."+ MetaData.TablePendingStep.goalId+"="+id;
+        Cursor c=db.rawQuery(completedStepCountQuery,null);
+        if(c.moveToFirst()){
+            do{
+                completedStepCount=c.getInt(c.getColumnIndex("stepCount"));
+            }while(c.moveToNext());
+        }
+        c.close();
+        return completedStepCount;
+    }
 
 }

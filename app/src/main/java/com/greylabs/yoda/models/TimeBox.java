@@ -76,7 +76,9 @@ public class TimeBox {
     public void setTimeBoxWhen(TimeBoxWhen timeBoxWhen) {
         this.timeBoxWhen = timeBoxWhen;
     }
-
+    public void initDatabase(Context context){
+        this.database=Database.getInstance(context);
+    }
     /**********************************************************************************************/
     // Constructors
     /**********************************************************************************************/
