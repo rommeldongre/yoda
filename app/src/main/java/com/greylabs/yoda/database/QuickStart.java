@@ -2,6 +2,7 @@ package com.greylabs.yoda.database;
 
 import android.content.Context;
 
+import com.greylabs.yoda.enums.Daily;
 import com.greylabs.yoda.enums.SubValue;
 import com.greylabs.yoda.enums.TimeBoxOn;
 import com.greylabs.yoda.enums.TimeBoxTill;
@@ -21,6 +22,7 @@ import java.util.TreeSet;
  */
 public final class QuickStart {
 
+    private final static String TAG="QuickStart";
     //static int rowsAdded=0;
     ArrayList<Long> timeBoxIds;
     ArrayList<Long> goalIds;
@@ -51,13 +53,14 @@ public final class QuickStart {
         ////set on
         com.greylabs.yoda.models.TimeBoxOn timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,TimeBoxOn.DAILY);
         timeBoxOns=new TreeSet<>();
+        timeBoxOns.add(Daily.DAILY);
         timeBoxOn.setSubValues(timeBoxOns);
         timeBox.setTimeBoxOn(timeBoxOn);
         //set till
         timeBox.setTillType(TimeBoxTill.FOREVER);
-
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
+        Logger.log(TAG, "1 Added");
 
         //2
         timeBox=new TimeBox(context);
@@ -82,7 +85,7 @@ public final class QuickStart {
         timeBox.setTillType(TimeBoxTill.YEAR);
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
-
+        Logger.log(TAG, "1 Added");
         //3
         timeBox=new TimeBox(context);
         timeBox.setNickName("Weekday Evenings Forever");
@@ -103,7 +106,7 @@ public final class QuickStart {
         timeBox.setTillType(TimeBoxTill.YEAR);
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
-
+        Logger.log(TAG, "1 Added");
         //4
         timeBox=new TimeBox(context);
         timeBox.setNickName("Sunday Morning Forever");
@@ -123,12 +126,15 @@ public final class QuickStart {
         timeBox.setTillType(TimeBoxTill.FOREVER);
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
+        Logger.log(TAG, "1 Added");
+
         //5
         timeBox=new TimeBox(context);
         timeBox.setNickName("Weekend Afternoon Forever");
        //on
         timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,TimeBoxOn.DAILY);
         timeBoxOns=new TreeSet<>();
+        timeBoxOns.add(Daily.DAILY);
         timeBoxOn.setSubValues(timeBoxOns);
         timeBox.setTimeBoxOn(timeBoxOn);
         //when
@@ -141,7 +147,7 @@ public final class QuickStart {
         timeBox.setTillType(TimeBoxTill.YEAR);
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
-
+        Logger.log(TAG, "1 Added");
         //6
         timeBox=new TimeBox(context);
         timeBox.setNickName("Weekend Evenings ");
@@ -161,7 +167,7 @@ public final class QuickStart {
         timeBox.setTillType(TimeBoxTill.QUARTER);
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
-
+        Logger.log(TAG, "1 Added");
         //7
         timeBox=new TimeBox(context);
         timeBox.setNickName("Week Nights");
@@ -185,7 +191,7 @@ public final class QuickStart {
         timeBox.setTillType(TimeBoxTill.YEAR);
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
-
+        Logger.log(TAG, "1 Added");
 
         //8
         timeBox=new TimeBox(context);
@@ -193,6 +199,7 @@ public final class QuickStart {
         //on
         timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,TimeBoxOn.DAILY);
         timeBoxOns=new TreeSet<>();
+        timeBoxOns.add(Daily.DAILY);
         timeBoxOn.setSubValues(timeBoxOns);
         timeBox.setTimeBoxOn(timeBoxOn);
         timeBoxWhen=new com.greylabs.yoda.models.TimeBoxWhen(context);
@@ -201,6 +208,7 @@ public final class QuickStart {
         timeBox.setTimeBoxWhen(timeBoxWhen);
         timeBox.setTillType(TimeBoxTill.FOREVER);
         timeBox.save();
+        Logger.log(TAG, "1 Added");
     }
 
     private void addDefaultsGoals(){

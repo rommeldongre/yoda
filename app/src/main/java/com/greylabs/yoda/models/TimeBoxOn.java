@@ -7,11 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.greylabs.yoda.database.Database;
 import com.greylabs.yoda.database.MetaData.TableTimeBoxOn;
-import com.greylabs.yoda.enums.Month;
-import com.greylabs.yoda.enums.Quarter;
-import com.greylabs.yoda.enums.SubValue;
-import com.greylabs.yoda.enums.WeekDay;
-import com.greylabs.yoda.enums.Year;
+import com.greylabs.yoda.enums.*;
+import com.greylabs.yoda.enums.Daily;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -70,7 +67,7 @@ public class TimeBoxOn {
     /**********************************************************************************************/
 
     public Set<SubValue> get(){
-        Set<SubValue> subValues=null;
+        Set<SubValue>  subValues=new TreeSet<>();
         SQLiteDatabase db=database.getReadableDatabase();
         String query="select * " +
                 " "+" from "+ TableTimeBoxOn.timeBoxOn+" " +
@@ -78,10 +75,10 @@ public class TimeBoxOn {
 
         Cursor c=db.rawQuery(query,null);
         if(c.moveToFirst()){
-            subValues=new TreeSet<>();
             do{
-                int value=c.getInt(c.getColumnIndex(TableTimeBoxOn.id));
-                subValues.add(getEnumTypeFromInteger(value,onType));
+                timeBoxId=c.getInt(c.getColumnIndex(TableTimeBoxOn.id));
+                int on= c.getInt(c.getColumnIndex(TableTimeBoxOn.on));
+                subValues.add(getEnumTypeFromInteger(on,onType));
             }while (c.moveToNext());
         }
         c.close();
@@ -123,7 +120,7 @@ public class TimeBoxOn {
         SubValue subValue=null;
         switch (onType){
             case DAILY:
-                subValue=null;
+                subValue= Daily.getIntegerToEnumType(value);
                 break;
             case WEEKLY:
                 subValue= WeekDay.getIntegerToEnumType(value);
@@ -145,6 +142,7 @@ public class TimeBoxOn {
         int value=0;
         switch (onType){
             case DAILY:
+                value=Daily.getEnumToIntegerType((Daily)subValue);
                 break;
             case WEEKLY:
                 value= WeekDay.getEnumToIntegerType((WeekDay)subValue);
