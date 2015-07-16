@@ -140,4 +140,46 @@ public class MetaData {
                 " "+"foreign key("+id+") references "+ TableTimeBox.timeBox+"("+ TableTimeBox.id+") " +
                 ")";
     }
+
+    public static class TableDay{
+        public static final String day="day";//table name
+        public static final String id="id";
+        public static final String date="date";
+        public static final String dayOfYear="dayOfYear";
+        public static final String dayOfWeek="dayOfWeek";
+        public static final String weekOfMonth="dayOfMonth";
+        public static final String quarterOfYear="quarterOfYear";
+        public static final String year="year";
+
+        public static final String createDayTable=" " +
+                " create table "+day+" ( " +
+                " "+id+" integer primary key autoincrement, " +
+                " "+date+" text , " +
+                " "+dayOfYear+" integer , " +
+                " "+dayOfWeek+" integer , " +
+                " "+weekOfMonth+" integer , " +
+                " "+quarterOfYear+" integer , " +
+                " "+year+" integer ," +
+                " ) ";
+    }
+    public static class TableSlot{
+        public static final String slot="slot";//table name
+        public static final String id="id";
+        public static final String when="when";
+        public static final String time="maxTime";
+        public static final String goalId="goalId";
+        public static final String timeBoxId="timeBoxId";
+        public static final String dayId="dayId";
+
+        public static final String createSlotTable=" " +
+                " create table "+slot+" ( " +
+                " "+id+" integer primary key autoincrement, " +
+                " "+when+" integer ," +
+                " "+time+" integer , " +
+                " "+goalId+" integer , " +
+                " "+timeBoxId+" integer , " +
+                " "+dayId+" integer , " +
+                " "+"foreign key("+dayId+") references "+ TableDay.day+"("+ TableDay.id+") " +
+                " )";
+    }
 }

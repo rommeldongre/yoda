@@ -42,28 +42,28 @@ public final class QuickStart {
         //1
         timeBox=new TimeBox(context);
         timeBox.setNickName("Daily Early Morning Forever");
-        timeBox.setTimeBoxOnType(TimeBoxOn.getEnumToIntegerType(TimeBoxOn.DAILY));
-        timeBox.setTimeBoxTillType(TimeBoxTill.getEnumToIntegerType(TimeBoxTill.FOREVER));
         ////set when
-        com.greylabs.yoda.models.TimeBoxWhen timeBoxWhen=new com.greylabs.yoda.models.TimeBoxWhen(context,timeBox.getId());
+        com.greylabs.yoda.models.TimeBoxWhen timeBoxWhen=new com.greylabs.yoda.models.TimeBoxWhen(context);
         timeBoxWhens=new TreeSet<>();
         timeBoxWhens.add(TimeBoxWhen.EARLY_MORNING);
         timeBoxWhen.setWhenValues(timeBoxWhens);
         timeBox.setTimeBoxWhen(timeBoxWhen);
         ////set on
-        com.greylabs.yoda.models.TimeBoxOn timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,timeBox.getId(),timeBox.getTimeBoxOnType());
+        com.greylabs.yoda.models.TimeBoxOn timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,TimeBoxOn.DAILY);
         timeBoxOns=new TreeSet<>();
         timeBoxOn.setSubValues(timeBoxOns);
         timeBox.setTimeBoxOn(timeBoxOn);
-        //timeBox.saveTimeBoxWhen(timeBox.getId(), timeBoxWhens);
+        //set till
+        timeBox.setTillType(TimeBoxTill.FOREVER);
+
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
+
         //2
         timeBox=new TimeBox(context);
         timeBox.setNickName("Weekday Afternoons till this year");
-        timeBox.setTimeBoxOnType(TimeBoxOn.getEnumToIntegerType(TimeBoxOn.WEEKLY));
-        timeBox.setTimeBoxTillType(TimeBoxTill.getEnumToIntegerType(TimeBoxTill.YEAR));
-        timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,timeBox.getId(),timeBox.getTimeBoxOnType());
+       //on
+        timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,TimeBoxOn.WEEKLY);
         timeBoxOns=new TreeSet<>();
         timeBoxOns.add(WeekDay.MONDAY);
         timeBoxOns.add(WeekDay.TUESDAY);
@@ -72,88 +72,101 @@ public final class QuickStart {
         timeBoxOns.add(WeekDay.FRIDAY);
         timeBoxOn.setSubValues(timeBoxOns);
         timeBox.setTimeBoxOn(timeBoxOn);
-        timeBoxWhen=new com.greylabs.yoda.models.TimeBoxWhen(context,timeBox.getId());
+        //when
+        timeBoxWhen=new com.greylabs.yoda.models.TimeBoxWhen(context);
         timeBoxWhens=new TreeSet<>();
         timeBoxWhens.add(TimeBoxWhen.AFTERNOON);
         timeBoxWhen.setWhenValues(timeBoxWhens);
         timeBox.setTimeBoxWhen(timeBoxWhen);
+        //till
+        timeBox.setTillType(TimeBoxTill.YEAR);
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
+
         //3
         timeBox=new TimeBox(context);
         timeBox.setNickName("Weekday Evenings Forever");
-        timeBox.setTimeBoxOnType(TimeBoxOn.getEnumToIntegerType(TimeBoxOn.WEEKLY));
-        timeBox.setTimeBoxTillType(TimeBoxTill.getEnumToIntegerType(TimeBoxTill.YEAR));
-        timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,timeBox.getId(),timeBoxOn.getOnType());
+        //on
+        timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,TimeBoxOn.WEEKLY);
         timeBoxOns=new TreeSet<>();
         timeBoxOns.add(WeekDay.SATURDAY);
         timeBoxOns.add(WeekDay.SUNDAY);
         timeBoxOn.setSubValues(timeBoxOns);
         timeBox.setTimeBoxOn(timeBoxOn);
-        timeBoxWhen=new com.greylabs.yoda.models.TimeBoxWhen(context,timeBox.getId());
+        //when
+        timeBoxWhen=new com.greylabs.yoda.models.TimeBoxWhen(context);
         timeBoxWhens=new TreeSet<>();
         timeBoxWhens.add(TimeBoxWhen.EVENING);
         timeBoxWhen.setWhenValues(timeBoxWhens);
         timeBox.setTimeBoxWhen(timeBoxWhen);
+        //till
+        timeBox.setTillType(TimeBoxTill.YEAR);
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
+
         //4
         timeBox=new TimeBox(context);
         timeBox.setNickName("Sunday Morning Forever");
-        timeBox.setTimeBoxOnType(TimeBoxOn.getEnumToIntegerType(TimeBoxOn.WEEKLY));
-        timeBox.setTimeBoxTillType(TimeBoxTill.getEnumToIntegerType(TimeBoxTill.FOREVER));
-        timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,timeBox.getId(),timeBox.getTimeBoxOnType());
+        //on
+        timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,TimeBoxOn.WEEKLY);
         timeBoxOns=new TreeSet<>();
         timeBoxOns.add(WeekDay.SUNDAY);
         timeBoxOn.setSubValues(timeBoxOns);
         timeBox.setTimeBoxOn(timeBoxOn);
-        timeBoxWhen=new com.greylabs.yoda.models.TimeBoxWhen(context,timeBox.getId());
+        //when
+        timeBoxWhen=new com.greylabs.yoda.models.TimeBoxWhen(context);
         timeBoxWhens=new TreeSet<>();
         timeBoxWhens.add(TimeBoxWhen.MORNING);
         timeBoxWhen.setWhenValues(timeBoxWhens);
         timeBox.setTimeBoxWhen(timeBoxWhen);
+        //till
+        timeBox.setTillType(TimeBoxTill.FOREVER);
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
         //5
         timeBox=new TimeBox(context);
         timeBox.setNickName("Weekend Afternoon Forever");
-        timeBox.setTimeBoxOnType(TimeBoxOn.getEnumToIntegerType(TimeBoxOn.DAILY));
-        timeBox.setTimeBoxTillType(TimeBoxTill.getEnumToIntegerType(TimeBoxTill.YEAR));
-        timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,timeBox.getId(),timeBox.getTimeBoxOnType());
+       //on
+        timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,TimeBoxOn.DAILY);
         timeBoxOns=new TreeSet<>();
         timeBoxOn.setSubValues(timeBoxOns);
         timeBox.setTimeBoxOn(timeBoxOn);
-        timeBoxWhen=new com.greylabs.yoda.models.TimeBoxWhen(context,timeBox.getId());
+        //when
+        timeBoxWhen=new com.greylabs.yoda.models.TimeBoxWhen(context);
         timeBoxWhens=new TreeSet<>();
         timeBoxWhens.add(TimeBoxWhen.EVENING);
         timeBoxWhen.setWhenValues(timeBoxWhens);
         timeBox.setTimeBoxWhen(timeBoxWhen);
+        //till
+        timeBox.setTillType(TimeBoxTill.YEAR);
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
+
         //6
         timeBox=new TimeBox(context);
         timeBox.setNickName("Weekend Evenings ");
-        timeBox.setTimeBoxOnType(TimeBoxOn.getEnumToIntegerType(TimeBoxOn.WEEKLY));
-        timeBox.setTimeBoxTillType(TimeBoxTill.getEnumToIntegerType(TimeBoxTill.QUARTER));
-        Logger.log("QuickStart"," value: "+timeBox.getTimeBoxOnType());
-        timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,timeBox.getId(),timeBox.getTimeBoxOnType());
+        //on
+        timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,TimeBoxOn.WEEKLY);
         timeBoxOns=new TreeSet<>();
         timeBoxOns.add(WeekDay.SUNDAY);
         timeBoxOn.setSubValues(timeBoxOns);
         timeBox.setTimeBoxOn(timeBoxOn);
-        timeBoxWhen=new com.greylabs.yoda.models.TimeBoxWhen(context,timeBox.getId());
+        //when
+        timeBoxWhen=new com.greylabs.yoda.models.TimeBoxWhen(context);
         timeBoxWhens=new TreeSet<>();
         timeBoxWhens.add(TimeBoxWhen.EVENING);
         timeBoxWhen.setWhenValues(timeBoxWhens);
         timeBox.setTimeBoxWhen(timeBoxWhen);
+        //till
+        timeBox.setTillType(TimeBoxTill.QUARTER);
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
+
         //7
         timeBox=new TimeBox(context);
         timeBox.setNickName("Week Nights");
-        timeBox.setTimeBoxOnType(TimeBoxOn.getEnumToIntegerType(TimeBoxOn.WEEKLY));
-        timeBox.setTimeBoxTillType(TimeBoxTill.getEnumToIntegerType(TimeBoxTill.YEAR));
-        timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,timeBox.getId(),timeBox.getTimeBoxOnType());
+        //on
+        timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,TimeBoxOn.WEEKLY);
         timeBoxOns=new TreeSet<>();
         timeBoxOns.add(WeekDay.MONDAY);
         timeBoxOns.add(WeekDay.TUESDAY);
@@ -162,24 +175,31 @@ public final class QuickStart {
         timeBoxOns.add(WeekDay.FRIDAY);
         timeBoxOn.setSubValues(timeBoxOns);
         timeBox.setTimeBoxOn(timeBoxOn);
-        timeBoxWhen=new com.greylabs.yoda.models.TimeBoxWhen(context,timeBox.getId());
+        //when
+        timeBoxWhen=new com.greylabs.yoda.models.TimeBoxWhen(context);
         timeBoxWhens=new TreeSet<>();
         timeBoxWhens.add(TimeBoxWhen.LATE_NIGHT);
         timeBoxWhen.setWhenValues(timeBoxWhens);
         timeBox.setTimeBoxWhen(timeBoxWhen);
+        //till
+        timeBox.setTillType(TimeBoxTill.YEAR);
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
+
+
         //8
         timeBox=new TimeBox(context);
         timeBox.setNickName("Unplanned");
-        timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,timeBox.getId(),timeBox.getTimeBoxOnType());
+        //on
+        timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,TimeBoxOn.DAILY);
         timeBoxOns=new TreeSet<>();
         timeBoxOn.setSubValues(timeBoxOns);
         timeBox.setTimeBoxOn(timeBoxOn);
-        timeBoxWhen=new com.greylabs.yoda.models.TimeBoxWhen(context,timeBox.getId());
+        timeBoxWhen=new com.greylabs.yoda.models.TimeBoxWhen(context);
         timeBoxWhens=new TreeSet<>();
         timeBoxWhen.setWhenValues(timeBoxWhens);
         timeBox.setTimeBoxWhen(timeBoxWhen);
+        timeBox.setTillType(TimeBoxTill.FOREVER);
         timeBox.save();
     }
 

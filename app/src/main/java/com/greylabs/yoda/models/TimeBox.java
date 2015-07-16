@@ -9,6 +9,7 @@ import com.greylabs.yoda.database.Database;
 import com.greylabs.yoda.database.MetaData.TableTimeBox;
 import com.greylabs.yoda.database.MetaData.TableTimeBoxOn;
 import com.greylabs.yoda.database.MetaData.TableTimeBoxWhen;
+import com.greylabs.yoda.enums.TimeBoxTill;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +23,7 @@ public class TimeBox {
     /**********************************************************************************************/
     private long id;
     private String nickName;
-    private int timeBoxOnType;
-    private int  timeBoxTillType;
+    private TimeBoxTill tillType;
     private Context context;
     private Database database;
     private TimeBoxOn timeBoxOn;
@@ -46,21 +46,6 @@ public class TimeBox {
     public void setNickName(String nickName) {
         this.nickName = nickName;
     }
-    public int getTimeBoxOnType() {
-        return timeBoxOnType;
-    }
-
-    public void setTimeBoxOnType(int timeBoxOnType) {
-        this.timeBoxOnType = timeBoxOnType;
-    }
-
-    public int getTimeBoxTillType() {
-        return timeBoxTillType;
-    }
-
-    public void setTimeBoxTillType(int timeBoxTillType) {
-        this.timeBoxTillType = timeBoxTillType;
-    }
 
     public TimeBoxOn getTimeBoxOn() {
         return timeBoxOn;
@@ -79,6 +64,13 @@ public class TimeBox {
     public void initDatabase(Context context){
         this.database=Database.getInstance(context);
     }
+    public TimeBoxTill getTillType() {
+        return tillType;
+    }
+
+    public void setTillType(TimeBoxTill tillType) {
+        this.tillType = tillType;
+    }
     /**********************************************************************************************/
     // Constructors
     /**********************************************************************************************/
@@ -86,21 +78,18 @@ public class TimeBox {
         this.context=context;
         this.database=Database.getInstance(context);
     }
-
+    public TimeBox(Context context,TimeBoxWhen timeBoxWhen,TimeBoxOn timeBoxOn,TimeBoxTill tillType){
+        this(context);
+        this.timeBoxWhen=timeBoxWhen;
+        this.timeBoxOn=timeBoxOn;
+        this.tillType=tillType;
+    }
 
     /**********************************************************************************************/
     // Methods
     /**********************************************************************************************/
 
-    @Override
-    public String toString() {
-        return "TimeBox{" +
-                "id=" + id +
-                ", nickName='" + nickName + '\'' +
-                ", timeBoxOnType=" + timeBoxOnType +
-                ", timeBoxTillType=" + timeBoxTillType +
-                '}';
-    }
+
 
     public TimeBox get(long id){
         SQLiteDatabase db=database.getReadableDatabase();
@@ -113,16 +102,18 @@ public class TimeBox {
             do{
                 this.id=c.getInt(c.getColumnIndex(TableTimeBox.id));
                 this.nickName=c.getString(c.getColumnIndex(TableTimeBox.nickName));
-                this.timeBoxOnType=c.getInt(c.getColumnIndex(TableTimeBox.on));
-                this.timeBoxTillType=c.getInt(c.getColumnIndex(TableTimeBox.till));
+                this.timeBoxOn=new TimeBoxOn(context,
+                        com.greylabs.yoda.enums.TimeBoxOn.getIntegerToEnumType(c.getInt(c.getColumnIndex(TableTimeBox.on))));
+                this.timeBoxOn.setTimeBoxId(this.id);
+                this.timeBoxOn.setSubValues(this.timeBoxOn.get());
+                this.timeBoxWhen=new TimeBoxWhen(context);
+                this.timeBoxWhen.setTimeBoxId(this.id);
+                this.timeBoxWhen.setWhenValues(this.timeBoxWhen.get());
+                this.tillType=TimeBoxTill.getIntegerToEnumType(c.getInt(c.getColumnIndex(TableTimeBox.till)));
             }while (c.moveToNext());
         }
         c.close();
         //db.close();
-        this.timeBoxOn=new TimeBoxOn(context,this.id,this.timeBoxOnType);
-        this.timeBoxOn.setSubValues(this.timeBoxOn.get());
-        this.timeBoxWhen=new TimeBoxWhen(context,this.id);
-        this.timeBoxWhen.setWhenValues(this.timeBoxWhen.get());
         return this;
     }
 
@@ -139,12 +130,15 @@ public class TimeBox {
                 TimeBox timeBox=new TimeBox(context);
                 timeBox.id=c.getInt(c.getColumnIndex(TableTimeBox.id));
                 timeBox.nickName=c.getString(c.getColumnIndex(TableTimeBox.nickName));
-                timeBox.timeBoxOnType=c.getInt(c.getColumnIndex(TableTimeBox.on));
-                timeBox.timeBoxTillType=c.getInt(c.getColumnIndex(TableTimeBox.till));
-                this.timeBoxOn=new TimeBoxOn(context,this.id,this.timeBoxOnType);
-                this.timeBoxOn.setSubValues(this.timeBoxOn.get());
-                this.timeBoxWhen=new TimeBoxWhen(context,this.id);
-                this.timeBoxWhen.setWhenValues(this.timeBoxWhen.get());
+
+                timeBox.timeBoxOn=new TimeBoxOn(context,
+                        com.greylabs.yoda.enums.TimeBoxOn.getIntegerToEnumType(c.getInt(c.getColumnIndex(TableTimeBox.on))));
+                timeBox.timeBoxOn.setTimeBoxId(timeBox.id);
+                timeBox.timeBoxOn.setSubValues(this.timeBoxOn.get());
+                timeBox.timeBoxWhen=new TimeBoxWhen(context);
+                timeBox.timeBoxWhen.setTimeBoxId(this.id);
+                timeBox.timeBoxWhen.setWhenValues(this.timeBoxWhen.get());
+                timeBox.tillType=TimeBoxTill.getIntegerToEnumType(c.getInt(c.getColumnIndex(TableTimeBox.till)));
                 timeBoxes.add(timeBox);
 
             }while (c.moveToNext());
@@ -156,17 +150,15 @@ public class TimeBox {
 
     public long save(){
         SQLiteDatabase db=database.getWritableDatabase();
-
         ContentValues values=new ContentValues();
         values.put(TableTimeBox.nickName,this.nickName);
-        values.put(TableTimeBox.on, this.timeBoxOnType);
-        values.put(TableTimeBox.till, this.timeBoxTillType);
+        values.put(TableTimeBox.on, com.greylabs.yoda.enums.TimeBoxOn.getEnumToIntegerType(this.timeBoxOn.getOnType()));
+        values.put(TableTimeBox.till, TimeBoxTill.getEnumToIntegerType(this.tillType));
         long rowId;
         if(this.id!=0){
             values.put(TableTimeBox.id,this.id);
         }
         rowId=db.insertWithOnConflict(TableTimeBox.timeBox, null, values, SQLiteDatabase.CONFLICT_REPLACE);
-        //db.close();
         this.timeBoxOn.setTimeBoxId(rowId);
         this.timeBoxOn.save();
         this.timeBoxWhen.setTimeBoxId(rowId);
@@ -209,4 +201,15 @@ public class TimeBox {
         db.close();
         return rowId;
     }
+    @Override
+    public String toString() {
+        return "TimeBox{" +
+                "id=" + id +
+                ", nickName='" + nickName + '\'' +
+                ", tillType=" + tillType +
+                ", timeBoxOn=" + timeBoxOn +
+                ", timeBoxWhen=" + timeBoxWhen +
+                '}';
+    }
+
 }

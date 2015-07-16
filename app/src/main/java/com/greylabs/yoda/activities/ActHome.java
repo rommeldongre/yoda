@@ -10,13 +10,17 @@ import android.widget.RelativeLayout;
 
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.database.QuickStart;
+import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.utils.Constants;
+import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.views.GoalView;
 import com.greylabs.yoda.views.MyArcProgress;
 import com.greylabs.yoda.views.MyFloatingActionButton;
 import com.greylabs.yoda.views.MyFloatingActionsMenu;
 
 import net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu;
+
+import java.util.List;
 
 
 public class ActHome extends Activity implements View.OnClickListener, FloatingActionsMenu.OnFloatingActionsMenuUpdateListener, MyFloatingActionsMenu.OnFloatingActionsMenuUpdateListener {
@@ -42,6 +46,9 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
 
         QuickStart quickStart = new QuickStart(this);
         quickStart.quickStart();
+        List<TimeBox> timeBoxList=new TimeBox(this).getAll();
+        for (TimeBox tb: timeBoxList)
+            Logger.log("ActHome",tb.toString());
 
         initialize();
     }

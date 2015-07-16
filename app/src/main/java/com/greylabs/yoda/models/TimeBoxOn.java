@@ -12,7 +12,6 @@ import com.greylabs.yoda.enums.Quarter;
 import com.greylabs.yoda.enums.SubValue;
 import com.greylabs.yoda.enums.WeekDay;
 import com.greylabs.yoda.enums.Year;
-import com.greylabs.yoda.utils.Logger;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -25,7 +24,7 @@ public class TimeBoxOn {
     // Instance variables
     /**********************************************************************************************/
     private long timeBoxId;
-    private int onType;
+    private com.greylabs.yoda.enums.TimeBoxOn onType;
     private Set<SubValue> subValues;
     private Database database;
     private Context context;
@@ -33,19 +32,20 @@ public class TimeBoxOn {
     /**********************************************************************************************/
     // Geters and Setters
     /**********************************************************************************************/
+
+    public void setOnType(com.greylabs.yoda.enums.TimeBoxOn onType) {
+        this.onType = onType;
+    }
+    public com.greylabs.yoda.enums.TimeBoxOn getOnType() {
+        return onType;
+    }
     public void setSubValues(Set<SubValue> subValues) {
         this.subValues = subValues;
     }
     public Set<SubValue> getSubValues(){
         return this.subValues;
     }
-    public int getOnType() {
-        return onType;
-    }
 
-    public void setOnType(int onType) {
-        this.onType = onType;
-    }
     public long getTimeBoxId() {
         return timeBoxId;
     }
@@ -59,11 +59,10 @@ public class TimeBoxOn {
     /**********************************************************************************************/
     // Constructors
     /**********************************************************************************************/
-    public TimeBoxOn(Context context, long timeBoxId, int timeBoxOnType){
+    public TimeBoxOn(Context context, com.greylabs.yoda.enums.TimeBoxOn onType){
         database=Database.getInstance(context);
         this.context=context;
-        this.timeBoxId=timeBoxId;
-        this.onType=timeBoxOnType;
+        this.onType=onType;
     }
 
     /**********************************************************************************************/
@@ -82,7 +81,7 @@ public class TimeBoxOn {
             subValues=new TreeSet<>();
             do{
                 int value=c.getInt(c.getColumnIndex(TableTimeBoxOn.id));
-                subValues.add(getEnumTypeFromInteger(value, com.greylabs.yoda.enums.TimeBoxOn.getIntegerToEnumType(onType)));
+                subValues.add(getEnumTypeFromInteger(value,onType));
             }while (c.moveToNext());
         }
         c.close();
@@ -95,7 +94,7 @@ public class TimeBoxOn {
         long rowId = 0;
         for(com.greylabs.yoda.enums.SubValue on:subValues) {
             ContentValues values = new ContentValues();
-            values.put(TableTimeBoxOn.on, getIntegerFromEnumType(on,com.greylabs.yoda.enums.TimeBoxOn.getIntegerToEnumType(onType)));
+            values.put(TableTimeBoxOn.on, getIntegerFromEnumType(on,onType));
             values.put(TableTimeBoxOn.id, timeBoxId);
             rowId += db.insert(TableTimeBoxOn.timeBoxOn, null, values);
         }
@@ -108,7 +107,14 @@ public class TimeBoxOn {
         return numOfRowAffected;
     }
 
-
+    @Override
+    public String toString() {
+        return "TimeBoxOn{" +
+                "timeBoxId=" + timeBoxId +
+                ", onType=" + onType +
+                ", subValues=" + subValues +
+                '}';
+    }
 
     /**********************************************************************************************/
     // Utils
@@ -155,6 +161,4 @@ public class TimeBoxOn {
         }
         return value;
     }
-
-
 }

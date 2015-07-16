@@ -45,16 +45,12 @@ public class TimeBoxWhen {
         return this.whenValues;
     }
 
-
-
-
     /**********************************************************************************************/
     // Constructors
     /**********************************************************************************************/
-    public TimeBoxWhen(Context context,long timeBoxId){
+    public TimeBoxWhen(Context context){
         database=Database.getInstance(context);
         this.context=context;
-        this.timeBoxId=timeBoxId;
     }
 
     /**********************************************************************************************/
@@ -98,6 +94,13 @@ public class TimeBoxWhen {
         return numOfRowAffected;
     }
 
+    @Override
+    public String toString() {
+        return "TimeBoxWhen{" +
+                "timeBoxId=" + timeBoxId +
+                ", whenValues=" + whenValues +
+                '}';
+    }
     /**********************************************************************************************/
     // Utils
     /**********************************************************************************************/
