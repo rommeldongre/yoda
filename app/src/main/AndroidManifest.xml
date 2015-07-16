@@ -1,19 +1,15 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.greylabs.yoda"
-    android:installLocation="internalOnly"
-    >
-    <!-- Yoda Permissions-->
-    <uses-permission  android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.greylabs.yoda">
+
+    <application android:allowBackup="true" android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher" android:theme="@style/AppTheme">
+        <!-- App Permissions-->
+        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+        <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
         <activity
             android:name=".activities.ActHome"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -23,35 +19,41 @@
         <activity
             android:name=".activities.ActHomeNew"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.Translucent" />
-        <activity android:name=".activities.ActCreateTimeBox" />
-        <activity android:name=".activities.ActAddNewGoal" />
-        <activity android:name=".activities.ActAddNewStep" />
-        <activity android:name=".activities.ActChangeStepPriority" />
-        <activity android:name=".activities.ActNowFilter" />
-        <activity android:name=".activities.ActSettingAutosyncWithGoogle" />
-        <activity android:name=".activities.ActSettingChangeWallpaper" />
-        <activity android:name=".activities.ActSettingDefaultDuration" />
-        <activity android:name=".activities.ActSettingExportToGoogleCal" />
-        <activity android:name=".activities.ActSettingImportGoogleTasks" />
-        <activity android:name=".activities.ActTodayFilter" />
+            android:theme="@android:style/Theme.Translucent"
+            />
+        <activity
+            android:name=".activities.ActCreateTimeBox" />
+        <activity
+            android:name=".activities.ActAddNewGoal" />
+        <activity
+            android:name=".activities.ActGoalDetails" />
+        <activity
+            android:name=".activities.ActAddNewStep" />
+        <activity
+            android:name=".activities.ActChangeStepPriority" />
+        <activity
+            android:name=".activities.ActNowFilter" />
+        <activity
+            android:name=".activities.ActSettingAutosyncWithGoogle" />
+        <activity
+            android:name=".activities.ActSettingChangeWallpaper" />
+        <activity
+            android:name=".activities.ActSettingDefaultDuration" />
+        <activity
+            android:name=".activities.ActSettingExportToGoogleCal" />
+        <activity
+            android:name=".activities.ActSettingImportGoogleTasks" />
+        <activity
+            android:name=".activities.ActTodayFilter" />
 
 
-        <!--Yoda Services and Receivers-->
-        <service android:name=".scheduler.AlarmService" />
-
-        <receiver android:name=".scheduler.AlarmReceiver" />
+        <service android:name=".scheduler.AlarmService"/>
+        <receiver android:name=".scheduler.AlarmReceiver"/>
         <receiver android:name=".scheduler.DateChangeReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.DATE_CHANGED" />
             </intent-filter>
-        </receiver>
-        <service android:name=".scheduler.BootCompleteService"/>
-        <receiver android:name=".scheduler.BootCompleteReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
+            </receiver>
 
     </application>
 </manifest>

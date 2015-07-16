@@ -10,112 +10,134 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         >
 
         <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Jan"
             android:id="@+id/cbActCreateTimeBoxOnYearlyJan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cb_act_create_timebox_on_yearly_jan"
             android:checked="false"
-            style="@style/RadioButtonStyle" />
+            android:layout_weight="1"
+            style="@style/RadioButtonStyle"
+            android:textColor="@drawable/selector_radio_btn_text" />
 
         <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Feb"
             android:id="@+id/cbActCreateTimeBoxOnYearlyFeb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cb_act_create_timebox_on_yearly_feb"
             android:checked="false"
-            style="@style/RadioButtonStyle" />
+            android:layout_weight="1"
+            style="@style/RadioButtonStyle"
+            android:textColor="@drawable/selector_radio_btn_text" />
 
         <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Mar"
             android:id="@+id/cbActCreateTimeBoxOnYearlyMar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cb_act_create_timebox_on_yearly_mar"
             android:checked="false"
-            style="@style/RadioButtonStyle" />
+            android:layout_weight="1"
+            style="@style/RadioButtonStyle"
+            android:textColor="@drawable/selector_radio_btn_text" />
 
         <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Apr"
             android:id="@+id/cbActCreateTimeBoxOnYearlyApr"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cb_act_create_timebox_on_yearly_apr"
             android:checked="false"
-            style="@style/RadioButtonStyle" />
+            android:layout_weight="1"
+            style="@style/RadioButtonStyle"
+            android:textColor="@drawable/selector_radio_btn_text" />
 
         <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="May"
             android:id="@+id/cbActCreateTimeBoxOnYearlyMay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cb_act_create_timebox_on_yearly_may"
             android:checked="false"
-            style="@style/RadioButtonStyle" />
+            android:layout_weight="1"
+            style="@style/RadioButtonStyle"
+            android:textColor="@drawable/selector_radio_btn_text" />
 
         <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Jun"
             android:id="@+id/cbActCreateTimeBoxOnYearlyJun"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cb_act_create_timebox_on_yearly_jun"
             android:checked="false"
-            style="@style/RadioButtonStyle" />
+            android:layout_weight="1"
+            style="@style/RadioButtonStyle"
+            android:textColor="@drawable/selector_radio_btn_text" />
     </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        >
+        android:layout_marginTop="5dp" >
 
         <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Jul"
             android:id="@+id/cbActCreateTimeBoxOnYearlyJul"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cb_act_create_timebox_on_yearly_jul"
             android:checked="false"
-            style="@style/RadioButtonStyle" />
+            android:layout_weight="1"
+            style="@style/RadioButtonStyle"
+            android:textColor="@drawable/selector_radio_btn_text" />
 
         <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Aug"
             android:id="@+id/cbActCreateTimeBoxOnYearlyAug"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cb_act_create_timebox_on_yearly_aug"
             android:checked="false"
-            style="@style/RadioButtonStyle" />
+            android:layout_weight="1"
+            style="@style/RadioButtonStyle"
+            android:textColor="@drawable/selector_radio_btn_text" />
 
         <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Sep"
             android:id="@+id/cbActCreateTimeBoxOnYearlySep"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cb_act_create_timebox_on_yearly_sep"
             android:checked="false"
-            style="@style/RadioButtonStyle" />
+            android:layout_weight="1"
+            style="@style/RadioButtonStyle"
+            android:textColor="@drawable/selector_radio_btn_text" />
 
         <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Oct"
             android:id="@+id/cbActCreateTimeBoxOnYearlyOct"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cb_act_create_timebox_on_yearly_oct"
             android:checked="false"
-            style="@style/RadioButtonStyle" />
+            android:layout_weight="1"
+            style="@style/RadioButtonStyle"
+            android:textColor="@drawable/selector_radio_btn_text" />
 
         <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Nov"
             android:id="@+id/cbActCreateTimeBoxOnYearlyNov"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cb_act_create_timebox_on_yearly_nov"
             android:checked="false"
-            style="@style/RadioButtonStyle" />
+            android:layout_weight="1"
+            style="@style/RadioButtonStyle"
+            android:textColor="@drawable/selector_radio_btn_text" />
 
         <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Dec"
             android:id="@+id/cbActCreateTimeBoxOnYearlyDec"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cb_act_create_timebox_on_yearly_dec"
             android:checked="false"
-            style="@style/RadioButtonStyle" />
+            android:layout_weight="1"
+            style="@style/RadioButtonStyle"
+            android:textColor="@drawable/selector_radio_btn_text" />
     </LinearLayout>
 
 </LinearLayout>

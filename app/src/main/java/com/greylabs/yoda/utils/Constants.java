@@ -1,10 +1,8 @@
 package com.greylabs.yoda.utils;
 
 public class Constants {
-    public static final String GOAL_ATTACHED_TRUE = "TRUE";
     public static final String GOAL_ATTACHED_IN_EXTRAS = "GOAL_ATTACHED_IN_EXTRAS";
     public static final String GOAL_OBJECT = "GOAL_OBJECT";
-    public static final String GOAL_ATTACHED_FALSE = "FALSE";
     public static final String DEFAULT_STEP_DURATION = "DEFAULT_STEP_DURATION";
     public static final int DEFAULT_STEP_DURATION_VALUE = 3;
     public static final String DEFAULT_SESSION_DURATION = "DEFAULT_SESSION_DURATION";
@@ -32,4 +30,5 @@ public class Constants {
     public static final String MSG_STEP_DELETED = "Step Deleted";
     public static final String PRIORITY_CHANGED = "PRIORITY_CHANGED";
     public static final String STEPS_ARRAY_LIST_WITH_NEW_PRIORITIES = "STEP_ARRAY_LIST";
+    public static final String TIMEBOX_NICK_NAME = "TIMEBOX_NICK_NAME";
 }

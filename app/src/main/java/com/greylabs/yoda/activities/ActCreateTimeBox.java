@@ -2,22 +2,23 @@ package com.greylabs.yoda.activities;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.ViewFlipper;
 
 import com.greylabs.yoda.R;
+import com.greylabs.yoda.utils.Logger;
 
 public class ActCreateTimeBox extends ActionBarActivity implements RadioGroup.OnCheckedChangeListener {
 
+    private Toolbar toolbar;
     private CheckBox cbWhenEarlyMorning;
     private CheckBox cbWhenMorning;
     private CheckBox cbWhenAfternoon;
@@ -48,24 +49,25 @@ public class ActCreateTimeBox extends ActionBarActivity implements RadioGroup.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ScrollView scrollView=new ScrollView(this);
-        LayoutInflater layoutInflater= (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        View v=layoutInflater.inflate(R.layout.activity_act_create_time_box,null);
-        scrollView.addView(v);
-        setContentView(scrollView);
+        setContentView(R.layout.activity_act_create_time_box);
         initUI();
         setHandlers();
-
     }
 
     private void initUI(){
+
+        toolbar = (Toolbar) findViewById(R.id.toolBarActCreateTimeBox);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(getResources().getString(R.string.titleActCeateTimeBox));
+
         //when
 
         viewFlipper=(ViewFlipper)findViewById(R.id.vfActCreateTimeBoxOn);
         rgOn=(RadioGroup)findViewById(R.id.rgActCreateTimeBoxOn);
         rbOnDaily=(RadioButton)findViewById(R.id.rbActCreateTimeBoxOnDaily);
         rbOnMonthly=(RadioButton)findViewById(R.id.rbActCreateTimeBoxOnMonthly);
-        rbOnQuaterly=(RadioButton)findViewById(R.id.rbActCreateTimeBoxOnQuaterly);
+        rbOnQuaterly=(RadioButton)findViewById(R.id.rbActCreateTimeBoxOnQuarterly);
         rbOnWeekly=(RadioButton)findViewById(R.id.rbActCreateTimeBoxOnWeekly);
         rbOnYearly=(RadioButton)findViewById(R.id.rbActCreateTimeBoxOnYearly);
 
@@ -82,25 +84,25 @@ public class ActCreateTimeBox extends ActionBarActivity implements RadioGroup.On
 //        rbOnYearly.setOnCheckedChangeListener(this);
         rgOn.setOnCheckedChangeListener(this);
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_act_create_time_box, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        switch (item.getItemId()){
+            case android.R.id.home :
+                this.finish();
+                break;
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+            case R.id.actionSaveActCreateTimeBox :
+                Logger.showMsg(this, "TimeBox saved");
+                this.finish();
+                break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -116,7 +118,7 @@ public class ActCreateTimeBox extends ActionBarActivity implements RadioGroup.On
             case R.id.rbActCreateTimeBoxOnMonthly:
                 viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(findViewById(R.id.third)));
                 break;
-            case R.id.rbActCreateTimeBoxOnQuaterly:
+            case R.id.rbActCreateTimeBoxOnQuarterly:
                 viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(findViewById(R.id.four)));
                 break;
             case R.id.rbActCreateTimeBoxOnYearly:

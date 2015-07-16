@@ -1,8 +1,6 @@
 package com.greylabs.yoda.adapters;
 
 import android.content.Context;
-import android.graphics.AvoidXfermode;
-import android.graphics.PorterDuff;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,10 +9,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.greylabs.yoda.R;
-import com.greylabs.yoda.interfaces.OnClickOfRecyclerViewActChangeStepPriority;
+import com.greylabs.yoda.interfaces.onClickOfRecyclerViewActChangeStepPriority;
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.utils.Constants;
-import com.greylabs.yoda.utils.Logger;
 
 import java.util.ArrayList;
 
@@ -63,7 +60,7 @@ public class RecyclerViewActChangeStepPriority extends RecyclerView.Adapter<Recy
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         int Holderid;
-        OnClickOfRecyclerViewActChangeStepPriority myOnClickRecyclerView;
+        onClickOfRecyclerViewActChangeStepPriority myOnClickRecyclerView;
         Context contxt;
 
         TextView tvStepName;
@@ -101,7 +98,7 @@ public class RecyclerViewActChangeStepPriority extends RecyclerView.Adapter<Recy
 //            }
 
             try {
-                myOnClickRecyclerView = (OnClickOfRecyclerViewActChangeStepPriority) contxt;
+                myOnClickRecyclerView = (onClickOfRecyclerViewActChangeStepPriority) contxt;
             } catch (ClassCastException e) {
                 throw new ClassCastException(contxt.toString()
                         + " must implement OnHeadlineSelectedListener");

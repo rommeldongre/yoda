@@ -10,9 +10,8 @@ import android.widget.RelativeLayout;
 
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.database.QuickStart;
-import com.greylabs.yoda.models.TimeBox;
+import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.utils.Constants;
-import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.views.GoalView;
 import com.greylabs.yoda.views.MyArcProgress;
 import com.greylabs.yoda.views.MyFloatingActionButton;
@@ -20,7 +19,7 @@ import com.greylabs.yoda.views.MyFloatingActionsMenu;
 
 import net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu;
 
-import java.util.List;
+import java.util.ArrayList;
 
 
 public class ActHome extends Activity implements View.OnClickListener, FloatingActionsMenu.OnFloatingActionsMenuUpdateListener, MyFloatingActionsMenu.OnFloatingActionsMenuUpdateListener {
@@ -33,6 +32,8 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
     MyFloatingActionButton btnAddGoal, btnDefaultDuration, btnAutosyncWithGoogle,
             btnExportToGoogleCalender, btnImportGoogleTasks, btnChangeWallpaper, btnFilters, btnAddStep;
 
+    ArrayList<Goal> goalList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,11 +45,8 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
 
         setContentView(R.layout.activity_home);
 
-        QuickStart quickStart = new QuickStart(this);
-        quickStart.quickStart();
-        List<TimeBox> timeBoxList=new TimeBox(this).getAll();
-        for (TimeBox tb: timeBoxList)
-            Logger.log("ActHome",tb.toString());
+//        QuickStart quickStart = new QuickStart(this);
+//        quickStart.quickStart();
 
         initialize();
     }
@@ -109,12 +107,14 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
     }
 
     private void getGoalsFromLocalAndPopulate() {
+        goalList.addAll(new Goal(this).getAll());
+
         linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
 
         //add all the goals from db here loop
-        for(int i=0; i<7; i++){
-            GoalView goalView = new GoalView(this);
+        for(int i=0; i < goalList.size(); i++){
+            GoalView goalView = new GoalView(this, goalList.get(i));
             linearLayout.addView(goalView);
         }
         // init btnAddGoal
@@ -133,7 +133,9 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.addNewGoalActHome:
-                startActivity(new Intent(this, ActAddNewGoal.class));
+                Intent intent = new Intent(this, ActAddNewGoal.class);
+                intent.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, false);
+                this.startActivity(intent);
                 break;
 
             case R.id.arcTotalProgressActHome :
@@ -142,7 +144,7 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
 
             case R.id.btnAddStepActHome :
                 Intent i = new Intent(this, ActAddNewStep.class);
-                i.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, Constants.GOAL_ATTACHED_FALSE);
+                i.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, false);
                 startActivity(i);
                 break;
 

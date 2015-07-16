@@ -44,7 +44,7 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
     LinearLayout singleStepPanel, seriesPanel;
     ScrollView scrollView;
     ArrayAdapter<String> spinnerArrayAdapter;
-    List<Goal> goalList;
+    List<Goal> goalList = new ArrayList<>();
     ArrayList<String> goalNamesList = new ArrayList<>();
     Goal currentGoal;
     static int goalChosen;
@@ -123,11 +123,11 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
     private void getGoalListAndPopulate() {
         // check context and populate spinner else show only one currentGoal
         Intent intent = getIntent();
-        if(intent.getExtras().getString(Constants.GOAL_ATTACHED_IN_EXTRAS).equals(Constants.GOAL_ATTACHED_TRUE)){
+        if(intent.getExtras().getBoolean(Constants.GOAL_ATTACHED_IN_EXTRAS)){
             currentGoal  = (Goal)intent.getSerializableExtra(Constants.GOAL_OBJECT);
             goalList.add(currentGoal);
             goalNamesList.add(currentGoal.getNickName());
-        }else if(intent.getExtras().getString(Constants.GOAL_ATTACHED_IN_EXTRAS).equals(Constants.GOAL_ATTACHED_FALSE)){
+        }else if(!intent.getExtras().getBoolean(Constants.GOAL_ATTACHED_IN_EXTRAS)){
             currentGoal = new Goal(this);
             goalList = currentGoal.getAll();
             if(goalList != null && !goalList.isEmpty()){
@@ -211,7 +211,9 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
         switch (parent.getId()){
             case R.id.spinnerGoalNameActAddNewStep :
                 if(position+1 == goalNamesList.size()){
-                    startActivity(new Intent(this, ActAddNewGoal.class));
+                    Intent intent = new Intent(this, ActAddNewGoal.class);
+                    intent.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, false);
+                    this.startActivity(intent);
                 }else{
                     goalChosen = position;
                 }

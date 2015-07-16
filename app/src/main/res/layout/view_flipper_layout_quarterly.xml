@@ -3,46 +3,35 @@
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="center"
-    android:id="@+id/llActCreateTimeBoxOnMonthly"
+    android:id="@+id/llActCreateTimeBoxOnQuarterly"
     android:visibility="gone"
     >
 
     <CheckBox
-        android:id="@+id/cbActCreateTimeBoxOnMonthly1Week"
+        android:id="@+id/cbActCreateTimeBoxOnQuarterly1Month"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/cb_act_create_timebox_on_monthly_1week"
-        android:checked="false"
-        android:layout_weight="1"
-        style="@style/RadioButtonStyle"
-        android:textColor="@drawable/selector_radio_btn_text"
-        />
-
-    <CheckBox
-        android:id="@+id/cbActCreateTimeBoxOnMonthly2Week"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/cb_act_create_timebox_on_monthly_2week"
+        android:text="@string/cb_act_create_timebox_on_monthly_1month"
         android:checked="false"
         android:layout_weight="1"
         style="@style/RadioButtonStyle"
         android:textColor="@drawable/selector_radio_btn_text" />
 
     <CheckBox
-        android:id="@+id/cbActCreateTimeBoxOnMonthly3Week"
+        android:id="@+id/cbActCreateTimeBoxOnQuarterly2Month"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/cb_act_create_timebox_on_monthly_3week"
+        android:text="@string/cb_act_create_timebox_on_monthly_2month"
         android:checked="false"
         android:layout_weight="1"
         style="@style/RadioButtonStyle"
         android:textColor="@drawable/selector_radio_btn_text" />
 
     <CheckBox
-        android:id="@+id/cbActCreateTimeBoxOnMonthly4Week"
+        android:id="@+id/cbActCreateTimeBoxOnQuarterly3Month"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/cb_act_create_timebox_on_monthly_4week"
+        android:text="@string/cb_act_create_timebox_on_monthly_3month"
         android:checked="false"
         android:layout_weight="1"
         style="@style/RadioButtonStyle"

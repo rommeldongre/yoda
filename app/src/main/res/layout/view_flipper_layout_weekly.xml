@@ -4,91 +4,76 @@
     android:layout_height="wrap_content"
     android:gravity="center"
     android:id="@+id/llActCreateTimeBoxOnWeekly"
-    android:visibility="gone"
-    >
+    android:visibility="gone" >
 
     <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="S"
         android:id="@+id/cbActCreateTimeBoxOnWeeklySun"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cb_act_create_timebox_onweekly_sun"
         android:checked="false"
-        android:background="@drawable/selector_radio_btn"
-        android:button="@null"
-        android:gravity="center"
-        android:padding="5dp"
+        android:layout_weight="1"
+        style="@style/RadioButtonStyle"
         android:textColor="@drawable/selector_radio_btn_text" />
 
     <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="M"
         android:id="@+id/cbActCreateTimeBoxOnWeeklyMon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cb_act_create_timebox_onweekly_mon"
         android:checked="false"
-        android:background="@drawable/selector_radio_btn"
-        android:button="@null"
-        android:gravity="center"
-        android:padding="5dp"
+        android:layout_weight="1"
+        style="@style/RadioButtonStyle"
         android:textColor="@drawable/selector_radio_btn_text" />
 
     <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="T"
         android:id="@+id/cbActCreateTimeBoxOnWeeklyTue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cb_act_create_timebox_onweekly_tue"
         android:checked="false"
-        android:background="@drawable/selector_radio_btn"
-        android:button="@null"
-        android:gravity="center"
-        android:padding="5dp"
+        android:layout_weight="1"
+        style="@style/RadioButtonStyle"
         android:textColor="@drawable/selector_radio_btn_text" />
 
     <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="W"
         android:id="@+id/cbActCreateTimeBoxOnWeeklyWed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cb_act_create_timebox_onweekly_wed"
         android:checked="false"
-        android:background="@drawable/selector_radio_btn"
-        android:button="@null"
-        android:gravity="center"
-        android:padding="5dp"
+        android:layout_weight="1"
+        style="@style/RadioButtonStyle"
         android:textColor="@drawable/selector_radio_btn_text" />
 
     <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="T"
         android:id="@+id/cbActCreateTimeBoxOnWeeklyThu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cb_act_create_timebox_onweekly_thu"
         android:checked="false"
-        android:background="@drawable/selector_radio_btn"
-        android:button="@null"
-        android:gravity="center"
-        android:padding="5dp"
+        android:layout_weight="1"
+        style="@style/RadioButtonStyle"
         android:textColor="@drawable/selector_radio_btn_text" />
 
     <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="F"
         android:id="@+id/cbActCreateTimeBoxOnWeeklyFri"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/cb_act_create_timebox_onweekly_fri"
         android:checked="false"
-        android:background="@drawable/selector_radio_btn"
-        android:button="@null"
-        android:gravity="center"
-        android:padding="5dp"
+        android:layout_weight="1"
+        style="@style/RadioButtonStyle"
         android:textColor="@drawable/selector_radio_btn_text" />
 
     <CheckBox
+        android:id="@+id/cbActCreateTimeBoxOnWeeklySat"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="S"
-        android:id="@+id/cbActCreateTimeBoxOnWeeklySat"
+        android:text="@string/cb_act_create_timebox_onweekly_sat"
         android:checked="false"
-        android:background="@drawable/selector_radio_btn"
-        android:button="@null"
-        android:gravity="center"
-        android:padding="5dp"
+        android:layout_weight="1"
+        style="@style/RadioButtonStyle"
         android:textColor="@drawable/selector_radio_btn_text" />
 
 </LinearLayout>

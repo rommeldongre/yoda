@@ -76,6 +76,29 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
         btnHideAdvanced.setOnClickListener(this);
         btnAddFirstStep.setOnClickListener(this);
         timeSpinner.setOnItemSelectedListener(this);
+
+        Intent intent = getIntent();
+        if(intent.getBooleanExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, false)){
+            goal = (Goal)intent.getSerializableExtra(Constants.GOAL_OBJECT);
+
+            getSupportActionBar().setTitle(goal.getNickName());
+
+            edtNickName.setText(goal.getNickName().toString());
+            timeSpinner.setSelection(spinnerArrayAdapter.getPosition(intent.getExtras().getString(Constants.TIMEBOX_NICK_NAME)));
+
+            edtObjective.setText(goal.getObjective());
+            edtKeyResult.setText(goal.getKeyResult());
+            edtGoalReason.setText(goal.getReason());
+            edtGoalReward.setText(goal.getReward());
+            edtGoalBuddy.setText(goal.getBuddyEmail());
+
+            btnAddFirstStep.setVisibility(View.GONE);
+            btnShowAdvanced.setVisibility(View.GONE);
+            cardViewAdvanced.setVisibility(View.VISIBLE);
+
+        }else if(!intent.getExtras().getBoolean(Constants.GOAL_ATTACHED_IN_EXTRAS)){
+            goal = new Goal(this);
+        }
     }
 
     private void getTimeBoxListAndPopulate() {
@@ -122,7 +145,6 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
     }
 
     private void saveGoal() {
-        goal = new Goal(this);
         if(edtNickName.getText() != null && edtNickName.getText().length() > 0){
             goal.setNickName(edtNickName.getText().toString());
             goal.setTimeBoxId(timeBoxList.get(timeSpinner.getSelectedItemPosition()).getId());
@@ -148,7 +170,7 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
                 saveGoal();
                 if(isSaved){
                     Intent i = new Intent(this, ActAddNewStep.class);
-                    i.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, Constants.GOAL_ATTACHED_TRUE);
+                    i.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, true);
                     i.putExtra(Constants.GOAL_OBJECT, goal);
                     startActivity(i);
                     this.finish();

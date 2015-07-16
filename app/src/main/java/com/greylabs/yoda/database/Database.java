@@ -7,9 +7,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.utils.Logger;
 
+import java.io.Serializable;
+
 import static com.greylabs.yoda.database.MetaData.*;
 
-public class Database extends SQLiteOpenHelper {
+public class Database extends SQLiteOpenHelper implements Serializable{
     /**********************************************************************************************/
     //Database Details
     /**********************************************************************************************/
