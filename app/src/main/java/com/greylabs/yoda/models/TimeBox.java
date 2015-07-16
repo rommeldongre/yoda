@@ -134,10 +134,10 @@ public class TimeBox {
                 timeBox.timeBoxOn=new TimeBoxOn(context,
                         com.greylabs.yoda.enums.TimeBoxOn.getIntegerToEnumType(c.getInt(c.getColumnIndex(TableTimeBox.on))));
                 timeBox.timeBoxOn.setTimeBoxId(timeBox.id);
-                timeBox.timeBoxOn.setSubValues(this.timeBoxOn.get());
+                timeBox.timeBoxOn.setSubValues(timeBox.timeBoxOn.get());
                 timeBox.timeBoxWhen=new TimeBoxWhen(context);
                 timeBox.timeBoxWhen.setTimeBoxId(this.id);
-                timeBox.timeBoxWhen.setWhenValues(this.timeBoxWhen.get());
+                timeBox.timeBoxWhen.setWhenValues(timeBox.timeBoxWhen.get());
                 timeBox.tillType=TimeBoxTill.getIntegerToEnumType(c.getInt(c.getColumnIndex(TableTimeBox.till)));
                 timeBoxes.add(timeBox);
 
