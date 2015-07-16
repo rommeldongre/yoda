@@ -106,6 +106,7 @@
     <string name="cb_act_create_timebox_on_yearly_nov">Nov</string>
     <string name="cb_act_create_timebox_on_yearly_dec">Dec</string>
     <string name="label_summary_act_create_time_box">Summary</string>
+    <string name="actionEditActGoalDetails">Edit</string>
     <string-array name="arrayStepTypeActAddNewStep">
         <item>Single Step</item>
         <item>Series</item>

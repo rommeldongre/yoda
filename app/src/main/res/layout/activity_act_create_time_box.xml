@@ -220,7 +220,7 @@
 
                         <RadioButton
                             android:id="@+id/rbActCreateTimeBoxTillWeek"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/rb_week_act_create_time_box"
                             android:checked="false"
@@ -229,7 +229,7 @@
 
                         <RadioButton
                             android:id="@+id/rbActCreateTimeBoxTillMonth"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/rb_month_act_create_time_box"
                             android:checked="false"
@@ -238,7 +238,7 @@
 
                         <RadioButton
                             android:id="@+id/rbActCreateTimeBoxTillQuarter"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/rb_quarter_act_create_time_box"
                             android:checked="false"
@@ -247,7 +247,7 @@
 
                         <RadioButton
                             android:id="@+id/rbActCreateTimeBoxTillYear"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/rb_year_act_create_time_box"
                             android:checked="false"
@@ -256,7 +256,7 @@
 
                         <RadioButton
                             android:id="@+id/rbActCreateTimeBoxTillForever"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/rb_forever_act_create_time_box"
                             android:checked="false"
@@ -282,7 +282,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:editable="false"
-                        android:text="@string/label_summary_act_create_time_box" />
+                        android:textColor="@color/gray"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                        android:text="Early Morning - Yearly - Jan - Dec - Forever Early Morning - Yearly - Jan - Dec - Forever" />
 
                 </LinearLayout>
             </LinearLayout>

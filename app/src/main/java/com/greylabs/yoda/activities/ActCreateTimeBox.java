@@ -49,14 +49,9 @@ public class ActCreateTimeBox extends ActionBarActivity implements RadioGroup.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ScrollView scrollView=new ScrollView(this);
-        LayoutInflater layoutInflater= (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
-        View v=layoutInflater.inflate(R.layout.activity_act_create_time_box,null);
-        scrollView.addView(v);
-        setContentView(scrollView);
+        setContentView(R.layout.activity_act_create_time_box);
         initUI();
         setHandlers();
-
     }
 
     private void initUI(){
@@ -103,7 +98,7 @@ public class ActCreateTimeBox extends ActionBarActivity implements RadioGroup.On
                 this.finish();
                 break;
 
-            case R.id.actionSavePriorityActChangeStepPriority :
+            case R.id.actionSaveActCreateTimeBox :
                 Logger.showMsg(this, "TimeBox saved");
                 this.finish();
                 break;

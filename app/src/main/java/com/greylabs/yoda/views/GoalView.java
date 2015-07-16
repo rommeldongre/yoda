@@ -6,18 +6,18 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.github.lzyzsd.circleprogress.DonutProgress;
 import com.greylabs.yoda.R;
-import com.greylabs.yoda.activities.ActNowFilter;
+import com.greylabs.yoda.activities.ActGoalDetails;
+import com.greylabs.yoda.models.Goal;
+import com.greylabs.yoda.utils.Constants;
 
 public class GoalView extends LinearLayout implements View.OnClickListener {
 
     private Context context;
     MyDonutProgress donutProgress;
     TextView tvGoalName;
-    boolean isAddButton = false;
+    Goal currentGoal;
 
 
     public GoalView(Context context) {
@@ -32,6 +32,13 @@ public class GoalView extends LinearLayout implements View.OnClickListener {
         init();
     }
 
+    public GoalView(Context context, Goal goal) {
+        super(context);
+        this.context = context;
+        this.currentGoal = goal;
+        init();
+    }
+
 //    public WidgetTextFieldView(Context context, AttributeSet attrs, int defStyle) {
 //        super(context, attrs, defStyle);
 //    this.context = context;
@@ -43,7 +50,7 @@ public class GoalView extends LinearLayout implements View.OnClickListener {
         inflate(getContext(), R.layout.view_goal, this);
         this.donutProgress = (MyDonutProgress) findViewById(R.id.donutProgressViewGoal);
         this.tvGoalName = (TextView)findViewById(R.id.tvViewGoal);
-        tvGoalName.setText("Goal Name kldfldkjf asdasd");
+        tvGoalName.setText(this.currentGoal.getNickName());
         setDonutProgressValues();
 
         donutProgress.setOnClickListener(this);
@@ -84,12 +91,8 @@ public class GoalView extends LinearLayout implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-//        if(isAddButton){
-//            Toast.makeText(context, "add goal", Toast.LENGTH_SHORT).show();
-//        }else {
-
-        //put goal object in intent
-        context.startActivity(new Intent(context, ActNowFilter.class));
-//        }
+        Intent intent = new Intent(context, ActGoalDetails.class);
+        intent.putExtra(Constants.GOAL_OBJECT, currentGoal);
+        context.startActivity(intent);
     }
 }

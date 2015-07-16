@@ -18,6 +18,7 @@
         <item name="android:button">@null</item>
         <item name="android:gravity">center</item>
         <item name="android:padding">5dp</item>
+        <item name="android:layout_margin">1dp</item>
         <item name="android:textColor">@drawable/selector_radio_btn_text</item>
     </style>
 
