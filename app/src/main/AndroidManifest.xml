@@ -30,7 +30,9 @@
         <activity
             android:name=".activities.ActAddNewStep" />
         <activity
-            android:name=".activities.ActChangeStepPriority" />
+            android:name=".activities.ActStepList" />
+        <activity
+            android:name=".activities.ActGoalList" />
         <activity
             android:name=".activities.ActNowFilter" />
         <activity

@@ -6,24 +6,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.greylabs.yoda.R;
+import com.greylabs.yoda.interfaces.OnClickOfRecyclerViewActGoalList;
 import com.greylabs.yoda.interfaces.onClickOfRecyclerViewActChangeStepPriority;
-import com.greylabs.yoda.models.PendingStep;
+import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.utils.Constants;
 
 import java.util.ArrayList;
 
-public class RecyclerViewActChangeStepPriority extends RecyclerView.Adapter<RecyclerViewActChangeStepPriority.ViewHolder> {
+public class AdapterRecyclerViewActGoalList extends RecyclerView.Adapter<AdapterRecyclerViewActGoalList.ViewHolder> {
 
-    ArrayList<PendingStep> stepsArrayList;
+    ArrayList<Goal> goalArrayList;
     Context context;
+    boolean isEditOperation = false;
 
-    public RecyclerViewActChangeStepPriority(Context passedContext, ArrayList<PendingStep> stepsArrayList)
+    public AdapterRecyclerViewActGoalList(Context passedContext, ArrayList<Goal> goalArrayList, boolean isEditOperation)
     {
         this.context = passedContext;
-        this.stepsArrayList = stepsArrayList;
+        this.goalArrayList = goalArrayList;
+        this.isEditOperation = isEditOperation;
     }
 
     @Override
@@ -32,7 +36,7 @@ public class RecyclerViewActChangeStepPriority extends RecyclerView.Adapter<Recy
         View v;
         ViewHolder vhItem;
 //        switch (viewType){
-        v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item_act_change_step_priority, parent, false);
+        v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item_act_goal_list, parent, false);
         vhItem = new ViewHolder(v, viewType, context);
         return vhItem;
     }
@@ -40,13 +44,24 @@ public class RecyclerViewActChangeStepPriority extends RecyclerView.Adapter<Recy
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
 //            switch (holder.Holderid) {
-        holder.tvStepName.setText(stepsArrayList.get(position).getNickName());
+        holder.tvGoalName.setText(goalArrayList.get(position).getNickName());
+        if(isEditOperation){
+            holder.btnHandle.setVisibility(View.VISIBLE);
+            holder.btnDeleteGoal.setVisibility(View.VISIBLE);
+            holder.btnEditGoal.setVisibility(View.VISIBLE);
+            holder.progressBar.setVisibility(View.GONE);
+        }else {
+            holder.btnDeleteGoal.setVisibility(View.GONE);
+            holder.btnEditGoal.setVisibility(View.GONE);
+            holder.btnHandle.setVisibility(View.GONE);
+            holder.progressBar.setVisibility(View.VISIBLE);
+        }
 //        holder.btnDeleteGoal.getBackground().setColorFilter(R.color.white, PorterDuff.Mode.);
     }
 
     @Override
     public int getItemCount() {
-        return stepsArrayList.size();//+ 1;
+        return goalArrayList.size();//+ 1;
     }
 
     @Override
@@ -60,11 +75,13 @@ public class RecyclerViewActChangeStepPriority extends RecyclerView.Adapter<Recy
 
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         int Holderid;
-        onClickOfRecyclerViewActChangeStepPriority myOnClickRecyclerView;
+        OnClickOfRecyclerViewActGoalList myOnClickRecyclerView;
         Context contxt;
 
-        TextView tvStepName;
-        Button btnEditStep, btnDeleteStep;
+        TextView tvGoalName;
+        Button btnEditGoal, btnDeleteGoal, btnHandle;
+        ProgressBar progressBar;
+
 
         public ViewHolder(View itemView, int ViewType, Context c) {
             super(itemView);
@@ -74,14 +91,16 @@ public class RecyclerViewActChangeStepPriority extends RecyclerView.Adapter<Recy
 
 //            switch (ViewType){
 //                case Utilities.TYPE_INT_AUDIO_CAPTURE :
-            tvStepName = (TextView)itemView.findViewById(R.id.tvStepNameRecyclerItemActChangeStepPriority);
-            btnEditStep = (Button) itemView.findViewById(R.id.btnEditStepRecyclerItemActChangeStepPriority);
-            btnDeleteStep = (Button) itemView.findViewById(R.id.btnDeleteStepRecyclerItemActChangeStepPriority);
+            tvGoalName = (TextView)itemView.findViewById(R.id.tvGoalNameRecyclerItemActGoalList);
+            btnEditGoal = (Button) itemView.findViewById(R.id.btnEditGoalRecyclerItemActGoalList);
+            btnDeleteGoal = (Button) itemView.findViewById(R.id.btnDeleteGoalRecyclerItemActGoalList);
+            btnHandle =  (Button) itemView.findViewById(R.id.btnHandleRecyclerItemActGoalList);
+            progressBar = (ProgressBar) itemView.findViewById(R.id.pbRecyclerItemActGoalList);
 //            Holderid = 0;
 //                    break;
 
-            btnEditStep.setOnClickListener(this);
-            btnDeleteStep.setOnClickListener(this);
+            btnEditGoal.setOnClickListener(this);
+            btnDeleteGoal.setOnClickListener(this);
         }
 
         @Override
@@ -98,17 +117,17 @@ public class RecyclerViewActChangeStepPriority extends RecyclerView.Adapter<Recy
 //            }
 
             try {
-                myOnClickRecyclerView = (onClickOfRecyclerViewActChangeStepPriority) contxt;
+                myOnClickRecyclerView = (OnClickOfRecyclerViewActGoalList) contxt;
             } catch (ClassCastException e) {
                 throw new ClassCastException(contxt.toString()
                         + " must implement OnHeadlineSelectedListener");
             }
             switch (v.getId()){
-                case R.id.btnEditStepRecyclerItemActChangeStepPriority :
+                case R.id.btnEditGoalRecyclerItemActGoalList :
                     myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_EDIT);
                     break;
 
-                case R.id.btnDeleteStepRecyclerItemActChangeStepPriority :
+                case R.id.btnDeleteGoalRecyclerItemActGoalList :
                     myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_DELETE);
                     break;
             }

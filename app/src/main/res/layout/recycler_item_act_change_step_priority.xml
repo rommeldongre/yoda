@@ -18,7 +18,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
-            android:background="@drawable/ic_btn_edit_act_change_step_priority"
+            android:background="@drawable/ic_btn_edit"
             />
 
         <Button
@@ -28,7 +28,7 @@
             android:layout_toLeftOf="@+id/btnEditStepRecyclerItemActChangeStepPriority"
             android:layout_marginRight="10dip"
             android:layout_margin="10dp"
-            android:background="@drawable/ic_btn_delete_act_change_step_priority"
+            android:background="@drawable/ic_btn_delete"
             />
         <!--android:background="@android:drawable/ic_menu_delete"-->
 

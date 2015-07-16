@@ -78,26 +78,46 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
         timeSpinner.setOnItemSelectedListener(this);
 
         Intent intent = getIntent();
-        if(intent.getBooleanExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, false)){
-            goal = (Goal)intent.getSerializableExtra(Constants.GOAL_OBJECT);
+        switch (intent.getStringExtra(Constants.CALLER)){
+            case Constants.ACT_HOME :
+                if(!intent.getExtras().getBoolean(Constants.GOAL_ATTACHED_IN_EXTRAS)){
+                    goal = new Goal(this);
+                }
+                break;
 
-            getSupportActionBar().setTitle(goal.getNickName());
+            case Constants.ACT_ADD_NEW_STEP :
+                if(!intent.getExtras().getBoolean(Constants.GOAL_ATTACHED_IN_EXTRAS)){
+                    goal = new Goal(this);
+                }
+                btnAddFirstStep.setVisibility(View.GONE);
+                break;
 
-            edtNickName.setText(goal.getNickName().toString());
-            timeSpinner.setSelection(spinnerArrayAdapter.getPosition(intent.getExtras().getString(Constants.TIMEBOX_NICK_NAME)));
+            case Constants.ACT_GOAL_DETAILS :
+                if(intent.getBooleanExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, false)){
+                    goal = (Goal)intent.getSerializableExtra(Constants.GOAL_OBJECT);
 
-            edtObjective.setText(goal.getObjective());
-            edtKeyResult.setText(goal.getKeyResult());
-            edtGoalReason.setText(goal.getReason());
-            edtGoalReward.setText(goal.getReward());
-            edtGoalBuddy.setText(goal.getBuddyEmail());
+                    getSupportActionBar().setTitle(goal.getNickName());
 
-            btnAddFirstStep.setVisibility(View.GONE);
-            btnShowAdvanced.setVisibility(View.GONE);
-            cardViewAdvanced.setVisibility(View.VISIBLE);
+                    edtNickName.setText(goal.getNickName().toString());
+                    timeSpinner.setSelection(spinnerArrayAdapter.getPosition(intent.getExtras().getString(Constants.TIMEBOX_NICK_NAME)));
 
-        }else if(!intent.getExtras().getBoolean(Constants.GOAL_ATTACHED_IN_EXTRAS)){
-            goal = new Goal(this);
+                    edtObjective.setText(goal.getObjective());
+                    edtKeyResult.setText(goal.getKeyResult());
+                    edtGoalReason.setText(goal.getReason());
+                    edtGoalReward.setText(goal.getReward());
+                    edtGoalBuddy.setText(goal.getBuddyEmail());
+
+                    btnAddFirstStep.setVisibility(View.GONE);
+                    btnShowAdvanced.setVisibility(View.GONE);
+                    cardViewAdvanced.setVisibility(View.VISIBLE);
+
+                }else if(!intent.getExtras().getBoolean(Constants.GOAL_ATTACHED_IN_EXTRAS)){
+                    goal = new Goal(this);
+                }
+                break;
+
+//            case Constants.ACT_GOAL_LIST :
+//                break;
         }
     }
 
@@ -133,6 +153,9 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
                 break;
             case R.id.actionSaveActAddNewGoal :
                 saveGoal();
+
+                //according to caller send response through intent
+
                 if(isSaved){
                     Intent intent2 = new Intent();
                     intent2.putExtra(Constants.GOAL_OBJECT, goal);

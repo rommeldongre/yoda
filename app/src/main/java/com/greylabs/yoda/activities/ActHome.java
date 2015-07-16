@@ -107,7 +107,8 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
     }
 
     private void getGoalsFromLocalAndPopulate() {
-        goalList.addAll(new Goal(this).getAll());
+        if(new Goal(this).getAll() != null)
+            goalList.addAll(new Goal(this).getAll());
 
         linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -134,6 +135,7 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
         switch (v.getId()){
             case R.id.addNewGoalActHome:
                 Intent intent = new Intent(this, ActAddNewGoal.class);
+                intent.putExtra(Constants.CALLER, Constants.ACT_HOME);
                 intent.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, false);
                 this.startActivity(intent);
                 break;
@@ -168,7 +170,8 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
                 break;
 
             case R.id.btnImportGoogleTasksActHome :
-                startActivity(new Intent(this, ActSettingImportGoogleTasks.class));
+//                startActivity(new Intent(this, ActSettingImportGoogleTasks.class));
+                startActivity(new Intent(this, ActGoalList.class));
                 btnSettings.collapse();
                 break;
 

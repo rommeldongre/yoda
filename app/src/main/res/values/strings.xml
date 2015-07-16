@@ -58,6 +58,7 @@
     <string name="rbTopMostActSettingsDefaultDuration">Top-most</string>
     <string name="titleActChangeStepPriority">Change Step Priority</string>
     <string name="tvEmptyViewActChangeStepPriority">No Steps to Show</string>
+    <string name="tvEmptyViewActGoalList">No Goal to Show</string>
     <string name="actionSave">Save</string>
     <string name="titleActCeateTimeBox">New TimeBox</string>
     <string name="label_when_act_create_time_box">When</string>
@@ -107,6 +108,8 @@
     <string name="cb_act_create_timebox_on_yearly_dec">Dec</string>
     <string name="label_summary_act_create_time_box">Summary</string>
     <string name="actionEditActGoalDetails">Edit</string>
+    <string name="titleActGoalList">My Goals</string>
+    <string name="actionEdit">Edit</string>
     <string-array name="arrayStepTypeActAddNewStep">
         <item>Single Step</item>
         <item>Series</item>

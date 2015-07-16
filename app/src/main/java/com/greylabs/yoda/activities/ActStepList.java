@@ -25,7 +25,7 @@ import com.greylabs.yoda.utils.Logger;
 import java.util.ArrayList;
 
 
-public class ActChangeStepPriority extends ActionBarActivity implements onClickOfRecyclerViewActChangeStepPriority {
+public class ActStepList extends ActionBarActivity implements onClickOfRecyclerViewActChangeStepPriority {
 
     private Toolbar toolbar;
     TextView emptyViewActChangeStepPriority;
@@ -94,7 +94,7 @@ public class ActChangeStepPriority extends ActionBarActivity implements onClickO
         dragSortRecycler.setOnItemMovedListener(new DragSortRecycler.OnItemMovedListener() {
             @Override
             public void onItemMoved(int from, int to) {
-//                Logger.showMsg(ActChangeStepPriority.this, "onItemMoved " + from + " to " + to);
+//                Logger.showMsg(ActStepList.this, "onItemMoved " + from + " to " + to);
                 if(from != to)
                     stepArrayList.add(to, stepArrayList.remove(from));
                 mAdapter.notifyDataSetChanged();
@@ -165,7 +165,7 @@ public class ActChangeStepPriority extends ActionBarActivity implements onClickO
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         stepArrayList.get(Position).delete();
-                        Logger.showMsg(ActChangeStepPriority.this, Constants.MSG_STEP_DELETED);
+                        Logger.showMsg(ActStepList.this, Constants.MSG_STEP_DELETED);
                         getStepArrayFromLocal();
                         mAdapter.notifyDataSetChanged();
                     }

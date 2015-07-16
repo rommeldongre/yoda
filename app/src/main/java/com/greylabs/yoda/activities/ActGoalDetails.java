@@ -71,6 +71,7 @@ public class ActGoalDetails extends ActionBarActivity {
             case R.id.actionEditActGoalDetails :
                 Intent intent = new Intent(this, ActAddNewGoal.class);
                 intent.putExtra(Constants.GOAL_OBJECT, currentGoal);
+                intent.putExtra(Constants.CALLER, Constants.ACT_GOAL_DETAILS);
                 intent.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, true);
                 intent.putExtra(Constants.TIMEBOX_NICK_NAME, currentTimeBox.getNickName());
                 this.startActivity(intent);

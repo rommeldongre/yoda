@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    android:id="@+id/handleRecyclerItemActChangeStepPriority"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp">
+    <!--android:background="?android:attr/selectableItemBackground"       requires API 11-->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/btnEditGoalRecyclerItemActGoalList"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:gravity="center_vertical"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/ic_btn_edit_gray" />
+
+        <Button
+            android:id="@+id/btnDeleteGoalRecyclerItemActGoalList"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/btnEditGoalRecyclerItemActGoalList"
+            android:layout_marginRight="10dip"
+            android:layout_margin="15dp"
+            android:background="@drawable/ic_btn_delete_gray" />
+        <!--android:background="@android:drawable/ic_menu_delete"-->
+
+        <ProgressBar
+            android:id="@+id/pbRecyclerItemActGoalList"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:progress="60"
+            android:progressTint="@color/ColorPrimaryDark"
+            android:layout_below="@+id/btnEditGoalRecyclerItemActGoalList" />
+
+        <Button
+            android:id="@+id/btnHandleRecyclerItemActGoalList"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentLeft="true"
+            android:gravity="center_vertical"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/ic_btn_handle_gray" />
+
+        <TextView
+            android:id="@+id/tvGoalNameRecyclerItemActGoalList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:layout_toRightOf="@+id/btnHandleRecyclerItemActGoalList"
+            android:layout_marginLeft="10dp"
+            android:layout_toLeftOf="@id/btnDeleteGoalRecyclerItemActGoalList" />
+
+    </RelativeLayout>
+</android.support.v7.widget.CardView>
+
+    <!--<View-->
+    <!--android:id="@+id/lineView"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="1dp"-->
+    <!--android:layout_marginTop="8dp"/>-->
+    <!--&lt;!&ndash;android:background="@color/white" />&ndash;&gt;-->

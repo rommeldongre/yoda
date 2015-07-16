@@ -5,7 +5,7 @@
     <item
         android:id="@+id/actionEditActGoalDetails"
         android:title="@string/actionEditActGoalDetails"
-        android:icon="@drawable/ic_btn_edit_act_change_step_priority"
+        android:icon="@drawable/ic_btn_edit"
         app:showAsAction="ifRoom" />
 
 </menu>

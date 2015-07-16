@@ -212,6 +212,7 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
             case R.id.spinnerGoalNameActAddNewStep :
                 if(position+1 == goalNamesList.size()){
                     Intent intent = new Intent(this, ActAddNewGoal.class);
+                    intent.putExtra(Constants.CALLER, Constants.ACT_ADD_NEW_STEP);
                     intent.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, false);
                     this.startActivity(intent);
                 }else{
@@ -221,7 +222,7 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
 
             case R.id.spinnerPriorityActAddNewStep :
                 if(stepPrioritySpinner.getSelectedItem().toString().equals("Change Manually")){
-                    Intent i = new Intent(this, ActChangeStepPriority.class);
+                    Intent i = new Intent(this, ActStepList.class);
 //                    //--------------------- send the current step object also
                     i.putExtra(Constants.GOAL_OBJECT, goalList.get(goalSpinner.getSelectedItemPosition()));
                     startActivityForResult(i, 1);
@@ -303,7 +304,7 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
             goalList.add((Goal) data.getExtras().getSerializable(Constants.GOAL_OBJECT));
             goalNamesList.add(((Goal) data.getExtras().getSerializable(Constants.GOAL_OBJECT)).getNickName());
             goalChosen = goalList.size()-1;
-        }else if (resultCode == 2){             // result from ActChangeStepPriority
+        }else if (resultCode == 2){             // result from ActStepList
             if(data.getExtras().getBoolean(Constants.PRIORITY_CHANGED)){
                 if(!stepArrayList.isEmpty())
                     stepArrayList.clear();
