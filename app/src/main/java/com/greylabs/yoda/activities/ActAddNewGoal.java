@@ -193,6 +193,8 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
                 saveGoal();
                 if(isSaved){
                     Intent i = new Intent(this, ActAddNewStep.class);
+                    i.putExtra(Constants.CALLER, Constants.ACT_ADD_NEW_GOAL);
+                    i.putExtra(Constants.STEP_ATTACHED_IN_EXTRAS, false);
                     i.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, true);
                     i.putExtra(Constants.GOAL_OBJECT, goal);
                     startActivity(i);

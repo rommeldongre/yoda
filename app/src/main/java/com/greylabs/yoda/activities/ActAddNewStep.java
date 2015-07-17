@@ -225,6 +225,8 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
                     Intent i = new Intent(this, ActStepList.class);
 //                    //--------------------- send the current step object also
                     i.putExtra(Constants.GOAL_OBJECT, goalList.get(goalSpinner.getSelectedItemPosition()));
+                    i.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, true);
+                    i.putExtra(Constants.CALLER, Constants.ACT_ADD_NEW_STEP);
                     startActivityForResult(i, 1);
                 }
                 break;

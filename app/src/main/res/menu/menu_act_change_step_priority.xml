@@ -3,9 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/actionSavePriorityActChangeStepPriority"
+        android:id="@+id/actionEditActStepList"
+        android:title="@string/actionEdit"
+        android:icon="@drawable/ic_btn_edit_white"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/actionSaveActStepList"
         android:title="@string/actionSaveActAddNewGoal"
         android:icon="@drawable/ic_btn_save_act_add_new_goal"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"
+        android:visible="false" />
 
 </menu>

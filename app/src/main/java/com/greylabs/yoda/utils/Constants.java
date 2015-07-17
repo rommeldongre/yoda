@@ -39,4 +39,7 @@ public class Constants {
     public static final String ACT_HOME = "ACT_HOME";
     public static final String ACT_GOAL_DETAILS = "ACT_GOAL_DETAILS";
     public static final String ACT_GOAL_LIST = "ACT_GOAL_LIST";
+    public static final String ACT_STEP_LIST = "ACT_STEP_LIST";
+    public static final String STEP_ATTACHED_IN_EXTRAS = "STEP_ATTACHED_IN_EXTRAS";
+    public static final String ACT_ADD_NEW_GOAL = "ACT_ADD_NEW_GOAL";
 }

@@ -15,8 +15,8 @@ import android.widget.TextView;
 
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.adapters.DragSortRecycler;
-import com.greylabs.yoda.adapters.RecyclerViewActChangeStepPriority;
-import com.greylabs.yoda.interfaces.onClickOfRecyclerViewActChangeStepPriority;
+import com.greylabs.yoda.adapters.AdapterRecyclerViewActStepList;
+import com.greylabs.yoda.interfaces.onClickOfRecyclerViewActStepList;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.utils.Constants;
@@ -25,64 +25,55 @@ import com.greylabs.yoda.utils.Logger;
 import java.util.ArrayList;
 
 
-public class ActStepList extends ActionBarActivity implements onClickOfRecyclerViewActChangeStepPriority {
+public class ActStepList extends ActionBarActivity implements onClickOfRecyclerViewActStepList {
 
     private Toolbar toolbar;
     TextView emptyViewActChangeStepPriority;
     ArrayList<PendingStep> stepArrayList;
+    boolean isOperationEdit = false;
+    Menu menu;
     Goal currentGoal;
+    String caller;
 
     RecyclerView recyclerView;
-    RecyclerViewActChangeStepPriority mAdapter;
+    AdapterRecyclerViewActStepList mAdapter;
     LinearLayoutManager mLayoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_change_step_priority);
-
-//        if(IS_DRAFT){
-//            currentAssetForm  = (Form)i.getSerializableExtra("FORM");
-//            currentAFO = (AssetFormObject) i.getSerializableExtra("ASSET_FORM_OBJECT");
-//            if(currentAssetForm.getFORM_FIELD_JSON() != null){
-//                newJSONArrayFromString  = CombineJSONArrays.combine(currentAssetForm.getFORM_FIELD_JSON(), currentAFO.getASSET_FORM_OBJECT_FIELD_VALUE_JSON());
-//                widgetArrayList = JSONtoWidgetObjects.getWidgetObjectsArray(newJSONArrayFromString);
-//            }
-//        }else {
-//            currentAssetForm  = (Form)i.getSerializableExtra("FORM");
-//            try {
-//                newJSONArrayFromString  = new JSONArray(currentAssetForm.getFORM_FIELD_JSON());
-//                Utilities.sysout(""+newJSONArrayFromString);                            //******************to be deleted
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//            widgetArrayList = JSONtoWidgetObjects.getWidgetObjectsArray(newJSONArrayFromString);
-//        }
         initialize();
     }
 
     private void initialize() {
-        stepArrayList = new ArrayList<PendingStep>();
+        stepArrayList = new ArrayList<>();
         Intent i = getIntent();
-        currentGoal = (Goal) i.getExtras().getSerializable(Constants.GOAL_OBJECT);
+        caller = i.getStringExtra(Constants.CALLER);
+        if(i.getBooleanExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, false))
+            currentGoal = (Goal) i.getExtras().getSerializable(Constants.GOAL_OBJECT);
 
         toolbar = (Toolbar) findViewById(R.id.toolBarActChangeStepPriority);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(getResources().getString(R.string.titleActChangeStepPriority));
+        if(currentGoal != null){
+            getSupportActionBar().setTitle(currentGoal.getNickName());
+        }else{
+            getSupportActionBar().setTitle(getResources().getString(R.string.titleActChangeStepPriority));
+        }
 
         emptyViewActChangeStepPriority = (TextView) findViewById(R.id.tvEmptyViewActChangeStepPriority);
         recyclerView = (RecyclerView)findViewById(R.id.recyclerActChangeStepPriority);
         recyclerView.setHasFixedSize(true);
         getStepArrayFromLocal();
-        mAdapter = new RecyclerViewActChangeStepPriority(this, stepArrayList);
+        mAdapter = new AdapterRecyclerViewActStepList(this, stepArrayList, isOperationEdit, caller);
         recyclerView.setAdapter(mAdapter);
         mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(null);
 
         DragSortRecycler dragSortRecycler = new DragSortRecycler();
-        dragSortRecycler.setViewHandleId(R.id.tvStepNameRecyclerItemActChangeStepPriority);
+        dragSortRecycler.setViewHandleId(R.id.btnHandleRecyclerItemActStepList);
         dragSortRecycler.setFloatingAlpha(0.8F);
         dragSortRecycler.setFloatingBgColor(getResources().getColor(R.color.ColorPrimary));
 //        setAutoScrollSpeed(float)
@@ -94,7 +85,6 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
         dragSortRecycler.setOnItemMovedListener(new DragSortRecycler.OnItemMovedListener() {
             @Override
             public void onItemMoved(int from, int to) {
-//                Logger.showMsg(ActStepList.this, "onItemMoved " + from + " to " + to);
                 if(from != to)
                     stepArrayList.add(to, stepArrayList.remove(from));
                 mAdapter.notifyDataSetChanged();
@@ -110,7 +100,7 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
     private void getStepArrayFromLocal() {
         stepArrayList.clear();
         PendingStep pendingStep = new PendingStep(this);
-        if(pendingStep.getAll(currentGoal.getId()) != null)
+        if(currentGoal != null && pendingStep.getAll(currentGoal.getId()) != null)
             stepArrayList.addAll(pendingStep.getAll(currentGoal.getId()));
         checkForEmptyViewVisibility();
     }
@@ -129,6 +119,12 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_act_change_step_priority, menu);
+        this.menu = menu;
+        if(caller.equals(Constants.ACT_ADD_NEW_STEP)){
+
+        }else if(caller.equals(Constants.ACT_GOAL_LIST)){
+
+        }
         return true;
     }
 
@@ -136,27 +132,43 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home :
-                Intent intent1 = new Intent();
-                intent1.putExtra(Constants.PRIORITY_CHANGED, false);
-                setResult(1, intent1);
                 this.finish();
                 break;
-            case R.id.actionSavePriorityActChangeStepPriority :
-                Intent intent2 = new Intent();
-                intent2.putExtra(Constants.PRIORITY_CHANGED, true);
-                intent2.putExtra(Constants.STEPS_ARRAY_LIST_WITH_NEW_PRIORITIES, stepArrayList);
-                setResult(1, intent2);
-                this.finish();
+            case R.id.actionEditActStepList :
+                menu.findItem(R.id.actionEditActStepList).setVisible(false);
+                menu.findItem(R.id.actionSaveActStepList).setVisible(true);
+                isOperationEdit = true;
+                mAdapter = new AdapterRecyclerViewActStepList(this, stepArrayList, isOperationEdit);
+                recyclerView.setAdapter(mAdapter);
+                break;
+            case R.id.actionSaveActStepList :
+                menu.findItem(R.id.actionEditActStepList).setVisible(true);
+                menu.findItem(R.id.actionSaveActStepList).setVisible(false);
+                isOperationEdit = false;
+                mAdapter = new AdapterRecyclerViewActStepList(this, stepArrayList, isOperationEdit);
+                recyclerView.setAdapter(mAdapter);
+                saveStepsByNewOrder();
+                Logger.showMsg(this, "Changes Saved");
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    private void saveStepsByNewOrder() {
+        for(int i=0; i<stepArrayList.size(); i++ ){
+            stepArrayList.get(i).setPriority(i + 1);
+            stepArrayList.get(i).save();
+        }
+    }
+
     @Override
     public void onClickRecyclerView(final int Position, String operation) {
-//        int position = po
         switch (operation){
             case Constants.OPERATION_EDIT :
+                Intent intent = new Intent(this, ActAddNewStep.class);
+                intent.putExtra(Constants.CALLER, Constants.ACT_STEP_LIST);
+                intent.putExtra(Constants.STEP_ATTACHED_IN_EXTRAS, true);
+                this.startActivity(intent);
                 break;
 
             case Constants.OPERATION_DELETE :
@@ -176,21 +188,4 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
                 break;
         }
     }
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        // check if the request code is same as what is passed  here it is 2
-//        if(resultCode == RESULT_CANCELED){
-//
-//        }else if(requestCode==2)
-//        {
-//            if(data.getStringExtra("clickedbutton").equals("done")){
-//                widgetArrayList.clear();
-//                widgetArrayList.addAll((ArrayList<Widget>) data.getSerializableExtra("widgetarraylist"));
-//                mAdapter.notifyDataSetChanged();
-//            }
-//        }
-//    }
-
 }

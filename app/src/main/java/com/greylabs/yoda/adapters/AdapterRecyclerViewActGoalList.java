@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.interfaces.OnClickOfRecyclerViewActGoalList;
-import com.greylabs.yoda.interfaces.onClickOfRecyclerViewActChangeStepPriority;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.utils.Constants;
 
@@ -36,7 +35,6 @@ public class AdapterRecyclerViewActGoalList extends RecyclerView.Adapter<Adapter
 
         View v;
         ViewHolder vhItem;
-//        switch (viewType){
         v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item_act_goal_list, parent, false);
         vhItem = new ViewHolder(v, viewType, context);
         return vhItem;
@@ -62,15 +60,11 @@ public class AdapterRecyclerViewActGoalList extends RecyclerView.Adapter<Adapter
 
     @Override
     public int getItemCount() {
-        return goalArrayList.size();//+ 1;
+        return goalArrayList.size();
     }
 
     @Override
     public int getItemViewType(int position) {
-//        switch (goalArrayList.get(position).getType())
-//        {
-//            case Utilities.TYPE_AUDIO_CAPTURE : return 1;
-//        }
         return 0;
     }
 
@@ -109,17 +103,6 @@ public class AdapterRecyclerViewActGoalList extends RecyclerView.Adapter<Adapter
 
         @Override
         public void onClick(View v) {
-
-//            switch (v.getId()){
-//                case R.id.btnEditStepRecyclerItemActChangeStepPriority :
-//                    Logger.showMsg(contxt, "edit "+getPosition());
-//                    break;
-//
-//                case R.id.btnDeleteStepRecyclerItemActChangeStepPriority :
-//                    Logger.showMsg(contxt, "delete "+getPosition());
-//                    break;
-//            }
-
             try {
                 myOnClickRecyclerView = (OnClickOfRecyclerViewActGoalList) contxt;
             } catch (ClassCastException e) {
