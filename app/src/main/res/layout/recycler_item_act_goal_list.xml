@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView
-    android:id="@+id/handleRecyclerItemActChangeStepPriority"
+    android:id="@+id/cardViewActGoalList"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -32,18 +32,6 @@
             android:background="@drawable/ic_btn_delete_gray" />
         <!--android:background="@android:drawable/ic_menu_delete"-->
 
-        <ProgressBar
-            android:id="@+id/pbRecyclerItemActGoalList"
-            style="?android:attr/progressBarStyleHorizontal"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:progress="60"
-            android:progressTint="@color/ColorPrimaryDark"
-            android:layout_below="@+id/btnEditGoalRecyclerItemActGoalList" />
-
         <Button
             android:id="@+id/btnHandleRecyclerItemActGoalList"
             android:layout_width="30dp"
@@ -63,6 +51,18 @@
             android:layout_toRightOf="@+id/btnHandleRecyclerItemActGoalList"
             android:layout_marginLeft="10dp"
             android:layout_toLeftOf="@id/btnDeleteGoalRecyclerItemActGoalList" />
+
+        <ProgressBar
+            android:id="@+id/pbRecyclerItemActGoalList"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:progress="60"
+            android:progressTint="@color/ColorPrimaryDark"
+            android:layout_below="@+id/tvGoalNameRecyclerItemActGoalList" />
 
     </RelativeLayout>
 </android.support.v7.widget.CardView>

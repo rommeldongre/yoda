@@ -132,41 +132,60 @@ public class ActGoalList  extends ActionBarActivity implements OnClickOfRecycler
                 menu.findItem(R.id.actionEditActGoalList).setVisible(false);
                 menu.findItem(R.id.actionSaveActGoalList).setVisible(true);
                 isOperationEdit = true;
-                recyclerView.setAdapter(new AdapterRecyclerViewActGoalList(this, goalArrayList, isOperationEdit));
-                Logger.showMsg(this, "Edit Mode");
+                mAdapter = new AdapterRecyclerViewActGoalList(this, goalArrayList, isOperationEdit);
+                recyclerView.setAdapter(mAdapter);
                 break;
             case R.id.actionSaveActGoalList :
                 menu.findItem(R.id.actionEditActGoalList).setVisible(true);
                 menu.findItem(R.id.actionSaveActGoalList).setVisible(false);
                 isOperationEdit = false;
-                recyclerView.setAdapter(new AdapterRecyclerViewActGoalList(this, goalArrayList, isOperationEdit));
+                mAdapter = new AdapterRecyclerViewActGoalList(this, goalArrayList, isOperationEdit);
+                recyclerView.setAdapter(mAdapter);
+                saveGoalsByNewOrder();
                 Logger.showMsg(this, "Changes Saved");
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
+    private void saveGoalsByNewOrder() {
+        for(int i=0; i<goalArrayList.size(); i++ ){
+            goalArrayList.get(i).setOrder(i+1);
+            goalArrayList.get(i).save();
+        }
+    }
+
     @Override
     public void onClickRecyclerView(final int Position, String operation) {
-        switch (operation){
-            case Constants.OPERATION_EDIT :
-                break;
+        if(isOperationEdit){
+            switch (operation){
+                case Constants.OPERATION_EDIT :
+                    Intent intent = new Intent(this, ActGoalDetails.class);
+                    intent.putExtra(Constants.GOAL_OBJECT, goalArrayList.get(Position));
+                    startActivity(intent);
+                    break;
 
-            case Constants.OPERATION_DELETE :
-                AlertDialog.Builder alertLogout = new AlertDialog.Builder(this);
-                alertLogout.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        goalArrayList.get(Position).delete();
-                        Logger.showMsg(ActGoalList.this, Constants.MSG_GOAL_DELETED);
-                        getGoalArrayFromLocal();
-                        mAdapter.notifyDataSetChanged();
-                    }
-                });
-                alertLogout.setNegativeButton("Cancel", null);
-                alertLogout.setMessage(Constants.MSG_DELETE_GOAL);
-                alertLogout.show();
-                break;
+                case Constants.OPERATION_DELETE :
+                    AlertDialog.Builder alertLogout = new AlertDialog.Builder(this);
+                    alertLogout.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            goalArrayList.get(Position).delete();
+                            Logger.showMsg(ActGoalList.this, Constants.MSG_GOAL_DELETED);
+                            getGoalArrayFromLocal();
+                            mAdapter.notifyDataSetChanged();
+                        }
+                    });
+                    alertLogout.setNegativeButton("Cancel", null);
+                    alertLogout.setMessage(Constants.MSG_DELETE_GOAL);
+                    alertLogout.show();
+                    break;
+            }
+        }else if(!isOperationEdit){
+            Intent i = new Intent(this, ActStepList.class);
+            i.putExtra(Constants.GOAL_OBJECT, goalArrayList.get(Position));
+            i.putExtra(Constants.CALLER, Constants.ACT_GOAL_LIST);
+            startActivity(i);
         }
     }
 }

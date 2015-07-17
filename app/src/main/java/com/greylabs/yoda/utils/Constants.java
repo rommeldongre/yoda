@@ -26,6 +26,7 @@ public class Constants {
     public static final boolean BEHAVIOUR_DO_NOT_EXPIRE_VALUE = false;
     public static final String OPERATION_DELETE = "DELETE";
     public static final String OPERATION_EDIT = "EDIT";
+    public static final String OPERATION_SHOW_STEPS = "OPERATION_SHOW_STEPS";
     public static final String MSG_DELETE_STEP = "Are you sure you want to delete the step?";
     public static final String MSG_STEP_DELETED = "Step Deleted";
     public static final String MSG_DELETE_GOAL = "Are you sure you want to delete the goal?";
@@ -37,4 +38,5 @@ public class Constants {
     public static final String CALLER = "CALLER";
     public static final String ACT_HOME = "ACT_HOME";
     public static final String ACT_GOAL_DETAILS = "ACT_GOAL_DETAILS";
+    public static final String ACT_GOAL_LIST = "ACT_GOAL_LIST";
 }

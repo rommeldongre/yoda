@@ -107,8 +107,11 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
     }
 
     private void getGoalsFromLocalAndPopulate() {
-        if(new Goal(this).getAll() != null)
+        if(new Goal(this).getAll() != null){
+            if(goalList != null)
+                goalList.clear();
             goalList.addAll(new Goal(this).getAll());
+        }
 
         linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -203,5 +206,12 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
         layoutOverlapping.setVisibility(View.GONE);
 //        layoutToBeHidden.setVisibility(View.VISIBLE);
 //        layoutSettingsBackground.setBackgroundColor(getResources().getColor(R.color.transperent));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        scrollView.removeAllViews();
+        getGoalsFromLocalAndPopulate();
     }
 }

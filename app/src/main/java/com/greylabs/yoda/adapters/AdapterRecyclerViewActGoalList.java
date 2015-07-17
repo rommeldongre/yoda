@@ -1,6 +1,7 @@
 package com.greylabs.yoda.adapters;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,6 +82,7 @@ public class AdapterRecyclerViewActGoalList extends RecyclerView.Adapter<Adapter
         TextView tvGoalName;
         Button btnEditGoal, btnDeleteGoal, btnHandle;
         ProgressBar progressBar;
+        CardView cardView;
 
 
         public ViewHolder(View itemView, int ViewType, Context c) {
@@ -96,11 +98,13 @@ public class AdapterRecyclerViewActGoalList extends RecyclerView.Adapter<Adapter
             btnDeleteGoal = (Button) itemView.findViewById(R.id.btnDeleteGoalRecyclerItemActGoalList);
             btnHandle =  (Button) itemView.findViewById(R.id.btnHandleRecyclerItemActGoalList);
             progressBar = (ProgressBar) itemView.findViewById(R.id.pbRecyclerItemActGoalList);
+            cardView = (CardView) itemView.findViewById(R.id.cardViewActGoalList);
 //            Holderid = 0;
 //                    break;
 
             btnEditGoal.setOnClickListener(this);
             btnDeleteGoal.setOnClickListener(this);
+            cardView.setOnClickListener(this);
         }
 
         @Override
@@ -129,6 +133,10 @@ public class AdapterRecyclerViewActGoalList extends RecyclerView.Adapter<Adapter
 
                 case R.id.btnDeleteGoalRecyclerItemActGoalList :
                     myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_DELETE);
+                    break;
+
+                case R.id.cardViewActGoalList :
+                    myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_SHOW_STEPS);
                     break;
             }
         }
