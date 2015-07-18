@@ -49,7 +49,6 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
     private void initialize() {
         stepArrayList = new ArrayList<>();
         Intent i = getIntent();
-        caller = i.getStringExtra(Constants.CALLER);
         if(i.getBooleanExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, false))
             currentGoal = (Goal) i.getExtras().getSerializable(Constants.GOAL_OBJECT);
 
@@ -62,10 +61,20 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
             getSupportActionBar().setTitle(getResources().getString(R.string.titleActChangeStepPriority));
         }
 
+        caller = i.getStringExtra(Constants.CALLER);
+        switch (caller){
+            case Constants.ACT_ADD_NEW_STEP :
+                isOperationEdit = true;
+                stepArrayList = (ArrayList<PendingStep>) i.getSerializableExtra(Constants.STEP_ARRAY_LIST);
+                break;
+
+            case Constants.ACT_GOAL_LIST :
+                getStepArrayFromLocal();
+                break;
+        }
         emptyViewActChangeStepPriority = (TextView) findViewById(R.id.tvEmptyViewActChangeStepPriority);
         recyclerView = (RecyclerView)findViewById(R.id.recyclerActChangeStepPriority);
         recyclerView.setHasFixedSize(true);
-        getStepArrayFromLocal();
         mAdapter = new AdapterRecyclerViewActStepList(this, stepArrayList, isOperationEdit, caller);
         recyclerView.setAdapter(mAdapter);
         mLayoutManager = new LinearLayoutManager(this);
@@ -121,7 +130,8 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
         getMenuInflater().inflate(R.menu.menu_act_change_step_priority, menu);
         this.menu = menu;
         if(caller.equals(Constants.ACT_ADD_NEW_STEP)){
-
+            menu.findItem(R.id.actionEditActStepList).setVisible(false);
+            menu.findItem(R.id.actionSaveActStepList).setVisible(true);
         }else if(caller.equals(Constants.ACT_GOAL_LIST)){
 
         }
@@ -138,17 +148,30 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
                 menu.findItem(R.id.actionEditActStepList).setVisible(false);
                 menu.findItem(R.id.actionSaveActStepList).setVisible(true);
                 isOperationEdit = true;
-                mAdapter = new AdapterRecyclerViewActStepList(this, stepArrayList, isOperationEdit);
+                mAdapter = new AdapterRecyclerViewActStepList(this, stepArrayList, isOperationEdit, caller);
                 recyclerView.setAdapter(mAdapter);
                 break;
             case R.id.actionSaveActStepList :
-                menu.findItem(R.id.actionEditActStepList).setVisible(true);
-                menu.findItem(R.id.actionSaveActStepList).setVisible(false);
-                isOperationEdit = false;
-                mAdapter = new AdapterRecyclerViewActStepList(this, stepArrayList, isOperationEdit);
-                recyclerView.setAdapter(mAdapter);
-                saveStepsByNewOrder();
-                Logger.showMsg(this, "Changes Saved");
+                switch (caller){
+                    case Constants.ACT_GOAL_LIST :
+                        menu.findItem(R.id.actionEditActStepList).setVisible(true);
+                        menu.findItem(R.id.actionSaveActStepList).setVisible(false);
+                        isOperationEdit = false;
+                        mAdapter = new AdapterRecyclerViewActStepList(this, stepArrayList, isOperationEdit, caller);
+                        recyclerView.setAdapter(mAdapter);
+                        saveStepsByNewOrder();
+                        Logger.showMsg(this, "Changes Saved");
+                        break;
+
+                    case Constants.ACT_ADD_NEW_STEP :
+                        // send the arrayList in intent back to the ActAddStep
+                        Intent secIntent = new Intent();
+                        secIntent.putExtra(Constants.STEPS_ARRAY_LIST_WITH_NEW_PRIORITIES, getStepsByNewOrder());
+                        setResult(Constants.RESULTCODE_OF_ACT_STEP_LIST, secIntent);
+                        Logger.showMsg(this, "Changes Saved");
+                        this.finish();
+                        break;
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -159,6 +182,13 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
             stepArrayList.get(i).setPriority(i + 1);
             stepArrayList.get(i).save();
         }
+    }
+
+    private ArrayList<PendingStep> getStepsByNewOrder() {
+        for(int i=0; i<stepArrayList.size(); i++ ){
+            stepArrayList.get(i).setPriority(i + 1);
+        }
+        return stepArrayList;
     }
 
     @Override
@@ -178,8 +208,9 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
                     public void onClick(DialogInterface dialogInterface, int i) {
                         stepArrayList.get(Position).delete();
                         Logger.showMsg(ActStepList.this, Constants.MSG_STEP_DELETED);
-                        getStepArrayFromLocal();
-                        mAdapter.notifyDataSetChanged();
+//                        getStepArrayFromLocal();
+//                        mAdapter.notifyDataSetChanged();
+                        mAdapter.notifyItemRemoved(Position);
                     }
                 });
                 alertLogout.setNegativeButton("Cancel", null);

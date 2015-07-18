@@ -31,7 +31,6 @@ public class Constants {
     public static final String MSG_STEP_DELETED = "Step Deleted";
     public static final String MSG_DELETE_GOAL = "Are you sure you want to delete the goal?";
     public static final String MSG_GOAL_DELETED = "Goal Deleted";
-    public static final String PRIORITY_CHANGED = "PRIORITY_CHANGED";
     public static final String STEPS_ARRAY_LIST_WITH_NEW_PRIORITIES = "STEP_ARRAY_LIST";
     public static final String TIMEBOX_NICK_NAME = "TIMEBOX_NICK_NAME";
     public static final String ACT_ADD_NEW_STEP = "ACT_ADD_NEW_STEP";
@@ -42,4 +41,8 @@ public class Constants {
     public static final String ACT_STEP_LIST = "ACT_STEP_LIST";
     public static final String STEP_ATTACHED_IN_EXTRAS = "STEP_ATTACHED_IN_EXTRAS";
     public static final String ACT_ADD_NEW_GOAL = "ACT_ADD_NEW_GOAL";
+    public static final String MSG_ENTER_STEP_NAME = "Please Enter Step Name";
+    public static final String STEP_ARRAY_LIST = "STEP_ARRAY_LIST";
+    public static final int RESULTCODE_OF_ACT_ADD_GOAL = 1;
+    public static final int RESULTCODE_OF_ACT_STEP_LIST = 2;
 }

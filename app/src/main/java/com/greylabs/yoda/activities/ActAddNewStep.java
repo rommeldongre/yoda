@@ -52,6 +52,7 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
     Paint thumbPaint, textPaint;
     ArrayList<PendingStep> stepArrayList = new ArrayList<>();
     Prefs prefs;
+    int newPosition = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +108,7 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
         thumbPaint.setColor(getResources().getColor(R.color.ColorPrimary));
 
         setDefaultValues();
+        getStepArrayFromLocal();
     }
 
     private void setDefaultValues() {
@@ -118,6 +120,15 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
         }else {
             stepPrioritySpinner.setSelection(0);
         }
+    }
+
+
+    private void getStepArrayFromLocal() {
+        stepArrayList.clear();
+        PendingStep pendingStep = new PendingStep(this);
+        currentGoal = goalList.get(goalSpinner.getSelectedItemPosition());
+        if(currentGoal != null && pendingStep.getAll(currentGoal.getId()) != null)
+            stepArrayList.addAll(pendingStep.getAll(currentGoal.getId()));
     }
 
     private void getGoalListAndPopulate() {
@@ -153,10 +164,11 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home :
-                this.finish();
+                finish();
                 break;
             case R.id.actionSaveActAddNewStep :
                 saveStep();
+                finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -211,23 +223,35 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
         switch (parent.getId()){
             case R.id.spinnerGoalNameActAddNewStep :
                 if(position+1 == goalNamesList.size()){
-                    Intent intent = new Intent(this, ActAddNewGoal.class);
-                    intent.putExtra(Constants.CALLER, Constants.ACT_ADD_NEW_STEP);
-                    intent.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, false);
-                    this.startActivity(intent);
+                Intent intent = new Intent(this, ActAddNewGoal.class);
+                intent.putExtra(Constants.CALLER, Constants.ACT_ADD_NEW_STEP);
+                intent.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, false);
+                this.startActivity(intent);
                 }else{
                     goalChosen = position;
+                    getStepArrayFromLocal();
                 }
                 break;
 
             case R.id.spinnerPriorityActAddNewStep :
                 if(stepPrioritySpinner.getSelectedItem().toString().equals("Change Manually")){
-                    Intent i = new Intent(this, ActStepList.class);
+                    if(edtStepName.getText()!=null && edtStepName.getText().length()>0){
+                        Intent i = new Intent(this, ActStepList.class);
 //                    //--------------------- send the current step object also
-                    i.putExtra(Constants.GOAL_OBJECT, goalList.get(goalSpinner.getSelectedItemPosition()));
-                    i.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, true);
-                    i.putExtra(Constants.CALLER, Constants.ACT_ADD_NEW_STEP);
-                    startActivityForResult(i, 1);
+                        stepArrayList.add(generateCurrentStepObject());
+                        i.putExtra(Constants.STEP_ARRAY_LIST, stepArrayList);
+                        i.putExtra(Constants.GOAL_OBJECT, goalList.get(goalSpinner.getSelectedItemPosition()));
+                        i.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, true);
+                        i.putExtra(Constants.CALLER, Constants.ACT_ADD_NEW_STEP);
+                        startActivityForResult(i, 1);
+                    }else {
+                        Logger.showMsg(this, Constants.MSG_ENTER_STEP_NAME);
+                        if(prefs.isPriorityNewStepBottomMost()){
+                            stepPrioritySpinner.setSelection(1);
+                        }else {
+                            stepPrioritySpinner.setSelection(0);
+                        }
+                    }
                 }
                 break;
 
@@ -301,28 +325,50 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == 1 && data.getExtras().getBoolean(Constants.GOAL_ATTACHED_IN_EXTRAS)){// result from ActAddNewGoal
+        if(resultCode == Constants.RESULTCODE_OF_ACT_ADD_GOAL && data.getExtras().getBoolean(Constants.GOAL_ATTACHED_IN_EXTRAS)){// result from ActAddNewGoal
 //            getGoalListAndPopulate();
             goalList.add((Goal) data.getExtras().getSerializable(Constants.GOAL_OBJECT));
             goalNamesList.add(((Goal) data.getExtras().getSerializable(Constants.GOAL_OBJECT)).getNickName());
+            goalSpinner.setSelection(goalList.size()-1);
             goalChosen = goalList.size()-1;
-        }else if (resultCode == 2){             // result from ActStepList
-            if(data.getExtras().getBoolean(Constants.PRIORITY_CHANGED)){
-                if(!stepArrayList.isEmpty())
-                    stepArrayList.clear();
-                stepArrayList = data.getExtras().getParcelable(Constants.STEPS_ARRAY_LIST_WITH_NEW_PRIORITIES);
+        }else if (resultCode == Constants.RESULTCODE_OF_ACT_STEP_LIST){             // result from ActStepList
+            if(!stepArrayList.isEmpty())
+                stepArrayList.clear();
+            stepArrayList = (ArrayList<PendingStep>) data.getSerializableExtra(Constants.STEPS_ARRAY_LIST_WITH_NEW_PRIORITIES);
 
-                ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, android.R.id.text1);
-                spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                stepPrioritySpinner.setAdapter(spinnerAdapter);
-                spinnerAdapter.add("5");
-                spinnerAdapter.add("Top-most");
-                spinnerAdapter.add("Bottom-most");
-                spinnerAdapter.add("Change Manually");
-                stepPrioritySpinner.setSelection(0);
-            }else if(data.getExtras().getBoolean(Constants.PRIORITY_CHANGED) == false){
-
+            for (int i = 0; i<stepArrayList.size(); i++){
+                if(currentStep.getNickName().equals(stepArrayList.get(i).getNickName()))
+                    newPosition = i+1;
             }
+
+            ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, android.R.id.text1);
+            spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            stepPrioritySpinner.setAdapter(spinnerAdapter);
+            spinnerAdapter.add(""+newPosition);
+            spinnerAdapter.add("Top-most");
+            spinnerAdapter.add("Bottom-most");
+            spinnerAdapter.add("Change Manually");
+            stepPrioritySpinner.setSelection(0);
         }
+    }
+
+    private PendingStep generateCurrentStepObject() {
+        currentStep = new PendingStep(this);
+        if(edtStepName.getText()!=null && edtStepName.getText().length()>0){
+            currentStep.setNickName(edtStepName.getText().toString());
+        }else {
+            Logger.showMsg(this, Constants.MSG_ENTER_STEP_NAME);
+        }
+        currentStep.setGoalId(goalList.get(goalSpinner.getSelectedItemPosition()).getId());
+        if(stepTypeSpinner.getSelectedItemPosition()==0){
+            currentStep.setStepCount(1);
+            currentStep.setTime(sbTimeSingleStep.getProgress());
+            currentStep.setSeries(false);
+        }else if (stepTypeSpinner.getSelectedItemPosition()==1){
+            currentStep.setStepCount(sbNoOfSteps.getProgress());
+            currentStep.setTime(sbTimeSeriesStep.getProgress());
+            currentStep.setSeries(true);
+        }
+        return currentStep;
     }
 }

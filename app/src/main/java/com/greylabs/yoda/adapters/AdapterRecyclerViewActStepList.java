@@ -45,8 +45,17 @@ public class AdapterRecyclerViewActStepList extends RecyclerView.Adapter<Adapter
         holder.tvStepName.setText(stepsArrayList.get(position).getNickName());
         if(isEditOperation){
             holder.btnHandle.setVisibility(View.VISIBLE);
-            holder.btnDeleteStep.setVisibility(View.VISIBLE);
-            holder.btnEditStep.setVisibility(View.VISIBLE);
+            switch (caller){
+                case Constants.ACT_GOAL_LIST :
+                    holder.btnDeleteStep.setVisibility(View.VISIBLE);
+                    holder.btnEditStep.setVisibility(View.VISIBLE);
+                    break;
+
+                case Constants.ACT_ADD_NEW_STEP :
+                    holder.btnDeleteStep.setVisibility(View.GONE);
+                    holder.btnEditStep.setVisibility(View.GONE);
+                    break;
+            }
         }else {
             holder.btnDeleteStep.setVisibility(View.GONE);
             holder.btnEditStep.setVisibility(View.GONE);

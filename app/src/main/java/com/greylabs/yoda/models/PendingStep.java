@@ -26,8 +26,8 @@ public class PendingStep implements Serializable{
     private int stepCount;
     private int skipCount;
     private long goalId;
-    private Database database;
-    private Context context;
+    transient private Database database;
+    transient private Context context;
 
 
     /**********************************************************************************************/
