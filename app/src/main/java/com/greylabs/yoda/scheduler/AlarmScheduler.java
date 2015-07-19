@@ -3,6 +3,8 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+
+import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.utils.Logger;
 import java.io.Serializable;
 import java.util.Calendar;
@@ -21,28 +23,44 @@ import java.util.Date;
 //
 //        alarmInfo.setStepId(2);
 //        alarmInfo.cancel();
-public class AlarmInfo implements Serializable{
+public class AlarmScheduler implements Serializable{
     /**********************************************************************************************/
     // Instance variables
     /**********************************************************************************************/
     private static final String TAG="Alarm";
     private long stepId;
+    private long subStepId;
+    private PendingStep.PendingStepType pendingStepType;
     private Date alarmDate;
     private int duration;
+    private int startTime;
     private Context context;
     private AlarmManager alarmManager;
 
-    public long getStepId() {
-        return stepId;
-    }
     /**********************************************************************************************/
     // Getters and Setters
     /**********************************************************************************************/
-
+    public long getStepId() {
+        return stepId;
+    }
     public void setStepId(long stepId) {
         this.stepId = stepId;
     }
+    public long getSubStepId() {
+        return subStepId;
+    }
 
+    public void setSubStepId(long subStepId) {
+        this.subStepId = subStepId;
+    }
+
+    public PendingStep.PendingStepType getPendingStepType() {
+        return pendingStepType;
+    }
+
+    public void setPendingStepType(PendingStep.PendingStepType pendingStepType) {
+        this.pendingStepType = pendingStepType;
+    }
     public Date getAlarmDate() {
         return alarmDate;
     }
@@ -50,7 +68,13 @@ public class AlarmInfo implements Serializable{
     public void setAlarmDate(Date alarmDate) {
         this.alarmDate = alarmDate;
     }
+    public int getStartTime() {
+        return startTime;
+    }
 
+    public void setStartTime(int startTime) {
+        this.startTime = startTime;
+    }
     public int getDuration() {
         return duration;
     }
@@ -58,7 +82,6 @@ public class AlarmInfo implements Serializable{
     public void setDuration(int duration) {
         this.duration = duration;
     }
-
     public Context getContext() {
         return context;
     }
@@ -70,7 +93,7 @@ public class AlarmInfo implements Serializable{
     /**********************************************************************************************/
     // Constructor
     /**********************************************************************************************/
-    public AlarmInfo(Context context){
+    public AlarmScheduler(Context context){
         this.context=context;
         alarmManager= (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
     }
@@ -88,11 +111,31 @@ public class AlarmInfo implements Serializable{
 
         Calendar calTarget=Calendar.getInstance();
         calTarget.setTime(alarmDate);
-        Logger.log(TAG,"Target date:"+calTarget.getTime().toString());
+
+        //start Time
+        calTarget.set(Calendar.HOUR_OF_DAY,startTime);
+        Logger.log(TAG,"Target date:[Start Time]"+calTarget.getTime().toString());
         Intent broadcastReceiver = new Intent(context, AlarmReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int)stepId,broadcastReceiver,0);
-        alarmManager.set(AlarmManager.RTC_WAKEUP,calTarget.getTimeInMillis(),pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calTarget.getTimeInMillis(), pendingIntent);
 
+        //end time
+        calTarget.add(Calendar.HOUR_OF_DAY, duration);
+        Logger.log(TAG, "Target date:[End Time]" + calTarget.getTime().toString());
+        broadcastReceiver = new Intent(context, AlarmReceiver.class);
+        pendingIntent = PendingIntent.getBroadcast(context, -(int)stepId,broadcastReceiver,0);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calTarget.getTimeInMillis(), pendingIntent);
+    }
+
+    public void postponeAlarm(int mins){
+        Calendar calTarget=Calendar.getInstance();
+        calTarget.setTime(alarmDate);
+        calTarget.set(Calendar.HOUR_OF_DAY, startTime);
+        calTarget.add(Calendar.MINUTE,mins);
+        Logger.log(TAG, "Target date:[Postpone to]" + calTarget.getTime().toString());
+        Intent broadcastReceiver = new Intent(context, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, -(int)stepId,broadcastReceiver,0);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calTarget.getTimeInMillis(), pendingIntent);
     }
 
     /**
@@ -102,8 +145,9 @@ public class AlarmInfo implements Serializable{
      */
     public void cancel(){
         Intent broadcastReceiver = new Intent(context, AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int)stepId,broadcastReceiver,0);
-        alarmManager.cancel(pendingIntent);
+        PendingIntent pendingIntentStart = PendingIntent.getBroadcast(context, (int)stepId,broadcastReceiver,0);
+        PendingIntent pendingIntentEnd = PendingIntent.getBroadcast(context, -(int)stepId,broadcastReceiver,0);
+        alarmManager.cancel(pendingIntentStart);
+        alarmManager.cancel(pendingIntentEnd);
     }
-
 }

@@ -4,10 +4,10 @@ public enum Month  implements SubValue{
     /**********************************************************************************************/
     // Enum Constants
     /**********************************************************************************************/
-    WEEK1("Week1",0),
-    WEEK2("Week2",1),
-    WEEK3("Week3",2),
-    WEEK4("Week4",3);
+    WEEK1("Week1",1),
+    WEEK2("Week2",2),
+    WEEK3("Week3",3),
+    WEEK4("Week4",4);
 
     /**********************************************************************************************/
     // Enum properties
@@ -49,10 +49,10 @@ public enum Month  implements SubValue{
     public static Month getIntegerToEnumType(int id){
         Month month=null;
         switch (id){
-            case 0: month= WEEK1;break;
-            case 1: month= WEEK2;break;
-            case 2: month= WEEK3;break;
-            case 3: month= WEEK4;break;
+            case 1: month= WEEK1;break;
+            case 2: month= WEEK2;break;
+            case 3: month= WEEK3;break;
+            case 4: month= WEEK4;break;
         }
         return month;
     }
@@ -60,10 +60,10 @@ public enum Month  implements SubValue{
     public static int getEnumToIntegerType(Month month){
         int intValue=0;
         switch (month){
-            case WEEK1:intValue=0;break;
-            case WEEK2:intValue=1;break;
-            case WEEK3:intValue=2;break;
-            case WEEK4:intValue=3;break;
+            case WEEK1:intValue=WEEK1.getValue();break;
+            case WEEK2:intValue=WEEK2.getValue();break;
+            case WEEK3:intValue=WEEK3.getValue();break;
+            case WEEK4:intValue=WEEK4.getValue();break;
         }
         return intValue;
     }

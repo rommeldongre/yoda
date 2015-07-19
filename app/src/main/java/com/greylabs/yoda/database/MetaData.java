@@ -61,22 +61,27 @@ public class MetaData {
         public static final String nickName="nickName";
         public static final String priority="priority";
         public static final String time="time";
-        public static final String series="series";
+        public static final String type="series";
         public static final String stepCount="stepCount";
+        public static final String status="status";
         public static final String skipCount="skipCount";
         public static final String goalId="goalId";//FK to Goal
-
+        public static  final String slotId="slotId";
+        public static final String subStepOf="subStepOf";
         public static final String createPendingStepTable="" +
                 "create table "+pendingStep+" ( " +
                 " "+id+" integer primary key autoincrement," +
                 " "+nickName+" text, " +
                 " "+priority+" integer, " +
                 " "+time+" integer, " +
-                " "+series+" integer, " +
+                " "+type+" integer, " +
                 " "+stepCount+" integer, " +
                 " "+skipCount+" integer ," +
+                " "+status+" integer ," +
                 " "+goalId+" integer, " +
-                " "+"foreign key("+goalId+") references "+ TableGoal.goal+"("+ TableGoal.id+") " +
+                " "+"foreign key("+goalId+") references "+ TableGoal.goal+"("+ TableGoal.id+") ," +
+                " "+"foreign key("+slotId+") references "+ TableSlot.slot+"("+ TableSlot.id+") , " +
+                " "+"foreign key("+subStepOf+") references "+ TablePendingStep.pendingStep+"("+ TablePendingStep.id+") " +
                 " )";
 
     }
@@ -148,6 +153,7 @@ public class MetaData {
         public static final String dayOfYear="dayOfYear";
         public static final String dayOfWeek="dayOfWeek";
         public static final String weekOfMonth="dayOfMonth";
+        public static final String monthOfYear="monthOfYear";
         public static final String quarterOfYear="quarterOfYear";
         public static final String year="year";
 
@@ -158,6 +164,7 @@ public class MetaData {
                 " "+dayOfYear+" integer , " +
                 " "+dayOfWeek+" integer , " +
                 " "+weekOfMonth+" integer , " +
+                " "+monthOfYear+" integer , " +
                 " "+quarterOfYear+" integer , " +
                 " "+year+" integer ," +
                 " ) ";
@@ -166,6 +173,7 @@ public class MetaData {
         public static final String slot="slot";//table name
         public static final String id="id";
         public static final String when="when";
+        public static final String scheduleDate="scheduleDate";
         public static final String time="maxTime";
         public static final String goalId="goalId";
         public static final String timeBoxId="timeBoxId";
@@ -175,6 +183,7 @@ public class MetaData {
                 " create table "+slot+" ( " +
                 " "+id+" integer primary key autoincrement, " +
                 " "+when+" integer ," +
+                " "+scheduleDate+" text ," +
                 " "+time+" integer , " +
                 " "+goalId+" integer , " +
                 " "+timeBoxId+" integer , " +

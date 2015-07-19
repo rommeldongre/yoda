@@ -1,9 +1,16 @@
 package com.greylabs.yoda.models;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 
 import com.greylabs.yoda.database.Database;
+import com.greylabs.yoda.database.MetaData.*;
+import com.greylabs.yoda.utils.CalendarUtils;
+import com.greylabs.yoda.utils.WhereConditionBuilder;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,11 +22,13 @@ public class Day {
     // Instance variables
     /**********************************************************************************************/
     private long id;
-    private int day;
-    private int weekDay;
+    private int dayOfYear;
+    private int dayOfWeek;
     private Date date;
     private int weekOfMonth;
+    private int monthOfYear;
     private int quarterOfYear;
+    private int year;
     private List<Slot> slots;
     private Database database;
     private Context context;
@@ -34,21 +43,20 @@ public class Day {
     public void setId(long id) {
         this.id = id;
     }
-
-    public int getDay() {
-        return day;
+    public int getDayOfYear() {
+        return dayOfYear;
     }
 
-    public void setDay(int day) {
-        this.day = day;
+    public void setDayOfYear(int dayOfYear) {
+        this.dayOfYear = dayOfYear;
     }
 
-    public int getWeekDay() {
-        return weekDay;
+    public int getDayOfWeek() {
+        return dayOfWeek;
     }
 
-    public void setWeekDay(int weekDay) {
-        this.weekDay = weekDay;
+    public void setDayOfWeek(int dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
     }
 
     public Date getDate() {
@@ -66,7 +74,13 @@ public class Day {
     public void setWeekOfMonth(int weekOfMonth) {
         this.weekOfMonth = weekOfMonth;
     }
+    public int getMonthOfYear() {
+        return monthOfYear;
+    }
 
+    public void setMonthOfYear(int monthOfYear) {
+        this.monthOfYear = monthOfYear;
+    }
     public int getQuarterOfYear() {
         return quarterOfYear;
     }
@@ -83,6 +97,13 @@ public class Day {
     public void setSlots(List<Slot> slots) {
         this.slots = slots;
     }
+    public int getYear() {
+        return year;
+    }
+
+    public void setYear(int year) {
+        this.year = year;
+    }
     /**********************************************************************************************/
     // Constructors
     /**********************************************************************************************/
@@ -95,23 +116,61 @@ public class Day {
     // Methods
     /**********************************************************************************************/
 
-    /**
-     * This method retrieves all the slot of passed timebox.Internally it build where condition to
-     * filter records of that fit in timebox
-     * @param timeBox
-     * @return None
-     */
-    public void getAll(TimeBox timeBox){
-
-
+    @Override
+    public String toString() {
+        return "Day{" +
+                "id=" + id +
+                ", dayOfYear=" + dayOfYear +
+                ", dayOfWeek=" + dayOfWeek +
+                ", date=" + date +
+                ", weekOfMonth=" + weekOfMonth +
+                ", monthOfYear=" + monthOfYear +
+                ", quarterOfYear=" + quarterOfYear +
+                ", year=" + year +
+                '}';
     }
 
     /**
-     * This method save(updates) all days.
-     * @param days
+     * This method save(updates) or insert day.
      * @return None
      */
-    public void saveAll(List<Day> days){
-
+    public long save(){
+        SQLiteDatabase db=database.getWritableDatabase();
+        ContentValues cv=new ContentValues();
+        cv.put(TableDay.date,this.date.toString());
+        cv.put(TableDay.dayOfYear,this.dayOfYear);
+        cv.put(TableDay.dayOfWeek,this.dayOfWeek);
+        cv.put(TableDay.weekOfMonth,this.weekOfMonth);
+        cv.put(TableDay.monthOfYear,this.monthOfYear);
+        cv.put(TableDay.quarterOfYear,this.quarterOfYear);
+        cv.put(TableDay.year,this.year);
+        if(this.id!=0)
+            cv.put(TableDay.id,this.id);
+        long rowId=db.insertWithOnConflict(TableDay.day,null,cv,SQLiteDatabase.CONFLICT_REPLACE);
+        this.id=rowId;
+        return rowId;
     }
+
+    public Day get(long id){
+        String query="select * " +
+                    " "+" from "+TableDay.day+" " +
+                " "+" where "+TableDay.id+" = "+id;
+        SQLiteDatabase db=database.getReadableDatabase();
+        Cursor c=db.rawQuery(query,null);
+        if(c.moveToFirst()){
+            do{
+                this.setId(c.getInt(c.getColumnIndex(TableDay.id)));
+                this.setDayOfYear(c.getInt(c.getColumnIndex(TableDay.dayOfYear)));
+                this.setDate(CalendarUtils.parseDate(c.getString(c.getColumnIndex(TableDay.date))));
+                this.setDayOfWeek(c.getInt(c.getColumnIndex(TableDay.dayOfWeek)));
+                this.setMonthOfYear(c.getInt(c.getColumnIndex(TableDay.monthOfYear)));
+                this.setQuarterOfYear(c.getInt(c.getColumnIndex(TableDay.quarterOfYear)));
+                this.setYear(c.getInt(c.getColumnIndex(TableDay.year)));
+            }while (c.moveToNext());
+        }
+        return this;
+    }
+
+
+
 }

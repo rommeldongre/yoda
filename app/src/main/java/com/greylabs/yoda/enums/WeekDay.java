@@ -1,16 +1,18 @@
 package com.greylabs.yoda.enums;
 
+import java.util.Calendar;
+
 public enum WeekDay implements SubValue {
     /**********************************************************************************************/
     // Enum Constants
     /**********************************************************************************************/
-    SUNDAY("Sunday","S",0),
-    MONDAY("Monday","M",1),
-    TUESDAY("Tuesday","T",2),
-    WEDNESDAY("Wednesday","W",3),
-    THURSDAY("Thursday","T",4),
-    FRIDAY("Friday","F",5),
-    SATURDAY("Saturday","S",6);
+    SUNDAY("Sunday","S", Calendar.SUNDAY),
+    MONDAY("Monday","M",Calendar.MONDAY),
+    TUESDAY("Tuesday","T",Calendar.TUESDAY),
+    WEDNESDAY("Wednesday","W",Calendar.WEDNESDAY),
+    THURSDAY("Thursday","T",Calendar.THURSDAY),
+    FRIDAY("Friday","F",Calendar.FRIDAY),
+    SATURDAY("Saturday","S",Calendar.SATURDAY);
 
     /**********************************************************************************************/
     // Enum properties
@@ -61,13 +63,13 @@ public enum WeekDay implements SubValue {
     public static  WeekDay getIntegerToEnumType(int id){
         WeekDay weekDay=null;
         switch (id){
-            case 0: weekDay= SUNDAY;break;
-            case 1: weekDay= MONDAY;break;
-            case 2: weekDay= TUESDAY;break;
-            case 3: weekDay= WEDNESDAY;break;
-            case 4: weekDay= THURSDAY;break;
-            case 5: weekDay= FRIDAY;break;
-            case 6: weekDay=SATURDAY;break;
+            case 1: weekDay= SUNDAY;break;
+            case 2: weekDay= MONDAY;break;
+            case 3: weekDay= TUESDAY;break;
+            case 4: weekDay= WEDNESDAY;break;
+            case 5: weekDay= THURSDAY;break;
+            case 6: weekDay= FRIDAY;break;
+            case 7: weekDay=SATURDAY;break;
         }
         return weekDay;
     }
@@ -75,13 +77,13 @@ public enum WeekDay implements SubValue {
     public static int getEnumToIntegerType(WeekDay weekDay){
         int intValue=0;
         switch (weekDay){
-            case SUNDAY:intValue=0;break;
-            case MONDAY:intValue=1;break;
-            case TUESDAY:intValue=2;break;
-            case WEDNESDAY:intValue=3;break;
-            case THURSDAY:intValue=4;break;
-            case FRIDAY:intValue=5;break;
-            case SATURDAY:intValue=6;break;
+            case SUNDAY:intValue=SUNDAY.getValue();break;
+            case MONDAY:intValue=MONDAY.getValue();break;
+            case TUESDAY:intValue=TUESDAY.getValue();break;
+            case WEDNESDAY:intValue=WEDNESDAY.getValue();break;
+            case THURSDAY:intValue=THURSDAY.getValue();break;
+            case FRIDAY:intValue=FRIDAY.getValue();break;
+            case SATURDAY:intValue=SATURDAY.getValue();break;
         }
         return intValue;
     }

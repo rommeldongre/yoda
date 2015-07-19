@@ -33,6 +33,7 @@ public class Constants {
     public static final String MSG_GOAL_DELETED = "Goal Deleted";
     public static final String STEPS_ARRAY_LIST_WITH_NEW_PRIORITIES = "STEP_ARRAY_LIST";
     public static final String TIMEBOX_NICK_NAME = "TIMEBOX_NICK_NAME";
+    public static final int MAX_SLOT_DURATION=3;
     public static final String ACT_ADD_NEW_STEP = "ACT_ADD_NEW_STEP";
     public static final String CALLER = "CALLER";
     public static final String ACT_HOME = "ACT_HOME";

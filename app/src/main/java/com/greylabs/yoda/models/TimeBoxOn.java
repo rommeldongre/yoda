@@ -148,7 +148,7 @@ public class TimeBoxOn {
                 value= WeekDay.getEnumToIntegerType((WeekDay)subValue);
                 break;
             case MONTHLY:
-                value= Month.getEnumToIntegerType((Month) subValue);
+                value= Month.getEnumToIntegerType((Month)subValue);
                 break;
             case QUATERLY:
                 value= Quarter.getEnumToIntegerType((Quarter)subValue);
