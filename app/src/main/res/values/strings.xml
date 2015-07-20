@@ -114,6 +114,7 @@
     <string name="actionAdd">Add</string>
     <string name="titleActTimeBoxList">My TimeBoxes</string>
     <string name="titleActAddNewTimeBoxEdit">Edit TimebBox</string>
+    <string name="btnSetWallpaperActSettingsChangeWallpaper">Set Wallpaper</string>
     <string-array name="arrayStepTypeActAddNewStep">
         <item>Single Step</item>
         <item>Series</item>

@@ -1,0 +1,35 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rlActSettingsChangeWallpaper"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ImageView
+        android:id="@+id/ivActSettingsChangeWallpaper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/wallpaper1"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:scaleType="fitXY" />
+
+    <Button
+        android:id="@+id/btnSetWallpaperActSettingsChangeWallpaper"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/dark_transperent"
+        android:text="@string/btnSetWallpaperActSettingsChangeWallpaper"
+        android:drawableLeft="@drawable/ic_btn_save_act_add_new_goal"/>
+
+    <HorizontalScrollView
+        android:id="@+id/hsvActSettingsChangeWallpaper"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true">
+        <LinearLayout
+            android:id="@+id/llActSettingsChangeWallpaper"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" />
+    </HorizontalScrollView>
+</RelativeLayout>

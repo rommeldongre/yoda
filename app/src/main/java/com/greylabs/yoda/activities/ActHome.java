@@ -9,7 +9,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.greylabs.yoda.R;
-import com.greylabs.yoda.database.QuickStart;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.views.GoalView;
@@ -68,6 +67,11 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
         btnExportToGoogleCalender = (MyFloatingActionButton) findViewById(R.id.btnExportToGoogleCalActHome);
         btnImportGoogleTasks = (MyFloatingActionButton) findViewById(R.id.btnImportGoogleTasksActHome);
         btnChangeWallpaper = (MyFloatingActionButton) findViewById(R.id.btnChangeWallpaperActHome);
+
+        //set wallpaper here
+//        int resId=data.getIntExtra("drawableResourceId",R.drawable.image1);
+//        Bitmap bitmap = BitmapUtility.decodeSampledBitmapFromResource(getResources(), resId, 300, 500);
+//        ivBackground.setImageBitmap(bitmap);
 
         setStyleToArcTotalProgress();
         getGoalsFromLocalAndPopulate();

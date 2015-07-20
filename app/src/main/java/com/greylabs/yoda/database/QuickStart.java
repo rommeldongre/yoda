@@ -20,6 +20,7 @@ import java.util.TreeSet;
 /**
  * Created by Jaybhay Vijay on 7/1/2015.
  */
+
 public final class QuickStart {
 
     private final static String TAG="QuickStart";
@@ -404,8 +405,5 @@ public final class QuickStart {
         pendingStep.setTime(3);
         pendingStep.setGoalId(goalIds.get(6));
         pendingStep.save();
-
     }
-
-
 }
