@@ -3,15 +3,17 @@
     <!-- App Permissions-->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <application android:allowBackup="true" android:label="@string/app_name"
-        android:icon="@mipmap/ic_launcher" android:theme="@style/AppTheme"
-        android:name=".activities.Yoda"
-        >
+
+    <application android:allowBackup="true"
+        android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher"
+        android:theme="@style/AppTheme"
+        android:name=".activities.Yoda" >
         <!-- Activities -->
         <activity
             android:name=".activities.ActHome"
             android:label="@string/app_name"
-            >
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -21,36 +23,50 @@
         <activity
             android:name=".activities.ActHomeNew"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.Translucent"
-            />
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent" />
         <activity
-            android:name=".activities.ActAddTimeBox" />
+            android:name=".activities.ActAddTimeBox"
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.ActAddNewGoal" />
+            android:name=".activities.ActAddNewGoal"
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.ActGoalDetails" />
+            android:name=".activities.ActGoalDetails"
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.ActAddNewStep" />
+            android:name=".activities.ActAddNewStep"
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.ActStepList" />
+            android:name=".activities.ActStepList"
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.ActGoalList" />
+            android:name=".activities.ActGoalList"
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.ActTimeBoxList" />
+            android:name=".activities.ActTimeBoxList"
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.ActNowFilter" />
+            android:name=".activities.ActNowFilter"
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.ActSettingAutosyncWithGoogle" />
+            android:name=".activities.ActSettingAutosyncWithGoogle"
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.ActSettingChangeWallpaper" />
+            android:name=".activities.ActSettingChangeWallpaper"
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.ActSettingDefaultDuration" />
+            android:name=".activities.ActSettingDefaultDuration"
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.ActSettingExportToGoogleCal" />
+            android:name=".activities.ActSettingExportToGoogleCal"
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.ActSettingImportGoogleTasks" />
+            android:name=".activities.ActSettingImportGoogleTasks"
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.ActTodayFilter" />
+            android:name=".activities.ActTodayFilter"
+            android:screenOrientation="portrait" />
 
 
         <!-- Receivers and Services-->

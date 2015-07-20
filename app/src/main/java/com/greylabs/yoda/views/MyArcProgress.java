@@ -319,6 +319,7 @@ public class MyArcProgress extends View {
         // divider line
         Paint paintLine = new Paint();
         paintLine.setColor(this.dividerColor);
+        paintLine.setStrokeWidth(2);
         canvas.drawLine(this.rectF.left + this.getStrokeWidth(), this.rectF.centerY(), this.rectF.right - this.getStrokeWidth(), this.rectF.centerY(), paintLine);
 
         // two arcs

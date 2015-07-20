@@ -94,7 +94,7 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
         arcTotalProgress.setFinishedStrokeColor(getResources().getColor(R.color.luminous_green));
         arcTotalProgress.setUnfinishedStrokeColor(getResources().getColor(R.color.gray_unfinished_progress));
         arcTotalProgress.setBackgroundCircleColor(getResources().getColor(R.color.transperent_total_arc_background));
-        arcTotalProgress.setDividerColor(getResources().getColor(R.color.gray));
+        arcTotalProgress.setDividerColor(getResources().getColor(R.color.white));
 //        arcTotalProgress.setArcAngle(330);
 
         // check for string lengths first and strip accordingly
