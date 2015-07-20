@@ -12,7 +12,7 @@
     <color name="settings_background_act_home">#55ffffff</color>
     <color name="overlapping_background_act_home">#BBFFFFFF</color>
     <color name="textolor_settings_buttons">#545454</color>
-    <color name="backgroundBtnSetWallpaperActChangeWallpaper">#44000000</color>
+    <color name="backgroundBtnSetWallpaperActChangeWallpaper">#66000000</color>
 
 
     <color name="gray">#939393</color>

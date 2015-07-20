@@ -16,8 +16,9 @@
         android:id="@+id/btnSetWallpaperActSettingsChangeWallpaper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/dark_transperent"
+        android:background="@color/backgroundBtnSetWallpaperActChangeWallpaper"
         android:text="@string/btnSetWallpaperActSettingsChangeWallpaper"
+        android:textColor="@color/white"
         android:drawableLeft="@drawable/ic_btn_save_act_add_new_goal"/>
 
     <HorizontalScrollView
@@ -25,7 +26,8 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true">
+        android:layout_centerHorizontal="true"
+        android:scrollbars="none">
         <LinearLayout
             android:id="@+id/llActSettingsChangeWallpaper"
             android:layout_width="match_parent"

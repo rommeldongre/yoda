@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.greylabs.yoda.R;
+import com.greylabs.yoda.database.QuickStart;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.views.GoalView;

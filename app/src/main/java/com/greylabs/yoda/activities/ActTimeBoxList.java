@@ -143,6 +143,7 @@ public class ActTimeBoxList extends ActionBarActivity implements OnClickOfRecycl
             switch (operation){
                 case Constants.OPERATION_EDIT :
                     Intent intent = new Intent(this, ActAddTimeBox.class);
+                    intent.putExtra(Constants.CALLER, Constants.ACT_TIMEBOX_LIST);
                     intent.putExtra(Constants.TIMEBOX_OBJECT, timeBoxArrayList.get(Position));
                     startActivity(intent);
                     break;

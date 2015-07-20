@@ -226,7 +226,9 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if(position+1 == timeBoxNames.size()){
-            startActivity(new Intent(this, ActAddTimeBox.class));
+            Intent intent = new Intent(this, ActAddTimeBox.class);
+            intent.putExtra(Constants.CALLER, Constants.ACT_ADD_NEW_GOAL);
+            startActivity(intent);
         }
     }
 
