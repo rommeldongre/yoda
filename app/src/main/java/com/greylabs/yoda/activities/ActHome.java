@@ -175,7 +175,7 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
 
             case R.id.btnImportGoogleTasksActHome :
 //                startActivity(new Intent(this, ActSettingImportGoogleTasks.class));
-                startActivity(new Intent(this, ActGoalList.class));
+                startActivity(new Intent(this, ActTimeBoxList.class));
                 btnSettings.collapse();
                 break;
 

@@ -7,21 +7,20 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.greylabs.yoda.database.Database;
 import com.greylabs.yoda.database.MetaData.TableTimeBoxWhen;
+
+import java.io.Serializable;
 import java.util.Set;
 import java.util.TreeSet;
 
-/**
- * Created by Jaybhay Vijay on 7/3/2015.
- */
-public class TimeBoxWhen {
+public class TimeBoxWhen implements Serializable{
 
     /**********************************************************************************************/
     // Instance variables
     /**********************************************************************************************/
     private long timeBoxId;
     private Set<com.greylabs.yoda.enums.TimeBoxWhen> whenValues;
-    private Database database;
-    private Context context;
+    transient private Database database;
+    transient private Context context;
 
     /**********************************************************************************************/
     // Geters and Setters

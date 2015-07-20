@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView
-    android:id="@+id/cardViewActStepList"
+    android:id="@+id/cardViewActTimeBoxList"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -10,10 +10,10 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="60dp" >
+        android:minHeight="60dp">
 
         <Button
-            android:id="@+id/btnEditStepRecyclerItemActStepList"
+            android:id="@+id/btnEditTimeBoxRecyclerItemActTimeBoxList"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentRight="true"
@@ -23,33 +23,25 @@
             android:background="@drawable/ic_btn_edit_gray" />
 
         <Button
-            android:id="@+id/btnDeleteStepRecyclerItemActStepList"
+            android:id="@+id/btnDeleteTimeBoxRecyclerItemActTimeBoxList"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/btnEditStepRecyclerItemActStepList"
+            android:layout_toLeftOf="@+id/btnEditTimeBoxRecyclerItemActTimeBoxList"
             android:layout_marginRight="10dip"
             android:layout_margin="15dp"
             android:background="@drawable/ic_btn_delete_gray" />
 
-        <Button
-            android:id="@+id/btnHandleRecyclerItemActStepList"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentLeft="true"
-            android:gravity="center_vertical"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:background="@drawable/ic_btn_handle_gray" />
-
         <TextView
-            android:id="@+id/tvStepNameRecyclerItemActStepList"
+            android:id="@+id/tvGoalNameRecyclerItemActTimeBoxList"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            android:layout_toRightOf="@+id/btnHandleRecyclerItemActStepList"
-            android:layout_marginLeft="10dp"
-            android:layout_toLeftOf="@id/btnDeleteStepRecyclerItemActStepList" />
+            android:maxLines="2"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="15dp"
+            android:layout_toLeftOf="@id/btnDeleteTimeBoxRecyclerItemActTimeBoxList" />
+
     </RelativeLayout>
 </android.support.v7.widget.CardView>

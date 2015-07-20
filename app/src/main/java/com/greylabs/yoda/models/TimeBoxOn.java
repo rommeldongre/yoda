@@ -10,21 +10,19 @@ import com.greylabs.yoda.database.MetaData.TableTimeBoxOn;
 import com.greylabs.yoda.enums.*;
 import com.greylabs.yoda.enums.Daily;
 
+import java.io.Serializable;
 import java.util.Set;
 import java.util.TreeSet;
 
-/**
- * Created by Jaybhay Vijay on 7/3/2015.
- */
-public class TimeBoxOn {
+public class TimeBoxOn implements Serializable{
     /**********************************************************************************************/
     // Instance variables
     /**********************************************************************************************/
     private long timeBoxId;
     private com.greylabs.yoda.enums.TimeBoxOn onType;
     private Set<SubValue> subValues;
-    private Database database;
-    private Context context;
+    transient private Database database;
+    transient private Context context;
 
     /**********************************************************************************************/
     // Geters and Setters

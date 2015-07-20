@@ -153,15 +153,14 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
                 break;
             case R.id.actionSaveActAddNewGoal :
                 saveGoal();
-
                 //according to caller send response through intent
-
                 if(isSaved){
                     Intent intent2 = new Intent();
                     intent2.putExtra(Constants.GOAL_OBJECT, goal);
                     intent2.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, true);
-                    setResult(1, intent2);
-                    this.finish();}
+                    setResult(Constants.RESULTCODE_OF_ACT_ADD_GOAL, intent2);
+                    this.finish();
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -227,7 +226,7 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         if(position+1 == timeBoxNames.size()){
-            startActivity(new Intent(this, ActCreateTimeBox.class));
+            startActivity(new Intent(this, ActAddTimeBox.class));
         }
     }
 

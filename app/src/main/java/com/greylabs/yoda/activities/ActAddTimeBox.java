@@ -1,22 +1,23 @@
 package com.greylabs.yoda.activities;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.ScrollView;
 import android.widget.ViewFlipper;
 
 import com.greylabs.yoda.R;
+import com.greylabs.yoda.models.TimeBox;
+import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Logger;
 
-public class ActCreateTimeBox extends ActionBarActivity implements RadioGroup.OnCheckedChangeListener {
+public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnCheckedChangeListener {
 
     private Toolbar toolbar;
     private CheckBox cbWhenEarlyMorning;
@@ -42,9 +43,10 @@ public class ActCreateTimeBox extends ActionBarActivity implements RadioGroup.On
     RadioButton radioButton4;
     View llWeekly;
     View llMonthly;
-    View llQuaterly;
+    View llQuarterly;
     View llYearly;
     View llDaily;
+    TimeBox currentTimeBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,8 +76,24 @@ public class ActCreateTimeBox extends ActionBarActivity implements RadioGroup.On
         llDaily=findViewById(R.id.first);
         llWeekly=findViewById(R.id.second);
         llMonthly=findViewById(R.id.third);
-        llQuaterly=findViewById(R.id.four);
+        llQuarterly =findViewById(R.id.four);
         llYearly=findViewById(R.id.five);
+
+        Intent intent = getIntent();
+        switch (intent.getStringExtra(Constants.CALLER)){
+            case Constants.ACT_TIMEBOX_LIST :
+                currentTimeBox = new TimeBox(this);
+                break;
+
+            case Constants.ACT_ADD_NEW_GOAL :
+                if(intent.getExtras().getBoolean(Constants.TIMEBOX_ATTACHED_IN_EXTRAS)){
+                    currentTimeBox = (TimeBox) intent.getSerializableExtra(Constants.TIMEBOX_OBJECT);
+                    getSupportActionBar().setTitle(getString(R.string.titleActAddNewTimeBoxEdit));
+
+                    //initialize all the views here from the old values of the timebox
+                }
+                break;
+        }
     }
     private void setHandlers(){
 //        rbOnMonthly.setOnCheckedChangeListener(this);

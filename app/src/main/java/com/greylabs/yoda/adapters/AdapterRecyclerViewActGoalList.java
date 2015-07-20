@@ -55,7 +55,7 @@ public class AdapterRecyclerViewActGoalList extends RecyclerView.Adapter<Adapter
             holder.btnHandle.setVisibility(View.GONE);
             holder.progressBar.setVisibility(View.VISIBLE);
         }
-//        holder.btnDeleteGoal.getBackground().setColorFilter(R.color.white, PorterDuff.Mode.);
+//        holder.btnDeleteTimeBox.getBackground().setColorFilter(R.color.white, PorterDuff.Mode.);
     }
 
     @Override

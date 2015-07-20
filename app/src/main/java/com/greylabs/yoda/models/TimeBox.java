@@ -11,21 +11,19 @@ import com.greylabs.yoda.database.MetaData.TableTimeBoxOn;
 import com.greylabs.yoda.database.MetaData.TableTimeBoxWhen;
 import com.greylabs.yoda.enums.TimeBoxTill;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Jaybhay Vijay on 6/30/2015.
- */
-public class TimeBox {
+public class TimeBox implements Serializable{
     /**********************************************************************************************/
     // Instance variables
     /**********************************************************************************************/
     private long id;
     private String nickName;
+    transient private Context context;
+    transient private Database database;
     private TimeBoxTill tillType;
-    private Context context;
-    private Database database;
     private TimeBoxOn timeBoxOn;
     private TimeBoxWhen timeBoxWhen;
 

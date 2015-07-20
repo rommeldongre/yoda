@@ -110,6 +110,10 @@
     <string name="actionEditActGoalDetails">Edit</string>
     <string name="titleActGoalList">My Goals</string>
     <string name="actionEdit">Edit</string>
+    <string name="tvEmptyViewActTimeBoxList">No TimeBoxes to Show</string>
+    <string name="actionAdd">Add</string>
+    <string name="titleActTimeBoxList">My TimeBoxes</string>
+    <string name="titleActAddNewTimeBoxEdit">Edit TimebBox</string>
     <string-array name="arrayStepTypeActAddNewStep">
         <item>Single Step</item>
         <item>Series</item>

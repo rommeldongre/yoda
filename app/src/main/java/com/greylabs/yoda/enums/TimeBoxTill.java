@@ -1,6 +1,8 @@
 package com.greylabs.yoda.enums;
 
-public enum TimeBoxTill {
+import java.io.Serializable;
+
+public enum TimeBoxTill implements Serializable{
     /**********************************************************************************************/
     // Enum Constants
     /**********************************************************************************************/

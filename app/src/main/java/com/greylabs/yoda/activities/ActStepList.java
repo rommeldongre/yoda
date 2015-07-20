@@ -29,7 +29,7 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
 
     private Toolbar toolbar;
     TextView emptyViewActChangeStepPriority;
-    ArrayList<PendingStep> stepArrayList;
+    ArrayList<PendingStep> stepArrayList = new ArrayList<>();
     boolean isOperationEdit = false;
     Menu menu;
     Goal currentGoal;
@@ -65,7 +65,9 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
         switch (caller){
             case Constants.ACT_ADD_NEW_STEP :
                 isOperationEdit = true;
-                stepArrayList = (ArrayList<PendingStep>) i.getSerializableExtra(Constants.STEP_ARRAY_LIST);
+                if(stepArrayList!=null)
+                    stepArrayList.clear();
+                stepArrayList.addAll((ArrayList<PendingStep>) i.getSerializableExtra(Constants.STEP_ARRAY_LIST));
                 break;
 
             case Constants.ACT_GOAL_LIST :

@@ -24,7 +24,7 @@
             android:theme="@android:style/Theme.Translucent"
             />
         <activity
-            android:name=".activities.ActCreateTimeBox" />
+            android:name=".activities.ActAddTimeBox" />
         <activity
             android:name=".activities.ActAddNewGoal" />
         <activity
@@ -35,6 +35,8 @@
             android:name=".activities.ActStepList" />
         <activity
             android:name=".activities.ActGoalList" />
+        <activity
+            android:name=".activities.ActTimeBoxList" />
         <activity
             android:name=".activities.ActNowFilter" />
         <activity
