@@ -1,6 +1,8 @@
 package com.greylabs.yoda.utils;
 
 public class Constants {
+
+    public static final String IS_APPLICATION_FIRST_TIME_INSTALLED ="IS_APPLICATION_FIRST_TIME_INSTALLED" ;
     public static final String GOAL_ATTACHED_IN_EXTRAS = "GOAL_ATTACHED_IN_EXTRAS";
     public static final String GOAL_OBJECT = "GOAL_OBJECT";
     public static final String DEFAULT_STEP_DURATION = "DEFAULT_STEP_DURATION";

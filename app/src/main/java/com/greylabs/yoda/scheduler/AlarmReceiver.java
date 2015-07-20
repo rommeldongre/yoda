@@ -15,6 +15,12 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Logger.log(TAG,"Received Alarm. Starting Alarm Service to do background task.");
         Intent alarmService = new Intent(context, AlarmService.class);
+        AlarmScheduler alarmScheduler=(AlarmScheduler)intent.getSerializableExtra("alarmScheduler");
+        if(alarmScheduler==null){
+            Logger.log(TAG,"AlarmScheduler received null");
+        }else{
+            Logger.log(TAG,"AlarmScheduler is not null:"+alarmScheduler.toString());
+        }
         context.startService(alarmService);
     }
 }

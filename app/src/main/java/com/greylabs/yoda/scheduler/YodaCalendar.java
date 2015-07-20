@@ -52,7 +52,7 @@ public class YodaCalendar {
      * This method must be called when app is installed first time or device rebooted.
      *@return None
      */
-    public void  init(){
+    public static void  init(Context context){
 
         //Create calender and set todays date
         Calendar cal=Calendar.getInstance();

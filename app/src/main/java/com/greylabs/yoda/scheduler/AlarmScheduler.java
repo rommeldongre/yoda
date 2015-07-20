@@ -32,10 +32,23 @@ public class AlarmScheduler implements Serializable{
     private long subStepId;
     private PendingStep.PendingStepType pendingStepType;
     private Date alarmDate;
+
+    @Override
+    public String toString() {
+        return "AlarmScheduler{" +
+                "stepId=" + stepId +
+                ", subStepId=" + subStepId +
+                ", pendingStepType=" + pendingStepType +
+                ", alarmDate=" + alarmDate +
+                ", duration=" + duration +
+                ", startTime=" + startTime +
+                '}';
+    }
+
     private int duration;
     private int startTime;
-    private Context context;
-    private AlarmManager alarmManager;
+    transient private Context context;
+    transient private AlarmManager alarmManager;
 
     /**********************************************************************************************/
     // Getters and Setters
@@ -113,9 +126,10 @@ public class AlarmScheduler implements Serializable{
         calTarget.setTime(alarmDate);
 
         //start Time
-        calTarget.set(Calendar.HOUR_OF_DAY,startTime);
-        Logger.log(TAG,"Target date:[Start Time]"+calTarget.getTime().toString());
+        calTarget.set(Calendar.HOUR_OF_DAY, startTime);
+        Logger.log(TAG, "Target date:[Start Time]" + calTarget.getTime().toString());
         Intent broadcastReceiver = new Intent(context, AlarmReceiver.class);
+        broadcastReceiver.putExtra("alarmScheduler",this);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int)stepId,broadcastReceiver,0);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calTarget.getTimeInMillis(), pendingIntent);
 
@@ -123,6 +137,7 @@ public class AlarmScheduler implements Serializable{
         calTarget.add(Calendar.HOUR_OF_DAY, duration);
         Logger.log(TAG, "Target date:[End Time]" + calTarget.getTime().toString());
         broadcastReceiver = new Intent(context, AlarmReceiver.class);
+        broadcastReceiver.putExtra("alarmScheduler",this);
         pendingIntent = PendingIntent.getBroadcast(context, -(int)stepId,broadcastReceiver,0);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calTarget.getTimeInMillis(), pendingIntent);
     }

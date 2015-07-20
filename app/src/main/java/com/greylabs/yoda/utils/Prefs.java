@@ -28,6 +28,13 @@ public class Prefs {
 //        editor.commit();
 //    }
 
+    public void setApplicationFirstTimeInstalled(boolean isAppFirstTimeInstalled){
+        editor.putBoolean(Constants.IS_APPLICATION_FIRST_TIME_INSTALLED, isAppFirstTimeInstalled);
+        editor.commit();
+    }
+    public boolean getApplicationFirstTimeInstalled(){
+        return systemPrefs.getBoolean(Constants.IS_APPLICATION_FIRST_TIME_INSTALLED, true);
+    }
     public int getDefaultStepDuration(){
         return systemPrefs.getInt(Constants.DEFAULT_STEP_DURATION, Constants.DEFAULT_STEP_DURATION_VALUE);
     }
