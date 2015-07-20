@@ -4,14 +4,16 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.greylabs.yoda.R;
-import com.greylabs.yoda.database.QuickStart;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.utils.Constants;
+import com.greylabs.yoda.utils.Prefs;
 import com.greylabs.yoda.views.GoalView;
 import com.greylabs.yoda.views.MyArcProgress;
 import com.greylabs.yoda.views.MyFloatingActionButton;
@@ -31,18 +33,17 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
     MyFloatingActionsMenu btnSettings;
     MyFloatingActionButton btnAddGoal, btnDefaultDuration, btnAutosyncWithGoogle,
             btnExportToGoogleCalender, btnImportGoogleTasks, btnChangeWallpaper, btnFilters, btnAddStep;
+    Prefs prefs;
 
     ArrayList<Goal> goalList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
         // full screen Activity
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
 //        QuickStart quickStart = new QuickStart(this);
@@ -70,9 +71,8 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
         btnChangeWallpaper = (MyFloatingActionButton) findViewById(R.id.btnChangeWallpaperActHome);
 
         //set wallpaper here
-//        int resId=data.getIntExtra("drawableResourceId",R.drawable.image1);
-//        Bitmap bitmap = BitmapUtility.decodeSampledBitmapFromResource(getResources(), resId, 300, 500);
-//        ivBackground.setImageBitmap(bitmap);
+        prefs = Prefs.getInstance(this);
+        layoutWallpaper.setBackgroundResource(prefs.getWallpaperResourceId());
 
         setStyleToArcTotalProgress();
         getGoalsFromLocalAndPopulate();
@@ -185,7 +185,7 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
                 break;
 
             case R.id.btnChangeWallpaperActHome :
-                startActivity(new Intent(this, ActSettingChangeWallpaper.class));
+                startActivityForResult(new Intent(this, ActSettingChangeWallpaper.class), 1);
                 btnSettings.collapse();
                 break;
 
@@ -219,5 +219,14 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
         super.onResume();
         scrollView.removeAllViews();
         getGoalsFromLocalAndPopulate();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == Constants.RESULTCODE_ACT_SETTINGS_CHANGE_WALLPAPER){
+//            prefs = Prefs.getInstance(this);
+            layoutWallpaper.setBackgroundResource(prefs.getWallpaperResourceId());
+        }
     }
 }

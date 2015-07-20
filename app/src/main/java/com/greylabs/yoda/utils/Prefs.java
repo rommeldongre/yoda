@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.greylabs.yoda.R;
+
 public class Prefs {
     Context context;
     SharedPreferences systemPrefs;
@@ -123,5 +125,14 @@ public class Prefs {
     public void setBehaviourDoNotExpire(boolean isChecked){
         editor.putBoolean(Constants.BEHAVIOUR_DO_NOT_EXPIRE, isChecked);
         editor.commit();
+    }
+
+    public void setWallpaperResourceId(int resId) {
+        editor.putInt(Constants.WALLPAPER_RESOURCE_ID, resId);
+        editor.commit();
+    }
+
+    public int getWallpaperResourceId() {
+        return systemPrefs.getInt(Constants.WALLPAPER_RESOURCE_ID, R.drawable.wallpaper1);
     }
 }

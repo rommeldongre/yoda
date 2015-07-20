@@ -18,8 +18,10 @@
         android:layout_height="wrap_content"
         android:background="@color/backgroundBtnSetWallpaperActChangeWallpaper"
         android:text="@string/btnSetWallpaperActSettingsChangeWallpaper"
+        android:gravity="left|center_vertical"
         android:textColor="@color/white"
-        android:drawableLeft="@drawable/ic_btn_save_act_add_new_goal"/>
+        android:paddingLeft="20dp"
+        android:drawableLeft="@drawable/ic_btn_tick_thin"/>
 
     <HorizontalScrollView
         android:id="@+id/hsvActSettingsChangeWallpaper"

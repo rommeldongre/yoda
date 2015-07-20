@@ -54,4 +54,6 @@ public class Constants {
     public static final String TIMEBOX_ATTACHED_IN_EXTRAS = "TIMEBOX_ATTACHED_IN_EXTRAS";
     public static final String ACT_TIMEBOX_LIST = "ACT_TIMEBOX_LIST";
     public static final String MSG_WALLPAPER_SET_SUCCESFULLY = "Wallpaper Set";
+    public static final String WALLPAPER_RESOURCE_ID = "WALLPAPER_RESOURCE_ID";
+    public static final int RESULTCODE_ACT_SETTINGS_CHANGE_WALLPAPER = 21;
 }
