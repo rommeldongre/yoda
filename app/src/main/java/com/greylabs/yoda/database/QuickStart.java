@@ -288,7 +288,7 @@ public final class QuickStart {
         pendingStep=new PendingStep(context);
         pendingStep.setNickName("Swim 30 mins");
         pendingStep.setPriority(1);
-        pendingStep.setSeries(false);
+        pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
         pendingStep.setStepCount(1);
         pendingStep.setTime(3);
         pendingStep.setGoalId(goalIds.get(0));
@@ -296,7 +296,7 @@ public final class QuickStart {
         pendingStep=new PendingStep(context);
         pendingStep.setNickName("Oatmeal breakfast");
         pendingStep.setPriority(2);
-        pendingStep.setSeries(false);
+        pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
         pendingStep.setStepCount(1);
         pendingStep.setTime(3);
         pendingStep.setGoalId(goalIds.get(0));
@@ -305,7 +305,7 @@ public final class QuickStart {
         pendingStep=new PendingStep(context);
         pendingStep.setNickName("Make 5 calls");
         pendingStep.setPriority(1);
-        pendingStep.setSeries(false);
+        pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
         pendingStep.setStepCount(1);
         pendingStep.setTime(3);
         pendingStep.setGoalId(goalIds.get(1));
@@ -313,7 +313,7 @@ public final class QuickStart {
         pendingStep=new PendingStep(context);
         pendingStep.setNickName("Write blog article");
         pendingStep.setPriority(2);
-        pendingStep.setSeries(false);
+        pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
         pendingStep.setStepCount(1);
         pendingStep.setTime(3);
         pendingStep.setGoalId(goalIds.get(1));
@@ -321,7 +321,7 @@ public final class QuickStart {
         pendingStep=new PendingStep(context);
         pendingStep.setNickName("Follow up on claim");
         pendingStep.setPriority(3);
-        pendingStep.setSeries(false);
+        pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
         pendingStep.setStepCount(1);
         pendingStep.setTime(3);
         pendingStep.setGoalId(goalIds.get(1));
@@ -329,7 +329,7 @@ public final class QuickStart {
         pendingStep=new PendingStep(context);
         pendingStep.setNickName("Finish");
         pendingStep.setPriority(4);
-        pendingStep.setSeries(false);
+        pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
         pendingStep.setStepCount(1);
         pendingStep.setTime(3);
         pendingStep.setGoalId(goalIds.get(1));
@@ -339,7 +339,7 @@ public final class QuickStart {
         pendingStep=new PendingStep(context);
         pendingStep.setNickName("Play with kids");
         pendingStep.setPriority(1);
-        pendingStep.setSeries(false);
+        pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
         pendingStep.setStepCount(1);
         pendingStep.setTime(3);
         pendingStep.setGoalId(goalIds.get(2));
@@ -347,7 +347,7 @@ public final class QuickStart {
         pendingStep=new PendingStep(context);
         pendingStep.setNickName("Cook with spouse");
         pendingStep.setPriority(2);
-        pendingStep.setSeries(false);
+        pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
         pendingStep.setStepCount(1);
         pendingStep.setTime(3);
         pendingStep.setGoalId(goalIds.get(2));
@@ -355,7 +355,7 @@ public final class QuickStart {
         pendingStep=new PendingStep(context);
         pendingStep.setNickName("Skype with parents");
         pendingStep.setPriority(3);
-        pendingStep.setSeries(false);
+        pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
         pendingStep.setStepCount(1);
         pendingStep.setTime(3);
         pendingStep.setGoalId(goalIds.get(2));
@@ -364,7 +364,7 @@ public final class QuickStart {
         pendingStep=new PendingStep(context);
         pendingStep.setNickName("Pay weekly bills");
         pendingStep.setPriority(1);
-        pendingStep.setSeries(false);
+        pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
         pendingStep.setStepCount(1);
         pendingStep.setTime(3);
         pendingStep.setGoalId(goalIds.get(3));
@@ -372,7 +372,7 @@ public final class QuickStart {
         pendingStep=new PendingStep(context);
         pendingStep.setNickName("Clean out inbox");
         pendingStep.setPriority(2);
-        pendingStep.setSeries(false);
+        pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
         pendingStep.setStepCount(1);
         pendingStep.setTime(3);
         pendingStep.setGoalId(goalIds.get(3));
@@ -381,7 +381,7 @@ public final class QuickStart {
         pendingStep=new PendingStep(context);
         pendingStep.setNickName("Play tennis");
         pendingStep.setPriority(1);
-        pendingStep.setSeries(false);
+        pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
         pendingStep.setStepCount(1);
         pendingStep.setTime(3);
         pendingStep.setGoalId(goalIds.get(4));
@@ -390,7 +390,7 @@ public final class QuickStart {
         pendingStep=new PendingStep(context);
         pendingStep.setNickName("Dinner with friends");
         pendingStep.setPriority(2);
-        pendingStep.setSeries(false);
+        pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
         pendingStep.setStepCount(1);
         pendingStep.setTime(3);
         pendingStep.setGoalId(goalIds.get(5));
@@ -399,7 +399,7 @@ public final class QuickStart {
         pendingStep=new PendingStep(context);
         pendingStep.setNickName("Read book");
         pendingStep.setPriority(1);
-        pendingStep.setSeries(false);
+        pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
         pendingStep.setStepCount(1);
         pendingStep.setTime(3);
         pendingStep.setGoalId(goalIds.get(6));

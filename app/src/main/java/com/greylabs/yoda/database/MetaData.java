@@ -79,6 +79,8 @@ public class MetaData {
                 " "+skipCount+" integer ," +
                 " "+status+" integer ," +
                 " "+goalId+" integer, " +
+                " "+slotId+" integer, " +
+                " "+subStepOf+" integer, " +
                 " "+"foreign key("+goalId+") references "+ TableGoal.goal+"("+ TableGoal.id+") ," +
                 " "+"foreign key("+slotId+") references "+ TableSlot.slot+"("+ TableSlot.id+") , " +
                 " "+"foreign key("+subStepOf+") references "+ TablePendingStep.pendingStep+"("+ TablePendingStep.id+") " +
@@ -166,13 +168,13 @@ public class MetaData {
                 " "+weekOfMonth+" integer , " +
                 " "+monthOfYear+" integer , " +
                 " "+quarterOfYear+" integer , " +
-                " "+year+" integer ," +
+                " "+year+" integer " +
                 " ) ";
     }
     public static class TableSlot{
         public static final String slot="slot";//table name
         public static final String id="id";
-        public static final String when="when";
+        public static final String when="whenType";
         public static final String scheduleDate="scheduleDate";
         public static final String time="maxTime";
         public static final String goalId="goalId";
@@ -181,7 +183,7 @@ public class MetaData {
 
         public static final String createSlotTable=" " +
                 " create table "+slot+" ( " +
-                " "+id+" integer primary key autoincrement, " +
+                " "+id+" integer primary key autoincrement , " +
                 " "+when+" integer ," +
                 " "+scheduleDate+" text ," +
                 " "+time+" integer , " +

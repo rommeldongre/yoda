@@ -41,6 +41,8 @@ public class Database extends SQLiteOpenHelper implements Serializable{
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
+        sqLiteDatabase.execSQL(TableDay.createDayTable);
+        sqLiteDatabase.execSQL(TableSlot.createSlotTable);
         sqLiteDatabase.execSQL(TableTimeBox.createTimeBoxTable);
         sqLiteDatabase.execSQL(TableTimeBoxOn.createTimeBoxOnTable);
         sqLiteDatabase.execSQL(TableTimeBoxWhen.createTimeBoxWhenTable);
