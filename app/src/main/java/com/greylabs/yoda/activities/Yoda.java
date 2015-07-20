@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.res.Configuration;
 
 import com.greylabs.yoda.database.Database;
+import com.greylabs.yoda.database.QuickStart;
 import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.Prefs;
 
@@ -25,6 +26,8 @@ public class Yoda extends Application {
             //and initialize database
             Database.getInstance(getApplicationContext());
             YodaCalendar.init(getApplicationContext());
+            QuickStart qc=new QuickStart(getApplicationContext());
+            qc.quickStart();
             prefs.setApplicationFirstTimeInstalled(false);
         }
     }

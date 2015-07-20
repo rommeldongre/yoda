@@ -226,7 +226,7 @@ public class PendingStep implements Serializable {
         String query = "select * " +
                 " " + " from " + TablePendingStep.pendingStep + " " +
                 " " + " where " + TablePendingStep.goalId + " = " + goalId + " " +
-                " " + " and " + TablePendingStep.type + "!=" + PendingStepType.SUB_STEP;
+                " " + " and " + TablePendingStep.type + "!=" + PendingStepType.SUB_STEP.ordinal();
 
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
