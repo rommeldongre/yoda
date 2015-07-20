@@ -4,8 +4,6 @@ import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
-import java.io.ByteArrayOutputStream;
-
 public class BitmapUtility {
 
     public static Bitmap decodeSampledBitmapFromResource(Resources res, int resId,
@@ -47,10 +45,4 @@ public class BitmapUtility {
         return inSampleSize;
     }
 
-//    public static byte[] getByteArray(Bitmap bitmap){
-//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-//        bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
-//        byte[] b = baos.toByteArray();
-//        return b;
-//    }
 }

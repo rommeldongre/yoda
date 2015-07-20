@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.greylabs.yoda.database.Database;
 import com.greylabs.yoda.database.MetaData;
 import com.greylabs.yoda.database.MetaData.TableGoal;
+import com.greylabs.yoda.database.MetaData.TablePendingStep;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -240,33 +241,49 @@ public class Goal implements Serializable{
      * @return percentage of goal completion
      */
     public float getGoalProgress(){
-        int totalCompletedStepTime=0;
-        int totalPendingStepTime=0;
+        int totalStepsCompleted=0;
+        int totalStepsUnCompleted=0;
         SQLiteDatabase db=database.getReadableDatabase();
         //this query returns sum of time of all steps that are present in the Complpeted Step table
-        String sumOfTimeComplete=" select sum(p."+ MetaData.TablePendingStep.time+") as sumTime" +
-                " "+ MetaData.TableCompletedStep.completedStep+" as c join "+" "+ MetaData.TablePendingStep.pendingStep+" as p " +
-                " "+"on ( c."+ MetaData.TablePendingStep.id+" = "+ MetaData.TableCompletedStep.id+" )" +
-                " "+"where p."+ MetaData.TablePendingStep.goalId+"="+id;
+        String sumOfTimeComplete=" select count(*) as totalStepsCompleted  " +
+                " "+" from "+TablePendingStep.pendingStep+" " +
+                " "+" where ("+TablePendingStep.type+"= "+ PendingStep.PendingStepType.SINGLE_STEP+" or " +
+                " "+TablePendingStep.type+"= "+ PendingStep.PendingStepType.SUB_STEP.ordinal()+" ) and " +
+                " " +TablePendingStep.status+" = "+PendingStep.PendingStepStatus.COMPLETED.ordinal();
         Cursor c=db.rawQuery(sumOfTimeComplete,null);
         if(c.moveToFirst()){
             do{
-                totalCompletedStepTime=c.getInt(c.getColumnIndex("sumTime"));
+                totalStepsCompleted=c.getInt(c.getColumnIndex("sumTime"));
             }while(c.moveToNext());
         }
         c.close();
-        String sumOfTimePending=" select sum("+ MetaData.TablePendingStep.time+") as sumTime " +
-                " "+"from "+ MetaData.TablePendingStep.pendingStep+" " +
-                " "+"where "+ MetaData.TablePendingStep.goalId+"="+id;
+        String sumOfTimePending=" select count(*) as totalStepsUnCompleted  " +
+                " "+" from "+TablePendingStep.pendingStep+" " +
+                " "+" where ("+TablePendingStep.type+"= "+ PendingStep.PendingStepType.SINGLE_STEP+" or " +
+                " "+TablePendingStep.type+"= "+ PendingStep.PendingStepType.SUB_STEP.ordinal()+" ) and (" +
+                " " +TablePendingStep.status+" = "+PendingStep.PendingStepStatus.TODO.ordinal()+ " )";
          c=db.rawQuery(sumOfTimePending,null);
         if(c.moveToFirst()){
             do{
-                totalPendingStepTime=c.getInt(c.getColumnIndex("sumTime"));
+                totalStepsUnCompleted=c.getInt(c.getColumnIndex("sumTime"));
             }while(c.moveToNext());
         }
         c.close();
 
-        float percentage=(totalCompletedStepTime/(totalCompletedStepTime+totalPendingStepTime))*100;
+        float percentage=(totalStepsCompleted/(totalStepsCompleted+totalStepsUnCompleted))*100;
         return percentage;
     }
+
+    public int getStepCount(){
+        int stepCount=0;
+        String query="select count(*) as stepCount" +
+                " "+" from "+TablePendingStep.pendingStep+" " +
+                " "+" where "+TablePendingStep.goalId+" = "+this.id;
+        SQLiteDatabase db=database.getReadableDatabase();
+        Cursor c=db.rawQuery(query,null);
+        c.moveToFirst();
+        stepCount=c.getInt(c.getColumnIndex("stepCount"));
+        return stepCount;
+    }
+
 }

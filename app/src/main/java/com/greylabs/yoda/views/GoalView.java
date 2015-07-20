@@ -60,7 +60,7 @@ public class GoalView extends LinearLayout implements View.OnClickListener {
         donutProgress.setProgress(75);
         donutProgress.setTextColor(getResources().getColor(R.color.white));
         donutProgress.setTextSize(25);
-        donutProgress.setSuffixText("4");
+        donutProgress.setSuffixText(String.valueOf(currentGoal.getStepCount()));
         donutProgress.setFinishedStrokeWidth(7);
         donutProgress.setUnfinishedStrokeWidth(7);
         donutProgress.setFinishedStrokeColor(getResources().getColor(R.color.luminous_green));
