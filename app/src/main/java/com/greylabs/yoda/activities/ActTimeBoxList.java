@@ -145,27 +145,49 @@ public class ActTimeBoxList extends ActionBarActivity implements OnClickOfRecycl
         if(isOperationEdit){
             switch (operation){
                 case Constants.OPERATION_EDIT :
-                    Intent intent = new Intent(this, ActAddTimeBox.class);
-                    intent.putExtra(Constants.CALLER, Constants.ACT_TIMEBOX_LIST);
-                    intent.putExtra(Constants.TIMEBOX_OBJECT, timeBoxArrayList.get(Position));
-                    intent.putExtra(Constants.OPERATION, Constants.OPERATION_EDIT);
-                    startActivity(intent);
+                    if(!timeBoxArrayList.get(Position).getNickName().equals(Constants.NICKNAME_UNPLANNED_TIMEBOX)){
+                        Intent intent = new Intent(this, ActAddTimeBox.class);
+                        intent.putExtra(Constants.CALLER, Constants.ACT_TIMEBOX_LIST);
+                        intent.putExtra(Constants.TIMEBOX_OBJECT, timeBoxArrayList.get(Position));
+                        intent.putExtra(Constants.OPERATION, Constants.OPERATION_EDIT);
+                        startActivity(intent);
+                    }else {
+                        AlertDialog.Builder alertLogout = new AlertDialog.Builder(this);
+                        alertLogout.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                            }
+                        });
+                        alertLogout.setMessage(Constants.MSG_CANT_EDIT_DELETE_TIMEBOX);
+                        alertLogout.show();
+                    }
                     break;
 
                 case Constants.OPERATION_DELETE :
-                    AlertDialog.Builder alertLogout = new AlertDialog.Builder(this);
-                    alertLogout.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            timeBoxArrayList.get(Position).delete();
-                            Logger.showMsg(ActTimeBoxList.this, Constants.MSG_TIMEBOX_DELETED);
-                            getTimeBoxArrayFromLocal();
-                            mAdapter.notifyDataSetChanged();
-                        }
-                    });
-                    alertLogout.setNegativeButton("Cancel", null);
-                    alertLogout.setMessage(Constants.MSG_DELETE_TIMEBOX);
-                    alertLogout.show();
+                    if(!timeBoxArrayList.get(Position).getNickName().equals(Constants.NICKNAME_UNPLANNED_TIMEBOX)){
+                        AlertDialog.Builder alertLogout = new AlertDialog.Builder(this);
+                        alertLogout.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                timeBoxArrayList.get(Position).delete();
+                                Logger.showMsg(ActTimeBoxList.this, Constants.MSG_TIMEBOX_DELETED);
+                                getTimeBoxArrayFromLocal();
+                                mAdapter.notifyDataSetChanged();
+                            }
+                        });
+                        alertLogout.setNegativeButton("Cancel", null);
+                        alertLogout.setMessage(Constants.MSG_DELETE_TIMEBOX);
+                        alertLogout.show();
+                    }else {
+                        AlertDialog.Builder alertLogout = new AlertDialog.Builder(this);
+                        alertLogout.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                            }
+                        });
+                        alertLogout.setMessage(Constants.MSG_CANT_EDIT_DELETE_TIMEBOX);
+                        alertLogout.show();
+                    }
                     break;
             }
         }

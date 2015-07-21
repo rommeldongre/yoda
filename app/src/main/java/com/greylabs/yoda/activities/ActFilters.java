@@ -4,20 +4,17 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 
+import com.astuetz.PagerSlidingTabStrip;
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.adapters.TabPagerAdapterActFilters;
 
-import it.neokree.materialtabs.MaterialTab;
-import it.neokree.materialtabs.MaterialTabHost;
-import it.neokree.materialtabs.MaterialTabListener;
-
-public class ActFilters  extends ActionBarActivity implements MaterialTabListener
+public class ActFilters  extends ActionBarActivity
 {
 
     private Toolbar toolbar;
 //    Menu menu;
 
-    private MaterialTabHost tabBarView;
+    private PagerSlidingTabStrip tabBarView;
     private ViewPager viewPager;
     private TabPagerAdapterActFilters tabPagerAdapter;
 //    private int[] tab_icons_for_create_right = {R.drawable.ic_home_drawer_acthome, R.drawable.ic_notifications_drawer_acthome,
@@ -32,12 +29,7 @@ public class ActFilters  extends ActionBarActivity implements MaterialTabListene
         setContentView(R.layout.activity_filters);
         initialize();
     }
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if(tabPagerAdapter!=null)
-            tabPagerAdapter.notifyDataSetChanged();
-    }
+
     private void initialize() {
 
         toolbar = (Toolbar) findViewById(R.id.toolBarActFilters);
@@ -52,26 +44,22 @@ public class ActFilters  extends ActionBarActivity implements MaterialTabListene
         tabPagerAdapter = new TabPagerAdapterActFilters(getSupportFragmentManager());
         viewPager.setAdapter(tabPagerAdapter);
 
-        tabBarView = (MaterialTabHost) findViewById(R.id.tabBarActFilters);
+        tabBarView = (PagerSlidingTabStrip) findViewById(R.id.tabBarActFilters);
+        tabBarView.setViewPager(viewPager);
 
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
-//              tabBarView.setSelectedTab(position);
-                tabBarView.setSelectedNavigationItem(position);
             }
 
             @Override
-            public void onPageScrolled(int arg0, float arg1, int arg2) { }
+            public void onPageScrolled(int arg0, float arg1, int arg2) {
+            }
 
             @Override
-            public void onPageScrollStateChanged(int arg0) {}
+            public void onPageScrollStateChanged(int arg0) {
+            }
         });
-
-        tabBarView.addTab(
-                tabBarView.newTab()
-//                        .setIcon(getResources().getDrawable(tab_icons_for_no_create_right[n]))
-                        .setTabListener(this));
     }
 
 //    @Override
@@ -94,14 +82,14 @@ public class ActFilters  extends ActionBarActivity implements MaterialTabListene
 //        return super.onOptionsItemSelected(item);
 //    }
 
-    @Override
-    public void onTabSelected(MaterialTab tab) {
-        viewPager.setCurrentItem(tab.getPosition());
-    }
-    @Override
-    public void onTabReselected(MaterialTab materialTab) {
-
-    }
-    @Override
-    public void onTabUnselected(MaterialTab materialTab) {}
+//    @Override
+//    public void onTabSelected(MaterialTab tab) {
+//        viewPager.setCurrentItem(tab.getPosition());
+//    }
+//    @Override
+//    public void onTabReselected(MaterialTab materialTab) {
+//
+//    }
+//    @Override
+//    public void onTabUnselected(MaterialTab materialTab) {}
 }

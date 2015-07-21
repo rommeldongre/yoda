@@ -11,15 +11,12 @@ import com.greylabs.yoda.enums.WeekDay;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.TimeBox;
+import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Logger;
 
 import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
-
-/**
- * Created by Jaybhay Vijay on 7/1/2015.
- */
 
 public final class QuickStart {
 
@@ -196,7 +193,7 @@ public final class QuickStart {
 
         //8
         timeBox=new TimeBox(context);
-        timeBox.setNickName("Unplanned");
+        timeBox.setNickName(Constants.NICKNAME_UNPLANNED_TIMEBOX);
         //on
         timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,TimeBoxOn.DAILY);
         timeBoxOns=new TreeSet<>();

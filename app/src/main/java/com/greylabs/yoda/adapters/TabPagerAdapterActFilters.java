@@ -63,13 +63,15 @@ public class TabPagerAdapterActFilters extends FragmentPagerAdapter
         Locale l = Locale.getDefault();
         switch (position) {
             case 0:
-                return "Now";
-            case 1:
                 return "Today";
-            case 2:
+            case 1:
                 return "This Week";
-            case 3:
+            case 2:
                 return "This Month";
+            case 3:
+                return "This Quarter";
+            case 4:
+                return "This Year";
         }
         return null;
     }

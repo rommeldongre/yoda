@@ -58,4 +58,6 @@ public class Constants {
     public static final int RESULTCODE_ACT_SETTINGS_CHANGE_WALLPAPER = 21;
     public static final String OPERATION = "OPERATION";
     public static final String OPERATION_ADD = "OPERATION_ADD";
+    public static final String NICKNAME_UNPLANNED_TIMEBOX = "Unplanned";
+    public static final String MSG_CANT_EDIT_DELETE_TIMEBOX = "Unplanned TimeBox can not be edited or deleted.";
 }
