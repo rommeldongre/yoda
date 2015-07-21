@@ -31,6 +31,24 @@
             <!--fab:fab_addButtonPlusIconColor="@color/half_black"-->
 
             <com.greylabs.yoda.views.MyFloatingActionButton
+                android:id="@+id/btnMyGoalsActHome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_size="mini"
+                fab:fab_colorNormal="@color/transperent_total_arc_background"
+                fab:fab_colorPressed="@color/transperent_more"
+                fab:fab_title="My Goals"/>
+
+            <com.greylabs.yoda.views.MyFloatingActionButton
+                android:id="@+id/btnMyTimeBoxesActHome"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_size="mini"
+                fab:fab_colorNormal="@color/transperent_total_arc_background"
+                fab:fab_colorPressed="@color/transperent_more"
+                fab:fab_title="My TimeBoxes"/>
+
+            <com.greylabs.yoda.views.MyFloatingActionButton
                 android:id="@+id/btnDefaultDurationActHome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

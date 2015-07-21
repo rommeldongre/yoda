@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/toolBarActFilters"
+        layout="@layout/tool_bar" />
+
+    <it.neokree.materialtabs.MaterialTabHost
+        android:id="@+id/tabBarActFilters"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        app:iconColor="#FFFFFF"
+        app:primaryColor="@color/ColorPrimary"
+        app:accentColor="#FFFF"
+        android:elevation="4dp"
+        app:hasIcons="false"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPagerActFilters"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

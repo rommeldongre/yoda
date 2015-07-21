@@ -47,25 +47,13 @@
             android:name=".activities.ActTimeBoxList"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.ActNowFilter"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activities.ActSettingAutosyncWithGoogle"
+            android:name=".activities.ActFilters"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.ActSettingChangeWallpaper"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activities.ActSettingDefaultDuration"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activities.ActSettingExportToGoogleCal"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activities.ActSettingImportGoogleTasks"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activities.ActTodayFilter"
             android:screenOrientation="portrait" />
 
 

@@ -31,7 +31,7 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
     RelativeLayout layoutToBeHidden, layoutWallpaper, layoutSettingsBackground, layoutOverlapping;
     MyArcProgress arcTotalProgress;
     MyFloatingActionsMenu btnSettings;
-    MyFloatingActionButton btnAddGoal, btnDefaultDuration, btnAutosyncWithGoogle,
+    MyFloatingActionButton btnAddGoal, btnMyGoals, btnMyTimeBoxes, btnDefaultDuration, btnAutosyncWithGoogle,
             btnExportToGoogleCalender, btnImportGoogleTasks, btnChangeWallpaper, btnFilters, btnAddStep;
     Prefs prefs;
 
@@ -64,6 +64,8 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
         btnFilters = (MyFloatingActionButton) findViewById(R.id.btnFilterActHome);
         btnSettings = (MyFloatingActionsMenu) findViewById(R.id.btnSettingsActHome);
 
+        btnMyGoals = (MyFloatingActionButton) findViewById(R.id.btnMyGoalsActHome);
+        btnMyTimeBoxes = (MyFloatingActionButton) findViewById(R.id.btnMyTimeBoxesActHome);
         btnDefaultDuration = (MyFloatingActionButton) findViewById(R.id.btnDefaultDurationActHome);
         btnAutosyncWithGoogle = (MyFloatingActionButton) findViewById(R.id.btnAutosyncWithGoogleActHome);
         btnExportToGoogleCalender = (MyFloatingActionButton) findViewById(R.id.btnExportToGoogleCalActHome);
@@ -81,6 +83,8 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
         btnFilters.setOnClickListener(this);
         btnSettings.setOnFloatingActionsMenuUpdateListener(this);
 
+        btnMyGoals.setOnClickListener(this);
+        btnMyTimeBoxes.setOnClickListener(this);
         btnDefaultDuration.setOnClickListener(this);
         btnAutosyncWithGoogle.setOnClickListener(this);
         btnExportToGoogleCalender.setOnClickListener(this);
@@ -149,7 +153,6 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
                 break;
 
             case R.id.arcTotalProgressActHome :
-                startActivity(new Intent(this, ActNowFilter.class));
                 break;
 
             case R.id.btnAddStepActHome :
@@ -160,7 +163,17 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
                 break;
 
             case R.id.btnFilterActHome :
-                startActivity(new Intent(this, ActTodayFilter.class));
+                startActivity(new Intent(this, ActFilters.class));
+                break;
+
+            case R.id.btnMyGoalsActHome :
+                startActivity(new Intent(this, ActGoalList.class));
+                btnSettings.collapse();
+                break;
+
+            case R.id.btnMyTimeBoxesActHome :
+                startActivity(new Intent(this, ActTimeBoxList.class));
+                btnSettings.collapse();
                 break;
 
             case R.id.btnDefaultDurationActHome :
@@ -169,18 +182,14 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
                 break;
 
             case R.id.btnAutosyncWithGoogleActHome :
-                startActivity(new Intent(this, ActSettingAutosyncWithGoogle.class));
                 btnSettings.collapse();
                 break;
 
             case R.id.btnExportToGoogleCalActHome :
-                startActivity(new Intent(this, ActSettingExportToGoogleCal.class));
                 btnSettings.collapse();
                 break;
 
             case R.id.btnImportGoogleTasksActHome :
-//                startActivity(new Intent(this, ActSettingImportGoogleTasks.class));
-                startActivity(new Intent(this, ActTimeBoxList.class));
                 btnSettings.collapse();
                 break;
 
