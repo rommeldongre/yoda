@@ -278,6 +278,14 @@ public final class QuickStart {
         goal.save();
         goalIds.add(goal.getId());
 
+        //8
+        goal=new Goal(context);
+        goal.setNickName(Constants.NICKNAME_UNPLANNED_GOAL);
+        goal.setObjective("");
+        goal.setKeyResult("");
+        goal.setTimeBoxId(timeBoxIds.get(7));
+        goal.save();
+        goalIds.add(goal.getId());
     }
 
     private void addDefaultSteps(){
