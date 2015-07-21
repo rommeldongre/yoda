@@ -211,16 +211,16 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
 
     @Override
     public void onMenuExpanded() {
-        layoutOverlapping.setVisibility(View.VISIBLE);
-//        layoutToBeHidden.setVisibility(View.GONE);
-//        layoutSettingsBackground.setBackgroundColor(getResources().getColor(R.color.settings_background_act_home));
+//        layoutOverlapping.setVisibility(View.VISIBLE);
+        layoutToBeHidden.setVisibility(View.GONE);
+        layoutSettingsBackground.setBackgroundColor(getResources().getColor(R.color.settings_background_act_home));
     }
 
     @Override
     public void onMenuCollapsed() {
-        layoutOverlapping.setVisibility(View.GONE);
-//        layoutToBeHidden.setVisibility(View.VISIBLE);
-//        layoutSettingsBackground.setBackgroundColor(getResources().getColor(R.color.transperent));
+//        layoutOverlapping.setVisibility(View.GONE);
+        layoutToBeHidden.setVisibility(View.VISIBLE);
+        layoutSettingsBackground.setBackgroundColor(getResources().getColor(R.color.transperent));
     }
 
     @Override

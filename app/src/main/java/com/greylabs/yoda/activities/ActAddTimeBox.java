@@ -409,6 +409,7 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
             switch (currentTimeBox.getTimeBoxOn().getOnType()){
                 case DAILY:
                     rbOnDaily.setChecked(true);
+                    llDaily.setVisibility(View.VISIBLE);
                     break;
                 case WEEKLY:
                     rbOnWeekly.setChecked(true);
@@ -424,6 +425,7 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
                             case FRIDAY:cbOnWeeklyFri.setChecked(true);break;
                             case SATURDAY:cbOnWeeklySat.setChecked(true);break;
                         }
+                        llWeekly.setVisibility(View.VISIBLE);
                     }
                     break;
                 case MONTHLY:
@@ -437,6 +439,7 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
                             case WEEK4:cbOnMonthly4Week.setChecked(true);break;
                         }
                     }
+                    llMonthly.setVisibility(View.VISIBLE);
                     break;
                 case QUATERLY:
                     rbOnQuaterly.setChecked(true);
@@ -447,6 +450,7 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
                             case MONTH2:cbOnQuaterly2Month.setChecked(true);
                             case MONTH3:cbOnQuaterly3Month.setChecked(true);
                         }
+                        llQuarterly.setVisibility(View.VISIBLE);
                     }
                     break;
                 case YEARLY:
@@ -468,6 +472,7 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
                             case DECEMBER:cbOnYearlyDec.setChecked(true);break;
                         }
                     }
+                    llYearly.setVisibility(View.VISIBLE);
                     break;
             }
             //set Till
@@ -479,6 +484,7 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
                 case FOREVER:rbTillForever.setChecked(true);
             }
         }
+        edtSummary.setText(currentTimeBox.getNickName());
     }
     private TimeBox createTimeBoxObjectFromUI(){
       TimeBox timeBox=null;
@@ -604,5 +610,4 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
         }
         return  summary;
     }
-
 }

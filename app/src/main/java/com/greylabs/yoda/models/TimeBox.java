@@ -134,7 +134,7 @@ public class TimeBox implements Serializable{
                 timeBox.timeBoxOn.setTimeBoxId(timeBox.id);
                 timeBox.timeBoxOn.setSubValues(timeBox.timeBoxOn.get());
                 timeBox.timeBoxWhen=new TimeBoxWhen(context);
-                timeBox.timeBoxWhen.setTimeBoxId(this.id);
+                timeBox.timeBoxWhen.setTimeBoxId(timeBox.id);
                 timeBox.timeBoxWhen.setWhenValues(timeBox.timeBoxWhen.get());
                 timeBox.tillType=TimeBoxTill.getIntegerToEnumType(c.getInt(c.getColumnIndex(TableTimeBox.till)));
                 timeBoxes.add(timeBox);
