@@ -147,26 +147,48 @@ public class ActGoalList  extends ActionBarActivity implements OnClickOfRecycler
         if(isOperationEdit){
             switch (operation){
                 case Constants.OPERATION_EDIT :
-                    Intent intent = new Intent(this, ActGoalDetails.class);
-                    intent.putExtra(Constants.GOAL_OBJECT, goalArrayList.get(Position));
-                    intent.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, true);
-                    startActivity(intent);
+                    if(!goalArrayList.get(Position).getNickName().equals(Constants.NICKNAME_UNPLANNED_GOAL)){
+                        Intent intent = new Intent(ActGoalList.this, ActGoalDetails.class);
+                        intent.putExtra(Constants.GOAL_OBJECT, goalArrayList.get(Position));
+                        intent.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, true);
+                        startActivity(intent);
+                    }else {
+                        AlertDialog.Builder alertLogout = new AlertDialog.Builder(this);
+                        alertLogout.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                            }
+                        });
+                        alertLogout.setMessage(Constants.MSG_CANT_EDIT_DELETE_GOAL);
+                        alertLogout.show();
+                    }
                     break;
 
                 case Constants.OPERATION_DELETE :
-                    AlertDialog.Builder alertLogout = new AlertDialog.Builder(this);
-                    alertLogout.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            goalArrayList.get(Position).delete();
-                            Logger.showMsg(ActGoalList.this, Constants.MSG_GOAL_DELETED);
-                            getGoalArrayFromLocal();
-                            mAdapter.notifyDataSetChanged();
-                        }
-                    });
-                    alertLogout.setNegativeButton("Cancel", null);
-                    alertLogout.setMessage(Constants.MSG_DELETE_GOAL);
-                    alertLogout.show();
+                    if(!goalArrayList.get(Position).getNickName().equals(Constants.NICKNAME_UNPLANNED_GOAL)){
+                        AlertDialog.Builder alertLogout = new AlertDialog.Builder(this);
+                        alertLogout.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                goalArrayList.get(Position).delete();
+                                Logger.showMsg(ActGoalList.this, Constants.MSG_GOAL_DELETED);
+                                getGoalArrayFromLocal();
+                                mAdapter.notifyDataSetChanged();
+                            }
+                        });
+                        alertLogout.setNegativeButton("Cancel", null);
+                        alertLogout.setMessage(Constants.MSG_DELETE_GOAL);
+                        alertLogout.show();
+                    }else {
+                        AlertDialog.Builder alertLogout = new AlertDialog.Builder(this);
+                        alertLogout.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                            }
+                        });
+                        alertLogout.setMessage(Constants.MSG_CANT_EDIT_DELETE_GOAL);
+                        alertLogout.show();
+                    }
                     break;
             }
         }else if(!isOperationEdit){

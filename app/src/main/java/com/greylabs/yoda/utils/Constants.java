@@ -61,4 +61,5 @@ public class Constants {
     public static final String NICKNAME_UNPLANNED_TIMEBOX = "Unplanned";
     public static final String MSG_CANT_EDIT_DELETE_TIMEBOX = "Unplanned TimeBox can not be edited or deleted.";
     public static final String NICKNAME_UNPLANNED_GOAL = "Unplanned";
+    public static final String MSG_CANT_EDIT_DELETE_GOAL = "Unplanned Goal can not be edited or deleted.";
 }

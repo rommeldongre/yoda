@@ -84,6 +84,7 @@ public final class QuickStart {
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
         Logger.log(TAG, "1 Added");
+
         //3
         timeBox=new TimeBox(context);
         timeBox.setNickName("Weekday Evenings Forever");
@@ -105,6 +106,7 @@ public final class QuickStart {
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
         Logger.log(TAG, "1 Added");
+
         //4
         timeBox=new TimeBox(context);
         timeBox.setNickName("Sunday Morning Forever");
@@ -146,6 +148,7 @@ public final class QuickStart {
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
         Logger.log(TAG, "1 Added");
+
         //6
         timeBox=new TimeBox(context);
         timeBox.setNickName("Weekend Evenings ");
@@ -166,6 +169,7 @@ public final class QuickStart {
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
         Logger.log(TAG, "1 Added");
+
         //7
         timeBox=new TimeBox(context);
         timeBox.setNickName("Week Nights");
@@ -206,6 +210,7 @@ public final class QuickStart {
         timeBox.setTimeBoxWhen(timeBoxWhen);
         timeBox.setTillType(TimeBoxTill.FOREVER);
         timeBox.save();
+        timeBoxIds.add(timeBox.getId());
         Logger.log(TAG, "1 Added");
     }
 
