@@ -115,6 +115,9 @@
     <string name="titleActTimeBoxList">My TimeBoxes</string>
     <string name="titleActAddNewTimeBoxEdit">Edit TimebBox</string>
     <string name="btnSetWallpaperActSettingsChangeWallpaper">Set Wallpaper</string>
+    <string name="msgActCreateTimeBoxSelectWhenTime">Select at least one When Time</string>
+    <string name="msgActCreateTimeBoxSelectOnTime">Select On Time</string>
+    <string name="msgActCreateTimeBoxSelectTillTime">Select Till Time</string>
     <string name="titleActFilters">Filters</string>
     <string-array name="arrayStepTypeActAddNewStep">
         <item>Single Step</item>

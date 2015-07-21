@@ -5,7 +5,7 @@ public enum TimeBoxWhen {
     // Enum Constants
     /**********************************************************************************************/
     EARLY_MORNING("Early Morning",6, 9,0),
-    MORNING("Moring",9, 12,1),
+    MORNING("Morning",9, 12,1),
     AFTERNOON("Afternoon",12, 15,2),
     EVENING("Evening" ,15, 18,3),
     NIGHT("Night",18, 21,4),
