@@ -142,7 +142,7 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
         Intent intent = getIntent();
         switch (intent.getStringExtra(Constants.CALLER)){
             case Constants.ACT_TIMEBOX_LIST :
-                if(intent.getExtras().getBoolean(Constants.TIMEBOX_ATTACHED_IN_EXTRAS)){
+                if(intent.getStringExtra(Constants.OPERATION).equals(Constants.OPERATION_EDIT)){
                     currentTimeBox = (TimeBox) intent.getSerializableExtra(Constants.TIMEBOX_OBJECT);
                     getSupportActionBar().setTitle(getString(R.string.titleActAddNewTimeBoxEdit));
                     timeBoxWhenSet=currentTimeBox.getTimeBoxWhen().getWhenValues();
@@ -151,6 +151,8 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
                     timeBoxTill=currentTimeBox.getTillType();
                     initEditUI();
                     //initialize all the views here from the old values of the timebox
+                }else if(intent.getStringExtra(Constants.OPERATION).equals(Constants.OPERATION_ADD)){
+                    currentTimeBox = new TimeBox(this);
                 }
                 break;
             case Constants.ACT_ADD_NEW_GOAL :

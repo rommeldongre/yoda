@@ -130,7 +130,10 @@ public class ActTimeBoxList extends ActionBarActivity implements OnClickOfRecycl
                 recyclerView.setAdapter(mAdapter);
                 break;
             case R.id.actionAddActTimeBoxList :
-                startActivity(new Intent(this, ActAddTimeBox.class));
+                Intent intent = new Intent(this, ActAddTimeBox.class);
+                intent.putExtra(Constants.CALLER, Constants.ACT_TIMEBOX_LIST);
+                intent.putExtra(Constants.OPERATION, Constants.OPERATION_ADD);
+                startActivity(intent);
                 finish();
                 break;
         }
@@ -145,6 +148,7 @@ public class ActTimeBoxList extends ActionBarActivity implements OnClickOfRecycl
                     Intent intent = new Intent(this, ActAddTimeBox.class);
                     intent.putExtra(Constants.CALLER, Constants.ACT_TIMEBOX_LIST);
                     intent.putExtra(Constants.TIMEBOX_OBJECT, timeBoxArrayList.get(Position));
+                    intent.putExtra(Constants.OPERATION, Constants.OPERATION_EDIT);
                     startActivity(intent);
                     break;
 

@@ -32,7 +32,6 @@ public class AdapterRecyclerViewActGoalList extends RecyclerView.Adapter<Adapter
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View v;
         ViewHolder vhItem;
         v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_item_act_goal_list, parent, false);

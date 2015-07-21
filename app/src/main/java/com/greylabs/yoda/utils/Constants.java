@@ -56,4 +56,6 @@ public class Constants {
     public static final String MSG_WALLPAPER_SET_SUCCESFULLY = "Wallpaper Set";
     public static final String WALLPAPER_RESOURCE_ID = "WALLPAPER_RESOURCE_ID";
     public static final int RESULTCODE_ACT_SETTINGS_CHANGE_WALLPAPER = 21;
+    public static final String OPERATION = "OPERATION";
+    public static final String OPERATION_ADD = "OPERATION_ADD";
 }

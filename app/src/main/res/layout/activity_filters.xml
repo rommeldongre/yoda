@@ -16,8 +16,7 @@
         app:iconColor="#FFFFFF"
         app:primaryColor="@color/ColorPrimary"
         app:accentColor="#FFFF"
-        android:elevation="4dp"
-        app:hasIcons="false"/>
+        android:elevation="4dp"/>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPagerActFilters"
