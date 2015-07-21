@@ -145,6 +145,10 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
                 if(intent.getExtras().getBoolean(Constants.TIMEBOX_ATTACHED_IN_EXTRAS)){
                     currentTimeBox = (TimeBox) intent.getSerializableExtra(Constants.TIMEBOX_OBJECT);
                     getSupportActionBar().setTitle(getString(R.string.titleActAddNewTimeBoxEdit));
+                    timeBoxWhenSet=currentTimeBox.getTimeBoxWhen().getWhenValues();
+                    timeBoxOnSubValueSet=currentTimeBox.getTimeBoxOn().getSubValues();
+                    timeBoxOn=currentTimeBox.getTimeBoxOn().getOnType();
+                    timeBoxTill=currentTimeBox.getTillType();
                     initEditUI();
                     //initialize all the views here from the old values of the timebox
                 }
