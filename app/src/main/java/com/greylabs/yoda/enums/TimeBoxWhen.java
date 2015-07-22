@@ -76,7 +76,7 @@ public enum TimeBoxWhen {
             case 2: timeBoxWhen= AFTERNOON;break;
             case 3: timeBoxWhen= EVENING;break;
             case 4: timeBoxWhen= NIGHT;break;
-            case 5: timeBoxWhen=LATE_NIGHT;break;
+            case 5: timeBoxWhen= LATE_NIGHT;break;
         }
         return timeBoxWhen;
     }

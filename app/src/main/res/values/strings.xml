@@ -119,6 +119,7 @@
     <string name="msgActCreateTimeBoxSelectOnTime">Select On Time</string>
     <string name="msgActCreateTimeBoxSelectTillTime">Select Till Time</string>
     <string name="titleActFilters">Filters</string>
+    <string name="msgActAddNewGoalTimeBoxNotApplicable">Selected TimeBox is overlaping with one of the active TimeBoxes. Please choose different TimeBox</string>
     <string name="tvEmptyViewFragFilter">No Goals Planned</string>
     <string-array name="arrayStepTypeActAddNewStep">
         <item>Single Step</item>

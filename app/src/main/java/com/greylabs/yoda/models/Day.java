@@ -11,6 +11,7 @@ import com.greylabs.yoda.utils.CalendarUtils;
 import com.greylabs.yoda.utils.WhereConditionBuilder;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -135,9 +136,13 @@ public class Day {
      * @return None
      */
     public long save(){
+        Calendar cal=Calendar.getInstance();
+        cal.setTime(this.date);
+        String  sqliteDate=cal.get(Calendar.YEAR)+"-"+cal.get(Calendar.MONTH)+"-"+cal.get(Calendar.DATE)+" " +
+                cal.get(Calendar.HOUR_OF_DAY)+":"+cal.get(Calendar.MINUTE)+":"+cal.get(Calendar.SECOND);
         SQLiteDatabase db=database.getWritableDatabase();
         ContentValues cv=new ContentValues();
-        cv.put(TableDay.date,this.date.toString());
+        cv.put(TableDay.date,sqliteDate);
         cv.put(TableDay.dayOfYear,this.dayOfYear);
         cv.put(TableDay.dayOfWeek,this.dayOfWeek);
         cv.put(TableDay.weekOfMonth,this.weekOfMonth);

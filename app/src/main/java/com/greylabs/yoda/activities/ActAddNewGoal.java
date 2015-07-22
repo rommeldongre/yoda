@@ -1,7 +1,11 @@
 package com.greylabs.yoda.activities;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -16,8 +20,11 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 
 import com.greylabs.yoda.R;
+import com.greylabs.yoda.asynctask.AsyncTaskAttachTimeBox;
+import com.greylabs.yoda.asynctask.AysncTaskWithProgressBar;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.TimeBox;
+import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.views.MyFloatingActionButton;
@@ -40,7 +47,7 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
 //    boolean timeSelected = false;
     Goal goal;
     boolean isSaved = false;
-
+    private YodaCalendar yodaCalendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +126,7 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
 //            case Constants.ACT_GOAL_LIST :
 //                break;
         }
+
     }
 
     private void getTimeBoxListAndPopulate() {
@@ -149,7 +157,6 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
                 Intent intent1 = new Intent();
                 intent1.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, false);
                 setResult(1, intent1);
-                this.finish();
                 break;
             case R.id.actionSaveActAddNewGoal :
                 saveGoal();
@@ -159,7 +166,7 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
                     intent2.putExtra(Constants.GOAL_OBJECT, goal);
                     intent2.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, true);
                     setResult(Constants.RESULTCODE_OF_ACT_ADD_GOAL, intent2);
-                    this.finish();
+
                 }
                 break;
         }
@@ -167,7 +174,15 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
     }
 
     private void saveGoal() {
-        if(edtNickName.getText() != null && edtNickName.getText().length() > 0){
+        if(yodaCalendar==null){
+            yodaCalendar=new YodaCalendar(this,timeBoxList.get(timeSpinner.getSelectedItemPosition()));
+        }
+        if(yodaCalendar.validateTimeBox()==false){
+            AlertDialog.Builder alert=new AlertDialog.Builder(this);
+            alert.setPositiveButton("Ok",null);
+            alert.setMessage(getString(R.string.msgActAddNewGoalTimeBoxNotApplicable));
+            alert.show();
+        }else if(edtNickName.getText() != null && edtNickName.getText().length() > 0 ){
             goal.setNickName(edtNickName.getText().toString());
             goal.setTimeBoxId(timeBoxList.get(timeSpinner.getSelectedItemPosition()).getId());
             goal.setObjective(edtObjective.getText().toString());
@@ -176,6 +191,8 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
             goal.setReward(edtGoalReward.getText().toString());
             goal.setBuddyEmail(edtGoalBuddy.getText().toString());
             goal.save();
+            AsyncTaskAttachTimeBox asyncTaskAttachTimeBox=new AsyncTaskAttachTimeBox(this,new MyHandler(),yodaCalendar,"Please Wait,Attaching TimeBox",goal.getId());
+            asyncTaskAttachTimeBox.execute(yodaCalendar);
 
             isSaved = true;
             Logger.showMsg(this, getResources().getString(R.string.msgGoalSavedActAddNewGoal));
@@ -240,5 +257,15 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
     protected void onResume() {
         super.onResume();
         timeSpinner.setSelection(0);
+    }
+
+    public class MyHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            int res=(int)msg.obj;
+            if(res== AysncTaskWithProgressBar.SUCCESS) {
+                ActAddNewGoal.this.finish();
+            }
+        }
     }
 }

@@ -126,7 +126,7 @@ public class Slot {
                 " "+TableSlot.timeBoxId+","+TableSlot.dayId+" ";
         String query="select "+cols+" from " +
                 " "+TableDay.day+" as d  join "+TableSlot.slot+" as s " +
-                " "+" on ( d."+TableDay.id+" = "+" s."+TableSlot.dayId+" " +
+                " "+" on ( d."+TableDay.id+" = "+" s."+TableSlot.dayId+" )" +
                 " "+ WhereConditionBuilder.buildWhereCondition(timeBox);
         SQLiteDatabase db=database.getReadableDatabase();
         Cursor c=db.rawQuery(query,null);

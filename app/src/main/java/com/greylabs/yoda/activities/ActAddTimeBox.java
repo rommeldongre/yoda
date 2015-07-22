@@ -15,6 +15,7 @@ import android.widget.RadioGroup;
 import android.widget.ViewFlipper;
 
 import com.greylabs.yoda.R;
+import com.greylabs.yoda.enums.Daily;
 import com.greylabs.yoda.enums.Month;
 import com.greylabs.yoda.enums.Quarter;
 import com.greylabs.yoda.enums.SubValue;
@@ -240,8 +241,11 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
                 rbTillMonth.setEnabled(true);
                 rbTillQuarter.setEnabled(true);
                 invalidateOnValueSelections();
+                invalidateTillSelections();
+                timeBoxOnSubValueSet.add(Daily.DAILY);
                 timeBoxOn=TimeBoxOn.DAILY;
                 viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(findViewById(R.id.first)));
+                edtSummary.setText(createSummaryString());
                 break;
             case R.id.rbActCreateTimeBoxOnWeekly:
                 rbTillWeek.setEnabled(true);
@@ -249,12 +253,14 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
                 rbTillQuarter.setEnabled(true);
                 timeBoxOn=TimeBoxOn.WEEKLY;
                 invalidateOnValueSelections();
+                invalidateTillSelections();
                 viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(findViewById(R.id.second)));
                 break;
             case R.id.rbActCreateTimeBoxOnMonthly:
                 rbTillWeek.setEnabled(false);
                 timeBoxOn=TimeBoxOn.MONTHLY;
                 invalidateOnValueSelections();
+                invalidateTillSelections();
                 viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(findViewById(R.id.third)));
                 break;
             case R.id.rbActCreateTimeBoxOnQuarterly:
@@ -262,6 +268,7 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
                 rbTillMonth.setEnabled(false);
                 timeBoxOn=TimeBoxOn.QUATERLY;
                 invalidateOnValueSelections();
+                invalidateTillSelections();
                 viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(findViewById(R.id.four)));
                 break;
             case R.id.rbActCreateTimeBoxOnYearly:
@@ -270,6 +277,7 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
                 rbTillQuarter.setEnabled(false);
                 timeBoxOn=TimeBoxOn.YEARLY;
                 invalidateOnValueSelections();
+                invalidateTillSelections();
                 viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(findViewById(R.id.five)));
                 break;
         }
@@ -511,6 +519,7 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
     }
 
     private void invalidateOnValueSelections(){
+        timeBoxOnSubValueSet.clear();
         cbOnWeeklyMon.setChecked(false);
         cbOnWeeklyTue.setChecked(false);
         cbOnWeeklyWed.setChecked(false);
@@ -540,6 +549,13 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
         cbOnYearlyOct.setChecked(false);
         cbOnYearlyNov.setChecked(false);
         cbOnYearlyDec.setChecked(false);
+    }
+    private void invalidateTillSelections(){
+        rbTillWeek.setChecked(false);
+        rbTillMonth.setChecked(false);
+        rbTillQuarter.setChecked(false);
+        rbTillYear.setChecked(false);
+        rbTillForever.setChecked(false);
     }
     private String createSummaryString(){
         String summary="";

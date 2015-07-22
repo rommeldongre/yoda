@@ -11,7 +11,8 @@ import java.util.Date;
 public class CalendarUtils {
     private final static String TAG="CalendarUtils";
     public static Date parseDate(String dateInString) {
-        SimpleDateFormat sdf=new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy");
+        //SimpleDateFormat sdf=new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy");
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         try {
             return sdf.parse(dateInString);
         } catch (ParseException e) {
@@ -52,6 +53,20 @@ public class CalendarUtils {
                 return 2;
         }
         return -1;
+    }
+    public static int getLastMonthOfQuarter(int currentMonth){
+        Calendar calendar=Calendar.getInstance();
+        int lastMonth=0;
+        if(currentMonth>=Calendar.JANUARY && currentMonth<=Calendar.MARCH){
+            lastMonth=Calendar.MARCH;
+        }else if(currentMonth>=Calendar.APRIL && currentMonth<=Calendar.JUNE){
+            lastMonth=Calendar.JUNE;
+        }else if(currentMonth>=Calendar.JULY && currentMonth<=Calendar.SEPTEMBER){
+            lastMonth=Calendar.SEPTEMBER;
+        }else if(currentMonth>=Calendar.OCTOBER && currentMonth<=Calendar.DECEMBER){
+            lastMonth=Calendar.DECEMBER;
+        }
+        return lastMonth;
     }
     public static int getWeek(int day){
         if(day>=29 && day<=31)

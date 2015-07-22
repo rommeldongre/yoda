@@ -1,7 +1,6 @@
 package com.greylabs.yoda.utils;
 import com.greylabs.yoda.database.MetaData;
-import com.greylabs.yoda.database.MetaData.TableTimeBox;
-import com.greylabs.yoda.database.MetaData.TableTimeBoxWhen;
+import com.greylabs.yoda.database.MetaData.TableDay;
 import com.greylabs.yoda.enums.Month;
 import com.greylabs.yoda.enums.Quarter;
 import com.greylabs.yoda.enums.SubValue;
@@ -11,14 +10,13 @@ import com.greylabs.yoda.enums.Year;
 import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.models.TimeBoxOn;
 import com.greylabs.yoda.models.TimeBoxWhen;
-import java.util.Iterator;
+import java.util.Calendar;
 import java.util.Set;
 
 /**
  * Created by Jaybhay Vijay on 7/15/2015.
  */
 public class WhereConditionBuilder {
-
     /**
      * This method build where condition based on timebox object
      * @return where string cossits of criteria for filtering slots of calendar and null when timebox
@@ -26,11 +24,14 @@ public class WhereConditionBuilder {
      */
     public static String buildWhereCondition(TimeBox timeBox){
         String whereClause="";
-        if(timeBox.getTimeBoxOn().getOnType()!= com.greylabs.yoda.enums.TimeBoxOn.DAILY
-            || timeBox.getTillType()==TimeBoxTill.FOREVER) {
-            whereClause+="where "+buildWhen(timeBox.getTimeBoxWhen())+" and " +
-                    " "+buildOn(timeBox.getTimeBoxOn())+" and " +
-                    " "+buildTill(timeBox.getTillType());
+        if(timeBox.getTillType()!=TimeBoxTill.FOREVER) {
+            if(timeBox.getTimeBoxOn().getOnType()!= com.greylabs.yoda.enums.TimeBoxOn.DAILY) {
+                whereClause += "where " + buildWhen(timeBox.getTimeBoxWhen()) + " and " +
+                        " " + buildOn(timeBox.getTimeBoxOn()) + " and " + buildTill(timeBox.getTillType(), timeBox.getTimeBoxOn());
+            }else{
+                whereClause += "where " + buildWhen(timeBox.getTimeBoxWhen()) +
+                         " and " + buildTill(timeBox.getTillType(), timeBox.getTimeBoxOn());
+            }
         }
         return whereClause;
 
@@ -38,23 +39,47 @@ public class WhereConditionBuilder {
     private static String buildWhen(TimeBoxWhen timeBoxWhen){
         String strWhen="(";
         Set<com.greylabs.yoda.enums.TimeBoxWhen> whens=timeBoxWhen.getWhenValues();
-        Iterator it=whens.iterator();
-        while (it.hasNext()){
-            com.greylabs.yoda.enums.TimeBoxWhen when=(com.greylabs.yoda.enums.TimeBoxWhen)it.next();
-            strWhen+=TableTimeBoxWhen.timeBoxWhen+"="+when.getValue()+" or ";
+        for(com.greylabs.yoda.enums.TimeBoxWhen when:whens){
+            strWhen+= MetaData.TableSlot.when+"="+when.getValue()+" or ";
         }
         strWhen=strWhen.substring(0,strWhen.lastIndexOf("or"));
-        strWhen+=strWhen+")";
+        strWhen=strWhen+")";
 
         return strWhen;
     }
-    private static String buildTill(TimeBoxTill timeBoxTill){
-        if(timeBoxTill.getValue()==TimeBoxTill.FOREVER.getValue())
-            return "";
-        else
-            return "(" +TableTimeBox.till+" = "+timeBoxTill.getValue()+")";
+    private static String buildTill(TimeBoxTill timeBoxTill,TimeBoxOn timeBoxOn){
+        String strTill="";
+        Calendar calendar=Calendar.getInstance();
+        if(timeBoxTill.getValue()!=TimeBoxTill.FOREVER.getValue())
+        {
+            switch (timeBoxTill){
+                case WEEK:
+                    strTill = "( "+TableDay.weekOfMonth+"="+CalendarUtils.getWeek(calendar.get(Calendar.DAY_OF_MONTH))+" )";
+                    break;
+                case MONTH:
+                    strTill = "( "+TableDay.monthOfYear+"="+calendar.get(Calendar.MONTH)+" )";
+                    break;
+                case QUARTER:
+                    int lastMonth=CalendarUtils.getLastMonthOfQuarter(calendar.get(Calendar.MONTH));
+                    if(lastMonth!=0) {
+                        strTill = "( ";
+                        for (int i = calendar.get(Calendar.MONTH); i < lastMonth; i++) {
+                            strTill+= TableDay.monthOfYear+"="+calendar.get(Calendar.MONTH)+" or ";
+                        }
+                        strTill=strTill.substring(0,strTill.lastIndexOf("or"));
+                        strTill+=" )";
+                    }
 
+                    break;
+                case YEAR:
+                    strTill="( "+calendar.get(Calendar.YEAR)+" )";
+                    break;
+            }
+
+        }
+        return strTill;
     }
+
     private static String buildOn(TimeBoxOn timeBoxOn){
         String strOn="( ";
         Set<SubValue> ons=timeBoxOn.getSubValues();
