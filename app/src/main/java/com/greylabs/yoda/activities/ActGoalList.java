@@ -191,7 +191,7 @@ public class ActGoalList  extends ActionBarActivity implements OnClickOfRecycler
                     }
                     break;
             }
-        }else if(!isOperationEdit){
+        }else if(!isOperationEdit && operation.equals(Constants.OPERATION_SHOW_STEPS)){
             Intent i = new Intent(this, ActStepList.class);
             i.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, true);
             i.putExtra(Constants.GOAL_OBJECT, goalArrayList.get(Position));

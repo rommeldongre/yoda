@@ -42,7 +42,7 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_change_step_priority);
+        setContentView(R.layout.activity_step_list);
         initialize();
     }
 
@@ -52,14 +52,10 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
         if(i.getBooleanExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, false))
             currentGoal = (Goal) i.getExtras().getSerializable(Constants.GOAL_OBJECT);
 
-        toolbar = (Toolbar) findViewById(R.id.toolBarActChangeStepPriority);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        if(currentGoal != null){
-            getSupportActionBar().setTitle(currentGoal.getNickName());
-        }else{
-            getSupportActionBar().setTitle(getResources().getString(R.string.titleActChangeStepPriority));
-        }
+        toolbar = (Toolbar) findViewById(R.id.toolBarActStepList);
+        emptyViewActChangeStepPriority = (TextView) findViewById(R.id.tvEmptyViewActStepList);
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerActStepList);
+        recyclerView.setHasFixedSize(true);
 
         caller = i.getStringExtra(Constants.CALLER);
         switch (caller){
@@ -68,20 +64,27 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
                 if(stepArrayList!=null)
                     stepArrayList.clear();
                 stepArrayList.addAll((ArrayList<PendingStep>) i.getSerializableExtra(Constants.STEP_ARRAY_LIST));
+                checkForEmptyViewVisibility();
                 break;
 
             case Constants.ACT_GOAL_LIST :
                 getStepArrayFromLocal();
                 break;
         }
-        emptyViewActChangeStepPriority = (TextView) findViewById(R.id.tvEmptyViewActChangeStepPriority);
-        recyclerView = (RecyclerView)findViewById(R.id.recyclerActChangeStepPriority);
-        recyclerView.setHasFixedSize(true);
+
         mAdapter = new AdapterRecyclerViewActStepList(this, stepArrayList, isOperationEdit, caller);
         recyclerView.setAdapter(mAdapter);
         mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setItemAnimator(null);
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if(currentGoal != null){
+            getSupportActionBar().setTitle(currentGoal.getNickName());
+        }else{
+            getSupportActionBar().setTitle(getResources().getString(R.string.titleActChangeStepPriority));
+        }
 
         DragSortRecycler dragSortRecycler = new DragSortRecycler();
         dragSortRecycler.setViewHandleId(R.id.btnHandleRecyclerItemActStepList);
@@ -96,7 +99,7 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
         dragSortRecycler.setOnItemMovedListener(new DragSortRecycler.OnItemMovedListener() {
             @Override
             public void onItemMoved(int from, int to) {
-                if(from != to)
+                if (from != to)
                     stepArrayList.add(to, stepArrayList.remove(from));
                 mAdapter.notifyDataSetChanged();
             }
@@ -134,8 +137,9 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
         if(caller.equals(Constants.ACT_ADD_NEW_STEP)){
             menu.findItem(R.id.actionEditActStepList).setVisible(false);
             menu.findItem(R.id.actionSaveActStepList).setVisible(true);
-        }else if(caller.equals(Constants.ACT_GOAL_LIST)){
-
+        }else if(caller.equals(Constants.ACT_GOAL_LIST) && stepArrayList.isEmpty()){
+            menu.findItem(R.id.actionEditActStepList).setVisible(false);
+            menu.findItem(R.id.actionSaveActStepList).setVisible(false);
         }
         return true;
     }

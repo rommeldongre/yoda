@@ -66,7 +66,7 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_act_create_time_box);
+        setContentView(R.layout.activity_create_time_box);
         initUI();
         setHandlers();
     }

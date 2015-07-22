@@ -32,8 +32,8 @@ public class PendingStep implements Serializable {
     private long goalId;
     private long slotId;
     private long subStepOf;
-    private Database database;
-    private Context context;
+    transient private Database database;
+    transient private Context context;
 
     /**********************************************************************************************/
     //Getters and Setters

@@ -49,7 +49,7 @@ public class ActSettingChangeWallpaper extends AppCompatActivity implements View
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_act_setting_change_wallpaper);
+        setContentView(R.layout.activity_setting_change_wallpaper);
         rlActSettingChangeWallpaper = (RelativeLayout)findViewById(R.id.rlActSettingsChangeWallpaper);
         ivBackground = (ImageView)findViewById(R.id.ivActSettingsChangeWallpaper);
         llActSettingChangeWallpaper = (LinearLayout)findViewById(R.id.llActSettingsChangeWallpaper);
