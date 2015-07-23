@@ -121,6 +121,9 @@
     <string name="titleActFilters">Filters</string>
     <string name="msgActAddNewGoalTimeBoxNotApplicable">Selected TimeBox is overlaping with one of the active TimeBoxes. Please choose different TimeBox</string>
     <string name="tvEmptyViewFragFilter">No Goals Planned</string>
+    <string name="tvCompletedActNowFilter">Did it!! - Another step closer!</string>
+    <string name="tvDoingItActNowFilter">Doing it - Check back in 5 mins.</string>
+    <string name="tvMissedActNowFilter">Missed it. - Log my excuse</string>
     <string-array name="arrayStepTypeActAddNewStep">
         <item>Single Step</item>
         <item>Series</item>

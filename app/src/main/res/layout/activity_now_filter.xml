@@ -3,10 +3,14 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <CardView
+    <include
+        android:id="@+id/toolBarActNowFilter"
+        layout="@layout/tool_bar"></include>
+
+    <android.support.v7.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="15dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
         android:padding="15dp" >
 
         <LinearLayout
@@ -14,29 +18,89 @@
             android:layout_height="match_parent"
             android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/tvGoalNameActNowFilter"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                android:text="Goal Name" />
+            <Button
+                android:id="@+id/btnCloseActNowFilter"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_margin="10dp"
+                android:layout_gravity="right"
+                android:background="@drawable/ic_btn_close"
+                android:visibility="gone" />
 
-
-            <TextView
-                android:id="@+id/tvStepNameActNowFilter"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                android:text="Step Name" />
-
-            
             <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="50dp" >
+
+                <TextView
+                    android:id="@+id/tvGoalNameActNowFilter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                    android:textColor="@color/gray"
+                    android:maxLines="1"
+                    android:text="Goal Name" />
+
+
+                <TextView
+                    android:id="@+id/tvStepNameActNowFilter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                    android:textColor="@color/gray"
+                    android:maxLines="1"
+                    android:text="Step Name" />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        android:textColor="@color/gray"
+                        android:text="Today at" />
+
+
+                    <TextView
+                        android:id="@+id/tvTimeActNowFilter"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        android:textColor="@color/gray"
+                        android:text="6 pm" />
+
+                </LinearLayout>
+            </RelativeLayout>
+
+            <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/button_material_light" />
+            
+            <LinearLayout
+                android:id="@+id/llDidActNowFilter"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                android:orientation="horizontal"
+                android:layout_marginLeft="10dp" >
             
                 <Button
-                    android:id="@+id/btnCompletedActNowFilter"
+                    android:id="@+id/btnDidActNowFilter"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:background="@drawable/ic_btn_step_completed" />
@@ -45,11 +109,73 @@
                     android:id="@+id/tvCompletedActNowFilter"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-                    android:text="Step Name" />
+                    android:layout_marginLeft="15dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/tvCompletedActNowFilter" />
                 
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/button_material_light" />
+
+            <LinearLayout
+                android:id="@+id/llDoingItActNowFilter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="10dp" >
+
+                <Button
+                    android:id="@+id/btnDoingItActNowFilter"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/ic_btn_step_doing_it" />
+
+                <TextView
+                    android:id="@+id/tvDoingItActNowFilter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/tvDoingItActNowFilter" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/button_material_light" />
+
+            <LinearLayout
+                android:id="@+id/llMissedActNowFilter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp" >
+
+                <Button
+                    android:id="@+id/btnMissedActNowFilter"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/ic_btn_step_missed" />
+
+                <TextView
+                    android:id="@+id/tvMissedActNowFilter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/tvMissedActNowFilter" />
+
             </LinearLayout>
             
         </LinearLayout>
-    </CardView>
+    </android.support.v7.widget.CardView>
 </LinearLayout>

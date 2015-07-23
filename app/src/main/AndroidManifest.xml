@@ -50,6 +50,9 @@
             android:name=".activities.ActFilters"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".activities.ActNowFilter"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".activities.ActSettingChangeWallpaper"
             android:screenOrientation="portrait" />
         <activity
