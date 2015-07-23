@@ -89,12 +89,18 @@ public class YodaCalendar {
         int quarterOfYear=-1;
         int year=-1;
         Day day=new Day(context);
+        cal=Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
         //SimpleDateFormat sqliteDateFormat=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         for(dayOfYear=1;dayOfYear<=maxDays;dayOfYear++){
             dayOfWeek=cal.get(Calendar.DAY_OF_WEEK);
             weekOfMonth= CalendarUtils.getWeek(cal.get(Calendar.DATE));
             monthOfYear= cal.get(Calendar.MONTH);
             quarterOfYear=CalendarUtils.getQuarter(monthOfYear);
+            year=cal.get(Calendar.YEAR);
             day.setId(0);
 
             day.setDate(cal.getTime());
@@ -253,11 +259,15 @@ public class YodaCalendar {
     /**********************************************************************************************/
     public boolean validateTimeBox(){
         boolean isValid=true;
-        for(Slot slot:slots){
-            if(slot.getTimeBoxId()!=0) {
-                isValid = false;
-                break;
+        if(slots!=null) {
+            for (Slot slot : slots) {
+                if (slot.getTimeBoxId() != 0) {
+                    isValid = false;
+                    break;
+                }
             }
+        }else{
+            isValid=false;
         }
         return isValid;
     }

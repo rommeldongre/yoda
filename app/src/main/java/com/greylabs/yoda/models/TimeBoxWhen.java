@@ -67,6 +67,7 @@ public class TimeBoxWhen implements Serializable{
             whenValues=new TreeSet<>();
             do{
                 int value=c.getInt(c.getColumnIndex(TableTimeBoxWhen.when));
+
                 whenValues.add(com.greylabs.yoda.enums.TimeBoxWhen.getIntegerToEnumType(value));
             }while (c.moveToNext());
         }

@@ -28,7 +28,9 @@ public class AlarmService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(this, "Alarm on start comman...", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Alarm on start command...", Toast.LENGTH_SHORT).show();
+        YodaNotificationManager yodaNotificationManager=new YodaNotificationManager(this);
+        yodaNotificationManager.showNotification();
         return START_STICKY;
     }
 
