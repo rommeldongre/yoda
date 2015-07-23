@@ -54,22 +54,28 @@ public class WhereConditionBuilder {
         {
             switch (timeBoxTill){
                 case WEEK:
-                    strTill = "( "+TableDay.weekOfMonth+"="+CalendarUtils.getWeek(calendar.get(Calendar.DAY_OF_MONTH))+" )";
+                    strTill = "( "+TableDay.weekOfMonth+"="+CalendarUtils.getWeek(calendar.get(Calendar.DAY_OF_MONTH))+" " +
+                                 " and " +TableDay.monthOfYear+"="+calendar.get(Calendar.MONTH)+" " +
+                                 " and "+TableDay.year+"="+calendar.get(Calendar.YEAR)+" "+
+                               " )";
                     break;
                 case MONTH:
-                    strTill = "( "+TableDay.monthOfYear+"="+calendar.get(Calendar.MONTH)+" )";
+                    strTill = "( "+TableDay.monthOfYear+"="+calendar.get(Calendar.MONTH)+" " +
+                            " and " +TableDay.year+"="+calendar.get(Calendar.YEAR)+" "+
+                            ")";
                     break;
                 case QUARTER:
                     int lastMonth=CalendarUtils.getLastMonthOfQuarter(calendar.get(Calendar.MONTH));
                     if(lastMonth!=0) {
                         strTill = "( ";
-                        for (int i = calendar.get(Calendar.MONTH); i < lastMonth; i++) {
+                        for (int i = calendar.get(Calendar.MONTH); i <= lastMonth; i++) {
                             strTill+= TableDay.monthOfYear+"="+calendar.get(Calendar.MONTH)+" or ";
+                            calendar.add(Calendar.MONTH,1);
                         }
                         strTill=strTill.substring(0,strTill.lastIndexOf("or"));
                         strTill+=" )";
+                        strTill="("+strTill+" and "+TableDay.year+"="+calendar.get(Calendar.YEAR)+" )";
                     }
-
                     break;
                 case YEAR:
                     strTill="( "+calendar.get(Calendar.YEAR)+" )";

@@ -192,9 +192,9 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
             goal.setReward(edtGoalReward.getText().toString());
             goal.setBuddyEmail(edtGoalBuddy.getText().toString());
             goal.save();
-            AsyncTaskAttachTimeBox asyncTaskAttachTimeBox=new AsyncTaskAttachTimeBox(this,new MyHandler(),yodaCalendar,"Please Wait,Attaching TimeBox",goal.getId());
-            asyncTaskAttachTimeBox.execute(yodaCalendar);
-
+            //AsyncTaskAttachTimeBox asyncTaskAttachTimeBox=new AsyncTaskAttachTimeBox(this,new MyHandler(),yodaCalendar,"Please Wait,Attaching TimeBox",goal.getId());
+            //asyncTaskAttachTimeBox.execute(yodaCalendar);
+            yodaCalendar.attachTimeBox(goal.getId());
             isSaved = true;
             Logger.showMsg(this, getResources().getString(R.string.msgGoalSavedActAddNewGoal));
         }else {

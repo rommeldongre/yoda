@@ -142,7 +142,7 @@ public class MetaData {
 
         public static final String createTimeBoxWhenTable="" +
                 "create table  "+timeBoxWhen+" ( " +
-                " "+id+" integer primary key autoincrement, " +
+                " "+id+" integer , " +
                 " "+when+" integer ," +
                 " "+"foreign key("+id+") references "+ TableTimeBox.timeBox+"("+ TableTimeBox.id+") " +
                 ")";

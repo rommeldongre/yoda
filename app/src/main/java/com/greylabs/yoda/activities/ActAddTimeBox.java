@@ -49,6 +49,7 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
     private RadioButton rbOnYearly;private CheckBox cbOnYearlyJan,cbOnYearlyFeb,cbOnYearlyMar,cbOnYearlyApr,cbOnYearlyMay,cbOnYearlyJun,
             cbOnYearlyJul,cbOnYearlyAug,cbOnYearlySep,cbOnYearlyOct,cbOnYearlyNov,cbOnYearlyDec;
 
+    private RadioGroup rgTill;
     private RadioButton rbTillWeek,rbTillMonth,rbTillQuarter,rbTillYear,rbTillForever;
 
     private EditText edtSummary;
@@ -131,6 +132,7 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
         cbOnYearlyNov=(CheckBox)llYearly.findViewById(R.id.cbActCreateTimeBoxOnYearlyNov);
         cbOnYearlyDec=(CheckBox)llYearly.findViewById(R.id.cbActCreateTimeBoxOnYearlyDec);
 
+        rgTill=(RadioGroup)findViewById(R.id.rgActCreateTimeBoxTill);
         rbTillWeek=(RadioButton)findViewById(R.id.rbActCreateTimeBoxTillWeek);
         rbTillMonth=(RadioButton)findViewById(R.id.rbActCreateTimeBoxTillMonth);
         rbTillQuarter=(RadioButton)findViewById(R.id.rbActCreateTimeBoxTillQuarter);
@@ -163,7 +165,7 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
     }
     private void setHandlers(){
         rgOn.setOnCheckedChangeListener(this);
-
+        rgTill.setOnCheckedChangeListener(this);
         cbWhenEarlyMorning.setOnCheckedChangeListener(this);
         cbWhenMorning.setOnCheckedChangeListener(this);
         cbWhenAfternoon.setOnCheckedChangeListener(this);
@@ -200,12 +202,6 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
         cbOnYearlyOct.setOnCheckedChangeListener(this);
         cbOnYearlyNov.setOnCheckedChangeListener(this);
         cbOnYearlyDec.setOnCheckedChangeListener(this);
-
-        rbTillWeek.setOnCheckedChangeListener(this);
-        rbTillMonth.setOnCheckedChangeListener(this);
-        rbTillQuarter.setOnCheckedChangeListener(this);
-        rbTillYear.setOnCheckedChangeListener(this);
-        rbTillForever.setOnCheckedChangeListener(this);
     }
 
     @Override
@@ -240,8 +236,9 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
                 rbTillWeek.setEnabled(true);
                 rbTillMonth.setEnabled(true);
                 rbTillQuarter.setEnabled(true);
+                rbTillYear.setEnabled(true);
+                rbTillForever.setEnabled(true);
                 invalidateOnValueSelections();
-                invalidateTillSelections();
                 timeBoxOnSubValueSet.add(Daily.DAILY);
                 timeBoxOn=TimeBoxOn.DAILY;
                 viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(findViewById(R.id.first)));
@@ -251,152 +248,198 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
                 rbTillWeek.setEnabled(true);
                 rbTillMonth.setEnabled(true);
                 rbTillQuarter.setEnabled(true);
+                rbTillYear.setEnabled(true);
+                rbTillForever.setEnabled(true);
                 timeBoxOn=TimeBoxOn.WEEKLY;
                 invalidateOnValueSelections();
-                invalidateTillSelections();
                 viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(findViewById(R.id.second)));
                 break;
             case R.id.rbActCreateTimeBoxOnMonthly:
-                rbTillWeek.setEnabled(false);
+                rbTillWeek.setVisibility(View.GONE);
+                rbTillMonth.setVisibility(View.VISIBLE);
+                rbTillQuarter.setVisibility(View.VISIBLE);
+                rbTillYear.setVisibility(View.VISIBLE);
+                rbTillForever.setVisibility(View.VISIBLE);
                 timeBoxOn=TimeBoxOn.MONTHLY;
                 invalidateOnValueSelections();
-                invalidateTillSelections();
                 viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(findViewById(R.id.third)));
                 break;
             case R.id.rbActCreateTimeBoxOnQuarterly:
-                rbTillWeek.setEnabled(false);
-                rbTillMonth.setEnabled(false);
+                rbTillWeek.setVisibility(View.GONE);
+                rbTillMonth.setVisibility(View.GONE);
+                rbTillQuarter.setVisibility(View.VISIBLE);
+                rbTillYear.setVisibility(View.VISIBLE);
+                rbTillForever.setVisibility(View.VISIBLE);
                 timeBoxOn=TimeBoxOn.QUATERLY;
                 invalidateOnValueSelections();
-                invalidateTillSelections();
                 viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(findViewById(R.id.four)));
                 break;
             case R.id.rbActCreateTimeBoxOnYearly:
-                rbTillWeek.setEnabled(false);
-                rbTillMonth.setEnabled(false);
-                rbTillQuarter.setEnabled(false);
+                rbTillWeek.setVisibility(View.GONE);
+                rbTillMonth.setVisibility(View.GONE);
+                rbTillQuarter.setVisibility(View.GONE);
+                rbTillYear.setVisibility(View.VISIBLE);
+                rbTillForever.setVisibility(View.VISIBLE);
                 timeBoxOn=TimeBoxOn.YEARLY;
                 invalidateOnValueSelections();
-                invalidateTillSelections();
                 viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(findViewById(R.id.five)));
+                break;
+
+            case R.id.rbActCreateTimeBoxTillWeek:
+                timeBoxTill=TimeBoxTill.WEEK;
+                edtSummary.setText(createSummaryString());
+                break;
+            case R.id.rbActCreateTimeBoxTillMonth:
+                timeBoxTill=TimeBoxTill.MONTH;
+                edtSummary.setText(createSummaryString());
+                break;
+            case R.id.rbActCreateTimeBoxTillQuarter:
+                timeBoxTill=TimeBoxTill.QUARTER;
+                edtSummary.setText(createSummaryString());
+                break;
+            case R.id.rbActCreateTimeBoxTillYear:
+                timeBoxTill=TimeBoxTill.YEAR;
+                edtSummary.setText(createSummaryString());
+                break;
+            case R.id.rbActCreateTimeBoxTillForever:
+                timeBoxTill=TimeBoxTill.FOREVER;
+                edtSummary.setText(createSummaryString());
                 break;
         }
     }
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        invalidateTillSelections();
       switch (compoundButton.getId()){
           case R.id.cbActCreateTimeBoxEarlyMorning:
-              timeBoxWhenSet.add(TimeBoxWhen.EARLY_MORNING);
+              if(b) timeBoxWhenSet.add(TimeBoxWhen.EARLY_MORNING);
+              else  timeBoxWhenSet.remove(TimeBoxWhen.EARLY_MORNING);
               break;
           case R.id.cbActCreateTimeBoxMorning:
-              timeBoxWhenSet.add(TimeBoxWhen.MORNING);
+              if(b) timeBoxWhenSet.add(TimeBoxWhen.MORNING);
+              else  timeBoxWhenSet.remove(TimeBoxWhen.MORNING);
               break;
           case R.id.cbActCreateTimeBoxAfternoon:
-              timeBoxWhenSet.add(TimeBoxWhen.AFTERNOON);
+              if(b) timeBoxWhenSet.add(TimeBoxWhen.AFTERNOON);
+              else  timeBoxWhenSet.remove(TimeBoxWhen.AFTERNOON);
               break;
           case R.id.cbActCreateTimeBoxEvening:
-              timeBoxWhenSet.add(TimeBoxWhen.EVENING);
+              if(b) timeBoxWhenSet.add(TimeBoxWhen.EVENING);
+              else  timeBoxWhenSet.remove(TimeBoxWhen.EVENING);
               break;
           case R.id.cbActCreateTimeBoxNight:
-              timeBoxWhenSet.add(TimeBoxWhen.NIGHT);
+              if(b) timeBoxWhenSet.add(TimeBoxWhen.NIGHT);
+              else  timeBoxWhenSet.remove(TimeBoxWhen.NIGHT);
               break;
           case R.id.cbActCreateTimeBoxLateNight:
-              timeBoxWhenSet.add(TimeBoxWhen.LATE_NIGHT);
+              if(b) timeBoxWhenSet.add(TimeBoxWhen.LATE_NIGHT);
+              else  timeBoxWhenSet.remove(TimeBoxWhen.LATE_NIGHT);
               break;
           case R.id.cbActCreateTimeBoxOnWeeklyMon:
-              timeBoxOnSubValueSet.add(WeekDay.MONDAY);
+              if(b) timeBoxOnSubValueSet.add(WeekDay.MONDAY);
+              else  timeBoxOnSubValueSet.remove(WeekDay.MONDAY);
               break;
           case R.id.cbActCreateTimeBoxOnWeeklyTue:
-              timeBoxOnSubValueSet.add(WeekDay.TUESDAY);
+              if(b) timeBoxOnSubValueSet.add(WeekDay.TUESDAY);
+              else  timeBoxOnSubValueSet.remove(WeekDay.TUESDAY);
               break;
           case R.id.cbActCreateTimeBoxOnWeeklyWed:
-              timeBoxOnSubValueSet.add(WeekDay.WEDNESDAY);
+              if(b) timeBoxOnSubValueSet.add(WeekDay.WEDNESDAY);
+              else  timeBoxOnSubValueSet.remove(WeekDay.WEDNESDAY);
               break;
           case R.id.cbActCreateTimeBoxOnWeeklyThu:
-              timeBoxOnSubValueSet.add(WeekDay.THURSDAY);
+              if(b) timeBoxOnSubValueSet.add(WeekDay.THURSDAY);
+              else  timeBoxOnSubValueSet.remove(WeekDay.THURSDAY);
               break;
           case R.id.cbActCreateTimeBoxOnWeeklyFri:
-              timeBoxOnSubValueSet.add(WeekDay.FRIDAY);
+              if(b) timeBoxOnSubValueSet.add(WeekDay.FRIDAY);
+              else  timeBoxOnSubValueSet.remove(WeekDay.FRIDAY);
               break;
           case R.id.cbActCreateTimeBoxOnWeeklySat:
-              timeBoxOnSubValueSet.add(WeekDay.SATURDAY);
+              if(b) timeBoxOnSubValueSet.add(WeekDay.SATURDAY);
+              else  timeBoxOnSubValueSet.remove(WeekDay.SATURDAY);
               break;
           case R.id.cbActCreateTimeBoxOnWeeklySun:
-              timeBoxOnSubValueSet.add(WeekDay.SUNDAY);
+              if(b) timeBoxOnSubValueSet.add(WeekDay.SUNDAY);
+              else  timeBoxOnSubValueSet.remove(WeekDay.SUNDAY);
               break;
           case R.id.cbActCreateTimeBoxOnMonthly1Week:
-              timeBoxOnSubValueSet.add(Month.WEEK1);
+              if(b) timeBoxOnSubValueSet.add(Month.WEEK1);
+              else  timeBoxOnSubValueSet.remove(Month.WEEK1);
               break;
           case R.id.cbActCreateTimeBoxOnMonthly2Week:
-              timeBoxOnSubValueSet.add(Month.WEEK2);
+              if(b) timeBoxOnSubValueSet.add(Month.WEEK2);
+              else  timeBoxOnSubValueSet.remove(Month.WEEK2);
               break;
           case R.id.cbActCreateTimeBoxOnMonthly3Week:
-              timeBoxOnSubValueSet.add(Month.WEEK3);
+              if(b) timeBoxOnSubValueSet.add(Month.WEEK3);
+              else  timeBoxOnSubValueSet.remove(Month.WEEK3);
               break;
           case R.id.cbActCreateTimeBoxOnMonthly4Week:
-              timeBoxOnSubValueSet.add(Month.WEEK4);
+              if(b) timeBoxOnSubValueSet.add(Month.WEEK4);
+              else  timeBoxOnSubValueSet.remove(Month.WEEK4);
               break;
           case R.id.cbActCreateTimeBoxOnQuarterly1Month:
-              timeBoxOnSubValueSet.add(Quarter.MONTH1);
+              if(b) timeBoxOnSubValueSet.add(Quarter.MONTH1);
+              else  timeBoxOnSubValueSet.remove(Quarter.MONTH1);
               break;
           case R.id.cbActCreateTimeBoxOnQuarterly2Month:
-              timeBoxOnSubValueSet.add(Quarter.MONTH2);
+              if(b) timeBoxOnSubValueSet.add(Quarter.MONTH2);
+              else  timeBoxOnSubValueSet.remove(Quarter.MONTH2);
               break;
           case R.id.cbActCreateTimeBoxOnQuarterly3Month:
-              timeBoxOnSubValueSet.add(Quarter.MONTH3);
+              if(b) timeBoxOnSubValueSet.add(Quarter.MONTH3);
+              else  timeBoxOnSubValueSet.remove(Quarter.MONTH3);
               break;
           case R.id.cbActCreateTimeBoxOnYearlyJan:
-              timeBoxOnSubValueSet.add(Year.JANUARY);
+              if(b) timeBoxOnSubValueSet.add(Year.JANUARY);
+              else  timeBoxOnSubValueSet.remove(Year.JANUARY);
               break;
           case R.id.cbActCreateTimeBoxOnYearlyFeb:
-              timeBoxOnSubValueSet.add(Year.FEBRUARY);
+              if(b) timeBoxOnSubValueSet.add(Year.FEBRUARY);
+              else  timeBoxOnSubValueSet.remove(Year.FEBRUARY);
               break;
           case R.id.cbActCreateTimeBoxOnYearlyMar:
-              timeBoxOnSubValueSet.add(Year.MARCH);
+              if(b) timeBoxOnSubValueSet.add(Year.MARCH);
+              else  timeBoxOnSubValueSet.remove(Year.MARCH);
               break;
           case R.id.cbActCreateTimeBoxOnYearlyApr:
-              timeBoxOnSubValueSet.add(Year.APRIL);
+              if(b) timeBoxOnSubValueSet.add(Year.APRIL);
+              else  timeBoxOnSubValueSet.remove(Year.APRIL);
               break;
           case R.id.cbActCreateTimeBoxOnYearlyMay:
-              timeBoxOnSubValueSet.add(Year.MAY);
+              if(b) timeBoxOnSubValueSet.add(Year.MAY);
+              else  timeBoxOnSubValueSet.remove(Year.MAY);
               break;
           case R.id.cbActCreateTimeBoxOnYearlyJun:
-              timeBoxOnSubValueSet.add(Year.JUNE);
+              if(b) timeBoxOnSubValueSet.add(Year.JUNE);
+              else  timeBoxOnSubValueSet.remove(Year.JUNE);
               break;
           case R.id.cbActCreateTimeBoxOnYearlyJul:
-              timeBoxOnSubValueSet.add(Year.JULY);
+              if(b) timeBoxOnSubValueSet.add(Year.JULY);
+              else  timeBoxOnSubValueSet.remove(Year.JULY);
               break;
           case R.id.cbActCreateTimeBoxOnYearlyAug:
-              timeBoxOnSubValueSet.add(Year.AUGUST);
+              if(b) timeBoxOnSubValueSet.add(Year.AUGUST);
+              else  timeBoxOnSubValueSet.remove(Year.AUGUST);
               break;
           case R.id.cbActCreateTimeBoxOnYearlySep:
-              timeBoxOnSubValueSet.add(Year.SEPTEMBER);
+              if(b) timeBoxOnSubValueSet.add(Year.SEPTEMBER);
+              else  timeBoxOnSubValueSet.remove(Year.SEPTEMBER);
               break;
           case R.id.cbActCreateTimeBoxOnYearlyOct:
-              timeBoxOnSubValueSet.add(Year.OCTOBER);
+              if(b) timeBoxOnSubValueSet.add(Year.OCTOBER);
+              else  timeBoxOnSubValueSet.remove(Year.OCTOBER);
               break;
           case R.id.cbActCreateTimeBoxOnYearlyNov:
-              timeBoxOnSubValueSet.add(Year.NOVEMBER);
+              if(b) timeBoxOnSubValueSet.add(Year.NOVEMBER);
+              else  timeBoxOnSubValueSet.remove(Year.NOVEMBER);
               break;
           case R.id.cbActCreateTimeBoxOnYearlyDec:
-              timeBoxOnSubValueSet.add(Year.DECEMBER);
+              if(b) timeBoxOnSubValueSet.add(Year.DECEMBER);
+              else  timeBoxOnSubValueSet.remove(Year.DECEMBER);
               break;
 
-          case R.id.rbActCreateTimeBoxTillWeek:
-              timeBoxTill=TimeBoxTill.WEEK;
-              break;
-          case R.id.rbActCreateTimeBoxTillMonth:
-              timeBoxTill=TimeBoxTill.MONTH;
-              break;
-          case R.id.rbActCreateTimeBoxTillQuarter:
-              timeBoxTill=TimeBoxTill.QUARTER;
-              break;
-          case R.id.rbActCreateTimeBoxTillYear:
-              timeBoxTill=TimeBoxTill.YEAR;
-              break;
-          case R.id.rbActCreateTimeBoxTillForever:
-              timeBoxTill=TimeBoxTill.FOREVER;
-              break;
       }
         edtSummary.setText(createSummaryString());
     }
@@ -492,7 +535,7 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
                 case FOREVER:rbTillForever.setChecked(true);
             }
         }
-        edtSummary.setText(currentTimeBox.getNickName());
+        edtSummary.setText(createSummaryString());
     }
     private TimeBox createTimeBoxObjectFromUI(){
       TimeBox timeBox=null;
@@ -512,7 +555,7 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
        }else if(timeBoxTill==null){
            Logger.showMsg(this,getString(R.string.msgActCreateTimeBoxSelectTillTime));
        }
-        if(edtSummary.getText()!=null && !edtSummary.getText().equals("")){
+        if(timeBox!=null && edtSummary.getText()!=null && !edtSummary.getText().equals("")){
            timeBox.setNickName(edtSummary.getText().toString());
         }
         return timeBox;
@@ -551,11 +594,8 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
         cbOnYearlyDec.setChecked(false);
     }
     private void invalidateTillSelections(){
-        rbTillWeek.setChecked(false);
-        rbTillMonth.setChecked(false);
-        rbTillQuarter.setChecked(false);
-        rbTillYear.setChecked(false);
-        rbTillForever.setChecked(false);
+      rgTill.clearCheck();
+        timeBoxTill=null;
     }
     private String createSummaryString(){
         String summary="";

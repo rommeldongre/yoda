@@ -9,10 +9,12 @@ import com.greylabs.yoda.database.Database;
 import com.greylabs.yoda.database.MetaData.TableSlot;
 import com.greylabs.yoda.database.MetaData.TablePendingStep;
 import com.greylabs.yoda.database.MetaData.TableDay;
+import com.greylabs.yoda.enums.*;
 import com.greylabs.yoda.utils.CalendarUtils;
 import com.greylabs.yoda.utils.WhereConditionBuilder;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -122,8 +124,9 @@ public class Slot {
      */
     public List<Slot> getAll(TimeBox timeBox){
         List<Slot> slots=null;
-        String cols=" s."+TableSlot.id+" as slotId ,"+TableSlot.time+","+TableSlot.goalId+"," +
-                " "+TableSlot.timeBoxId+","+TableSlot.dayId+" ";
+        String cols=" s."+TableSlot.id+" as slotId ,"+TableSlot.when+","+TableSlot.time+","+TableSlot.scheduleDate+","+TableSlot.goalId+"," +
+                " "+TableSlot.timeBoxId+","+TableSlot.dayId+", "+TableDay.dayOfYear+","+TableDay.dayOfWeek+"," +
+                ""+TableDay.weekOfMonth+","+TableDay.monthOfYear+","+TableDay.quarterOfYear+","+TableDay.year+" ";
         String query="select "+cols+" from " +
                 " "+TableDay.day+" as d  join "+TableSlot.slot+" as s " +
                 " "+" on ( d."+TableDay.id+" = "+" s."+TableSlot.dayId+" )" +
@@ -136,6 +139,8 @@ public class Slot {
                 Slot slot=new Slot(context);
                 slot.setId(c.getLong(c.getColumnIndex("slotId")));
                 slot.setTime(c.getInt(c.getColumnIndex(TableSlot.time)));
+                slot.setWhen(com.greylabs.yoda.enums.TimeBoxWhen.getIntegerToEnumType(c.getInt(c.getColumnIndex(TableSlot.when))));
+                slot.setScheduleDate(CalendarUtils.parseDate(c.getString(c.getColumnIndex(TableSlot.scheduleDate))));
                 slot.setGoalId(c.getLong(c.getColumnIndex(TableSlot.goalId)));
                 slot.setTimeBoxId(c.getLong(c.getColumnIndex(TableSlot.timeBoxId)));
                 slot.setDayId(c.getLong(c.getColumnIndex(TableSlot.dayId)));
@@ -183,8 +188,13 @@ public class Slot {
         ContentValues cv=new ContentValues();
         if(id!=0)
             cv.put(TableSlot.id,id);
-        cv.put(TableSlot.when,when.getValue());
+        cv.put(TableSlot.when, when.getValue());
         cv.put(TableSlot.time,time);
+        Calendar cal=Calendar.getInstance();
+        cal.setTime(scheduleDate);
+        String  sqliteDate=cal.get(Calendar.YEAR)+"-"+(cal.get(Calendar.MONTH)+1)+"-"+cal.get(Calendar.DATE)+" " +
+                cal.get(Calendar.HOUR_OF_DAY)+":"+cal.get(Calendar.MINUTE)+":"+cal.get(Calendar.SECOND);
+        cv.put(TableSlot.scheduleDate,sqliteDate);
         cv.put(TableSlot.goalId,goalId);
         cv.put(TableSlot.timeBoxId,timeBoxId);
         cv.put(TableSlot.dayId,dayId);
