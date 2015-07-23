@@ -159,7 +159,7 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
             case R.id.btnAddStepActHome :
                 Intent intent1 = new Intent(this, ActAddNewStep.class);
                 intent1.putExtra(Constants.CALLER, Constants.ACT_HOME);
-                intent1.putExtra(Constants.STEP_ATTACHED_IN_EXTRAS, false);
+//                intent1.putExtra(Constants.STEP_ATTACHED_IN_EXTRAS, false);
                 startActivity(intent1);
                 break;
 

@@ -68,4 +68,10 @@ public class Constants {
     public static final String SCOPE_THIS_MONTH = "THIS_MONTH";
     public static final String SCOPE_THIS_QUARTER = "THIS_QUARTER";
     public static final String SCOPE_THIS_YEAR = "THIS_YEAR";
+    public static final String STEP_OBJECT = "STEP_OBJECT";
+    public static final String PENDING_STEP_TYPE_SINGLE_STEP = "Single Step";
+    public static final String PENDING_STEP_TYPE_SERIES_STEP = "Series";
+    public static final String PENDING_STEP_PRIORITY_TOP_MOST = "Top-most";
+    public static final String PENDING_STEP_PRIORITY_BOTTOM_MOST = "Bottom-most";
+    public static final String PENDING_STEP_PRIORITY_CHANGE_MANUALY = "Change Manually";
 }

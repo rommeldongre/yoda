@@ -203,7 +203,8 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
             case Constants.OPERATION_EDIT :
                 Intent intent = new Intent(this, ActAddNewStep.class);
                 intent.putExtra(Constants.CALLER, Constants.ACT_STEP_LIST);
-                intent.putExtra(Constants.STEP_ATTACHED_IN_EXTRAS, true);
+                intent.putExtra(Constants.STEP_OBJECT, stepArrayList.get(Position));
+//                intent.putExtra(Constants.STEP_ATTACHED_IN_EXTRAS, true);
                 this.startActivity(intent);
                 break;
 

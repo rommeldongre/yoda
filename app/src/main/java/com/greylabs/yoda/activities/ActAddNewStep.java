@@ -137,12 +137,51 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
     private void getGoalListAndPopulate() {
         // check context and populate spinner else show only one currentGoal
         Intent intent = getIntent();
-        if(intent.getExtras().getBoolean(Constants.GOAL_ATTACHED_IN_EXTRAS)){
-            currentGoal  = (Goal)intent.getSerializableExtra(Constants.GOAL_OBJECT);
-            goalList.add(currentGoal);
-            goalNamesList.add(currentGoal.getNickName());
-        }else if(!intent.getExtras().getBoolean(Constants.GOAL_ATTACHED_IN_EXTRAS)){
-            getGoalListFromLocal();
+        switch (intent.getStringExtra(Constants.CALLER)){
+            case Constants.ACT_HOME :
+                getGoalListFromLocal();
+                currentStep = new PendingStep(this);
+                break;
+
+            case Constants.ACT_ADD_NEW_GOAL :
+                currentGoal  = (Goal)intent.getSerializableExtra(Constants.GOAL_OBJECT);
+                goalList.add(currentGoal);
+                goalNamesList.add(currentGoal.getNickName());
+                currentStep = new PendingStep(this);
+                break;
+
+            case Constants.ACT_STEP_LIST :
+                currentStep = (PendingStep) intent.getSerializableExtra(Constants.STEP_OBJECT);
+                getGoalListFromLocal();
+                getSupportActionBar().setTitle(currentStep.getNickName());
+                edtStepName.setText(currentStep.getNickName());
+
+                int oldGoalPosition = 0;
+                for(int i=0; i<goalList.size();i++){
+                    if(currentStep.getGoalId() == goalList.get(i).getId())
+                        oldGoalPosition = i;
+                }
+                goalSpinner.setSelection(oldGoalPosition);
+                goalChosen = oldGoalPosition;
+
+                ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, android.R.id.text1);
+                spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                stepPrioritySpinner.setAdapter(spinnerAdapter);
+                spinnerAdapter.add("" + currentStep.getPriority());
+                spinnerAdapter.add("Top-most");
+                spinnerAdapter.add("Bottom-most");
+                spinnerAdapter.add("Change Manually");
+                stepPrioritySpinner.setSelection(0);
+
+                if(currentStep.getPendingStepType() == PendingStep.PendingStepType.SINGLE_STEP){
+                    stepTypeSpinner.setSelection(0);
+                    sbTimeSingleStep.setProgress(currentStep.getTime());
+                }else {
+                    stepTypeSpinner.setSelection(1);
+                    sbTimeSeriesStep.setProgress(currentStep.getTime());
+                    sbNoOfSteps.setProgress(currentStep.getStepCount());
+                }
+                break;
         }
         goalNamesList.add(getResources().getString(R.string.addNewGoalSpinnerItemActAddNewStep));//add new Goal option
         spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, goalNamesList);
@@ -186,19 +225,45 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
     }
 
     private void saveStep() {
-        currentStep = new PendingStep(this);
         if(edtStepName.getText() != null && edtStepName.getText().length() > 0){
-//            currentStep.setNickName(edtStepName.getText().toString());
-//            currentStep.setPriority();
-//            currentStep.setTime();
-//            currentStep.setSeries();
-//            currentStep.setStepCount();
-////            currentStep.setSkipCount();
-//            currentStep.setGoalId();
+            currentStep.setNickName(edtStepName.getText().toString());
+            currentStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+
+            if(stepTypeSpinner.getSelectedItem().equals(Constants.PENDING_STEP_TYPE_SINGLE_STEP)){
+                if(sbTimeSingleStep.getProgress() > 3){
+                    currentStep.setPendingStepType(PendingStep.PendingStepType.SPLIT_STEP);
+                    currentStep.setStepCount(sbTimeSingleStep.getProgress() / 3);
+                }else {
+                    currentStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
+                    currentStep.setStepCount(1);
+                }
+                currentStep.setTime(sbTimeSingleStep.getProgress());
+            }else {
+                currentStep.setPendingStepType(PendingStep.PendingStepType.SERIES_STEP);
+                currentStep.setTime(sbTimeSeriesStep.getProgress());
+                currentStep.setStepCount(sbNoOfSteps.getProgress());
+            }
+//            currentStep.setSkipCount();
+            currentStep.setGoalId(currentGoal.getId());
+
+
+            if(stepPrioritySpinner.getSelectedItem().equals(Constants.PENDING_STEP_PRIORITY_TOP_MOST)){
+                stepArrayList.add(0, currentStep);
+            }else if(stepPrioritySpinner.getSelectedItem().equals(Constants.PENDING_STEP_PRIORITY_BOTTOM_MOST)){
+                stepArrayList.add(currentStep);
+            }else{
+                stepArrayList.add(Integer.parseInt(stepPrioritySpinner.getSelectedItem().toString())-1, currentStep);
+            }
 //            currentStep.save();
+            //save all the steps in the array with priorities
+            for(int i = 0; i<stepArrayList.size(); i++){
+                stepArrayList.get(i).initDatabase(this);
+                stepArrayList.get(i).setPriority(i+1);
+                stepArrayList.get(i).save();
+            }
             Logger.showMsg(this, getResources().getString(R.string.msgStepSavedActAddNewStep));
             this.finish();
-        }else {
+        } else {
             Logger.showMsg(this, getResources().getString(R.string.msgEnterStepNameActAddNewStep));
         }
     }
