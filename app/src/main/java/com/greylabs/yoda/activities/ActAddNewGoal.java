@@ -167,7 +167,6 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
                     intent2.putExtra(Constants.GOAL_OBJECT, goal);
                     intent2.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, true);
                     setResult(Constants.RESULTCODE_OF_ACT_ADD_GOAL, intent2);
-
                 }
                 break;
         }

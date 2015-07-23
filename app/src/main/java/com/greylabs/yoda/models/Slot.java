@@ -152,6 +152,35 @@ public class Slot {
 
 
     /**
+     * This method returns the all slots of corresponds to timeBoxId
+     * @return list of slots having day ID =dayId
+     */
+    public List<Slot> getAll(long timeBoxId){
+        List<Slot> slots = null;
+        String query=" select * from "+TableSlot.slot+" " +
+                " "+"where "+TableSlot.timeBoxId+" = "+timeBoxId;
+
+        SQLiteDatabase db=database.getReadableDatabase();
+        Cursor c=db.rawQuery(query,null);
+        if(c.moveToFirst()){
+            slots=new ArrayList<>();
+            do{
+                Slot slot=new Slot(context);
+                slot.setId(c.getInt(c.getColumnIndex(TableSlot.id)));
+                slot.setWhen(com.greylabs.yoda.enums.TimeBoxWhen.getIntegerToEnumType(c.getInt(c.getColumnIndex(TableSlot.when))));
+                slot.setScheduleDate(CalendarUtils.parseDate(c.getString(c.getColumnIndex(TableSlot.scheduleDate))));
+                slot.setTime(c.getInt(c.getColumnIndex(TableSlot.time)));
+                slot.setGoalId(c.getInt(c.getColumnIndex(TableSlot.goalId)));
+                slot.setTimeBoxId(c.getInt(c.getColumnIndex(TableSlot.timeBoxId)));
+                slot.setDayId(c.getInt(c.getColumnIndex(TableSlot.dayId)));
+                slots.add(slot);
+            }while(c.moveToNext());
+        }
+        return slots;
+    }
+
+
+    /**
      * This method returns the all slots of corresponds to dayId.
      * @return list of slots having day ID =dayId
      */

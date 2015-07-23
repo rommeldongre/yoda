@@ -14,8 +14,10 @@ import com.greylabs.yoda.utils.sorters.SortByDate;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Jaybhay Vijay on 7/15/2015.
@@ -198,7 +200,32 @@ public class YodaCalendar {
     // Step Scheduler
     /**********************************************************************************************/
     public boolean scheduleStep(PendingStep pendingStep) {
+        boolean isScheduled=false;
+        List<Slot> slots=slot.getAll(timeBox.getId());
         Collections.sort(slots, new SortByDate());
+        //remove todays passed slots
+        Calendar cal=Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        String  sqliteDate=cal.get(Calendar.YEAR)+"-"+(cal.get(Calendar.MONTH)+1)+"-"+cal.get(Calendar.DATE)+" " +
+                cal.get(Calendar.HOUR_OF_DAY)+":"+cal.get(Calendar.MINUTE)+":"+cal.get(Calendar.SECOND);
+        Date date=CalendarUtils.parseDate(sqliteDate);
+        Iterator<Slot> itSlots=slots.iterator();
+        Set<TimeBoxWhen> whens=CalendarUtils.getPossibleWhenTypesOfDay();
+        int i=0;
+        while (itSlots.hasNext()){
+            for(TimeBoxWhen when:whens) {
+                if (date.compareTo(slot.getScheduleDate()) == 0 && when==slot.getWhen()) {
+                    itSlots.remove();
+                }
+            }
+            if(i==5)
+                break;
+            i++;
+        }
+
         switch (pendingStep.getPendingStepType()){
             case SPLIT_STEP:
             case SERIES_STEP:
@@ -223,6 +250,7 @@ public class YodaCalendar {
                             alarmScheduler.setDuration(ps.getTime());
                             alarmScheduler.setAlarmDate(slot.getScheduleDate());
                             alarmScheduler.setAlarm();
+                            isScheduled=true;
                             break;
                         }
                     }
@@ -246,12 +274,13 @@ public class YodaCalendar {
                         alarmScheduler.setDuration(pendingStep.getTime());
                         alarmScheduler.setAlarmDate(slot.getScheduleDate());
                         alarmScheduler.setAlarm();
+                        isScheduled =true;
                         break;
                     }
                 }
                 break;
         }
-        return true;
+        return isScheduled;
     }
 
     /**********************************************************************************************/

@@ -1,6 +1,7 @@
 package com.greylabs.yoda.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -27,6 +28,8 @@ import android.widget.Spinner;
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
+import com.greylabs.yoda.models.TimeBox;
+import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.Prefs;
@@ -254,12 +257,21 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
             }else{
                 stepArrayList.add(Integer.parseInt(stepPrioritySpinner.getSelectedItem().toString())-1, currentStep);
             }
-//            currentStep.save();
-            //save all the steps in the array with priorities
-            for(int i = 0; i<stepArrayList.size(); i++){
-                stepArrayList.get(i).initDatabase(this);
-                stepArrayList.get(i).setPriority(i+1);
-                stepArrayList.get(i).save();
+            TimeBox timeBox=new TimeBox(this);
+            YodaCalendar yodaCalendar=new YodaCalendar(this,timeBox.get(currentGoal.getTimeBoxId()));
+            if(yodaCalendar.scheduleStep(currentStep)) {
+                //save all the steps in the array with priorities
+                for (int i = 0; i < stepArrayList.size(); i++) {
+                    stepArrayList.get(i).initDatabase(this);
+                    stepArrayList.get(i).setPriority(i + 1);
+                    stepArrayList.get(i).save();
+                }
+            }else{
+                AlertDialog.Builder builder=new AlertDialog.Builder(this);
+                builder.setTitle(getString(R.string.msgYodaSays));
+                builder.setMessage(getString(R.string.msgCannotSaveStepActAddNewStep));
+                builder.setPositiveButton(getString(R.string.btnOk), null);
+                builder.show();
             }
             Logger.showMsg(this, getResources().getString(R.string.msgStepSavedActAddNewStep));
             this.finish();

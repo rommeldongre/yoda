@@ -1,9 +1,14 @@
 package com.greylabs.yoda.utils;
 
+import com.greylabs.yoda.enums.TimeBoxWhen;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Created by Jaybhay Vijay on 7/15/2015.
@@ -80,5 +85,21 @@ public class CalendarUtils {
         else if(day>=23 && day<=28)
             return 4;
         return -1;
+    }
+    public static Set<TimeBoxWhen> getPossibleWhenTypesOfDay(){
+        Calendar cal=Calendar.getInstance();
+        Set<TimeBoxWhen> whens=new TreeSet<>();
+        whens.add(TimeBoxWhen.EARLY_MORNING);whens.add(TimeBoxWhen.MORNING);
+        whens.add(TimeBoxWhen.AFTERNOON);whens.add(TimeBoxWhen.EVENING);
+        whens.add(TimeBoxWhen.NIGHT);whens.add(TimeBoxWhen.LATE_NIGHT);
+        Iterator<TimeBoxWhen> itWhens=whens.iterator();
+        int currentHour=cal.get(Calendar.HOUR_OF_DAY);
+        while (itWhens.hasNext()){
+            TimeBoxWhen when=itWhens.next();
+            if(when.getStartTime()<currentHour)
+                itWhens.remove();
+
+        }
+        return whens;
     }
 }
