@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.greylabs.yoda.models.PendingStep;
+import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Logger;
 import java.io.Serializable;
 import java.util.Calendar;
@@ -129,7 +130,7 @@ public class AlarmScheduler implements Serializable{
         calTarget.set(Calendar.HOUR_OF_DAY, startTime);
         Logger.log(TAG, "Target date:[Start Time]" + calTarget.getTime().toString());
         Intent broadcastReceiver = new Intent(context, AlarmReceiver.class);
-        broadcastReceiver.putExtra("alarmScheduler",this);
+        broadcastReceiver.putExtra(Constants.ALARM_SCHEDULER,this);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int)stepId,broadcastReceiver,0);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calTarget.getTimeInMillis(), pendingIntent);
 
@@ -137,7 +138,7 @@ public class AlarmScheduler implements Serializable{
         calTarget.add(Calendar.HOUR_OF_DAY, duration);
         Logger.log(TAG, "Target date:[End Time]" + calTarget.getTime().toString());
         broadcastReceiver = new Intent(context, AlarmReceiver.class);
-        broadcastReceiver.putExtra("alarmScheduler",this);
+        broadcastReceiver.putExtra(Constants.ALARM_SCHEDULER,this);
         pendingIntent = PendingIntent.getBroadcast(context, -(int)stepId,broadcastReceiver,0);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calTarget.getTimeInMillis(), pendingIntent);
     }

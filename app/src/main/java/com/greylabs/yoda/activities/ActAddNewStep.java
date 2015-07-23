@@ -259,14 +259,15 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
             }
             TimeBox timeBox=new TimeBox(this);
             YodaCalendar yodaCalendar=new YodaCalendar(this,timeBox.get(currentGoal.getTimeBoxId()));
-            if(yodaCalendar.scheduleStep(currentStep)) {
                 //save all the steps in the array with priorities
-                for (int i = 0; i < stepArrayList.size(); i++) {
+            for (int i = 0; i < stepArrayList.size(); i++) {
                     stepArrayList.get(i).initDatabase(this);
                     stepArrayList.get(i).setPriority(i + 1);
                     stepArrayList.get(i).save();
-                }
-            }else{
+            }
+            boolean isScheduled=yodaCalendar.scheduleStep(currentStep);
+            if(!isScheduled){
+                currentStep.delete();
                 AlertDialog.Builder builder=new AlertDialog.Builder(this);
                 builder.setTitle(getString(R.string.msgYodaSays));
                 builder.setMessage(getString(R.string.msgCannotSaveStepActAddNewStep));

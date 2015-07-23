@@ -216,6 +216,7 @@ public class YodaCalendar {
         Set<TimeBoxWhen> whens=CalendarUtils.getPossibleWhenTypesOfDay();
         int i=0;
         while (itSlots.hasNext()){
+            Slot slot=itSlots.next();
             for(TimeBoxWhen when:whens) {
                 if (date.compareTo(slot.getScheduleDate()) == 0 && when==slot.getWhen()) {
                     itSlots.remove();
@@ -243,7 +244,7 @@ public class YodaCalendar {
                             slot.save();
                             ps.save();
                             AlarmScheduler alarmScheduler = new AlarmScheduler(context);
-                            alarmScheduler.setStepId(pendingStep.getId());
+                            alarmScheduler.setStepId(ps.getId());
                             alarmScheduler.setSubStepId(ps.getId());
                             alarmScheduler.setPendingStepType(PendingStep.PendingStepType.SUB_STEP);
                             alarmScheduler.setStartTime(slot.getWhen().getStartTime());

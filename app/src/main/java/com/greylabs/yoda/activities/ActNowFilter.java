@@ -9,6 +9,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.greylabs.yoda.R;
+import com.greylabs.yoda.models.Goal;
+import com.greylabs.yoda.models.PendingStep;
+import com.greylabs.yoda.scheduler.AlarmScheduler;
+import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Logger;
 
 public class ActNowFilter extends ActionBarActivity implements View.OnClickListener {
@@ -17,6 +21,8 @@ public class ActNowFilter extends ActionBarActivity implements View.OnClickListe
     LinearLayout llDidIt, llDoingIt, llMissedIt;
     Toolbar toolbar;
     Button btnCloseActivity;
+    private PendingStep pendingStep;
+    private Goal goal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +54,12 @@ public class ActNowFilter extends ActionBarActivity implements View.OnClickListe
     }
 
     private void getCurrentStepScheduledFromLocal() {
-
+        AlarmScheduler alarmScheduler=(AlarmScheduler)getIntent().getSerializableExtra(Constants.ALARM_SCHEDULER);
+        pendingStep=new PendingStep(this).get(alarmScheduler.getStepId());
+        goal=new Goal(this).get(pendingStep.getGoalId());
+        tvGoalName.setText(goal.getNickName());
+        tvStepName.setText(pendingStep.getNickName());
+        tvTime.setText(String.valueOf(alarmScheduler.getStartTime()));
     }
 
     @Override

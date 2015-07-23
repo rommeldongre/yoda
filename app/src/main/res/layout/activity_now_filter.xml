@@ -80,7 +80,7 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="@style/TextAppearance.AppCompat.Small"
                         android:textColor="@color/gray"
-                        android:text="6 pm" />
+                        />
 
                 </LinearLayout>
             </RelativeLayout>
