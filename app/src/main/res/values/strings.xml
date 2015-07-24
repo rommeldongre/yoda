@@ -127,6 +127,7 @@
     <string name="tvCompletedActNowFilter">Did it!! - Another step closer!</string>
     <string name="tvDoingItActNowFilter">Doing it - Check back in 5 mins.</string>
     <string name="tvMissedActNowFilter">Missed it. - Log my excuse</string>
+    <string name="tvEmptyViewActNowFilter">No step scheduled at this time</string>
     <string-array name="arrayStepTypeActAddNewStep">
         <item>Single Step</item>
         <item>Series</item>

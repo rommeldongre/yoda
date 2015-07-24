@@ -8,6 +8,7 @@
         <!-- Customize your theme here. -->
     </style>
 
+
     <style name="menu_labels_style">
         <item name="android:background">@drawable/fab_label_background</item>
         <item name="android:textColor">@color/textolor_settings_buttons</item>
@@ -20,6 +21,11 @@
         <item name="android:padding">5dp</item>
         <item name="android:layout_margin">1dp</item>
         <item name="android:textColor">@drawable/selector_radio_btn_text</item>
+    </style>
+
+    <style name="MyDialogueTheme" parent="@android:style/Theme.Dialog">
+        <!--<item name="android:windowActionBar">false</item>-->
+        <!--<item name="android:windowNoTitle">true</item>-->
     </style>
 
 </resources>
