@@ -23,11 +23,11 @@ public class FilterUtility {
         this.context = context;
     }
 
-    public Map<Goal, List<PendingStep>> getPendingSteps(StepFilterType stepFilterType){
+    public Map<Long, List<PendingStep>> getPendingSteps(StepFilterType stepFilterType){
         String criteria="";
         String startDate="";
         String endDate="";
-        Map<Goal, List<PendingStep>> filteredSteps=new HashMap<>();
+        Map<Long, List<PendingStep>> filteredSteps=new HashMap<>();
         Calendar cal=Calendar.getInstance();
         switch (stepFilterType){
             case TODAY:
@@ -85,13 +85,12 @@ public class FilterUtility {
         }
         //for each unique goal id create entry in hash map
         for(long goalId:goalIds){
-            Goal goal=new Goal(context).get(goalId);
             List<PendingStep> goalSteps=new ArrayList<>();
             for(PendingStep ps: pendingSteps){
                 if(ps.getGoalId()==goalId)
                     goalSteps.add(ps);
             }
-            filteredSteps.put(goal,goalSteps);
+            filteredSteps.put(goalId,goalSteps);
         }
 
         return  filteredSteps;
