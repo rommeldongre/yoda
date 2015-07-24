@@ -2,6 +2,7 @@ package com.greylabs.yoda.adapters;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -12,16 +13,18 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.TextView;
 
 import com.greylabs.yoda.R;
+import com.greylabs.yoda.models.Goal;
+import com.greylabs.yoda.models.PendingStep;
 
 public class AdapterExpandableList extends BaseExpandableListAdapter {
 
     private Context _context;
-    private List<String> _listDataHeader; // header titles
-    // child data in format of header title, child title
-    private HashMap<String, List<String>> _listDataChild;
+    private List<Goal> _listDataHeader; // header titles         string
+    // child data in format of header title, child title         string string
+    private Map<Long, List<PendingStep>> _listDataChild;
 
-    public AdapterExpandableList(Context context, List<String> listDataHeader,
-                                 HashMap<String, List<String>> listChildData) {
+    public AdapterExpandableList(Context context, List<Goal> listDataHeader,
+                                 Map<Long, List<PendingStep>> listChildData) {
         this._context = context;
         this._listDataHeader = listDataHeader;
         this._listDataChild = listChildData;
@@ -42,7 +45,7 @@ public class AdapterExpandableList extends BaseExpandableListAdapter {
     public View getChildView(int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
-        final String childText = (String) getChild(groupPosition, childPosition);
+        final String childText = ((PendingStep) getChild(groupPosition, childPosition)).getNickName();
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
@@ -59,7 +62,8 @@ public class AdapterExpandableList extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        return this._listDataChild.get(this._listDataHeader.get(groupPosition))
+        Goal goal=this._listDataHeader.get(groupPosition);
+        return this._listDataChild.get(new Long(goal.getId()))
                 .size();
     }
 
@@ -81,7 +85,7 @@ public class AdapterExpandableList extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
-        String headerTitle = (String) getGroup(groupPosition);
+        String headerTitle = ((Goal) getGroup(groupPosition)).getNickName();
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);

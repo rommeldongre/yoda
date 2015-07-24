@@ -343,22 +343,23 @@ public class PendingStep implements Serializable {
         String cols=" s."+TablePendingStep.id+" as stepId , "+TablePendingStep.nickName+", " +
                 TablePendingStep.priority+", "+TablePendingStep.time+", " +
                 TablePendingStep.type+", "+TablePendingStep.stepCount+","+
-                TablePendingStep.status+","+TablePendingStep.skipCount+","+
-                TablePendingStep.goalId+","+TablePendingStep.slotId+","+
+                TablePendingStep.status+","+TablePendingStep.skipCount+", p."+
+                TablePendingStep.goalId+" as stepGoalId ,"+TablePendingStep.slotId+","+
                 TablePendingStep.subStepOf+","+TableSlot.scheduleDate;
-        String query = "select * " +
+        String query = "select "+ cols +
                 " " + " from " + TablePendingStep.pendingStep + " as p join " + TableSlot.slot+" as s " +
-                " " + " on ( " +TablePendingStep.slotId+"="+TableSlot.id+" ) "+
-                " " + " where" + TablePendingStep.goalId + " = " + goalId + " " +
-                " " + " and  "  + TablePendingStep.type + "!=" + PendingStepType.SUB_STEP.ordinal()+" " +
-                " "+" and "+filterCriteria;
+                " " + " on ( p." +TablePendingStep.slotId+" = s."+TableSlot.id+" ) "+
+                " " + " where "  + TablePendingStep.type + "!=" + PendingStepType.SUB_STEP.ordinal()+" " +
+                " "+filterCriteria;
+//        p." + TablePendingStep.goalId + " = " + goalId + " " +
+//        " " + " and
 
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
             pendingSteps = new ArrayList<>();
             do {
                 PendingStep pendingStep = new PendingStep(context);
-                pendingStep.id = c.getInt(c.getColumnIndex(TablePendingStep.id));
+                pendingStep.id = c.getInt(c.getColumnIndex("stepId"));
                 pendingStep.nickName = c.getString(c.getColumnIndex(TablePendingStep.nickName));
                 pendingStep.priority = c.getInt(c.getColumnIndex(TablePendingStep.priority));
                 pendingStep.time = c.getInt(c.getColumnIndex(TablePendingStep.time));
@@ -368,7 +369,7 @@ public class PendingStep implements Serializable {
                 pendingStep.skipCount = c.getInt(c.getColumnIndex(TablePendingStep.skipCount));
                 pendingStep.pendingStepStatus = PendingStepStatus.getPendingStepStatus(
                         c.getInt(c.getColumnIndex(TablePendingStep.status)));
-                pendingStep.goalId = c.getInt(c.getColumnIndex(TablePendingStep.goalId));
+                pendingStep.goalId = c.getInt(c.getColumnIndex("stepGoalId"));
                 pendingStep.slotId = c.getLong(c.getColumnIndex(TablePendingStep.slotId));
                 pendingStep.subStepOf = c.getLong(c.getColumnIndex(TablePendingStep.subStepOf));
                 pendingSteps.add(pendingStep);

@@ -6,7 +6,9 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.greylabs.yoda.enums.StepFilterType;
 import com.greylabs.yoda.fragments.FragFilter;
+import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.utils.Constants;
 
 public class PagerAdapterActFilters extends FragmentPagerAdapter
@@ -28,34 +30,33 @@ public class PagerAdapterActFilters extends FragmentPagerAdapter
         switch (index) {
             case 0:
                 FragFilter fragFilter = new FragFilter();
-                bundle.putString(Constants.FILTER_SCOPE, Constants.SCOPE_TODAY);
+                bundle.putSerializable(Constants.FILTER_SCOPE, StepFilterType.TODAY);
                 fragFilter.setArguments(bundle);
                 return fragFilter;
 
             case 1:
                 FragFilter fragFilter1 = new FragFilter();
-                bundle.putString(Constants.FILTER_SCOPE, Constants.SCOPE_THIS_WEEK);
+                bundle.putSerializable(Constants.FILTER_SCOPE, StepFilterType.THIS_WEEK);
                 fragFilter1.setArguments(bundle);
                 return fragFilter1;
 
             case 2:
                 FragFilter fragFilter2 = new FragFilter();
-                bundle.putString(Constants.FILTER_SCOPE, Constants.SCOPE_THIS_MONTH);
+                bundle.putSerializable(Constants.FILTER_SCOPE, StepFilterType.THIS_MONTH);
                 fragFilter2.setArguments(bundle);
                 return fragFilter2;
 
             case 3:
                 FragFilter fragFilter3 = new FragFilter();
-                bundle.putString(Constants.FILTER_SCOPE, Constants.SCOPE_THIS_QUARTER);
+                bundle.putSerializable(Constants.FILTER_SCOPE, StepFilterType.THIS_QUARTER);
                 fragFilter3.setArguments(bundle);
                 return fragFilter3;
 
             case 4:
                 FragFilter fragFilter4 = new FragFilter();
-                bundle.putString(Constants.FILTER_SCOPE, Constants.SCOPE_THIS_YEAR);
+                bundle.putSerializable(Constants.FILTER_SCOPE, StepFilterType.THIS_YEAR);
                 fragFilter4.setArguments(bundle);
                 return fragFilter4;
-
         }
         return null;
     }

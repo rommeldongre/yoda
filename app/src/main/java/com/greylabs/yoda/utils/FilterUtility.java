@@ -29,24 +29,27 @@ public class FilterUtility {
         String endDate="";
         Map<Long, List<PendingStep>> filteredSteps=new HashMap<>();
         Calendar cal=Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
         switch (stepFilterType){
             case TODAY:
                 startDate=CalendarUtils.getSqLiteDateFormat(cal);
-                criteria=" and "+ TableSlot.scheduleDate+" = "+startDate;
+                criteria=" and "+ TableSlot.scheduleDate+" = '"+startDate+"'";
                 break;
             case THIS_WEEK:
                 startDate=CalendarUtils.getSqLiteDateFormat(cal);
                 cal.add(Calendar.DAY_OF_WEEK, Calendar.SATURDAY-cal.get(Calendar.DAY_OF_WEEK));
                 endDate=CalendarUtils.getSqLiteDateFormat(cal);
-                criteria=" and ( "+TableSlot.scheduleDate+ ">= "+startDate+
-                        " and "+TableSlot.scheduleDate+" <= "+endDate+" )";
+                criteria=" and ( "+TableSlot.scheduleDate+ ">= '"+startDate+"'"+
+                        " and "+TableSlot.scheduleDate+" <= '"+endDate+"' )";
                 break;
             case THIS_MONTH:
                 startDate=CalendarUtils.getSqLiteDateFormat(cal);
                 cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
                 endDate=CalendarUtils.getSqLiteDateFormat(cal);
-                criteria=" and ( "+TableSlot.scheduleDate+ ">= "+startDate+
-                        " and "+TableSlot.scheduleDate+" <= "+endDate+" )";
+                criteria=" and ( "+TableSlot.scheduleDate+ ">= '"+startDate+"'"+
+                        " and "+TableSlot.scheduleDate+" <= '"+endDate+"' )";
 
                 break;
             case THIS_QUARTER:
@@ -54,46 +57,46 @@ public class FilterUtility {
                 cal.set(Calendar.MONTH, CalendarUtils.getLastMonthOfQuarter(cal.get(Calendar.MONTH)));
                 cal.set(Calendar.DAY_OF_MONTH,cal.getActualMaximum(Calendar.DAY_OF_MONTH));
                 endDate=CalendarUtils.getSqLiteDateFormat(cal);
-                criteria=" and ( "+TableSlot.scheduleDate+ ">= "+startDate+
-                        " and "+TableSlot.scheduleDate+" <= "+endDate+" )";
+                criteria=" and ( "+TableSlot.scheduleDate+ ">= '"+startDate+"'"+
+                        " and "+TableSlot.scheduleDate+" <= '"+endDate+"' )";
                 break;
             case THIS_YEAR:
                 startDate=CalendarUtils.getSqLiteDateFormat(cal);
                 cal.set(Calendar.MONTH, Calendar.DECEMBER);
                 cal.set(Calendar.DAY_OF_MONTH,31);
                 endDate=CalendarUtils.getSqLiteDateFormat(cal);
-                criteria=" and ( "+TableSlot.scheduleDate+ ">= "+startDate+
-                        " and "+TableSlot.scheduleDate+" <= "+endDate+" )";
+                criteria=" and ( "+TableSlot.scheduleDate+ ">= '"+startDate+"'"+
+                        " and "+TableSlot.scheduleDate+" <= '"+endDate+"' )";
                 break;
         }
 
         PendingStep pendingStep=new PendingStep(context);
         List<PendingStep> pendingSteps=pendingStep.getAll(criteria);
         List<Long> goalIds=new ArrayList<>();
-        for (PendingStep ps:pendingSteps){
-             long goalId=ps.getGoalId();
-             boolean isPresent=false;
-             for(long gid:goalIds){
-                 if(gid==goalId) {
-                     isPresent=true;
-                     break;
-                 }
-             }
-            if (isPresent==false) {
-                goalIds.add(goalId);
+        if(pendingSteps!=null){
+            for (PendingStep ps:pendingSteps){
+                long goalId=ps.getGoalId();
+                boolean isPresent=false;
+                for(long gid:goalIds){
+                    if(gid==goalId) {
+                        isPresent=true;
+                        break;
+                    }
+                }
+                if (isPresent==false) {
+                    goalIds.add(goalId);
+                }
+            }
+            //for each unique goal id create entry in hash map
+            for(long goalId:goalIds){
+                List<PendingStep> goalSteps=new ArrayList<>();
+                for(PendingStep ps: pendingSteps){
+                    if(ps.getGoalId()==goalId)
+                        goalSteps.add(ps);
+                }
+                filteredSteps.put(goalId,goalSteps);
             }
         }
-        //for each unique goal id create entry in hash map
-        for(long goalId:goalIds){
-            List<PendingStep> goalSteps=new ArrayList<>();
-            for(PendingStep ps: pendingSteps){
-                if(ps.getGoalId()==goalId)
-                    goalSteps.add(ps);
-            }
-            filteredSteps.put(goalId,goalSteps);
-        }
-
         return  filteredSteps;
     }
-
 }
