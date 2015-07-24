@@ -61,7 +61,7 @@ public class MetaData {
         public static final String nickName="nickName";
         public static final String priority="priority";
         public static final String time="time";
-        public static final String type="series";
+        public static final String type="type";
         public static final String stepCount="stepCount";
         public static final String status="status";
         public static final String skipCount="skipCount";

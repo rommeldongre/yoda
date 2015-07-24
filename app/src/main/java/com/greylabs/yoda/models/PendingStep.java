@@ -1,18 +1,15 @@
 package com.greylabs.yoda.models;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.NetworkOnMainThreadException;
-
 import com.greylabs.yoda.database.Database;
-import com.greylabs.yoda.database.MetaData;
 import com.greylabs.yoda.database.MetaData.TablePendingStep;
+import com.greylabs.yoda.database.MetaData.TableSlot;
 import com.greylabs.yoda.utils.Constants;
-
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class PendingStep implements Serializable {
@@ -339,16 +336,55 @@ public class PendingStep implements Serializable {
     /**********************************************************************************************/
     //Utility Methods
 
-    /**
-     * ******************************************************************************************
-     */
+    /********************************************************************************************/
+    public List<PendingStep> getAll(String filterCriteria){
+        ArrayList<PendingStep> pendingSteps = null;
+        SQLiteDatabase db = database.getReadableDatabase();
+        String cols=" s."+TablePendingStep.id+" as stepId , "+TablePendingStep.nickName+", " +
+                TablePendingStep.priority+", "+TablePendingStep.time+", " +
+                TablePendingStep.type+", "+TablePendingStep.stepCount+","+
+                TablePendingStep.status+","+TablePendingStep.skipCount+","+
+                TablePendingStep.goalId+","+TablePendingStep.slotId+","+
+                TablePendingStep.subStepOf+","+TableSlot.scheduleDate;
+        String query = "select * " +
+                " " + " from " + TablePendingStep.pendingStep + " as p join " + TableSlot.slot+" as s " +
+                " " + " on ( " +TablePendingStep.slotId+"="+TableSlot.id+" ) "+
+                " " + " where" + TablePendingStep.goalId + " = " + goalId + " " +
+                " " + " and  "  + TablePendingStep.type + "!=" + PendingStepType.SUB_STEP.ordinal()+" " +
+                " "+" and "+filterCriteria;
+
+        Cursor c = db.rawQuery(query, null);
+        if (c.moveToFirst()) {
+            pendingSteps = new ArrayList<>();
+            do {
+                PendingStep pendingStep = new PendingStep(context);
+                pendingStep.id = c.getInt(c.getColumnIndex(TablePendingStep.id));
+                pendingStep.nickName = c.getString(c.getColumnIndex(TablePendingStep.nickName));
+                pendingStep.priority = c.getInt(c.getColumnIndex(TablePendingStep.priority));
+                pendingStep.time = c.getInt(c.getColumnIndex(TablePendingStep.time));
+                pendingStep.pendingStepType = PendingStepType.getIntegerToEnumType(
+                        c.getInt(c.getColumnIndex(TablePendingStep.type)));
+                pendingStep.stepCount = c.getInt(c.getColumnIndex(TablePendingStep.stepCount));
+                pendingStep.skipCount = c.getInt(c.getColumnIndex(TablePendingStep.skipCount));
+                pendingStep.pendingStepStatus = PendingStepStatus.getPendingStepStatus(
+                        c.getInt(c.getColumnIndex(TablePendingStep.status)));
+                pendingStep.goalId = c.getInt(c.getColumnIndex(TablePendingStep.goalId));
+                pendingStep.slotId = c.getLong(c.getColumnIndex(TablePendingStep.slotId));
+                pendingStep.subStepOf = c.getLong(c.getColumnIndex(TablePendingStep.subStepOf));
+                pendingSteps.add(pendingStep);
+            } while (c.moveToNext());
+        }
+        c.close();
+        return pendingSteps;
+    }
+
     public long getPendingStepCount(long goalId) {
         long pendingStepCount = 0;
         SQLiteDatabase db = database.getReadableDatabase();
         //this query returns sum of time of all steps that are present in the Complpeted Step table
         String pendingStepCountQuery = " select count(*) as stepCount " +
-                " " + "from " + MetaData.TablePendingStep.pendingStep + " " +
-                " " + "where " + MetaData.TablePendingStep.goalId + "=" + id;
+                " " + "from " + TablePendingStep.pendingStep + " " +
+                " " + "where " +TablePendingStep.goalId + "=" + id;
         Cursor c = db.rawQuery(pendingStepCountQuery, null);
         if (c.moveToFirst()) {
             do {

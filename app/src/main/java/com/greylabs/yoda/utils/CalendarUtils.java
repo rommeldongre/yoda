@@ -102,4 +102,9 @@ public class CalendarUtils {
         }
         return whens;
     }
+    public static String getSqLiteDateFormat(Calendar cal){
+        String  sqliteDate=cal.get(Calendar.YEAR)+"-"+(cal.get(Calendar.MONTH)+1)+"-"+cal.get(Calendar.DATE)+" " +
+                cal.get(Calendar.HOUR_OF_DAY)+":"+cal.get(Calendar.MINUTE)+":"+cal.get(Calendar.SECOND);
+        return sqliteDate;
+    }
 }
