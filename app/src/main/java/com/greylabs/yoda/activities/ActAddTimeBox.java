@@ -219,10 +219,10 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
 
             case R.id.actionSaveActCreateTimeBox :
                 TimeBox timeBox=createTimeBoxObjectFromUI();
-                timeBox.initDatabase(this);
-                timeBox.getTimeBoxOn().initDatabase(this);
-                timeBox.getTimeBoxWhen().initDatabase(this);
-                if(timeBox!=null){
+                if(timeBox!=null && timeBox.getTimeBoxOn()!=null && timeBox.getTimeBoxWhen()!=null){
+                    timeBox.initDatabase(this);
+                    timeBox.getTimeBoxOn().initDatabase(this);
+                    timeBox.getTimeBoxWhen().initDatabase(this);
                     timeBox.save();
                     Logger.showMsg(this, "TimeBox saved");
                     this.finish();
@@ -559,7 +559,7 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
         if(currentTimeBox!=null && edtSummary.getText()!=null && !edtSummary.getText().equals("")){
            currentTimeBox.setNickName(edtSummary.getText().toString());
         }
-        return currentTimeBox;
+          return currentTimeBox;
     }
 
     private void invalidateOnValueSelections(){

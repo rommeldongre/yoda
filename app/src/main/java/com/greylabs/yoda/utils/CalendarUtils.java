@@ -143,7 +143,7 @@ public class CalendarUtils {
         int currentHour=cal.get(Calendar.HOUR_OF_DAY);
         while (itWhens.hasNext()){
             TimeBoxWhen when=itWhens.next();
-            if(when.getStartTime()<currentHour)
+            if(!(when.getStartTime()>currentHour && currentHour<when.getEndTime()))
                 itWhens.remove();
 
         }

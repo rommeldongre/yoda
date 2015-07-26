@@ -138,7 +138,7 @@ public class YodaCalendar {
      */
     public int attachTimeBox(long goalId){
         int slotCount=0;
-        if(slots!=null && validateTimeBox()) {
+        if(slots!=null && slots.size()>0) {
             for (Slot slot : slots) {
                 slot.setTimeBoxId(timeBox.getId());
                 slot.setGoalId(goalId);
@@ -289,6 +289,29 @@ public class YodaCalendar {
     /**********************************************************************************************/
     public boolean validateTimeBox(){
         boolean isValid=true;
+        //remove today's passed slots
+        Calendar cal=Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        String  sqliteDate=cal.get(Calendar.YEAR)+"-"+(cal.get(Calendar.MONTH)+1)+"-"+cal.get(Calendar.DATE)+" " +
+                cal.get(Calendar.HOUR_OF_DAY)+":"+cal.get(Calendar.MINUTE)+":"+cal.get(Calendar.SECOND);
+        Date date=CalendarUtils.parseDate(sqliteDate);
+        Iterator<Slot> itSlots=slots.iterator();
+        Set<TimeBoxWhen> whens=CalendarUtils.getPossibleWhenTypesOfDay();
+        int i=0;
+        while (itSlots.hasNext()){
+            Slot slot=itSlots.next();
+            for(TimeBoxWhen when:whens) {
+                if (date.compareTo(slot.getScheduleDate()) == 0 && (when!=slot.getWhen())) {
+                    itSlots.remove();
+                }
+            }
+            if(i==5)
+                break;
+            i++;
+        }
         if(slots!=null) {
             for (Slot slot : slots) {
                 if (slot.getTimeBoxId() != 0) {
@@ -299,12 +322,14 @@ public class YodaCalendar {
         }else{
             isValid=false;
         }
+        if(slots.size()==0)
+            isValid=false;
         return isValid;
     }
 
     private boolean validateTimeBoxForUpdate(){
         boolean isValid=true;
-       for(Slot slot:slots){
+        for(Slot slot:slots){
             if(slot.getTimeBoxId()!=0 & slot.getTimeBoxId()!=timeBox.getId()) {
                 isValid = false;
                 break;
