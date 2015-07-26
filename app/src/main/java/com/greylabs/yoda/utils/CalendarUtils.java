@@ -1,12 +1,22 @@
 package com.greylabs.yoda.utils;
 
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+
+import com.greylabs.yoda.database.Database;
+import com.greylabs.yoda.database.MetaData;
 import com.greylabs.yoda.enums.TimeBoxWhen;
+import com.greylabs.yoda.models.Day;
+import com.greylabs.yoda.models.Slot;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -15,6 +25,43 @@ import java.util.TreeSet;
  */
 public class CalendarUtils {
     private final static String TAG="CalendarUtils";
+
+
+    public static String printYodaCalendar(Context context){
+        Database database=Database.getInstance(context);
+        String cols=" s."+ MetaData.TableSlot.id+" as slotId ,"+ MetaData.TableSlot.when+","+ MetaData.TableSlot.time+","+ MetaData.TableSlot.scheduleDate+","+ MetaData.TableSlot.goalId+"," +
+                " "+ MetaData.TableSlot.timeBoxId+","+ MetaData.TableSlot.dayId+", "+ MetaData.TableDay.dayOfYear+","+ MetaData.TableDay.dayOfWeek+"," +
+                ""+ MetaData.TableDay.weekOfMonth+","+ MetaData.TableDay.monthOfYear+","+ MetaData.TableDay.quarterOfYear+","+ MetaData.TableDay.year+" ";
+        String query="select "+cols+" from " +
+                " "+ MetaData.TableDay.day+" as d  join "+ MetaData.TableSlot.slot+" as s " +
+                " "+" on ( d."+ MetaData.TableDay.id+" = "+" s."+ MetaData.TableSlot.dayId+" )";
+        SQLiteDatabase db=database.getReadableDatabase();
+        Cursor c=db.rawQuery(query, null);
+        String calString="";
+        if(c.moveToFirst()){
+            Slot  slot=new Slot(context);
+            Day day=new Day(context);
+            do{
+                slot.setId(c.getLong(c.getColumnIndex("slotId")));
+                slot.setTime(c.getInt(c.getColumnIndex(MetaData.TableSlot.time)));
+                slot.setWhen(com.greylabs.yoda.enums.TimeBoxWhen.getIntegerToEnumType(c.getInt(c.getColumnIndex(MetaData.TableSlot.when))));
+                slot.setScheduleDate(CalendarUtils.parseDate(c.getString(c.getColumnIndex(MetaData.TableSlot.scheduleDate))));
+                slot.setGoalId(c.getLong(c.getColumnIndex(MetaData.TableSlot.goalId)));
+                slot.setTimeBoxId(c.getLong(c.getColumnIndex(MetaData.TableSlot.timeBoxId)));
+                slot.setDayId(c.getLong(c.getColumnIndex(MetaData.TableSlot.dayId)));
+                day.setDayOfWeek(c.getInt(c.getColumnIndex(MetaData.TableDay.dayOfWeek)));
+                day.setDayOfYear(c.getInt(c.getColumnIndex(MetaData.TableDay.dayOfYear)));
+                day.setWeekOfMonth(c.getInt(c.getColumnIndex(MetaData.TableDay.weekOfMonth)));
+                day.setMonthOfYear(c.getInt(c.getColumnIndex(MetaData.TableDay.monthOfYear)));
+                day.setQuarterOfYear(c.getInt(c.getColumnIndex(MetaData.TableDay.quarterOfYear)));
+                day.setYear(c.getInt(c.getColumnIndex(MetaData.TableDay.year)));
+                calString+=" "+slot.toString()+" ++++++ "+day.toString()+"  \n";
+            }while (c.moveToNext());
+        }
+        Logger.log(TAG,calString);
+        return calString;
+    }
+
     public static Date parseDate(String dateInString) {
         //SimpleDateFormat sdf=new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy");
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");

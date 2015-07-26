@@ -126,7 +126,7 @@ public class TimeBox implements Serializable{
             timeBoxes=new ArrayList<>();
             do{
                 TimeBox timeBox=new TimeBox(context);
-                timeBox.id=c.getInt(c.getColumnIndex(TableTimeBox.id));
+                timeBox.id=c.getLong(c.getColumnIndex(TableTimeBox.id));
                 timeBox.nickName=c.getString(c.getColumnIndex(TableTimeBox.nickName));
 
                 timeBox.timeBoxOn=new TimeBoxOn(context,
@@ -166,11 +166,11 @@ public class TimeBox implements Serializable{
     }
 
     public int delete(){
+        this.timeBoxOn.delete();
+        this.timeBoxWhen.delete();
         SQLiteDatabase db=database.getWritableDatabase();
         int numOfRowAffected=db.delete(TableTimeBox.timeBox, TableTimeBox.id + "=" + id, null);
         //db.close();
-        this.timeBoxOn.delete();
-        this.timeBoxWhen.delete();
         return numOfRowAffected;
     }
 

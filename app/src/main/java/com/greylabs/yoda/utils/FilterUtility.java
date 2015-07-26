@@ -4,14 +4,17 @@ import android.content.Context;
 
 import com.greylabs.yoda.database.MetaData.TableSlot;
 import com.greylabs.yoda.enums.StepFilterType;
+import com.greylabs.yoda.enums.TimeBoxWhen;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
+import com.greylabs.yoda.models.Slot;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Jaybhay Vijay on 7/23/2015.
@@ -35,7 +38,14 @@ public class FilterUtility {
         switch (stepFilterType){
             case TODAY:
                 startDate=CalendarUtils.getSqLiteDateFormat(cal);
-                criteria=" and "+ TableSlot.scheduleDate+" = '"+startDate+"'";
+                Set<TimeBoxWhen> whens=CalendarUtils.getPossibleWhenTypesOfDay();
+                String strWhen="(";
+                for(TimeBoxWhen when:whens){
+                    strWhen+=" "+TableSlot.when+" = '"+when.getStartTime()+"' or";
+                }
+                strWhen=strWhen.substring(0,strWhen.lastIndexOf("or"));
+                strWhen=strWhen+")";
+                criteria=" and "+ TableSlot.scheduleDate+" = '"+startDate+"'" ;//+"and "+strWhen+" )";
                 break;
             case THIS_WEEK:
                 startDate=CalendarUtils.getSqLiteDateFormat(cal);
@@ -65,8 +75,9 @@ public class FilterUtility {
                 cal.set(Calendar.MONTH, Calendar.DECEMBER);
                 cal.set(Calendar.DAY_OF_MONTH,31);
                 endDate=CalendarUtils.getSqLiteDateFormat(cal);
-                criteria=" and ( "+TableSlot.scheduleDate+ ">= '"+startDate+"'"+
-                        " and "+TableSlot.scheduleDate+" <= '"+endDate+"' )";
+               // criteria=" and ( "+TableSlot.scheduleDate+ ">= '"+startDate+"'"+
+                //        " and "+TableSlot.scheduleDate+" <= '"+endDate+"' )";
+                criteria=" and ( datetime("+TableSlot.scheduleDate+") between datetime('"+startDate+"') and datetime('"+endDate+"') )";
                 break;
         }
 
@@ -88,6 +99,7 @@ public class FilterUtility {
                 }
             }
             //for each unique goal id create entry in hash map
+            Slot slot=new Slot(context);
             for(long goalId:goalIds){
                 List<PendingStep> goalSteps=new ArrayList<>();
                 for(PendingStep ps: pendingSteps){
