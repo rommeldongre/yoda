@@ -8,9 +8,6 @@ import com.greylabs.yoda.database.QuickStart;
 import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.Prefs;
 
-/**
- * Created by Jaybhay Vijay on 7/19/2015.
- */
 public class Yoda extends Application {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -20,16 +17,6 @@ public class Yoda extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Prefs prefs=Prefs.getInstance(getApplicationContext());
-        if(prefs.getApplicationFirstTimeInstalled()==true){
-            //if application is first time installed then create database,
-            //and initialize database
-            Database.getInstance(getApplicationContext());
-            YodaCalendar.init(getApplicationContext());
-            QuickStart qc=new QuickStart(getApplicationContext());
-            qc.quickStart();
-            prefs.setApplicationFirstTimeInstalled(false);
-        }
     }
 
     @Override

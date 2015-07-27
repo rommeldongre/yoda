@@ -30,13 +30,6 @@ public class Prefs {
 //        editor.commit();
 //    }
 
-    public void setApplicationFirstTimeInstalled(boolean isAppFirstTimeInstalled){
-        editor.putBoolean(Constants.IS_APPLICATION_FIRST_TIME_INSTALLED, isAppFirstTimeInstalled);
-        editor.commit();
-    }
-    public boolean getApplicationFirstTimeInstalled(){
-        return systemPrefs.getBoolean(Constants.IS_APPLICATION_FIRST_TIME_INSTALLED, true);
-    }
     public int getDefaultStepDuration(){
         return systemPrefs.getInt(Constants.DEFAULT_STEP_DURATION, Constants.DEFAULT_STEP_DURATION_VALUE);
     }
@@ -73,42 +66,6 @@ public class Prefs {
         editor.commit();
     }
 
-//    public boolean getBottomMostPriorityOfNewStep(){
-//        return systemPrefs.getBoolean(Constants.BOTTOM_MOST_PRIORITY_OF_NEW_STEP, Constants.BOTTOM_MOST_PRIORITY_OF_NEW_STEP_VALUE);
-//    }
-//
-//    public void setBottomMostPriorityOfNewStep(boolean isChecked){
-//        editor.putBoolean(Constants.BOTTOM_MOST_PRIORITY_OF_NEW_STEP, isChecked);
-//        editor.commit();
-//    }
-//
-//    public boolean getTopMostPriorityOfNewStep(){
-//        return systemPrefs.getBoolean(Constants.TOP_MOST_PRIORITY_OF_NEW_STEP, Constants.TOP_MOST_PRIORITY_OF_NEW_STEP_VALUE);
-//    }
-//
-//    public void setTopMostPriorityOfNewStep(boolean isChecked){
-//        editor.putBoolean(Constants.TOP_MOST_PRIORITY_OF_NEW_STEP, isChecked);
-//        editor.commit();
-//    }
-//
-//    public boolean getDontExpireBehaviour(){
-//        return systemPrefs.getBoolean(Constants.DONT_EXPIRE_BEHAVIOUR, Constants.DONT_EXPIRE_BEHAVIOUR_VALUE);
-//    }
-//
-//    public void setDontExpireBehaviour(boolean isChecked){
-//        editor.putBoolean(Constants.DONT_EXPIRE_BEHAVIOUR, isChecked);
-//        editor.commit();
-//    }
-//
-//    public boolean getExpireBehaviour(){
-//        return systemPrefs.getBoolean(Constants.EXPIRE_BEHAVIOUR, Constants.EXPIRE_BEHAVIOUR_VALUE);
-//    }
-//
-//    public void setExpireBehaviour(boolean isChecked){
-//        editor.putBoolean(Constants.EXPIRE_BEHAVIOUR, isChecked);
-//        editor.commit();
-//    }
-
     public boolean isPriorityNewStepBottomMost(){
         return systemPrefs.getBoolean(Constants.PRIORITY_NEW_STEP_BOTTOM_MOST, Constants.PRIORITY_NEW_STEP_BOTTOM_MOST_VALUE);
     }
@@ -134,5 +91,23 @@ public class Prefs {
 
     public int getWallpaperResourceId() {
         return systemPrefs.getInt(Constants.WALLPAPER_RESOURCE_ID, R.drawable.wallpaper1);
+    }
+
+    public boolean isCalendarInitialized(){
+        return systemPrefs.getBoolean(Constants.IS_CALENDAR_INITIALIZED, false);
+    }
+
+    public void setCalendarInitialized(boolean isChecked){
+        editor.putBoolean(Constants.IS_CALENDAR_INITIALIZED, isChecked);
+        editor.commit();
+    }
+
+    public boolean isOptionFromActQuickStartSelected() {
+        return systemPrefs.getBoolean(Constants.OPTION_FROM_ACTQUICKSTART_SELECTED, false);
+    }
+
+    public void setOptionFromActQuickStartSelected(boolean isChecked){
+        editor.putBoolean(Constants.OPTION_FROM_ACTQUICKSTART_SELECTED, isChecked);
+        editor.commit();
     }
 }
