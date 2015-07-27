@@ -90,7 +90,7 @@ public class TimeBoxWhen implements Serializable{
 
     public int delete(){
         SQLiteDatabase db=database.getWritableDatabase();
-        int numOfRowAffected=db.delete(TableTimeBoxWhen.timeBoxWhen,TableTimeBoxWhen.id + "=" + timeBoxId, null);
+        int numOfRowAffected=db.delete(TableTimeBoxWhen.timeBoxWhen,TableTimeBoxWhen.id+"="+timeBoxId , null);
         return numOfRowAffected;
     }
 

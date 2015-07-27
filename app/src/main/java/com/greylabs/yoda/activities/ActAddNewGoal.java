@@ -131,7 +131,7 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
 
     private void getTimeBoxListAndPopulate() {
         TimeBox timeBox  = new TimeBox(this);
-        timeBoxList = timeBox.getAll();
+        timeBoxList = timeBox.getAll(TimeBox.TimeBoxStatus.INACTIVE);
         if(timeBoxList != null && !timeBoxList.isEmpty()){
             for(int i=0; i<timeBoxList.size();i++){
                 timeBoxNames.add(timeBoxList.get(i).getNickName());

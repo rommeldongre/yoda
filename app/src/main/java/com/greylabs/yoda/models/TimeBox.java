@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.greylabs.yoda.database.Database;
+import com.greylabs.yoda.database.MetaData;
 import com.greylabs.yoda.database.MetaData.TableTimeBox;
 import com.greylabs.yoda.database.MetaData.TableTimeBoxOn;
 import com.greylabs.yoda.database.MetaData.TableTimeBoxWhen;
@@ -115,19 +116,33 @@ public class TimeBox implements Serializable{
         return this;
     }
 
-    public List<TimeBox> getAll(){
+    public List<TimeBox> getAll(TimeBoxStatus status){
         ArrayList<TimeBox> timeBoxes=null;
         SQLiteDatabase db=database.getReadableDatabase();
-        String query="select * " +
-                " "+" from "+ TableTimeBox.timeBox+" ";
+        String query="";
+        String cols=" t."+TableTimeBox.id+" as tbId , t."+TableTimeBox.nickName+" as timeBoxNickname,"+TableTimeBox.on+"," +
+                " "+TableTimeBox.till;
+        String query1= " select  " +cols+
+                " "+" from "+ TableTimeBox.timeBox+" as t join  "+ MetaData.TableGoal.goal+" as g" +
+                " "+" on ( t."+TableTimeBox.id+" = g."+ MetaData.TableGoal.timeBoxId+" ) ";
+        String query2=" select  " +cols+
+                " "+" from "+ TableTimeBox.timeBox+" as t ";
+        if(status==TimeBoxStatus.ACTIVE){
+            query= query1;
+
+        }else if(status==TimeBoxStatus.INACTIVE){
+            query= " "+query2+" except "+query1+" ";
+        }else{
+            query=query2;
+        }
 
         Cursor c=db.rawQuery(query, null);
         if(c.moveToFirst()){
             timeBoxes=new ArrayList<>();
             do{
                 TimeBox timeBox=new TimeBox(context);
-                timeBox.id=c.getInt(c.getColumnIndex(TableTimeBox.id));
-                timeBox.nickName=c.getString(c.getColumnIndex(TableTimeBox.nickName));
+                timeBox.id=c.getLong(c.getColumnIndex("tbId"));
+                timeBox.nickName=c.getString(c.getColumnIndex("timeBoxNickname"));
 
                 timeBox.timeBoxOn=new TimeBoxOn(context,
                         com.greylabs.yoda.enums.TimeBoxOn.getIntegerToEnumType(c.getInt(c.getColumnIndex(TableTimeBox.on))));
@@ -166,11 +181,11 @@ public class TimeBox implements Serializable{
     }
 
     public int delete(){
+        this.timeBoxOn.delete();
+        this.timeBoxWhen.delete();
         SQLiteDatabase db=database.getWritableDatabase();
         int numOfRowAffected=db.delete(TableTimeBox.timeBox, TableTimeBox.id + "=" + id, null);
         //db.close();
-        this.timeBoxOn.delete();
-        this.timeBoxWhen.delete();
         return numOfRowAffected;
     }
 
@@ -209,5 +224,22 @@ public class TimeBox implements Serializable{
                 ", timeBoxWhen=" + timeBoxWhen +
                 '}';
     }
+
+    /**********************************************************************************************/
+    // Utils
+    /**********************************************************************************************/
+    public enum TimeBoxStatus {
+        ACTIVE,INACTIVE,NONE;
+        public static TimeBoxStatus getIntegerToEnumType(int type){
+            TimeBoxStatus timeBoxStatus=null;
+            switch (type){
+                case 0: timeBoxStatus=ACTIVE;break;
+                case 1: timeBoxStatus=INACTIVE;break;
+                default:timeBoxStatus=NONE;
+            }
+            return timeBoxStatus;
+        }
+    }
+
 
 }

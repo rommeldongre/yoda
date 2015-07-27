@@ -351,8 +351,6 @@ public class PendingStep implements Serializable {
                 " " + " on ( p." +TablePendingStep.slotId+" = s."+TableSlot.id+" ) "+
                 " " + " where "  + TablePendingStep.type + "!=" + PendingStepType.SUB_STEP.ordinal()+" " +
                 " "+filterCriteria;
-//        p." + TablePendingStep.goalId + " = " + goalId + " " +
-//        " " + " and
 
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {

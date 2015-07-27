@@ -219,7 +219,10 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
 
             case R.id.actionSaveActCreateTimeBox :
                 TimeBox timeBox=createTimeBoxObjectFromUI();
-                if(timeBox!=null){
+                if(timeBox!=null && timeBox.getTimeBoxOn()!=null && timeBox.getTimeBoxWhen()!=null){
+                    timeBox.initDatabase(this);
+                    timeBox.getTimeBoxOn().initDatabase(this);
+                    timeBox.getTimeBoxWhen().initDatabase(this);
                     timeBox.save();
                     Logger.showMsg(this, "TimeBox saved");
                     this.finish();
@@ -538,16 +541,14 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
         edtSummary.setText(createSummaryString());
     }
     private TimeBox createTimeBoxObjectFromUI(){
-      TimeBox timeBox=null;
        if(!timeBoxWhenSet.isEmpty() && !timeBoxOnSubValueSet.isEmpty() && timeBoxTill!=null && timeBoxOn!=null){
-           timeBox=new TimeBox(this);
            com.greylabs.yoda.models.TimeBoxWhen timeBoxWhen=new com.greylabs.yoda.models.TimeBoxWhen(this);
            com.greylabs.yoda.models.TimeBoxOn timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(this,this.timeBoxOn);
            timeBoxWhen.setWhenValues(timeBoxWhenSet);
            timeBoxOn.setSubValues(timeBoxOnSubValueSet);
-           timeBox.setTimeBoxWhen(timeBoxWhen);
-           timeBox.setTimeBoxOn(timeBoxOn);
-           timeBox.setTillType(timeBoxTill);
+           currentTimeBox.setTimeBoxWhen(timeBoxWhen);
+           currentTimeBox.setTimeBoxOn(timeBoxOn);
+           currentTimeBox.setTillType(timeBoxTill);
        }else if(timeBoxWhenSet.isEmpty()){
            Logger.showMsg(this,getString(R.string.msgActCreateTimeBoxSelectWhenTime));
        }else if(timeBoxOn==null || timeBoxOnSubValueSet.isEmpty()){
@@ -555,10 +556,10 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
        }else if(timeBoxTill==null){
            Logger.showMsg(this,getString(R.string.msgActCreateTimeBoxSelectTillTime));
        }
-        if(timeBox!=null && edtSummary.getText()!=null && !edtSummary.getText().equals("")){
-           timeBox.setNickName(edtSummary.getText().toString());
+        if(currentTimeBox!=null && edtSummary.getText()!=null && !edtSummary.getText().equals("")){
+           currentTimeBox.setNickName(edtSummary.getText().toString());
         }
-        return timeBox;
+          return currentTimeBox;
     }
 
     private void invalidateOnValueSelections(){

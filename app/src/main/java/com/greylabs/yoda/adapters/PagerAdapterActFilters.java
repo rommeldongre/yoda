@@ -76,8 +76,8 @@ public class PagerAdapterActFilters extends FragmentPagerAdapter
         return titles[position];
     }
 
-//    @Override
-//    public int getItemPosition(Object object) {
-//        return POSITION_NONE;
-//    }
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
+    }
 }

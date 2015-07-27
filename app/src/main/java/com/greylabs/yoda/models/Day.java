@@ -177,5 +177,29 @@ public class Day {
     }
 
 
+    public List<Day> getAll(){
+        List<Day> days=null;
+        String query="select * " +
+                " "+" from "+TableDay.day+" " +
+                " "+" where "+TableDay.id+" = "+id;
+        SQLiteDatabase db=database.getReadableDatabase();
+        Cursor c=db.rawQuery(query,null);
+        if(c.moveToFirst()){
+            days=new ArrayList<>();
+            do{
+                Day day=new Day(context);
+                day.setId(c.getInt(c.getColumnIndex(TableDay.id)));
+                day.setDayOfYear(c.getInt(c.getColumnIndex(TableDay.dayOfYear)));
+                day.setDate(CalendarUtils.parseDate(c.getString(c.getColumnIndex(TableDay.date))));
+                day.setDayOfWeek(c.getInt(c.getColumnIndex(TableDay.dayOfWeek)));
+                day.setMonthOfYear(c.getInt(c.getColumnIndex(TableDay.monthOfYear)));
+                day.setQuarterOfYear(c.getInt(c.getColumnIndex(TableDay.quarterOfYear)));
+                day.setYear(c.getInt(c.getColumnIndex(TableDay.year)));
+                days.add(day);
+            }while (c.moveToNext());
+        }
+        return days;
+    }
+
 
 }
