@@ -18,6 +18,8 @@ import com.greylabs.yoda.adapters.AdapterRecyclerViewActGoalList;
 import com.greylabs.yoda.adapters.DragSortRecycler;
 import com.greylabs.yoda.interfaces.OnClickOfRecyclerViewActGoalList;
 import com.greylabs.yoda.models.Goal;
+import com.greylabs.yoda.models.TimeBox;
+import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Logger;
 
@@ -34,6 +36,8 @@ public class ActGoalList  extends ActionBarActivity implements OnClickOfRecycler
     RecyclerView recyclerView;
     AdapterRecyclerViewActGoalList mAdapter;
     LinearLayoutManager mLayoutManager;
+
+    private YodaCalendar yodaCalendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,10 +174,15 @@ public class ActGoalList  extends ActionBarActivity implements OnClickOfRecycler
                         alertLogout.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                goalArrayList.get(Position).delete();
-                                Logger.showMsg(ActGoalList.this, Constants.MSG_GOAL_DELETED);
-                                getGoalArrayFromLocal();
-                                mAdapter.notifyDataSetChanged();
+                                Goal goal=goalArrayList.get(Position);
+                                int numberOfRowsAffected=goal.delete();
+                                if(numberOfRowsAffected==1) {
+                                    getGoalArrayFromLocal();
+                                    mAdapter.notifyDataSetChanged();
+                                    yodaCalendar=new YodaCalendar(ActGoalList.this);
+                                    yodaCalendar.detachTimeBox(goal.getTimeBoxId());
+                                    Logger.showMsg(ActGoalList.this, Constants.MSG_GOAL_DELETED);
+                                }
                             }
                         });
                         alertLogout.setNegativeButton("Cancel", null);

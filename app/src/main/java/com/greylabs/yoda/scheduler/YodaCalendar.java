@@ -40,13 +40,15 @@ public class YodaCalendar {
     /**********************************************************************************************/
     //Constructors
     /**********************************************************************************************/
-    public YodaCalendar(Context context, TimeBox timeBox) {
+    public YodaCalendar(Context context){
         this.context = context;
-        this.timeBox = timeBox;
         this.slot=new Slot(context);
+    }
+    public YodaCalendar(Context context, TimeBox timeBox) {
+        this(context);
+        this.timeBox = timeBox;
         slots=slot.getAll(timeBox);
     }
-
     /**********************************************************************************************/
     //Methods
     /**********************************************************************************************/
@@ -156,7 +158,8 @@ public class YodaCalendar {
      * @return returns value greater than 0  if timebox detached from goal successfully
      * otherwise 0 indicating that timebox was not attached previously .
      */
-    public int detachTimeBox(){
+    public int detachTimeBox(long timeBoxId){
+        slots=slot.getAll(timeBoxId);
         int slotCount=0;
         if(slots!=null) {
             for (Slot slot : slots) {
@@ -178,13 +181,13 @@ public class YodaCalendar {
      * @return returns value greater than 0  if timebox does not conflict and updated successfully
      * otherwise 0
      */
-    public int updateCalendar(long goalId){
+    public int updateTimeBox(long oldTimeBoxId ,long goalId){
         int slotCount=0;
-        if(slots!=null && validateTimeBoxForUpdate()){
+        if(slots!=null){
             //above condition confirms that timebox does not conflicts with other
             //we need to detach first all slots that have been assigned to it to ensure that
             // slot is free.
-            detachTimeBox();
+            detachTimeBox(oldTimeBoxId);
             for (Slot slot:slots){
                 slot.setTimeBoxId(timeBox.getId());
                 slot.setGoalId(goalId);
@@ -322,19 +325,51 @@ public class YodaCalendar {
         }else{
             isValid=false;
         }
-        if(slots.size()==0)
+        if(slots.size()==0 | slots==null)
             isValid=false;
         return isValid;
     }
 
-    private boolean validateTimeBoxForUpdate(){
+    public boolean validateTimeBoxForUpdate(long oldTimeBoxId){
         boolean isValid=true;
-        for(Slot slot:slots){
-            if(slot.getTimeBoxId()!=0 & slot.getTimeBoxId()!=timeBox.getId()) {
-                isValid = false;
+
+        //remove today's passed slots
+        Calendar cal=Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        String  sqliteDate=cal.get(Calendar.YEAR)+"-"+(cal.get(Calendar.MONTH)+1)+"-"+cal.get(Calendar.DATE)+" " +
+                cal.get(Calendar.HOUR_OF_DAY)+":"+cal.get(Calendar.MINUTE)+":"+cal.get(Calendar.SECOND);
+        Date date=CalendarUtils.parseDate(sqliteDate);
+        Iterator<Slot> itSlots=slots.iterator();
+        Set<TimeBoxWhen> whens=CalendarUtils.getPossibleWhenTypesOfDay();
+        int i=0;
+        while (itSlots.hasNext()){
+            Slot slot=itSlots.next();
+            for(TimeBoxWhen when:whens) {
+                if (date.compareTo(slot.getScheduleDate()) == 0 && (when!=slot.getWhen())) {
+                    itSlots.remove();
+                }
+            }
+            if(i==5)
                 break;
+            i++;
+        }
+
+        if(slots!=null) {
+            for (Slot slot : slots) {
+                if (slot.getTimeBoxId() != 0 ) {
+                    if(slot.getTimeBoxId() != oldTimeBoxId) {
+                        isValid = false;
+                        break;
+                    }
+                }
             }
         }
+        if(slots.size()==0 || slots==null)
+            isValid=false;
+
         return isValid;
 
     }

@@ -48,6 +48,7 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
     Goal goal;
     boolean isSaved = false;
     private YodaCalendar yodaCalendar;
+    private long oldSelectedTimeBoxId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,8 +107,8 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
                     getSupportActionBar().setTitle(goal.getNickName());
 
                     edtNickName.setText(goal.getNickName().toString());
-                    timeSpinner.setSelection(spinnerArrayAdapter.getPosition(intent.getExtras().getString(Constants.TIMEBOX_NICK_NAME)));
-
+                    timeSpinner.setSelection(spinnerArrayAdapter.getPosition(intent.getExtras().getString(Constants.TIMEBOX_NICK_NAME)), true);
+                    oldSelectedTimeBoxId=goal.getTimeBoxId();
                     edtObjective.setText(goal.getObjective());
                     edtKeyResult.setText(goal.getKeyResult());
                     edtGoalReason.setText(goal.getReason());
@@ -177,12 +178,21 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
         if(yodaCalendar==null){
             yodaCalendar=new YodaCalendar(this,timeBoxList.get(timeSpinner.getSelectedItemPosition()));
         }
-        if(yodaCalendar.validateTimeBox()==false){
+        String caller=getIntent().getStringExtra(Constants.CALLER);
+        boolean isValidTimeBox=false;
+        if(caller.equals(Constants.ACT_GOAL_DETAILS)) {
+            isValidTimeBox = yodaCalendar.validateTimeBoxForUpdate(oldSelectedTimeBoxId);
+        }else{
+            isValidTimeBox=yodaCalendar.validateTimeBox();
+        }
+
+        if(isValidTimeBox==false){
             AlertDialog.Builder alert=new AlertDialog.Builder(this);
-            alert.setPositiveButton("Ok",null);
+            alert.setPositiveButton("Ok", null);
             alert.setMessage(getString(R.string.msgActAddNewGoalTimeBoxNotApplicable));
             alert.show();
         }else if(edtNickName.getText() != null && edtNickName.getText().length() > 0 ){
+            goal.initDatabase(this);
             goal.setNickName(edtNickName.getText().toString());
             goal.setTimeBoxId(timeBoxList.get(timeSpinner.getSelectedItemPosition()).getId());
             goal.setObjective(edtObjective.getText().toString());
@@ -193,12 +203,14 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
             goal.save();
             //AsyncTaskAttachTimeBox asyncTaskAttachTimeBox=new AsyncTaskAttachTimeBox(this,new MyHandler(),yodaCalendar,"Please Wait,Attaching TimeBox",goal.getId());
             //asyncTaskAttachTimeBox.execute(yodaCalendar);
+            yodaCalendar.detachTimeBox(oldSelectedTimeBoxId);
             yodaCalendar.attachTimeBox(goal.getId());
             isSaved = true;
             Logger.showMsg(this, getResources().getString(R.string.msgGoalSavedActAddNewGoal));
         }else {
             Logger.showMsg(this, getResources().getString(R.string.msgEnterGoalNickNameActAddNewGoal));
         }
+
     }
 
     @Override
@@ -256,7 +268,7 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
     @Override
     protected void onResume() {
         super.onResume();
-        timeSpinner.setSelection(0);
+        //timeSpinner.setSelection(0);
     }
 
     public class MyHandler extends Handler {
