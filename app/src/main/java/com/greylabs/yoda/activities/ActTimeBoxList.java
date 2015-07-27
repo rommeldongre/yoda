@@ -24,6 +24,7 @@ import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Logger;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ActTimeBoxList extends ActionBarActivity implements OnClickOfRecyclerViewActTimeboxList {
 
@@ -85,8 +86,9 @@ public class ActTimeBoxList extends ActionBarActivity implements OnClickOfRecycl
     private void getTimeBoxArrayFromLocal() {
         timeBoxArrayList.clear();
         TimeBox timeBox = new TimeBox(this);
-        if(timeBox.getAll() != null)
-            timeBoxArrayList.addAll(timeBox.getAll());
+        List<TimeBox> timeBoxes= timeBox.getAll(TimeBox.TimeBoxStatus.NONE);
+        if(timeBoxes != null)
+            timeBoxArrayList.addAll(timeBoxes);
         checkForEmptyViewVisibility();
     }
 
