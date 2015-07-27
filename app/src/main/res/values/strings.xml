@@ -129,6 +129,11 @@
     <string name="tvMissedActNowFilter">Missed it. - Log my excuse</string>
     <string name="tvEmptyViewActNowFilter">No step scheduled at this time</string>
     <string name="btnQuickStartActQuickStart">Quick Start</string>
+    <string name="btnNewStepActQuickStart">New Step</string>
+    <string name="btnImportTaskActQuickStart">Import Tasks</string>
+    <string name="subtitleNewStepActQuickStart"><![CDATA[Create your own goals, steps & timeboxes]]></string>
+    <string name="subtitleImportTaskActQuickStart"><![CDATA[Import tasks from GTasks & sync them with Yoda]]></string>
+    <string name="subtitleQuickStartActQuickStart"><![CDATA[Quick start with predefined goals, steps & timeboxes]]></string>
     <string-array name="arrayStepTypeActAddNewStep">
         <item>Single Step</item>
         <item>Series</item>

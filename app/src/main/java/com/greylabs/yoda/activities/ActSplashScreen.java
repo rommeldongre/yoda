@@ -49,7 +49,7 @@ public class ActSplashScreen extends Activity{
         iv.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (!prefs.isCalendarInitialized() && !prefs.isOptionFromActQuickStartSelected()){
+                if (prefs.isCalendarInitialized() && !prefs.isOptionFromActQuickStartSelected()){
                     startActivity(new Intent(ActSplashScreen.this, ActQuickStart.class));
                     ActSplashScreen.this.finish();
                 }else if (!prefs.isCalendarInitialized()) {

@@ -79,4 +79,5 @@ public class Constants {
     public static final String IS_CALENDAR_INITIALIZED = "IS_CALENDAR_INITIALIZED";
     public static final String MSG_INITIALIZING_CALENDAR = "Initializing Calendar, Please Wait";
     public static final String OPTION_FROM_ACTQUICKSTART_SELECTED = "OPTION_FROM_ACTQUICKSTART_SELECTED";
+    public static final String MSG_INITIALIZING_QUICK_START = "Please Wait...";
 }

@@ -11,7 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.greylabs.yoda.R;
-import com.greylabs.yoda.database.QuickStart;
 import com.greylabs.yoda.models.Day;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.utils.Constants;
@@ -227,7 +226,7 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
     public void onMenuCollapsed() {
 //        layoutOverlapping.setVisibility(View.GONE);
         layoutToBeHidden.setVisibility(View.VISIBLE);
-        layoutSettingsBackground.setBackgroundColor(getResources().getColor(R.color.transperent));
+        layoutSettingsBackground.setBackgroundColor(getResources().getColor(R.color.transparent));
     }
 
     @Override

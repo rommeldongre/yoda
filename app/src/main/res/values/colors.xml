@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="white">#FFFF</color>
-    <color name="transperent">#00000000</color>
+    <color name="transparent">#00000000</color>
     <color name="transperent_total_arc_background">#33000000</color>
     <color name="transperent_white">#33ffffff</color>
 
@@ -32,4 +32,6 @@
     <color name="blue_semi_transparent">#805677fc</color>
     <color name="blue_semi_transparent_pressed">#80738ffe</color>
     <color name="transperent_dark_white">#88ffffff</color>
+    <color name="background_btnnewstepactquickstart">#FF5722</color>
+    <color name="background_btnimporttaskactquickstart">#FFEB3B</color>
 </resources>
