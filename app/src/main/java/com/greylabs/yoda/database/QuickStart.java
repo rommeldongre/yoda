@@ -285,7 +285,7 @@ public final class QuickStart {
 
         //8
         goal=new Goal(context);
-        goal.setNickName(Constants.NICKNAME_UNPLANNED_GOAL);
+        goal.setNickName(Constants.NICKNAME_STRETCH_GOAL);
         goal.setObjective("");
         goal.setKeyResult("");
         goal.setTimeBoxId(timeBoxIds.get(7));

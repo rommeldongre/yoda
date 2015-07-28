@@ -7,9 +7,7 @@ import com.greylabs.yoda.enums.SubValue;
 import com.greylabs.yoda.enums.TimeBoxOn;
 import com.greylabs.yoda.enums.TimeBoxTill;
 import com.greylabs.yoda.enums.TimeBoxWhen;
-import com.greylabs.yoda.enums.WeekDay;
 import com.greylabs.yoda.models.Goal;
-import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Logger;
@@ -65,7 +63,7 @@ public final class NewStep {
         //unplanned goal
         Goal goal;
         goal=new Goal(context);
-        goal.setNickName(Constants.NICKNAME_UNPLANNED_GOAL);
+        goal.setNickName(Constants.NICKNAME_STRETCH_GOAL);
         goal.setObjective("");
         goal.setKeyResult("");
         goal.setTimeBoxId(timeBoxIds.get(0));

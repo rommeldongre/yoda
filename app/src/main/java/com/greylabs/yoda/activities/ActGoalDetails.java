@@ -14,7 +14,6 @@ import com.greylabs.yoda.R;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.utils.Constants;
-import com.greylabs.yoda.utils.Logger;
 
 public class ActGoalDetails extends ActionBarActivity {
 
@@ -70,7 +69,7 @@ public class ActGoalDetails extends ActionBarActivity {
                 this.finish();
                 break;
             case R.id.actionEditActGoalDetails :
-                if(!currentGoal.getNickName().equals(Constants.NICKNAME_UNPLANNED_GOAL)){
+                if(!currentGoal.getNickName().equals(Constants.NICKNAME_STRETCH_GOAL)){
                     Intent intent = new Intent(this, ActAddNewGoal.class);
                     intent.putExtra(Constants.GOAL_OBJECT, currentGoal);
                     intent.putExtra(Constants.CALLER, Constants.ACT_GOAL_DETAILS);

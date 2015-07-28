@@ -18,7 +18,6 @@ import com.greylabs.yoda.adapters.AdapterRecyclerViewActGoalList;
 import com.greylabs.yoda.adapters.DragSortRecycler;
 import com.greylabs.yoda.interfaces.OnClickOfRecyclerViewActGoalList;
 import com.greylabs.yoda.models.Goal;
-import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Logger;
@@ -117,7 +116,13 @@ public class ActGoalList  extends ActionBarActivity implements OnClickOfRecycler
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home :
-                this.finish();
+                if(isOperationEdit){
+                    menu.findItem(R.id.actionEditActGoalList).setVisible(true);
+                    menu.findItem(R.id.actionSaveActGoalList).setVisible(false);
+                    isOperationEdit = false;
+                }else {
+                    this.finish();
+                }
                 break;
             case R.id.actionEditActGoalList :
                 menu.findItem(R.id.actionEditActGoalList).setVisible(false);
@@ -133,7 +138,6 @@ public class ActGoalList  extends ActionBarActivity implements OnClickOfRecycler
                 mAdapter = new AdapterRecyclerViewActGoalList(this, goalArrayList, isOperationEdit);
                 recyclerView.setAdapter(mAdapter);
                 saveGoalsByNewOrder();
-                Logger.showMsg(this, "Changes Saved");
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -151,7 +155,7 @@ public class ActGoalList  extends ActionBarActivity implements OnClickOfRecycler
         if(isOperationEdit){
             switch (operation){
                 case Constants.OPERATION_EDIT :
-                    if(!goalArrayList.get(Position).getNickName().equals(Constants.NICKNAME_UNPLANNED_GOAL)){
+                    if(!goalArrayList.get(Position).getNickName().equals(Constants.NICKNAME_STRETCH_GOAL)){
                         Intent intent = new Intent(ActGoalList.this, ActGoalDetails.class);
                         intent.putExtra(Constants.GOAL_OBJECT, goalArrayList.get(Position));
                         intent.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, true);
@@ -169,7 +173,7 @@ public class ActGoalList  extends ActionBarActivity implements OnClickOfRecycler
                     break;
 
                 case Constants.OPERATION_DELETE :
-                    if(!goalArrayList.get(Position).getNickName().equals(Constants.NICKNAME_UNPLANNED_GOAL)){
+                    if(!goalArrayList.get(Position).getNickName().equals(Constants.NICKNAME_STRETCH_GOAL)){
                         AlertDialog.Builder alertLogout = new AlertDialog.Builder(this);
                         alertLogout.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override

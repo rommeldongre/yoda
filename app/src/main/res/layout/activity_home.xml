@@ -30,20 +30,21 @@
             <!--fab:fab_addButtonColorPressed="@color/white_pressed"-->
             <!--fab:fab_addButtonPlusIconColor="@color/half_black"-->
 
-            <com.greylabs.yoda.views.MyFloatingActionButton
-                android:id="@+id/btnMyGoalsActHome"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                fab:fab_size="mini"
-                fab:fab_colorNormal="@color/transperent_total_arc_background"
-                fab:fab_colorPressed="@color/transperent_more"
-                fab:fab_title="My Goals"/>
+            <!--<com.greylabs.yoda.views.MyFloatingActionButton-->
+                <!--android:id="@+id/btnMyGoalsActHome"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--fab:fab_size="mini"-->
+                <!--fab:fab_colorNormal="@color/transperent_total_arc_background"-->
+                <!--fab:fab_colorPressed="@color/transperent_more"-->
+                <!--fab:fab_title="My Goals"/>-->
 
             <com.greylabs.yoda.views.MyFloatingActionButton
                 android:id="@+id/btnMyTimeBoxesActHome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 fab:fab_size="mini"
+                fab:fab_icon="@drawable/ic_btn_my_timeboxes_act_home"
                 fab:fab_colorNormal="@color/transperent_total_arc_background"
                 fab:fab_colorPressed="@color/transperent_more"
                 fab:fab_title="My TimeBoxes"/>
@@ -53,6 +54,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 fab:fab_size="mini"
+                fab:fab_icon="@drawable/ic_btn_default_duration_act_home"
                 fab:fab_colorNormal="@color/transperent_total_arc_background"
                 fab:fab_colorPressed="@color/transperent_more"
                 fab:fab_title="Default Duration"/>
@@ -62,6 +64,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 fab:fab_size="mini"
+                fab:fab_icon="@drawable/ic_btn_autosync_act_home"
                 fab:fab_colorNormal="@color/transperent_total_arc_background"
                 fab:fab_colorPressed="@color/transperent_more"
                 fab:fab_title="Autosync with Google"/>
@@ -71,6 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 fab:fab_size="mini"
+                fab:fab_icon="@drawable/ic_btn_export_tasks_act_home"
                 fab:fab_colorNormal="@color/transperent_total_arc_background"
                 fab:fab_colorPressed="@color/transperent_more"
                 fab:fab_title="Export To Google Calender"/>
@@ -80,6 +84,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 fab:fab_size="mini"
+                fab:fab_icon="@drawable/ic_btn_import_tasks_act_home"
                 fab:fab_colorNormal="@color/transperent_total_arc_background"
                 fab:fab_colorPressed="@color/transperent_more"
                 fab:fab_title="Import from Google Tasks"/>
@@ -89,6 +94,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 fab:fab_size="mini"
+                fab:fab_icon="@drawable/ic_btn_change_wallpaper_act_home"
                 fab:fab_colorNormal="@color/transperent_total_arc_background"
                 fab:fab_colorPressed="@color/transperent_more"
                 fab:fab_title="Change Home Screen Wallpaper"
@@ -117,7 +123,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dip"
                 android:layout_marginLeft="5dip"
-                android:layout_alignParentBottom="true">
+                android:layout_alignParentBottom="true"
+                android:layout_marginRight="76dp" >
 
                 <com.greylabs.yoda.views.MyFloatingActionButton
                     android:id="@+id/btnAddStepActHome"
@@ -140,6 +147,16 @@
                     fab:fab_colorNormal="@color/transperent_total_arc_background"
                     fab:fab_colorPressed="@color/transperent_more"
                     android:layout_centerInParent="true"/>
+
+                <com.greylabs.yoda.views.MyFloatingActionButton
+                    android:id="@+id/btnMyGoalsActHome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    fab:fab_icon="@drawable/ic_btn_my_goals_act_home"
+                    fab:fab_colorNormal="@color/transperent_total_arc_background"
+                    fab:fab_colorPressed="@color/transperent_more"
+                    fab:fab_title="My Goals"
+                    android:layout_alignParentRight="true"/>
             </RelativeLayout>
 
             <com.greylabs.yoda.views.MyArcProgress
@@ -150,7 +167,6 @@
                 android:layout_above="@id/BottomLayoutActHome"
                 android:layout_below="@id/scrollViewActHome"
                 android:layout_margin="10dp" />
-            <!--android:background="@color/transperent"-->
 
             <RelativeLayout
                 android:id="@+id/layoutOverlappingActHome"
