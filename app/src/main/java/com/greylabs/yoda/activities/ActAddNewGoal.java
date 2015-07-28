@@ -48,6 +48,7 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
     Goal goal;
     boolean isSaved = false;
     private YodaCalendar yodaCalendar;
+    String caller;
     private long oldSelectedTimeBoxId;
 
     @Override
@@ -86,7 +87,8 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
         timeSpinner.setOnItemSelectedListener(this);
 
         Intent intent = getIntent();
-        switch (intent.getStringExtra(Constants.CALLER)){
+        caller = intent.getStringExtra(Constants.CALLER);
+        switch (caller){
             case Constants.ACT_HOME :
                 if(!intent.getExtras().getBoolean(Constants.GOAL_ATTACHED_IN_EXTRAS)){
                     goal = new Goal(this);

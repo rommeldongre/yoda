@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 import com.greylabs.yoda.R;
+import com.greylabs.yoda.threads.NewStepAsyncTask;
 import com.greylabs.yoda.threads.QuickStartAsyncTask;
 import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.Prefs;
@@ -52,7 +53,7 @@ public class ActQuickStart extends Activity implements View.OnClickListener {
                 break;
 
             case R.id.rlNewStepActQuickStart :
-                Logger.showMsg(this, "new step");
+                new NewStepAsyncTask(this, new MyHandler()).execute();
                 break;
 
             case R.id.rlImportTaskActQuickStart :

@@ -1,8 +1,10 @@
 package com.greylabs.yoda.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,7 +21,6 @@ public class ActGoalDetails extends ActionBarActivity {
     Toolbar toolbar;
     Goal currentGoal;
     TimeBox currentTimeBox;
-
     TextView tvNickName, tvTime, tvObjective, tvKeyResult, tvReason, tvReward, tvBuddy;
 
     @Override
@@ -69,12 +70,23 @@ public class ActGoalDetails extends ActionBarActivity {
                 this.finish();
                 break;
             case R.id.actionEditActGoalDetails :
-                Intent intent = new Intent(this, ActAddNewGoal.class);
-                intent.putExtra(Constants.GOAL_OBJECT, currentGoal);
-                intent.putExtra(Constants.CALLER, Constants.ACT_GOAL_DETAILS);
-                intent.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, true);
-                intent.putExtra(Constants.TIMEBOX_NICK_NAME, currentTimeBox.getNickName());
-                this.startActivity(intent);
+                if(!currentGoal.getNickName().equals(Constants.NICKNAME_UNPLANNED_GOAL)){
+                    Intent intent = new Intent(this, ActAddNewGoal.class);
+                    intent.putExtra(Constants.GOAL_OBJECT, currentGoal);
+                    intent.putExtra(Constants.CALLER, Constants.ACT_GOAL_DETAILS);
+                    intent.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, true);
+                    intent.putExtra(Constants.TIMEBOX_NICK_NAME, currentTimeBox.getNickName());
+                    this.startActivity(intent);
+                }else {
+                    AlertDialog.Builder alertLogout = new AlertDialog.Builder(this);
+                    alertLogout.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                        }
+                    });
+                    alertLogout.setMessage(Constants.MSG_CANT_EDIT_DELETE_GOAL);
+                    alertLogout.show();
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);
