@@ -129,11 +129,11 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
 //            case Constants.ACT_GOAL_LIST :
 //                break;
         }
-
     }
 
     private void getTimeBoxListAndPopulate() {
         TimeBox timeBox  = new TimeBox(this);
+        timeBoxNames.add(getResources().getString(R.string.timeSpinnerHintActAddNewGoal));//add hint
         timeBoxList = timeBox.getAll(TimeBox.TimeBoxStatus.INACTIVE);
         if(timeBoxList != null && !timeBoxList.isEmpty()){
             for(int i=0; i<timeBoxList.size();i++){
@@ -256,10 +256,11 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if(position+1 == timeBoxNames.size()){
+        if(position>0 && position+1 == timeBoxNames.size()){
             Intent intent = new Intent(this, ActAddTimeBox.class);
             intent.putExtra(Constants.CALLER, Constants.ACT_ADD_NEW_GOAL);
             startActivity(intent);
+            timeSpinner.setSelection(0);
         }
     }
 
