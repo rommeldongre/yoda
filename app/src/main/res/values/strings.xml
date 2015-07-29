@@ -57,7 +57,8 @@
     <string name="rbBottomMostActSettingsDefaultDuration">Bottom-most</string>
     <string name="rbTopMostActSettingsDefaultDuration">Top-most</string>
     <string name="titleActChangeStepPriority">Change Step Priority</string>
-    <string name="tvEmptyViewActChangeStepPriority">No Steps to Show</string>
+    <string name="tvEmptyViewActStepList">No Steps to Show</string>
+    <string name="tvEmptyViewPendingStepsActStepList">No Pending Steps to Show</string>
     <string name="tvEmptyViewActGoalList">No Goal to Show</string>
     <string name="actionSave">Save</string>
     <string name="titleActCeateTimeBox">New TimeBox</string>
@@ -134,6 +135,8 @@
     <string name="subtitleNewStepActQuickStart"><![CDATA[Create your own goals, steps & timeboxes]]></string>
     <string name="subtitleImportTaskActQuickStart"><![CDATA[Import tasks from GTasks & sync them with Yoda]]></string>
     <string name="subtitleQuickStartActQuickStart"><![CDATA[Quick start with predefined goals, steps & timeboxes]]></string>
+    <string name="actionToggleSteps">Toggle Steps</string>
+    <string name="titlePendingStepsActStepsList">Pending Steps</string>
     <string-array name="arrayStepTypeActAddNewStep">
         <item>Single Step</item>
         <item>Series</item>

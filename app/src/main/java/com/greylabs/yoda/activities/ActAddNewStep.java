@@ -57,7 +57,8 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
     ArrayList<PendingStep> stepArrayList = new ArrayList<>();
     Prefs prefs;
     int newPosition = 0;
-
+    String caller;
+    Intent intent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,6 +67,8 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
     }
 
     private void initialize() {
+        intent = getIntent();
+        caller = intent.getStringExtra(Constants.CALLER);
         prefs = Prefs.getInstance(this);
         toolbar = (Toolbar) findViewById(R.id.toolBarActAddNewStep);
         setSupportActionBar(toolbar);
@@ -139,8 +142,8 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
 
     private void getGoalListAndPopulate() {
         // check context and populate spinner else show only one currentGoal
-        Intent intent = getIntent();
-        switch (intent.getStringExtra(Constants.CALLER)){
+        switch (caller){
+
             case Constants.ACT_HOME :
                 getGoalListFromLocal();
                 currentStep = new PendingStep(this);
@@ -154,35 +157,40 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
                 break;
 
             case Constants.ACT_STEP_LIST :
-                currentStep = (PendingStep) intent.getSerializableExtra(Constants.STEP_OBJECT);
-                getGoalListFromLocal();
-                getSupportActionBar().setTitle(currentStep.getNickName());
-                edtStepName.setText(currentStep.getNickName());
-
-                int oldGoalPosition = 0;
-                for(int i=0; i<goalList.size();i++){
-                    if(currentStep.getGoalId() == goalList.get(i).getId())
-                        oldGoalPosition = i;
-                }
-                goalSpinner.setSelection(oldGoalPosition);
-                goalChosen = oldGoalPosition;
-
-                ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, android.R.id.text1);
-                spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                stepPrioritySpinner.setAdapter(spinnerAdapter);
-                spinnerAdapter.add("" + currentStep.getPriority());
-                spinnerAdapter.add("Top-most");
-                spinnerAdapter.add("Bottom-most");
-                spinnerAdapter.add("Change Manually");
-                stepPrioritySpinner.setSelection(0);
-
-                if(currentStep.getPendingStepType() == PendingStep.PendingStepType.SINGLE_STEP){
-                    stepTypeSpinner.setSelection(0);
-                    sbTimeSingleStep.setProgress(currentStep.getTime());
+                if(intent.getStringExtra(Constants.OPERATION).equals(Constants.OPERATION_ADD)){
+                    getGoalListFromLocal();
+                    currentStep = new PendingStep(this);
                 }else {
-                    stepTypeSpinner.setSelection(1);
-                    sbTimeSeriesStep.setProgress(currentStep.getTime());
-                    sbNoOfSteps.setProgress(currentStep.getStepCount());
+                    currentStep = (PendingStep) intent.getSerializableExtra(Constants.STEP_OBJECT);
+                    getGoalListFromLocal();
+                    getSupportActionBar().setTitle(currentStep.getNickName());
+                    edtStepName.setText(currentStep.getNickName());
+
+                    int oldGoalPosition = 0;
+                    for(int i=0; i<goalList.size();i++){
+                        if(currentStep.getGoalId() == goalList.get(i).getId())
+                            oldGoalPosition = i;
+                    }
+                    goalSpinner.setSelection(oldGoalPosition);
+                    goalChosen = oldGoalPosition;
+
+                    ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, android.R.id.text1);
+                    spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                    stepPrioritySpinner.setAdapter(spinnerAdapter);
+                    spinnerAdapter.add("" + currentStep.getPriority());
+                    spinnerAdapter.add("Top-most");
+                    spinnerAdapter.add("Bottom-most");
+                    spinnerAdapter.add("Change Manually");
+                    stepPrioritySpinner.setSelection(0);
+
+                    if(currentStep.getPendingStepType() == PendingStep.PendingStepType.SINGLE_STEP){
+                        stepTypeSpinner.setSelection(0);
+                        sbTimeSingleStep.setProgress(currentStep.getTime());
+                    }else {
+                        stepTypeSpinner.setSelection(1);
+                        sbTimeSeriesStep.setProgress(currentStep.getTime());
+                        sbNoOfSteps.setProgress(currentStep.getStepCount());
+                    }
                 }
                 break;
         }
@@ -405,7 +413,7 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
 
 
         canvas.drawCircle(bm.getWidth() / 2, bm.getHeight() / 2, 25, thumbPaint);
-        canvas.drawText(text, bm.getWidth()/2 - textPaint.measureText(text)/2, bm.getHeight()/2+7, textPaint);
+        canvas.drawText(text, bm.getWidth() / 2 - textPaint.measureText(text) / 2, bm.getHeight() / 2 + 7, textPaint);
         return new BitmapDrawable(bm);
     }
 
@@ -430,8 +438,10 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
             stepArrayList = (ArrayList<PendingStep>) data.getSerializableExtra(Constants.STEPS_ARRAY_LIST_WITH_NEW_PRIORITIES);
 
             for (int i = 0; i<stepArrayList.size(); i++){
-                if(currentStep.getNickName().equals(stepArrayList.get(i).getNickName()))
+                if(currentStep.getNickName().equals(stepArrayList.get(i).getNickName())){
                     newPosition = i+1;
+                    stepArrayList.remove(i);
+                }
             }
 
             ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, android.R.id.text1);

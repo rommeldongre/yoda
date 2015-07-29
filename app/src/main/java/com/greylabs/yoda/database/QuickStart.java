@@ -303,7 +303,7 @@ public final class QuickStart {
         pendingStep.setStepCount(1);
         pendingStep.setTime(3);
         pendingStep.setGoalId(goalIds.get(0));
-        pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+        pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
         pendingStep.save();
         pendingStep=new PendingStep(context);
         pendingStep.setNickName("Oatmeal breakfast");
@@ -312,7 +312,7 @@ public final class QuickStart {
         pendingStep.setStepCount(1);
         pendingStep.setTime(3);
         pendingStep.setGoalId(goalIds.get(0));
-        pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+        pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
         pendingStep.save();
 
         pendingStep=new PendingStep(context);

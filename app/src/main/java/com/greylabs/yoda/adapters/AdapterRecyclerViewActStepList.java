@@ -1,6 +1,7 @@
 package com.greylabs.yoda.adapters;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import com.greylabs.yoda.R;
 import com.greylabs.yoda.interfaces.onClickOfRecyclerViewActStepList;
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.utils.Constants;
+import com.greylabs.yoda.utils.Logger;
 
 import java.util.ArrayList;
 
@@ -48,18 +50,18 @@ public class AdapterRecyclerViewActStepList extends RecyclerView.Adapter<Adapter
             switch (caller){
                 case Constants.ACT_GOAL_LIST :
                     holder.btnDeleteStep.setVisibility(View.VISIBLE);
-                    holder.btnEditStep.setVisibility(View.VISIBLE);
+//                    holder.btnEditStep.setVisibility(View.VISIBLE);
                     break;
 
                 case Constants.ACT_ADD_NEW_STEP :
                     holder.btnDeleteStep.setVisibility(View.GONE);
-                    holder.btnEditStep.setVisibility(View.GONE);
+//                    holder.btnEditStep.setVisibility(View.GONE);
                     break;
             }
         }else {
             holder.btnDeleteStep.setVisibility(View.GONE);
-            holder.btnEditStep.setVisibility(View.GONE);
             holder.btnHandle.setVisibility(View.GONE);
+//            holder.btnEditStep.setVisibility(View.GONE);
         }
     }
 
@@ -79,8 +81,8 @@ public class AdapterRecyclerViewActStepList extends RecyclerView.Adapter<Adapter
         Context contxt;
 
         TextView tvStepName;
-        Button btnEditStep, btnDeleteStep, btnHandle;
-//        CardView cardView;
+        Button btnDeleteStep, btnHandle;//btnEditStep,
+        CardView cardView;
 
         public ViewHolder(View itemView, int ViewType, Context c) {
             super(itemView);
@@ -89,14 +91,14 @@ public class AdapterRecyclerViewActStepList extends RecyclerView.Adapter<Adapter
             itemView.setOnClickListener(this);
 
             tvStepName = (TextView)itemView.findViewById(R.id.tvStepNameRecyclerItemActStepList);
-            btnEditStep = (Button) itemView.findViewById(R.id.btnEditStepRecyclerItemActStepList);
             btnDeleteStep = (Button) itemView.findViewById(R.id.btnDeleteStepRecyclerItemActStepList);
             btnHandle =  (Button) itemView.findViewById(R.id.btnHandleRecyclerItemActStepList);
-//            cardView = (CardView) itemView.findViewById(R.id.cardViewActStepList);
+//            btnEditStep = (Button) itemView.findViewById(R.id.btnEditStepRecyclerItemActStepList);
+            cardView = (CardView) itemView.findViewById(R.id.cardViewActStepList);
 
-            btnEditStep.setOnClickListener(this);
             btnDeleteStep.setOnClickListener(this);
-//            cardView.setOnClickListener(this);
+            cardView.setOnClickListener(this);
+//            btnEditStep.setOnClickListener(this);
         }
 
         @Override
@@ -108,17 +110,17 @@ public class AdapterRecyclerViewActStepList extends RecyclerView.Adapter<Adapter
                         + " must implement OnHeadlineSelectedListener");
             }
             switch (v.getId()){
-                case R.id.btnEditStepRecyclerItemActStepList :
-                    myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_EDIT);
-                    break;
-
+//                case R.id.btnEditStepRecyclerItemActStepList :
+//                    myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_EDIT);
+//                    break;
+//
                 case R.id.btnDeleteStepRecyclerItemActStepList :
                     myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_DELETE);
                     break;
 
-//                case R.id.cardViewActGoalList :
-//                    myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_SHOW_STEPS);
-//                    break;
+                case R.id.cardViewActStepList :
+                    myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_EDIT);
+                    break;
             }
         }
     }

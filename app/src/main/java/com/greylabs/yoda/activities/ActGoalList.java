@@ -120,6 +120,8 @@ public class ActGoalList  extends ActionBarActivity implements OnClickOfRecycler
                     menu.findItem(R.id.actionEditActGoalList).setVisible(true);
                     menu.findItem(R.id.actionSaveActGoalList).setVisible(false);
                     isOperationEdit = false;
+                    mAdapter = new AdapterRecyclerViewActGoalList(this, goalArrayList, isOperationEdit);
+                    recyclerView.setAdapter(mAdapter);
                 }else {
                     this.finish();
                 }

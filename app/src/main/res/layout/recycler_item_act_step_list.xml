@@ -12,25 +12,26 @@
         android:layout_height="wrap_content"
         android:minHeight="60dp" >
 
-        <Button
-            android:id="@+id/btnEditStepRecyclerItemActStepList"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_alignParentRight="true"
-            android:gravity="center_vertical"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/ic_btn_edit_gray" />
+        <!--<Button-->
+            <!--android:id="@+id/btnEditStepRecyclerItemActStepList"-->
+            <!--android:layout_width="30dp"-->
+            <!--android:layout_height="30dp"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:gravity="center_vertical"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_marginRight="15dp"-->
+            <!--android:background="@drawable/ic_btn_edit_gray" />-->
 
         <Button
             android:id="@+id/btnDeleteStepRecyclerItemActStepList"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/btnEditStepRecyclerItemActStepList"
+            android:layout_alignParentRight="true"
             android:layout_marginRight="10dip"
             android:layout_margin="15dp"
             android:background="@drawable/ic_btn_delete_gray" />
+        <!--android:layout_toLeftOf="@+id/btnEditStepRecyclerItemActStepList"-->
 
         <Button
             android:id="@+id/btnHandleRecyclerItemActStepList"
