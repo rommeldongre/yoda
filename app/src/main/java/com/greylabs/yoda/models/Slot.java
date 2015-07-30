@@ -152,13 +152,14 @@ public class Slot {
 
 
     /**
-     * This method returns the all slots of corresponds to timeBoxId
+     * This method returns the all slots that corresponds to timeBoxId
      * @return list of slots having day ID =dayId
      */
     public List<Slot> getAll(long timeBoxId){
         List<Slot> slots = null;
         String query=" select * from "+TableSlot.slot+" " +
-                " "+"where "+TableSlot.timeBoxId+" = "+timeBoxId;
+                " "+"where "+TableSlot.timeBoxId+" = "+timeBoxId+" " +
+                " "+" order by datetime( "+TableSlot.scheduleDate+" ) asc ";
 
         SQLiteDatabase db=database.getReadableDatabase();
         Cursor c=db.rawQuery(query,null);

@@ -207,6 +207,7 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
             //asyncTaskAttachTimeBox.execute(yodaCalendar);
             yodaCalendar.detachTimeBox(oldSelectedTimeBoxId);
             yodaCalendar.attachTimeBox(goal.getId());
+            yodaCalendar.rescheduleSteps(goal.getId());
             isSaved = true;
             Logger.showMsg(this, getResources().getString(R.string.msgGoalSavedActAddNewGoal));
         }else {

@@ -223,7 +223,8 @@ public class PendingStep implements Serializable {
         String query = "select * " +
                 " " + " from " + TablePendingStep.pendingStep + " " +
                 " " + " where " + TablePendingStep.goalId + " = " + goalId + " " +
-                " " + " and " + TablePendingStep.type + "!=" + PendingStepType.SUB_STEP.ordinal();
+                " " + " and " + TablePendingStep.type + "!=" + PendingStepType.SUB_STEP.ordinal()+" " +
+                " " + " order by "+TablePendingStep.priority+" asc ";
 
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
@@ -350,7 +351,8 @@ public class PendingStep implements Serializable {
                 " " + " from " + TablePendingStep.pendingStep + " as p join " + TableSlot.slot+" as s " +
                 " " + " on ( p." +TablePendingStep.slotId+" = s."+TableSlot.id+" ) "+
                 " " + " where "  + TablePendingStep.type + "!=" + PendingStepType.SUB_STEP.ordinal()+" " +
-                " "+filterCriteria;
+                " "+filterCriteria+" " +
+                " "+" order by "+TablePendingStep.priority+" asc ";
 
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
@@ -383,7 +385,8 @@ public class PendingStep implements Serializable {
         //this query returns sum of time of all steps that are present in the Complpeted Step table
         String pendingStepCountQuery = " select count(*) as stepCount " +
                 " " + "from " + TablePendingStep.pendingStep + " " +
-                " " + "where " +TablePendingStep.goalId + "=" + id;
+                " " + "where " +TablePendingStep.goalId + "=" + id+" " +
+                " " + " and "+TablePendingStep.type+" != "+PendingStepType.SUB_STEP.ordinal();
         Cursor c = db.rawQuery(pendingStepCountQuery, null);
         if (c.moveToFirst()) {
             do {
@@ -395,6 +398,7 @@ public class PendingStep implements Serializable {
     }
 
     private long createSubSteps(int numberOfSteps,int time) {
+        deleteSubSteps(this.getId());
         PendingStep pendingStepNew = new PendingStep(context);
         long rowId=0;
         for (int i = 1; i <= numberOfSteps; i++) {
@@ -412,6 +416,25 @@ public class PendingStep implements Serializable {
         }
         return rowId;
     }
+
+    private long updateSubSteps(int time) {
+        List<PendingStep> subSteps=this.getAllSubSteps(this.getId(),this.getGoalId());
+        long rowId=0;
+        for (PendingStep subStep:subSteps) {
+            subStep.setNickName("Part 1 of " + this.getNickName());
+            subStep.setPriority(this.getPriority());
+            subStep.setPendingStepType(PendingStepType.SUB_STEP);
+            subStep.setStepCount(1);
+            subStep.setSkipCount(0);
+            subStep.setPendingStepStatus(PendingStepStatus.TODO);
+            subStep.setGoalId(this.getGoalId());
+            subStep.setTime(time);
+            subStep.setSubStepOf(this.getId());
+            rowId+=subStep.save();
+        }
+        return rowId;
+    }
+
     /**********************************************************************************************/
     // Enum Constants
 
