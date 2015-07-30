@@ -1,7 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <include
         android:id="@+id/toolBarActCreateTimeBox"
@@ -32,54 +33,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:attr/textAppearanceSmall"
-                        android:text="@string/label_pick_color_act_create_time_box" />
+                        android:text="@string/label_pick_color_act_create_time_box"
+                        android:layout_marginBottom="5dp" />
 
-                    <RadioGroup
+                    <com.greylabs.yoda.utils.colorpicker.LineColorPicker
+                        android:id="@+id/colorPickerActCreateTimeBox"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="5dp" >
+                        android:layout_height="30dp"
+                        app:orientation="horizontal"
+                        style="@style/ColorPickerStyle"/>
 
-                        <RadioButton
-                            android:id="@+id/rbColor1ActCreateTimeBox"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="false"
-                            android:layout_weight="1"
-                            style="@style/RadioButtonStyle" />
-
-                        <RadioButton
-                            android:id="@+id/rbColor2ActCreateTimeBox"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="false"
-                            android:layout_weight="1"
-                            style="@style/RadioButtonStyle" />
-
-                        <RadioButton
-                            android:id="@+id/rbColor3ActCreateTimeBox"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="false"
-                            android:layout_weight="1"
-                            style="@style/RadioButtonStyle" />
-
-                        <RadioButton
-                            android:id="@+id/rbColor4ActCreateTimeBox"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="false"
-                            android:layout_weight="1"
-                            style="@style/RadioButtonStyle" />
-
-                        <RadioButton
-                            android:id="@+id/rbColor5ActCreateTimeBox"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="false"
-                            android:layout_weight="1"
-                            style="@style/RadioButtonStyle" />
-                    </RadioGroup>
                 </LinearLayout>
 
                 <LinearLayout

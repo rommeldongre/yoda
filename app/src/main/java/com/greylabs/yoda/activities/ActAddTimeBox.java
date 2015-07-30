@@ -1,8 +1,8 @@
 package com.greylabs.yoda.activities;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +14,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ViewFlipper;
 
+import com.github.lzyzsd.randomcolor.RandomColor;
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.enums.Daily;
 import com.greylabs.yoda.enums.Month;
@@ -27,6 +28,7 @@ import com.greylabs.yoda.enums.Year;
 import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Logger;
+import com.greylabs.yoda.utils.colorpicker.LineColorPicker;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -34,6 +36,7 @@ import java.util.TreeSet;
 public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnCheckedChangeListener,CompoundButton.OnCheckedChangeListener {
 
     private Toolbar toolbar;
+    private LineColorPicker colorPicker;
     private CheckBox cbWhenEarlyMorning;
     private CheckBox cbWhenMorning;
     private CheckBox cbWhenAfternoon;
@@ -73,12 +76,12 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
     }
 
     private void initUI(){
-
         toolbar = (Toolbar) findViewById(R.id.toolBarActCreateTimeBox);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(getResources().getString(R.string.titleActCeateTimeBox));
 
+        colorPicker = (LineColorPicker) findViewById(R.id.colorPickerActCreateTimeBox);
         //when
         cbWhenEarlyMorning=(CheckBox)findViewById(R.id.cbActCreateTimeBoxEarlyMorning);
         cbWhenMorning=(CheckBox)findViewById(R.id.cbActCreateTimeBoxMorning);
@@ -142,6 +145,7 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
         edtSummary=(EditText)findViewById(R.id.edtSummaryActCreateTimeBox);
         timeBoxWhenSet=new TreeSet<>();
         timeBoxOnSubValueSet=new TreeSet<>();
+        initializeColorPicker();
         Intent intent = getIntent();
         switch (intent.getStringExtra(Constants.CALLER)){
             case Constants.ACT_TIMEBOX_LIST :
@@ -163,6 +167,26 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
                 break;
         }
     }
+
+    private void initializeColorPicker() {
+        RandomColor randomColor = new RandomColor();
+        int[] color = randomColor.randomColor(9);
+        // set color palette
+//        colorPicker.setColors(new int[] {Color.RED,Color.GREEN,Color.BLUE,Color.YELLOW});
+        colorPicker.setColors(color);
+        // set selected color [optional]
+        colorPicker.setSelectedColorPosition(5);//SelectedColor(Color.RED);
+        // set on change listener
+//        colorPicker.setOnColorChangedListener(new OnColorChangedListener() {
+//            @Override
+//            public void onColorChanged(int c) {
+//                Logger.showMsg(ActAddTimeBox.this, "Selected color " + Integer.toHexString(c));
+//            }
+//        });
+        // get selected color
+//        int color = colorPicker.getColor();
+    }
+
     private void setHandlers(){
         rgOn.setOnCheckedChangeListener(this);
         rgTill.setOnCheckedChangeListener(this);

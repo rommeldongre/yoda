@@ -23,6 +23,14 @@
         <item name="android:textColor">@drawable/selector_radio_btn_text</item>
     </style>
 
+    <style name="ColorPickerStyle">
+        <item name="android:background">@drawable/selector_radio_btn</item>
+        <item name="android:button">@null</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:layout_margin">1dp</item>
+    </style>
+
     <style name="MyDialogueTheme" parent="@android:style/Theme.Dialog">
         <!--<item name="android:windowActionBar">false</item>-->
         <!--<item name="android:windowNoTitle">true</item>-->
