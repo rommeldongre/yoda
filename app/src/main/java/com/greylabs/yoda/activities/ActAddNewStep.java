@@ -26,6 +26,7 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 
 import com.greylabs.yoda.R;
+import com.greylabs.yoda.adapters.AdapterGoalSpinner;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.TimeBox;
@@ -47,7 +48,8 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
     SeekBar sbNoOfSteps, sbTimeSeriesStep, sbTimeSingleStep;
     LinearLayout singleStepPanel, seriesPanel;
     ScrollView scrollView;
-    ArrayAdapter<String> spinnerArrayAdapter;
+    AdapterGoalSpinner adapterGoalSpinner;
+//    ArrayAdapter<String> spinnerArrayAdapter;
     List<Goal> goalList = new ArrayList<>();
     ArrayList<String> goalNamesList = new ArrayList<>();
     Goal currentGoal;
@@ -67,6 +69,15 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
     }
 
     private void initialize() {
+        textPaint = new Paint();
+        textPaint.setColor(Color.WHITE);
+        textPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
+        textPaint.setTextSize(25);
+
+        thumbPaint = new Paint();
+        thumbPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
+        thumbPaint.setColor(getResources().getColor(R.color.ColorPrimary));
+
         intent = getIntent();
         caller = intent.getStringExtra(Constants.CALLER);
         prefs = Prefs.getInstance(this);
@@ -105,15 +116,6 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
         stepTypeSpinner.setOnItemSelectedListener(this);
         stepPrioritySpinner.setOnItemSelectedListener(this);
 
-        textPaint = new Paint();
-        textPaint.setColor(Color.WHITE);
-        textPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
-        textPaint.setTextSize(25);
-
-        thumbPaint = new Paint();
-        thumbPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
-        thumbPaint.setColor(getResources().getColor(R.color.ColorPrimary));
-
         setDefaultValues();
         getStepArrayFromLocal();
 
@@ -122,7 +124,9 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
 
     private void setDefaultValues() {
         sbTimeSingleStep.setProgress(prefs.getDefaultStepDuration());
+        sbTimeSingleStep.setThumb(writeOnDrawable(R.drawable.ic_btn_plus_sign, String.valueOf(prefs.getDefaultStepDuration())));
         sbTimeSeriesStep.setProgress(prefs.getDefaultStepDuration());
+        sbTimeSeriesStep.setThumb(writeOnDrawable(R.drawable.ic_btn_plus_sign, String.valueOf(prefs.getDefaultStepDuration())));
         if (prefs.isPriorityNewStepBottomMost()) {
             //choose bottom most
             stepPrioritySpinner.setSelection(1);
@@ -149,12 +153,12 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
                 currentStep = new PendingStep(this);
                 break;
 
-            case Constants.ACT_ADD_NEW_GOAL:
-                currentGoal = (Goal) intent.getSerializableExtra(Constants.GOAL_OBJECT);
-                goalList.add(currentGoal);
-                goalNamesList.add(currentGoal.getNickName());
-                currentStep = new PendingStep(this);
-                break;
+//            case Constants.ACT_ADD_NEW_GOAL:
+//                currentGoal = (Goal) intent.getSerializableExtra(Constants.GOAL_OBJECT);
+//                goalList.add(currentGoal);
+//                goalNamesList.add(currentGoal.getNickName());
+//                currentStep = new PendingStep(this);
+//                break;
 
             case Constants.ACT_STEP_LIST :
                 if(intent.getStringExtra(Constants.OPERATION).equals(Constants.OPERATION_ADD)){
@@ -182,22 +186,33 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
                     spinnerAdapter.add("Bottom-most");
                     spinnerAdapter.add("Change Manually");
                     stepPrioritySpinner.setSelection(0);
+                    stepPrioritySpinner.setEnabled(false);
 
                     if(currentStep.getPendingStepType() == PendingStep.PendingStepType.SINGLE_STEP){
                         stepTypeSpinner.setSelection(0);
                         sbTimeSingleStep.setProgress(currentStep.getTime());
+                        sbTimeSingleStep.setThumb(writeOnDrawable(R.drawable.ic_btn_plus_sign, String.valueOf(currentStep.getTime())));
                     }else {
                         stepTypeSpinner.setSelection(1);
                         sbTimeSeriesStep.setProgress(currentStep.getTime());
+                        sbTimeSeriesStep.setThumb(writeOnDrawable(R.drawable.ic_btn_plus_sign, String.valueOf(currentStep.getTime())));
                         sbNoOfSteps.setProgress(currentStep.getStepCount());
+                        sbNoOfSteps.setThumb(writeOnDrawable(R.drawable.ic_btn_plus_sign, String.valueOf(currentStep.getStepCount())));
                     }
                 }
                 break;
         }
-        goalNamesList.add(getResources().getString(R.string.addNewGoalSpinnerItemActAddNewStep));//add new Goal option
-        spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, goalNamesList);
-        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        goalSpinner.setAdapter(spinnerArrayAdapter);
+//        if(!caller.equals(Constants.ACT_ADD_NEW_GOAL)){
+//            goalNamesList.add(getResources().getString(R.string.addNewGoalSpinnerItemActAddNewStep));//add new Goal option
+//            Goal tempGoal = new Goal(this);
+//            tempGoal.setNickName(getResources().getString(R.string.addNewGoalSpinnerItemActAddNewStep));
+//            goalList.add(tempGoal);
+//        }
+
+//        spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, goalNamesList);
+//        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        adapterGoalSpinner = new AdapterGoalSpinner(this, goalList);
+        goalSpinner.setAdapter(adapterGoalSpinner);
         goalSpinner.setSelection(0);
     }
 
@@ -325,7 +340,8 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         switch (parent.getId()) {
             case R.id.spinnerGoalNameActAddNewStep:
-                if (position + 1 == goalNamesList.size()) {
+//                if (position + 1 == goalNamesList.size()) {
+                if (position + 1 == goalList.size()) {
                     Intent intent = new Intent(this, ActAddNewGoal.class);
                     intent.putExtra(Constants.CALLER, Constants.ACT_ADD_NEW_STEP);
                     intent.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, false);

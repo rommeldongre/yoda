@@ -1,7 +1,6 @@
 package com.greylabs.yoda.activities;
 
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,7 +19,7 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 
 import com.greylabs.yoda.R;
-import com.greylabs.yoda.asynctask.AsyncTaskAttachTimeBox;
+import com.greylabs.yoda.adapters.AdapterTimeBoxSpinner;
 import com.greylabs.yoda.asynctask.AysncTaskWithProgressBar;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.TimeBox;
@@ -39,12 +38,12 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
     CardView cardViewAdvanced;
     ScrollView scrollView;
     Toolbar toolbar;
-    MyFloatingActionButton btnAddFirstStep;
+//    MyFloatingActionButton btnAddFirstStep;
     Spinner timeSpinner;
-    ArrayAdapter<String> spinnerArrayAdapter;
-    List<TimeBox> timeBoxList;
+    AdapterTimeBoxSpinner adapterTimeBoxSpinner;
+//    ArrayAdapter<String> spinnerArrayAdapter;
+    List<TimeBox> timeBoxList = new ArrayList<>();
     ArrayList<String> timeBoxNames = new ArrayList<>();
-//    boolean timeSelected = false;
     Goal goal;
     boolean isSaved = false;
     private YodaCalendar yodaCalendar;
@@ -64,26 +63,24 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle(getResources().getString(R.string.titleActAddNewGoal));
 
+//        btnAddFirstStep = (MyFloatingActionButton) findViewById(R.id.btnAddFirstStepActAddNewGoal);
         edtObjective = (EditText) findViewById(R.id.edtObjectiveActAddNewGoal);
         edtKeyResult = (EditText) findViewById(R.id.edtKeyResultActAddNewGoal);
-//        edtTime = (EditText) findViewById(R.id.edtTimeActAddNewGoal);
         edtNickName = (EditText) findViewById(R.id.edtNickNameActAddNewGoal);
         cardViewAdvanced = (CardView) findViewById(R.id.cardViewAdvancedActAddNewGoal);
         edtGoalReason = (EditText) findViewById(R.id.edtGoalReasonActAddNewGoal);
-        edtGoalReward = (EditText) findViewById(R.id.edtGoalRewardHintActAddNewGoal);
+        edtGoalReward = (EditText) findViewById(R.id.edtGoalRewardActAddNewGoal);
         edtGoalBuddy = (EditText) findViewById(R.id.edtGoalBuddyActAddNewGoal);
         btnShowAdvanced = (Button) findViewById(R.id.btnShowAdvancedActAddNewGoal);
         btnHideAdvanced = (Button) findViewById(R.id.btnHideAdvancedActAddNewGoal);
-        btnAddFirstStep = (MyFloatingActionButton) findViewById(R.id.btnAddFirstStepActAddNewGoal);
         timeSpinner = (Spinner) findViewById(R.id.spinnerTimeActAddNewGoal);
         scrollView = (ScrollView) findViewById(R.id.scrollViewAvtAddNewGoal);
 
         getTimeBoxListAndPopulate();
 
-//        edtTime.setOnClickListener(this);
+//        btnAddFirstStep.setOnClickListener(this);
         btnShowAdvanced.setOnClickListener(this);
         btnHideAdvanced.setOnClickListener(this);
-        btnAddFirstStep.setOnClickListener(this);
         timeSpinner.setOnItemSelectedListener(this);
 
         Intent intent = getIntent();
@@ -99,7 +96,7 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
                 if(!intent.getExtras().getBoolean(Constants.GOAL_ATTACHED_IN_EXTRAS)){
                     goal = new Goal(this);
                 }
-                btnAddFirstStep.setVisibility(View.GONE);
+//                btnAddFirstStep.setVisibility(View.GONE);
                 break;
 
             case Constants.ACT_GOAL_DETAILS :
@@ -109,7 +106,12 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
                     getSupportActionBar().setTitle(goal.getNickName());
 
                     edtNickName.setText(goal.getNickName().toString());
-                    timeSpinner.setSelection(spinnerArrayAdapter.getPosition(intent.getExtras().getString(Constants.TIMEBOX_NICK_NAME)), true);
+                    //select the previous timeBox
+//                    for(int i=0; i<timeBoxList.size();i++){
+//                        if(timeBoxList.get(i).getNickName().equals(intent.getExtras().getString(Constants.TIMEBOX_NICK_NAME)))
+//                            timeSpinner.setSelection(i);
+//                    }
+
                     oldSelectedTimeBoxId=goal.getTimeBoxId();
                     edtObjective.setText(goal.getObjective());
                     edtKeyResult.setText(goal.getKeyResult());
@@ -117,7 +119,7 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
                     edtGoalReward.setText(goal.getReward());
                     edtGoalBuddy.setText(goal.getBuddyEmail());
 
-                    btnAddFirstStep.setVisibility(View.GONE);
+//                    btnAddFirstStep.setVisibility(View.GONE);
                     btnShowAdvanced.setVisibility(View.GONE);
                     cardViewAdvanced.setVisibility(View.VISIBLE);
 
@@ -132,18 +134,27 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
     }
 
     private void getTimeBoxListAndPopulate() {
-        TimeBox timeBox  = new TimeBox(this);
+        TimeBox tempTimeBox  = new TimeBox(this);
         timeBoxNames.add(getResources().getString(R.string.timeSpinnerHintActAddNewGoal));//add hint
-        timeBoxList = timeBox.getAll(TimeBox.TimeBoxStatus.INACTIVE);
+
+        tempTimeBox.setNickName(getResources().getString(R.string.timeSpinnerHintActAddNewGoal));
+        timeBoxList.add(tempTimeBox);
+
+        timeBoxList.addAll(tempTimeBox.getAll(TimeBox.TimeBoxStatus.INACTIVE));
         if(timeBoxList != null && !timeBoxList.isEmpty()){
             for(int i=0; i<timeBoxList.size();i++){
                 timeBoxNames.add(timeBoxList.get(i).getNickName());
             }
         }
         timeBoxNames.add(getResources().getString(R.string.addNewTimeBoxSpinnerItemActAddNewGoal));//add new TB option
-        spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, timeBoxNames);
-        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        timeSpinner.setAdapter(spinnerArrayAdapter);
+//        spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, timeBoxNames);
+//        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        timeSpinner.setAdapter(spinnerArrayAdapter);
+        TimeBox tempTimeBox1  = new TimeBox(this);
+        tempTimeBox1.setNickName(getResources().getString(R.string.addNewTimeBoxSpinnerItemActAddNewGoal));
+        timeBoxList.add(tempTimeBox1);
+        adapterTimeBoxSpinner = new AdapterTimeBoxSpinner(this, timeBoxList);
+        timeSpinner.setAdapter(adapterTimeBoxSpinner);
         timeSpinner.setSelection(0);
     }
 
@@ -177,71 +188,73 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
     }
 
     private void saveGoal() {
-        if(yodaCalendar==null){
-            yodaCalendar=new YodaCalendar(this,timeBoxList.get(timeSpinner.getSelectedItemPosition()-1));
-        }
-        String caller=getIntent().getStringExtra(Constants.CALLER);
-        boolean isValidTimeBox=false;
-        if(caller.equals(Constants.ACT_GOAL_DETAILS)) {
-            isValidTimeBox = yodaCalendar.validateTimeBoxForUpdate(oldSelectedTimeBoxId);
-        }else{
-            isValidTimeBox=yodaCalendar.validateTimeBox();
-        }
+        if(timeSpinner.getSelectedItemPosition()>0){
 
-        if(isValidTimeBox==false){
-            AlertDialog.Builder alert=new AlertDialog.Builder(this);
-            alert.setPositiveButton("Ok", null);
-            alert.setMessage(getString(R.string.msgActAddNewGoalTimeBoxNotApplicable));
-            alert.show();
-        }else if(edtNickName.getText() != null && edtNickName.getText().length() > 0 ){
-            goal.initDatabase(this);
-            goal.setNickName(edtNickName.getText().toString());
-            goal.setTimeBoxId(timeBoxList.get(timeSpinner.getSelectedItemPosition()-1).getId());
-            goal.setObjective(edtObjective.getText().toString());
-            goal.setKeyResult(edtKeyResult.getText().toString());
-            goal.setReason(edtGoalReason.getText().toString());
-            goal.setReward(edtGoalReward.getText().toString());
-            goal.setBuddyEmail(edtGoalBuddy.getText().toString());
-            goal.save();
-            //AsyncTaskAttachTimeBox asyncTaskAttachTimeBox=new AsyncTaskAttachTimeBox(this,new MyHandler(),yodaCalendar,"Please Wait,Attaching TimeBox",goal.getId());
-            //asyncTaskAttachTimeBox.execute(yodaCalendar);
-            yodaCalendar.detachTimeBox(oldSelectedTimeBoxId);
-            yodaCalendar.attachTimeBox(goal.getId());
-            yodaCalendar.rescheduleSteps(goal.getId());
-            isSaved = true;
-            Logger.showMsg(this, getResources().getString(R.string.msgGoalSavedActAddNewGoal));
-            this.finish();
+            if(yodaCalendar==null){
+                yodaCalendar=new YodaCalendar(this,timeBoxList.get(timeSpinner.getSelectedItemPosition()-1));
+            }
+            String caller=getIntent().getStringExtra(Constants.CALLER);
+            boolean isValidTimeBox=false;
+            if(caller.equals(Constants.ACT_GOAL_DETAILS)) {
+                isValidTimeBox = yodaCalendar.validateTimeBoxForUpdate(oldSelectedTimeBoxId);
+            }else{
+                isValidTimeBox=yodaCalendar.validateTimeBox();
+            }
+
+            if(isValidTimeBox==false){
+                AlertDialog.Builder alert=new AlertDialog.Builder(this);
+                alert.setPositiveButton("Ok", null);
+                alert.setMessage(getString(R.string.msgActAddNewGoalTimeBoxNotApplicable));
+                alert.show();
+            }else if(edtNickName.getText() != null && edtNickName.getText().length() > 0 ){
+                goal.initDatabase(this);
+                goal.setNickName(edtNickName.getText().toString());
+                goal.setTimeBoxId(timeBoxList.get(timeSpinner.getSelectedItemPosition()-1).getId());
+                goal.setObjective(edtObjective.getText().toString());
+                goal.setKeyResult(edtKeyResult.getText().toString());
+                goal.setReason(edtGoalReason.getText().toString());
+                goal.setReward(edtGoalReward.getText().toString());
+                goal.setBuddyEmail(edtGoalBuddy.getText().toString());
+                goal.save();
+                //AsyncTaskAttachTimeBox asyncTaskAttachTimeBox=new AsyncTaskAttachTimeBox(this,new MyHandler(),yodaCalendar,"Please Wait,Attaching TimeBox",goal.getId());
+                //asyncTaskAttachTimeBox.execute(yodaCalendar);
+                yodaCalendar.detachTimeBox(oldSelectedTimeBoxId);
+                yodaCalendar.attachTimeBox(goal.getId());
+                yodaCalendar.rescheduleSteps(goal.getId());
+                isSaved = true;
+                Logger.showMsg(this, getResources().getString(R.string.msgGoalSavedActAddNewGoal));
+                this.finish();
+            }else {
+                Logger.showMsg(this, getResources().getString(R.string.msgEnterGoalNickNameActAddNewGoal));
+            }
         }else {
-            Logger.showMsg(this, getResources().getString(R.string.msgEnterGoalNickNameActAddNewGoal));
+            Logger.showMsg(this, getResources().getString(R.string.msgSelectTimeBoxActAddNewGoal));
         }
-
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
 
-            case R.id.btnAddFirstStepActAddNewGoal :
-                saveGoal();
-                if(isSaved){
-                    Intent i = new Intent(this, ActAddNewStep.class);
-                    i.putExtra(Constants.CALLER, Constants.ACT_ADD_NEW_GOAL);
-//                    i.putExtra(Constants.STEP_ATTACHED_IN_EXTRAS, false);
-//                    i.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, true);
-                    i.putExtra(Constants.GOAL_OBJECT, goal);
-                    startActivity(i);
-                    this.finish();
-                }
-                break;
+//            case R.id.btnAddFirstStepActAddNewGoal :
+//                saveGoal();
+//                if(isSaved){
+//                    Intent i = new Intent(this, ActAddNewStep.class);
+//                    i.putExtra(Constants.CALLER, Constants.ACT_ADD_NEW_GOAL);
+//                    i.putExtra(Constants.GOAL_OBJECT, goal);
+//                    startActivity(i);
+//                    this.finish();
+//                }
+//                break;
 
             case R.id.btnShowAdvancedActAddNewGoal:
                 btnShowAdvanced.setVisibility(View.GONE);
                 cardViewAdvanced.setVisibility(View.VISIBLE);
-                scrollView.post(new Runnable() {
-                    public void run() {
-                        scrollView.fullScroll(View.FOCUS_DOWN);
-                    }
-                });
+//                scrollView.post(new Runnable() {
+//                    public void run() {
+//                        scrollView.fullScroll(View.FOCUS_DOWN);
+//                    }
+//                });
                 break;
 
             case R.id.btnHideAdvancedActAddNewGoal :
@@ -258,7 +271,7 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        if(position>0 && position+1 == timeBoxNames.size()){
+        if(position>0 && position+1 == timeBoxList.size()){            //timeBoxNames
             Intent intent = new Intent(this, ActAddTimeBox.class);
             intent.putExtra(Constants.CALLER, Constants.ACT_ADD_NEW_GOAL);
             startActivity(intent);

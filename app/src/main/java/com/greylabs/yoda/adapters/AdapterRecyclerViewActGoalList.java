@@ -14,6 +14,7 @@ import com.greylabs.yoda.R;
 import com.greylabs.yoda.interfaces.OnClickOfRecyclerViewActGoalList;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.utils.Constants;
+import com.greylabs.yoda.views.CircleView;
 
 import java.util.ArrayList;
 
@@ -43,12 +44,16 @@ public class AdapterRecyclerViewActGoalList extends RecyclerView.Adapter<Adapter
     public void onBindViewHolder(ViewHolder holder, int position) {
 //            switch (holder.Holderid) {
         holder.tvGoalName.setText(goalArrayList.get(position).getNickName());
+        holder.btnBullet.setFillColor(context.getResources().getColor(R.color.pink));
+        holder.btnBullet.setTitleText("0");
         if(isEditOperation){
+            holder.btnBullet.setVisibility(View.GONE);
             holder.btnHandle.setVisibility(View.VISIBLE);
             holder.btnDeleteGoal.setVisibility(View.VISIBLE);
             holder.btnEditGoal.setVisibility(View.VISIBLE);
             holder.progressBar.setVisibility(View.GONE);
         }else {
+            holder.btnBullet.setVisibility(View.VISIBLE);
             holder.btnDeleteGoal.setVisibility(View.GONE);
             holder.btnEditGoal.setVisibility(View.GONE);
             holder.btnHandle.setVisibility(View.GONE);
@@ -74,6 +79,7 @@ public class AdapterRecyclerViewActGoalList extends RecyclerView.Adapter<Adapter
 
         TextView tvGoalName;
         Button btnEditGoal, btnDeleteGoal, btnHandle;
+        CircleView btnBullet;
         ProgressBar progressBar;
         CardView cardView;
 
@@ -86,6 +92,7 @@ public class AdapterRecyclerViewActGoalList extends RecyclerView.Adapter<Adapter
 
 //            switch (ViewType){
 //                case Utilities.TYPE_INT_AUDIO_CAPTURE :
+            btnBullet = (CircleView) itemView.findViewById(R.id.btnBulletRecyclerItemActGoalList);
             tvGoalName = (TextView)itemView.findViewById(R.id.tvGoalNameRecyclerItemActGoalList);
             btnEditGoal = (Button) itemView.findViewById(R.id.btnEditGoalRecyclerItemActGoalList);
             btnDeleteGoal = (Button) itemView.findViewById(R.id.btnDeleteGoalRecyclerItemActGoalList);

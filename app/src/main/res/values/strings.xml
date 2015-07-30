@@ -139,6 +139,7 @@
     <string name="titlePendingStepsActStepsList">Pending Steps</string>
     <string name="timeSpinnerHintActAddNewGoal">Select a TimeBox</string>
     <string name="label_pick_color_act_create_time_box">Pick a color</string>
+    <string name="msgSelectTimeBoxActAddNewGoal">Please select a TimeBox</string>
     <string-array name="arrayStepTypeActAddNewStep">
         <item>Single Step</item>
         <item>Series</item>
