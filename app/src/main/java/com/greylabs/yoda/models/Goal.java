@@ -286,4 +286,17 @@ public class Goal implements Serializable{
         return stepCount;
     }
 
+    public long getGoalId(long timeBoxId){
+        long goalId=0;
+        String query="select id " +
+                " "+" from "+TableGoal.goal+" " +
+                " "+" where "+TableGoal.timeBoxId+" = "+timeBoxId;
+        SQLiteDatabase db=database.getReadableDatabase();
+        Cursor c=db.rawQuery(query,null);
+        if(c.moveToFirst()){
+            goalId=c.getLong(c.getColumnIndex(TableGoal.id));
+        }
+        return goalId;
+    }
+
 }

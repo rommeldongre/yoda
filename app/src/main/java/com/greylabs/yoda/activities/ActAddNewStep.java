@@ -284,7 +284,7 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
                 builder.setPositiveButton(getString(R.string.btnOk), null);
                 builder.show();
             } else {
-                //if user sets priority to Manual or TopMost ,then need to rearrange allotted slots
+                //if user sets priority to Manual or TopMost ,then need to rearrange steps
                 if (!stepPrioritySpinner.getSelectedItem().toString().equals(Constants.TEXT_PRIORITY_SPINNER_BOTTOM_MOST))
                     yodaCalendar.rescheduleSteps(goalList.get(goalSpinner.getSelectedItemPosition()).getId());
                 Logger.showMsg(this, getResources().getString(R.string.msgStepSavedActAddNewStep));

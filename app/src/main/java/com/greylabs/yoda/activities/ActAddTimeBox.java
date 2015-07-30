@@ -1,5 +1,6 @@
 package com.greylabs.yoda.activities;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
@@ -25,7 +26,9 @@ import com.greylabs.yoda.enums.TimeBoxTill;
 import com.greylabs.yoda.enums.TimeBoxWhen;
 import com.greylabs.yoda.enums.WeekDay;
 import com.greylabs.yoda.enums.Year;
+import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.TimeBox;
+import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.colorpicker.LineColorPicker;
@@ -156,6 +159,11 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
                     timeBoxOnSubValueSet=currentTimeBox.getTimeBoxOn().getSubValues();
                     timeBoxOn=currentTimeBox.getTimeBoxOn().getOnType();
                     timeBoxTill=currentTimeBox.getTillType();
+                    currentTimeBox.getTimeBoxWhen().setWhenValues(timeBoxWhenSet);
+                    currentTimeBox.getTimeBoxOn().setOnType(timeBoxOn);
+                    currentTimeBox.getTimeBoxOn().setSubValues(timeBoxOnSubValueSet);
+                    currentTimeBox.setTillType(timeBoxTill);
+
                     initEditUI();
                     //initialize all the views here from the old values of the timebox
                 }else if(intent.getStringExtra(Constants.OPERATION).equals(Constants.OPERATION_ADD)){
@@ -243,13 +251,44 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
 
             case R.id.actionSaveActCreateTimeBox :
                 TimeBox timeBox=createTimeBoxObjectFromUI();
-                if(timeBox!=null && timeBox.getTimeBoxOn()!=null && timeBox.getTimeBoxWhen()!=null){
+                boolean isSaved=false;
+                if(timeBox!=null && timeBox.getTimeBoxOn()!=null && timeBox.getTimeBoxWhen()!=null && timeBox.getTillType()!=null){
                     timeBox.initDatabase(this);
                     timeBox.getTimeBoxOn().initDatabase(this);
                     timeBox.getTimeBoxWhen().initDatabase(this);
-                    timeBox.save();
-                    Logger.showMsg(this, "TimeBox saved");
-                    this.finish();
+                    if(timeBox.getId()==0) {
+                        timeBox.save();
+                        isSaved=true;
+                    }else{
+                        //timebox is updated , check it is attached or not\
+                        Goal goal=new Goal(this);
+                        long goalId=goal.getGoalId(timeBox.getId());
+                        if(goalId!=0){
+                            //validate timebox for update
+                            YodaCalendar yodaCalendar=new YodaCalendar(this,timeBox);
+                            if(yodaCalendar.validateTimeBoxForUpdate(timeBox.getId())){
+                                timeBox.save();
+                                yodaCalendar.detachTimeBox(timeBox.getId());
+                                yodaCalendar.attachTimeBox(goalId);
+                                yodaCalendar.rescheduleSteps(goalId);
+                                isSaved=true;
+                            }else{
+                                isSaved=false;
+                                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                                builder.setTitle(getString(R.string.msgYodaSays));
+                                builder.setMessage(getString(R.string.msgActAddNewGoalTimeBoxNotApplicable));
+                                builder.setPositiveButton(getString(R.string.btnOk), null);
+                                builder.show();
+                            }
+                        }else{
+                            timeBox.save();
+                            isSaved=true;
+                        }
+                    }
+                    if(isSaved) {
+                        Logger.showMsg(this, "TimeBox saved");
+                        this.finish();
+                    }
                 }
                 break;
         }
@@ -260,54 +299,44 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
     public void onCheckedChanged(RadioGroup radioGroup, int radioButtonID) {
         switch (radioButtonID){
             case R.id.rbActCreateTimeBoxOnDaily:
-                rbTillWeek.setEnabled(true);
-                rbTillMonth.setEnabled(true);
-                rbTillQuarter.setEnabled(true);
-                rbTillYear.setEnabled(true);
-                rbTillForever.setEnabled(true);
+                invalidateTillSelections();
+                hideTillSelection();
                 invalidateOnValueSelections();
                 timeBoxOnSubValueSet.add(Daily.DAILY);
                 timeBoxOn=TimeBoxOn.DAILY;
+                timeBoxTill=null;
                 viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(findViewById(R.id.first)));
                 edtSummary.setText(createSummaryString());
                 break;
             case R.id.rbActCreateTimeBoxOnWeekly:
-                rbTillWeek.setEnabled(true);
-                rbTillMonth.setEnabled(true);
-                rbTillQuarter.setEnabled(true);
-                rbTillYear.setEnabled(true);
-                rbTillForever.setEnabled(true);
+                invalidateTillSelections();
+                hideTillSelection();
                 timeBoxOn=TimeBoxOn.WEEKLY;
+                timeBoxTill=null;
                 invalidateOnValueSelections();
                 viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(findViewById(R.id.second)));
                 break;
             case R.id.rbActCreateTimeBoxOnMonthly:
-                rbTillWeek.setVisibility(View.GONE);
-                rbTillMonth.setVisibility(View.VISIBLE);
-                rbTillQuarter.setVisibility(View.VISIBLE);
-                rbTillYear.setVisibility(View.VISIBLE);
-                rbTillForever.setVisibility(View.VISIBLE);
+                invalidateTillSelections();
+                hideTillSelection();
                 timeBoxOn=TimeBoxOn.MONTHLY;
+                timeBoxTill=null;
                 invalidateOnValueSelections();
                 viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(findViewById(R.id.third)));
                 break;
             case R.id.rbActCreateTimeBoxOnQuarterly:
-                rbTillWeek.setVisibility(View.GONE);
-                rbTillMonth.setVisibility(View.GONE);
-                rbTillQuarter.setVisibility(View.VISIBLE);
-                rbTillYear.setVisibility(View.VISIBLE);
-                rbTillForever.setVisibility(View.VISIBLE);
+                invalidateTillSelections();
+                hideTillSelection();
                 timeBoxOn=TimeBoxOn.QUATERLY;
+                timeBoxTill=null;
                 invalidateOnValueSelections();
                 viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(findViewById(R.id.four)));
                 break;
             case R.id.rbActCreateTimeBoxOnYearly:
-                rbTillWeek.setVisibility(View.GONE);
-                rbTillMonth.setVisibility(View.GONE);
-                rbTillQuarter.setVisibility(View.GONE);
-                rbTillYear.setVisibility(View.VISIBLE);
-                rbTillForever.setVisibility(View.VISIBLE);
+                invalidateTillSelections();
+                hideTillSelection();
                 timeBoxOn=TimeBoxOn.YEARLY;
+                timeBoxTill=null;
                 invalidateOnValueSelections();
                 viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(findViewById(R.id.five)));
                 break;
@@ -491,6 +520,7 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
                     break;
                 case WEEKLY:
                     rbOnWeekly.setChecked(true);
+                    viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(findViewById(R.id.first)));
                     //set On Subvalues
                     for(SubValue subValue:currentTimeBox.getTimeBoxOn().getSubValues()){
                         WeekDay weekDay=(WeekDay)subValue;
@@ -508,6 +538,7 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
                     break;
                 case MONTHLY:
                     rbOnMonthly.setChecked(true);
+                    viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(findViewById(R.id.second)));
                     for(SubValue subValue:currentTimeBox.getTimeBoxOn().getSubValues()){
                         Month month=(Month)subValue;
                         switch (month){
@@ -521,18 +552,20 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
                     break;
                 case QUATERLY:
                     rbOnQuaterly.setChecked(true);
+                    viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(findViewById(R.id.third)));
                     for(SubValue subValue:currentTimeBox.getTimeBoxOn().getSubValues()){
                         Quarter quarter=(Quarter)subValue;
                         switch (quarter){
-                            case MONTH1:cbOnQuaterly1Month.setChecked(true);
-                            case MONTH2:cbOnQuaterly2Month.setChecked(true);
-                            case MONTH3:cbOnQuaterly3Month.setChecked(true);
+                            case MONTH1:cbOnQuaterly1Month.setChecked(true);break;
+                            case MONTH2:cbOnQuaterly2Month.setChecked(true);break;
+                            case MONTH3:cbOnQuaterly3Month.setChecked(true);break;
                         }
                         llQuarterly.setVisibility(View.VISIBLE);
                     }
                     break;
                 case YEARLY:
                     rbOnYearly.setChecked(true);
+                    viewFlipper.setDisplayedChild(viewFlipper.indexOfChild(findViewById(R.id.four)));
                     for(SubValue subValue:currentTimeBox.getTimeBoxOn().getSubValues()){
                         Year year=(Year)subValue;
                         switch (year){
@@ -559,12 +592,48 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
                 case MONTH:rbTillMonth.setChecked(true);break;
                 case QUARTER:rbTillQuarter.setChecked(true);break;
                 case YEAR:rbTillYear.setChecked(true);break;
-                case FOREVER:rbTillForever.setChecked(true);
+                case FOREVER:rbTillForever.setChecked(true);break;
             }
         }
         edtSummary.setText(createSummaryString());
+        hideTillSelection();
+    }
+
+    private void hideTillSelection(){
+        if(rbOnDaily.isChecked()){
+            rbTillWeek.setVisibility(View.VISIBLE);
+            rbTillMonth.setVisibility(View.VISIBLE);
+            rbTillQuarter.setVisibility(View.VISIBLE);
+            rbTillYear.setVisibility(View.VISIBLE);
+            rbTillForever.setVisibility(View.VISIBLE);
+        }else if(rbOnWeekly.isChecked()){
+            rbTillWeek.setVisibility(View.VISIBLE);
+            rbTillMonth.setVisibility(View.VISIBLE);
+            rbTillQuarter.setVisibility(View.VISIBLE);
+            rbTillYear.setVisibility(View.VISIBLE);
+            rbTillForever.setVisibility(View.VISIBLE);
+        }else if(rbOnMonthly.isChecked()){
+            rbTillWeek.setVisibility(View.GONE);
+            rbTillMonth.setVisibility(View.VISIBLE);
+            rbTillQuarter.setVisibility(View.VISIBLE);
+            rbTillYear.setVisibility(View.VISIBLE);
+            rbTillForever.setVisibility(View.VISIBLE);
+        }else if(rbOnQuaterly.isChecked()){
+            rbTillWeek.setVisibility(View.GONE);
+            rbTillMonth.setVisibility(View.GONE);
+            rbTillQuarter.setVisibility(View.VISIBLE);
+            rbTillYear.setVisibility(View.VISIBLE);
+            rbTillForever.setVisibility(View.VISIBLE);
+        }else if(rbOnYearly.isChecked()){
+            rbTillWeek.setVisibility(View.GONE);
+            rbTillMonth.setVisibility(View.GONE);
+            rbTillQuarter.setVisibility(View.GONE);
+            rbTillYear.setVisibility(View.VISIBLE);
+            rbTillForever.setVisibility(View.VISIBLE);
+        }
     }
     private TimeBox createTimeBoxObjectFromUI(){
+        boolean isValid=false;
        if(!timeBoxWhenSet.isEmpty() && !timeBoxOnSubValueSet.isEmpty() && timeBoxTill!=null && timeBoxOn!=null){
            com.greylabs.yoda.models.TimeBoxWhen timeBoxWhen=new com.greylabs.yoda.models.TimeBoxWhen(this);
            com.greylabs.yoda.models.TimeBoxOn timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(this,this.timeBoxOn);
@@ -573,6 +642,7 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
            currentTimeBox.setTimeBoxWhen(timeBoxWhen);
            currentTimeBox.setTimeBoxOn(timeBoxOn);
            currentTimeBox.setTillType(timeBoxTill);
+           isValid=true;
        }else if(timeBoxWhenSet.isEmpty()){
            Logger.showMsg(this,getString(R.string.msgActCreateTimeBoxSelectWhenTime));
        }else if(timeBoxOn==null || timeBoxOnSubValueSet.isEmpty()){
@@ -583,7 +653,10 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
         if(currentTimeBox!=null && edtSummary.getText()!=null && !edtSummary.getText().equals("")){
            currentTimeBox.setNickName(edtSummary.getText().toString());
         }
-          return currentTimeBox;
+        if(isValid)
+            return currentTimeBox;
+        else
+            return null;
     }
 
     private void invalidateOnValueSelections(){
@@ -691,4 +764,5 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
         }
         return  summary;
     }
+
 }

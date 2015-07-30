@@ -159,6 +159,7 @@ public class YodaCalendar {
      * otherwise 0 indicating that timebox was not attached previously .
      */
     public int detachTimeBox(long timeBoxId){
+        List<Slot> slots=null;
         if(timeBoxId!=0)
             slots=slot.getAll(timeBoxId);
         int slotCount=0;
@@ -275,8 +276,8 @@ public class YodaCalendar {
         int count=0;
         List<PendingStep> pendingSteps= new PendingStep(context).getAll(goalId);
         if(pendingSteps!=null) {
+            List<Slot> slots=slot.getAll(timeBox.getId());
             for (PendingStep pendingStep : pendingSteps) {
-                List<Slot> slots=slot.getAll(timeBox.getId());
                 //Collections.sort(slots, new SortByDate());
                 removeTodaysPassedSlots();
                 switch (pendingStep.getPendingStepType()){
@@ -305,6 +306,7 @@ public class YodaCalendar {
                                     alarmScheduler.setAlarmDate(slot.getScheduleDate());
                                     alarmScheduler.setAlarm();
                                     count++;
+                                    it.remove();
                                     break;
                                 }
                             }
@@ -330,6 +332,7 @@ public class YodaCalendar {
                                 alarmScheduler.setAlarmDate(slot.getScheduleDate());
                                 alarmScheduler.setAlarm();
                                 count++;
+                                it.remove();
                                 break;
                             }
                         }

@@ -178,7 +178,7 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
 
     private void saveGoal() {
         if(yodaCalendar==null){
-            yodaCalendar=new YodaCalendar(this,timeBoxList.get(timeSpinner.getSelectedItemPosition()));
+            yodaCalendar=new YodaCalendar(this,timeBoxList.get(timeSpinner.getSelectedItemPosition()-1));
         }
         String caller=getIntent().getStringExtra(Constants.CALLER);
         boolean isValidTimeBox=false;
@@ -196,7 +196,7 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
         }else if(edtNickName.getText() != null && edtNickName.getText().length() > 0 ){
             goal.initDatabase(this);
             goal.setNickName(edtNickName.getText().toString());
-            goal.setTimeBoxId(timeBoxList.get(timeSpinner.getSelectedItemPosition()).getId());
+            goal.setTimeBoxId(timeBoxList.get(timeSpinner.getSelectedItemPosition()-1).getId());
             goal.setObjective(edtObjective.getText().toString());
             goal.setKeyResult(edtKeyResult.getText().toString());
             goal.setReason(edtGoalReason.getText().toString());
@@ -210,6 +210,7 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
             yodaCalendar.rescheduleSteps(goal.getId());
             isSaved = true;
             Logger.showMsg(this, getResources().getString(R.string.msgGoalSavedActAddNewGoal));
+            this.finish();
         }else {
             Logger.showMsg(this, getResources().getString(R.string.msgEnterGoalNickNameActAddNewGoal));
         }
