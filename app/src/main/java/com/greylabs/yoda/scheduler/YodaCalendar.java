@@ -159,7 +159,8 @@ public class YodaCalendar {
      * otherwise 0 indicating that timebox was not attached previously .
      */
     public int detachTimeBox(long timeBoxId){
-        slots=slot.getAll(timeBoxId);
+        if(timeBoxId!=0)
+            slots=slot.getAll(timeBoxId);
         int slotCount=0;
         if(slots!=null) {
             for (Slot slot : slots) {
@@ -205,31 +206,8 @@ public class YodaCalendar {
     public boolean scheduleStep(PendingStep pendingStep) {
         boolean isScheduled=false;
         List<Slot> slots=slot.getAll(timeBox.getId());
-        Collections.sort(slots, new SortByDate());
-        //remove todays passed slots
-        Calendar cal=Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        String  sqliteDate=cal.get(Calendar.YEAR)+"-"+(cal.get(Calendar.MONTH)+1)+"-"+cal.get(Calendar.DATE)+" " +
-                cal.get(Calendar.HOUR_OF_DAY)+":"+cal.get(Calendar.MINUTE)+":"+cal.get(Calendar.SECOND);
-        Date date=CalendarUtils.parseDate(sqliteDate);
-        Iterator<Slot> itSlots=slots.iterator();
-        Set<TimeBoxWhen> whens=CalendarUtils.getPossibleWhenTypesOfDay();
-        int i=0;
-        while (itSlots.hasNext()){
-            Slot slot=itSlots.next();
-            for(TimeBoxWhen when:whens) {
-                if (date.compareTo(slot.getScheduleDate()) == 0 && when==slot.getWhen()) {
-                    itSlots.remove();
-                }
-            }
-            if(i==5)
-                break;
-            i++;
-        }
-
+        //Collections.sort(slots, new SortByDate());
+        removeTodaysPassedSlots();
         switch (pendingStep.getPendingStepType()){
             case SPLIT_STEP:
             case SERIES_STEP:
@@ -287,34 +265,87 @@ public class YodaCalendar {
         return isScheduled;
     }
 
+    /**
+     * This method schedules all the steps associated with the goal . This method is called when
+     * TimeBox associated with the goal chenged or updated.
+     * @param goalId
+     * @return
+     */
+    public int rescheduleSteps(long goalId){
+        int count=0;
+        List<PendingStep> pendingSteps= new PendingStep(context).getAll(goalId);
+        if(pendingSteps!=null) {
+            for (PendingStep pendingStep : pendingSteps) {
+                List<Slot> slots=slot.getAll(timeBox.getId());
+                //Collections.sort(slots, new SortByDate());
+                removeTodaysPassedSlots();
+                switch (pendingStep.getPendingStepType()){
+                    case SPLIT_STEP:
+                    case SERIES_STEP:
+                        Iterator<PendingStep> substeps = pendingStep.
+                                getAllSubSteps(pendingStep.getId(), pendingStep.getGoalId()).iterator();
+                        while (substeps.hasNext()) {
+                            PendingStep substep=substeps.next();
+                            Iterator<Slot> it = slots.iterator();
+                            while (it.hasNext()) {
+                                Slot slot = it.next();
+                                slot.setTime(Constants.MAX_SLOT_DURATION);
+                                if (slot.getTimeBoxId()==timeBox.getId() && substep.getTime() <=slot.getTime()) {
+                                    slot.setTime(slot.getTime() - substep.getTime());
+                                    slot.setGoalId(substep.getGoalId());
+                                    substep.setSlotId(slot.getId());
+                                    slot.save();
+                                    substep.save();
+                                    AlarmScheduler alarmScheduler = new AlarmScheduler(context);
+                                    alarmScheduler.setStepId(substep.getId());
+                                    alarmScheduler.setSubStepId(substep.getId());
+                                    alarmScheduler.setPendingStepType(PendingStep.PendingStepType.SUB_STEP);
+                                    alarmScheduler.setStartTime(slot.getWhen().getStartTime());
+                                    alarmScheduler.setDuration(substep.getTime());
+                                    alarmScheduler.setAlarmDate(slot.getScheduleDate());
+                                    alarmScheduler.setAlarm();
+                                    count++;
+                                    break;
+                                }
+                            }
+                        }
+                        break;
+                    case SINGLE_STEP:
+                        Iterator<Slot> it = slots.iterator();
+                        while (it.hasNext()) {
+                            Slot slot = it.next();
+                            slot.setTime(Constants.MAX_SLOT_DURATION);
+                            if (slot.getTimeBoxId()==timeBox.getId() && pendingStep.getTime() <=slot.getTime()) {
+                                slot.setTime(slot.getTime() - pendingStep.getTime());
+                                slot.setGoalId(pendingStep.getGoalId());
+                                pendingStep.setSlotId(slot.getId());
+                                slot.save();
+                                pendingStep.save();
+                                AlarmScheduler alarmScheduler = new AlarmScheduler(context);
+                                alarmScheduler.setStepId(pendingStep.getId());
+                                alarmScheduler.setSubStepId(pendingStep.getId());
+                                alarmScheduler.setPendingStepType(pendingStep.getPendingStepType());
+                                alarmScheduler.setStartTime(slot.getWhen().getStartTime());
+                                alarmScheduler.setDuration(pendingStep.getTime());
+                                alarmScheduler.setAlarmDate(slot.getScheduleDate());
+                                alarmScheduler.setAlarm();
+                                count++;
+                                break;
+                            }
+                        }
+                        break;
+                }
+            }
+        }
+        return count;
+    }
+
     /**********************************************************************************************/
     // Utils
     /**********************************************************************************************/
     public boolean validateTimeBox(){
         boolean isValid=true;
-        //remove today's passed slots
-        Calendar cal=Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        String  sqliteDate=cal.get(Calendar.YEAR)+"-"+(cal.get(Calendar.MONTH)+1)+"-"+cal.get(Calendar.DATE)+" " +
-                cal.get(Calendar.HOUR_OF_DAY)+":"+cal.get(Calendar.MINUTE)+":"+cal.get(Calendar.SECOND);
-        Date date=CalendarUtils.parseDate(sqliteDate);
-        Iterator<Slot> itSlots=slots.iterator();
-        Set<TimeBoxWhen> whens=CalendarUtils.getPossibleWhenTypesOfDay();
-        int i=0;
-        while (itSlots.hasNext()){
-            Slot slot=itSlots.next();
-            for(TimeBoxWhen when:whens) {
-                if (date.compareTo(slot.getScheduleDate()) == 0 && (when!=slot.getWhen())) {
-                    itSlots.remove();
-                }
-            }
-            if(i==5)
-                break;
-            i++;
-        }
+        removeTodaysPassedSlots();
         if(slots!=null) {
             for (Slot slot : slots) {
                 if (slot.getTimeBoxId() != 0) {
@@ -325,38 +356,14 @@ public class YodaCalendar {
         }else{
             isValid=false;
         }
-        if(slots.size()==0 | slots==null)
+        if( slots==null || slots.size()==0 )
             isValid=false;
         return isValid;
     }
 
     public boolean validateTimeBoxForUpdate(long oldTimeBoxId){
         boolean isValid=true;
-
-        //remove today's passed slots
-        Calendar cal=Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        String  sqliteDate=cal.get(Calendar.YEAR)+"-"+(cal.get(Calendar.MONTH)+1)+"-"+cal.get(Calendar.DATE)+" " +
-                cal.get(Calendar.HOUR_OF_DAY)+":"+cal.get(Calendar.MINUTE)+":"+cal.get(Calendar.SECOND);
-        Date date=CalendarUtils.parseDate(sqliteDate);
-        Iterator<Slot> itSlots=slots.iterator();
-        Set<TimeBoxWhen> whens=CalendarUtils.getPossibleWhenTypesOfDay();
-        int i=0;
-        while (itSlots.hasNext()){
-            Slot slot=itSlots.next();
-            for(TimeBoxWhen when:whens) {
-                if (date.compareTo(slot.getScheduleDate()) == 0 && (when!=slot.getWhen())) {
-                    itSlots.remove();
-                }
-            }
-            if(i==5)
-                break;
-            i++;
-        }
-
+        removeTodaysPassedSlots();
         if(slots!=null) {
             for (Slot slot : slots) {
                 if (slot.getTimeBoxId() != 0 ) {
@@ -372,5 +379,34 @@ public class YodaCalendar {
 
         return isValid;
 
+    }
+
+    public void removeTodaysPassedSlots(){
+        //remove today's passed slots
+        Calendar cal=Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        String  sqliteDate=CalendarUtils.getSqLiteDateFormat(cal);
+        Date date=CalendarUtils.parseDate(sqliteDate);
+        Set<TimeBoxWhen> whens=CalendarUtils.getPossibleWhenTypesOfDay();
+        if(slots!=null) {
+            for (TimeBoxWhen when : whens) {
+                Slot slot = null;
+                Iterator<Slot> itSlots = slots.iterator();
+
+                while (itSlots.hasNext()) {
+                    slot = itSlots.next();
+                    if (date.compareTo(slot.getScheduleDate()) == 0 && (when != slot.getWhen())) {
+                        itSlots.remove();
+                        break;
+                    }
+                }
+                if (date.compareTo(slot.getScheduleDate()) != 0)
+                    break;
+
+            }
+        }
     }
 }

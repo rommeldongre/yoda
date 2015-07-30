@@ -80,4 +80,7 @@ public class Constants {
     public static final String MSG_INITIALIZING_CALENDAR = "Initializing Calendar, Please Wait";
     public static final String OPTION_FROM_ACTQUICKSTART_SELECTED = "OPTION_FROM_ACTQUICKSTART_SELECTED";
     public static final String MSG_INITIALIZING_QUICK_START = "Please Wait...";
+    public static final String TEXT_PRIORITY_SPINNER_TOP_MOST ="Top-most" ;
+    public static final String TEXT_PRIORITY_SPINNER_BOTTOM_MOST ="Bottom-most" ;
+    public static final String TEXT_PRIORITY_SPINNER_CHANGE_MANUALLY ="Change Manually" ;
 }
