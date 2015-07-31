@@ -9,7 +9,6 @@ import com.greylabs.yoda.database.MetaData.TableSlot;
 import com.greylabs.yoda.utils.Constants;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class PendingStep implements Serializable {
@@ -257,7 +256,8 @@ public class PendingStep implements Serializable {
         String query = "select * " +
                 " " + " from " + TablePendingStep.pendingStep + " " +
                 " " + " where " + TablePendingStep.goalId + " = " + goalId + " " +
-                " " + " and " + TablePendingStep.id + "=" + pendingStepId;
+                " " + " and " + TablePendingStep.subStepOf + "=" + pendingStepId+" " +
+                " " + " and "+TablePendingStep.type+"="+PendingStepType.SUB_STEP.ordinal();
 
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
@@ -304,34 +304,37 @@ public class PendingStep implements Serializable {
         }
         rowId = db.insertWithOnConflict(TablePendingStep.pendingStep, null, values, SQLiteDatabase.CONFLICT_REPLACE);
         this.id = rowId;
-        //only applicable for SplitStep and SeriesStep
-        switch (pendingStepType){
-            case SPLIT_STEP:
-                if(this.getTime()>Constants.MAX_SLOT_DURATION){
-                    float numberOfSteps=this.getTime()/Constants.MAX_SLOT_DURATION;
-                    Float f=new Float(numberOfSteps);
-                    createSubSteps(f.intValue(),Constants.MAX_SLOT_DURATION);
-                    if(numberOfSteps-f.intValue()>0.0f)
-                        createSubSteps(1,this.getTime()%Constants.MAX_SLOT_DURATION);
-                }
-                break;
-            case SERIES_STEP:
-                createSubSteps(this.getStepCount(),this.getTime());
-                break;
-        }
-
         return rowId;
     }
 
+    public long saveSubStep(PendingStep pendingStep){
+
+        SQLiteDatabase db = database.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        pendingStep.setId(0);
+        values.put(TablePendingStep.nickName, pendingStep.nickName);
+        values.put(TablePendingStep.priority, pendingStep.priority);
+        values.put(TablePendingStep.time, pendingStep.time);
+        values.put(TablePendingStep.type, pendingStep.pendingStepType.ordinal());
+        values.put(TablePendingStep.stepCount, pendingStep.stepCount);
+        values.put(TablePendingStep.skipCount, pendingStep.skipCount);
+        values.put(TablePendingStep.status, pendingStep.pendingStepStatus.ordinal());
+        values.put(TablePendingStep.goalId, pendingStep.goalId);
+        values.put(TablePendingStep.slotId, pendingStep.slotId);
+        values.put(TablePendingStep.subStepOf, pendingStep.subStepOf);
+        long rowId;
+        rowId=db.insert(TablePendingStep.pendingStep, null, values);
+        return rowId;
+    }
     public int delete() {
         SQLiteDatabase db = database.getWritableDatabase();
         int numOfRowAffected = db.delete(TablePendingStep.pendingStep, TablePendingStep.id + "=" + id, null);
         return numOfRowAffected;
     }
 
-    public int deleteSubSteps(long pendingStepId) {
+    public int deleteSubSteps() {
         SQLiteDatabase db = database.getWritableDatabase();
-        int numOfRowAffected = db.delete(TablePendingStep.pendingStep, TablePendingStep.subStepOf + "=" + pendingStepId, null);
+        int numOfRowAffected = db.delete(TablePendingStep.pendingStep, TablePendingStep.subStepOf + "=" + id, null);
         return numOfRowAffected;
     }
     /**********************************************************************************************/
@@ -348,11 +351,12 @@ public class PendingStep implements Serializable {
                 TablePendingStep.goalId+" as stepGoalId ,"+TablePendingStep.slotId+","+
                 TablePendingStep.subStepOf+","+TableSlot.scheduleDate;
         String query = "select "+ cols +
-                " " + " from " + TablePendingStep.pendingStep + " as p join " + TableSlot.slot+" as s " +
+                " " + " from " + TablePendingStep.pendingStep + " as p  join " + TableSlot.slot+" as s " +
                 " " + " on ( p." +TablePendingStep.slotId+" = s."+TableSlot.id+" ) "+
-                " " + " where "  + TablePendingStep.type + "!=" + PendingStepType.SUB_STEP.ordinal()+" " +
+                " " + " where "  + //TablePendingStep.type + "!=" + PendingStepType.SPLIT_STEP.ordinal()+" " +
+       //         " " + " or "+TablePendingStep.type+"!="+ PendingStepType.SERIES_STEP.ordinal()+" ) "+
                 " "+filterCriteria+" " +
-                " "+" order by "+TablePendingStep.priority+" asc ";
+                " "+" order by "+TablePendingStep.priority+" asc ,"+TablePendingStep.nickName+" asc ";
 
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
@@ -397,13 +401,12 @@ public class PendingStep implements Serializable {
         return pendingStepCount;
     }
 
-    private long createSubSteps(int numberOfSteps,int time) {
-        deleteSubSteps(this.getId());
+    public long createSubSteps(int start ,int numberOfSteps,int time) {
         PendingStep pendingStepNew = new PendingStep(context);
         long rowId=0;
-        for (int i = 1; i <= numberOfSteps; i++) {
+        for (int i = start; i <= numberOfSteps; i++) {
             pendingStepNew.setId(0);
-            pendingStepNew.setNickName("Part 1 of " + this.getNickName());
+            pendingStepNew.setNickName("Part " + i + " of " + this.getNickName());
             pendingStepNew.setPriority(this.getPriority());
             pendingStepNew.setPendingStepType(PendingStepType.SUB_STEP);
             pendingStepNew.setStepCount(1);
@@ -412,25 +415,27 @@ public class PendingStep implements Serializable {
             pendingStepNew.setGoalId(this.getGoalId());
             pendingStepNew.setTime(time);
             pendingStepNew.setSubStepOf(this.getId());
-            rowId+=pendingStepNew.save();
+            rowId+=pendingStepNew.saveSubStep(pendingStepNew);
         }
         return rowId;
     }
 
-    private long updateSubSteps(int time) {
+    public long updateSubSteps() {
         List<PendingStep> subSteps=this.getAllSubSteps(this.getId(),this.getGoalId());
         long rowId=0;
-        for (PendingStep subStep:subSteps) {
-            subStep.setNickName("Part 1 of " + this.getNickName());
-            subStep.setPriority(this.getPriority());
-            subStep.setPendingStepType(PendingStepType.SUB_STEP);
-            subStep.setStepCount(1);
-            subStep.setSkipCount(0);
-            subStep.setPendingStepStatus(PendingStepStatus.TODO);
-            subStep.setGoalId(this.getGoalId());
-            subStep.setTime(time);
-            subStep.setSubStepOf(this.getId());
-            rowId+=subStep.save();
+        if(subSteps!=null) {
+            for (PendingStep subStep : subSteps) {
+                subStep.setNickName(subStep.nickName);
+                subStep.setPriority(this.getPriority());
+                subStep.setPendingStepType(PendingStepType.SUB_STEP);
+                subStep.setStepCount(1);
+                subStep.setSkipCount(0);
+                subStep.setPendingStepStatus(PendingStepStatus.TODO);
+                subStep.setGoalId(subStep.getGoalId());
+                subStep.setTime(subStep.time);
+                subStep.setSubStepOf(this.getId());
+                rowId += subStep.save();
+            }
         }
         return rowId;
     }

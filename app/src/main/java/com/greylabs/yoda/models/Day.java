@@ -137,9 +137,12 @@ public class Day {
      */
     public long save(){
         Calendar cal=Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY,0);
+        cal.set(Calendar.MINUTE,0);
+        cal.set(Calendar.SECOND,0);
+        cal.set(Calendar.MILLISECOND,0);
         cal.setTime(this.date);
-        String  sqliteDate=cal.get(Calendar.YEAR)+"-"+(cal.get(Calendar.MONTH)+1)+"-"+cal.get(Calendar.DATE)+" " +
-                cal.get(Calendar.HOUR_OF_DAY)+":"+cal.get(Calendar.MINUTE)+":"+cal.get(Calendar.SECOND);
+        String sqliteDate=CalendarUtils.getSqLiteDateFormat(cal);
         SQLiteDatabase db=database.getWritableDatabase();
         ContentValues cv=new ContentValues();
         cv.put(TableDay.date,sqliteDate);

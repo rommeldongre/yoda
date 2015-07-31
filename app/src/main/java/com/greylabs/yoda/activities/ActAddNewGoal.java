@@ -139,11 +139,13 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
 
         tempTimeBox.setNickName(getResources().getString(R.string.timeSpinnerHintActAddNewGoal));
         timeBoxList.add(tempTimeBox);
-
-        timeBoxList.addAll(tempTimeBox.getAll(TimeBox.TimeBoxStatus.INACTIVE));
-        if(timeBoxList != null && !timeBoxList.isEmpty()){
-            for(int i=0; i<timeBoxList.size();i++){
-                timeBoxNames.add(timeBoxList.get(i).getNickName());
+        List<TimeBox> timeBoxes=tempTimeBox.getAll(TimeBox.TimeBoxStatus.INACTIVE);
+        if(timeBoxes!=null) {
+            timeBoxList.addAll(timeBoxes);
+            if (timeBoxList != null && !timeBoxList.isEmpty()) {
+                for (int i = 0; i < timeBoxList.size(); i++) {
+                    timeBoxNames.add(timeBoxList.get(i).getNickName());
+                }
             }
         }
         timeBoxNames.add(getResources().getString(R.string.addNewTimeBoxSpinnerItemActAddNewGoal));//add new TB option
@@ -191,7 +193,7 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
         if(timeSpinner.getSelectedItemPosition()>0){
 
             if(yodaCalendar==null){
-                yodaCalendar=new YodaCalendar(this,timeBoxList.get(timeSpinner.getSelectedItemPosition()-1));
+                yodaCalendar=new YodaCalendar(this,timeBoxList.get(timeSpinner.getSelectedItemPosition()));
             }
             String caller=getIntent().getStringExtra(Constants.CALLER);
             boolean isValidTimeBox=false;
@@ -209,7 +211,7 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
             }else if(edtNickName.getText() != null && edtNickName.getText().length() > 0 ){
                 goal.initDatabase(this);
                 goal.setNickName(edtNickName.getText().toString());
-                goal.setTimeBoxId(timeBoxList.get(timeSpinner.getSelectedItemPosition()-1).getId());
+                goal.setTimeBoxId(timeBoxList.get(timeSpinner.getSelectedItemPosition()).getId());
                 goal.setObjective(edtObjective.getText().toString());
                 goal.setKeyResult(edtKeyResult.getText().toString());
                 goal.setReason(edtGoalReason.getText().toString());

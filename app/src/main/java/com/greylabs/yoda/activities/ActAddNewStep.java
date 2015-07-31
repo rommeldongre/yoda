@@ -244,7 +244,6 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
                 break;
             case R.id.actionSaveActAddNewStep:
                 saveStep();
-                finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -289,7 +288,26 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
                 stepArrayList.get(i).setPriority(i + 1);
                 stepArrayList.get(i).setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
                 stepArrayList.get(i).save();
+                stepArrayList.get(i).updateSubSteps();
             }
+            PendingStep ps =currentStep;
+            switch (ps.getPendingStepType()){
+                case SPLIT_STEP:
+                    ps.deleteSubSteps();
+                    if(ps.getTime()>Constants.MAX_SLOT_DURATION){
+                        float numberOfSteps=(float)ps.getTime()/Constants.MAX_SLOT_DURATION;
+                        Float f=new Float(numberOfSteps);
+                        ps.createSubSteps(1, f.intValue(), Constants.MAX_SLOT_DURATION);
+                        if(numberOfSteps-f.intValue()>0.0f)
+                            ps.createSubSteps(f.intValue()+1,f.intValue()+1,currentStep.getTime()%Constants.MAX_SLOT_DURATION);
+                    }
+                    break;
+                case SERIES_STEP:
+                    ps.deleteSubSteps();
+                    ps.createSubSteps(1, currentStep.getStepCount(),currentStep.getTime());
+                    break;
+            }
+
             //assume default priority is bottom most irrespective of settings
             boolean isScheduled = yodaCalendar.scheduleStep(currentStep);
             if (!isScheduled) {
@@ -301,8 +319,9 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
                 builder.show();
             } else {
                 //if user sets priority to Manual or TopMost ,then need to rearrange steps
-                if (!stepPrioritySpinner.getSelectedItem().toString().equals(Constants.TEXT_PRIORITY_SPINNER_BOTTOM_MOST))
+                if (!stepPrioritySpinner.getSelectedItem().toString().equals(Constants.TEXT_PRIORITY_SPINNER_BOTTOM_MOST)) {
                     yodaCalendar.rescheduleSteps(goalList.get(goalSpinner.getSelectedItemPosition()).getId());
+                }
                 Logger.showMsg(this, getResources().getString(R.string.msgStepSavedActAddNewStep));
                 this.finish();
             }

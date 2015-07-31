@@ -19,6 +19,8 @@ import com.greylabs.yoda.adapters.AdapterRecyclerViewActStepList;
 import com.greylabs.yoda.interfaces.onClickOfRecyclerViewActStepList;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
+import com.greylabs.yoda.models.TimeBox;
+import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Logger;
 
@@ -236,11 +238,26 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
     }
 
     private void saveStepsByNewOrder() {
-        if(isPriorityChanged){
-            for(int i=0; i<stepArrayList.size(); i++ ){
+        TimeBox timeBox = new TimeBox(this);
+        YodaCalendar yodaCalendar = new YodaCalendar(this, timeBox.get(currentGoal.getTimeBoxId()));
+
+//        if(isPriorityChanged){
+//            for(int i=0; i<stepArrayList.size(); i++ ){
+//                stepArrayList.get(i).setPriority(i + 1);
+//                stepArrayList.get(i).save();
+//            }
+//        }
+
+        //save all the steps in the array with priorities
+        if (isPriorityChanged) {
+            for (int i = 0; i < stepArrayList.size(); i++) {
+                stepArrayList.get(i).initDatabase(this);
                 stepArrayList.get(i).setPriority(i + 1);
+                stepArrayList.get(i).setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
                 stepArrayList.get(i).save();
+                stepArrayList.get(i).updateSubSteps();
             }
+            yodaCalendar.rescheduleSteps(currentGoal.getId());
         }
     }
 

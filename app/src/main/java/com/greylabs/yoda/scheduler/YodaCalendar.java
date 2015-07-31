@@ -277,6 +277,7 @@ public class YodaCalendar {
         List<PendingStep> pendingSteps= new PendingStep(context).getAll(goalId);
         if(pendingSteps!=null) {
             List<Slot> slots=slot.getAll(timeBox.getId());
+            Iterator<Slot> it = slots.iterator();
             for (PendingStep pendingStep : pendingSteps) {
                 //Collections.sort(slots, new SortByDate());
                 removeTodaysPassedSlots();
@@ -287,7 +288,6 @@ public class YodaCalendar {
                                 getAllSubSteps(pendingStep.getId(), pendingStep.getGoalId()).iterator();
                         while (substeps.hasNext()) {
                             PendingStep substep=substeps.next();
-                            Iterator<Slot> it = slots.iterator();
                             while (it.hasNext()) {
                                 Slot slot = it.next();
                                 slot.setTime(Constants.MAX_SLOT_DURATION);
@@ -313,7 +313,6 @@ public class YodaCalendar {
                         }
                         break;
                     case SINGLE_STEP:
-                        Iterator<Slot> it = slots.iterator();
                         while (it.hasNext()) {
                             Slot slot = it.next();
                             slot.setTime(Constants.MAX_SLOT_DURATION);
