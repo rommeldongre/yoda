@@ -40,9 +40,9 @@
     <string name="edtStepTypeHintActAddNewStep">Select Step Type</string>
     <string name="tvPriorityActAddNewStep">Priority</string>
     <string name="edtPriorityHintActAddNewStep">Select Priority</string>
-    <string name="tvSingleStepTimeActAddNewStep">How long would it take to do this?</string>
+    <string name="tvSingleStepTimeActAddNewStep">How long would it take to do this?(Hrs)</string>
     <string name="tvStepsInSeriesActAddNewStep">No of steps in series</string>
-    <string name="tvTimeForEachStepActAddNewStep">Time for each step in series</string>
+    <string name="tvTimeForEachStepActAddNewStep">Time for each step in series (Hrs)</string>
     <string name="addNewTimeBoxSpinnerItemActAddNewGoal">Add New Time Box</string>
     <string name="addNewGoalSpinnerItemActAddNewStep">Add New Goal</string>
     <string name="tvDefaultStepDurationActSettingsDefaultDuration">Default Step Duration (Hrs)</string>
@@ -147,7 +147,7 @@
     <string-array name="arrayStepPriorityActAddNewStep">
         <item>Top-most</item>
         <item>Bottom-most</item>
-        <item>Change Manually</item>
+        <!--<item>Change Manually</item>-->
     </string-array>
 
     <!--<string name=""></string>-->
