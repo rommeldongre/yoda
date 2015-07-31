@@ -232,6 +232,7 @@ public class YodaCalendar {
                             alarmScheduler.setStartTime(slot.getWhen().getStartTime());
                             alarmScheduler.setDuration(ps.getTime());
                             alarmScheduler.setAlarmDate(slot.getScheduleDate());
+                            alarmScheduler.cancel();
                             alarmScheduler.setAlarm();
                             isScheduled=true;
                             break;
@@ -256,6 +257,7 @@ public class YodaCalendar {
                         alarmScheduler.setStartTime(slot.getWhen().getStartTime());
                         alarmScheduler.setDuration(pendingStep.getTime());
                         alarmScheduler.setAlarmDate(slot.getScheduleDate());
+                        alarmScheduler.cancel();
                         alarmScheduler.setAlarm();
                         isScheduled =true;
                         break;
@@ -304,6 +306,7 @@ public class YodaCalendar {
                                     alarmScheduler.setStartTime(slot.getWhen().getStartTime());
                                     alarmScheduler.setDuration(substep.getTime());
                                     alarmScheduler.setAlarmDate(slot.getScheduleDate());
+                                    alarmScheduler.cancel();
                                     alarmScheduler.setAlarm();
                                     count++;
                                     it.remove();
@@ -329,6 +332,7 @@ public class YodaCalendar {
                                 alarmScheduler.setStartTime(slot.getWhen().getStartTime());
                                 alarmScheduler.setDuration(pendingStep.getTime());
                                 alarmScheduler.setAlarmDate(slot.getScheduleDate());
+                                alarmScheduler.cancel();
                                 alarmScheduler.setAlarm();
                                 count++;
                                 it.remove();

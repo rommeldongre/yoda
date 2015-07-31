@@ -16,15 +16,19 @@ import android.widget.TextView;
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.adapters.DragSortRecycler;
 import com.greylabs.yoda.adapters.AdapterRecyclerViewActStepList;
+import com.greylabs.yoda.enums.StepFilterType;
 import com.greylabs.yoda.interfaces.onClickOfRecyclerViewActStepList;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
+import com.greylabs.yoda.models.Slot;
 import com.greylabs.yoda.models.TimeBox;
+import com.greylabs.yoda.scheduler.AlarmScheduler;
 import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Logger;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class ActStepList extends ActionBarActivity implements onClickOfRecyclerViewActStepList {
@@ -240,14 +244,6 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
     private void saveStepsByNewOrder() {
         TimeBox timeBox = new TimeBox(this);
         YodaCalendar yodaCalendar = new YodaCalendar(this, timeBox.get(currentGoal.getTimeBoxId()));
-
-//        if(isPriorityChanged){
-//            for(int i=0; i<stepArrayList.size(); i++ ){
-//                stepArrayList.get(i).setPriority(i + 1);
-//                stepArrayList.get(i).save();
-//            }
-//        }
-
         //save all the steps in the array with priorities
         if (isPriorityChanged) {
             for (int i = 0; i < stepArrayList.size(); i++) {
@@ -284,7 +280,25 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
                 alertLogout.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        stepArrayList.get(Position).delete();
+                        PendingStep pendingStep=stepArrayList.get(Position);
+                        switch (pendingStep.getPendingStepType()){
+                            case SPLIT_STEP:
+                            case SERIES_STEP:
+                                List<PendingStep> pendingSteps=pendingStep.getAllSubSteps(pendingStep.getId(),pendingStep.getGoalId());
+                                for (PendingStep ps:pendingSteps) {
+                                    cancelAlarm(pendingStep);
+                                    ps.delete();
+                                }
+                                pendingStep.delete();
+                                saveStepsByNewOrder();
+                                break;
+                            case SINGLE_STEP:
+                                cancelAlarm(pendingStep);
+                                pendingStep.delete();
+                                saveStepsByNewOrder();
+                                break;
+                        }
+
                         Logger.showMsg(ActStepList.this, Constants.MSG_STEP_DELETED);
 //                        getStepArrayFromLocal();
 //                        mAdapter.notifyDataSetChanged();
@@ -298,5 +312,14 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
                 alertLogout.show();
                 break;
         }
+    }
+
+    private void cancelAlarm(PendingStep ps){
+        AlarmScheduler alarmScheduler = new AlarmScheduler(ActStepList.this);
+        alarmScheduler.setStepId(ps.getId());
+        alarmScheduler.setSubStepId(ps.getId());
+        alarmScheduler.setPendingStepType(PendingStep.PendingStepType.SUB_STEP);
+        alarmScheduler.setDuration(ps.getTime());
+        alarmScheduler.cancel();
     }
 }
