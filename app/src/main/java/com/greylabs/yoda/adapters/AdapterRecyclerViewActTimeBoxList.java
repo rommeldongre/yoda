@@ -15,6 +15,7 @@ import com.greylabs.yoda.interfaces.OnClickOfRecyclerViewActGoalList;
 import com.greylabs.yoda.interfaces.OnClickOfRecyclerViewActTimeboxList;
 import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.utils.Constants;
+import com.greylabs.yoda.views.CircleView;
 
 import java.util.ArrayList;
 
@@ -44,13 +45,16 @@ public class AdapterRecyclerViewActTimeBoxList extends RecyclerView.Adapter<Adap
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.tvTimeBoxName.setText(timeBoxArrayList.get(position).getNickName());
-        if(isEditOperation){
-            holder.btnDeleteTimeBox.setVisibility(View.VISIBLE);
-            holder.btnEditTimeBox.setVisibility(View.VISIBLE);
-        }else {
+        if(timeBoxArrayList.get(position).getNickName().equals(Constants.NICKNAME_UNPLANNED_TIMEBOX))
             holder.btnDeleteTimeBox.setVisibility(View.GONE);
-            holder.btnEditTimeBox.setVisibility(View.GONE);
-        }
+        holder.circleView.setFillColor(context.getResources().getColor(R.color.gray));
+//        if(isEditOperation){
+//            holder.btnDeleteTimeBox.setVisibility(View.VISIBLE);
+////            holder.btnEditTimeBox.setVisibility(View.VISIBLE);
+//        }else {
+//            holder.btnDeleteTimeBox.setVisibility(View.GONE);
+////            holder.btnEditTimeBox.setVisibility(View.GONE);
+//        }
     }
 
     @Override
@@ -68,8 +72,9 @@ public class AdapterRecyclerViewActTimeBoxList extends RecyclerView.Adapter<Adap
         OnClickOfRecyclerViewActTimeboxList myOnClickRecyclerView;
         Context contxt;
 
+        CircleView circleView;
         TextView tvTimeBoxName;
-        Button btnEditTimeBox, btnDeleteTimeBox;
+        Button btnDeleteTimeBox;//btnEditTimeBox,
         CardView cardView;
 
 
@@ -79,12 +84,13 @@ public class AdapterRecyclerViewActTimeBoxList extends RecyclerView.Adapter<Adap
             itemView.setClickable(true);
             itemView.setOnClickListener(this);
 
+//            btnEditTimeBox = (Button) itemView.findViewById(R.id.btnEditTimeBoxRecyclerItemActTimeBoxList);
+            circleView = (CircleView) itemView.findViewById(R.id.btnBulletRecyclerItemActTimeBoxList);
             tvTimeBoxName = (TextView)itemView.findViewById(R.id.tvGoalNameRecyclerItemActTimeBoxList);
-            btnEditTimeBox = (Button) itemView.findViewById(R.id.btnEditTimeBoxRecyclerItemActTimeBoxList);
             btnDeleteTimeBox = (Button) itemView.findViewById(R.id.btnDeleteTimeBoxRecyclerItemActTimeBoxList);
             cardView = (CardView) itemView.findViewById(R.id.cardViewActTimeBoxList);
 
-            btnEditTimeBox.setOnClickListener(this);
+//            btnEditTimeBox.setOnClickListener(this);
             btnDeleteTimeBox.setOnClickListener(this);
             cardView.setOnClickListener(this);
         }
@@ -98,16 +104,16 @@ public class AdapterRecyclerViewActTimeBoxList extends RecyclerView.Adapter<Adap
                         + " must implement OnClickOfRecyclerViewActTimeBoxList");
             }
             switch (v.getId()){
-                case R.id.btnEditTimeBoxRecyclerItemActTimeBoxList :
-                    myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_EDIT);
-                    break;
+//                case R.id.btnEditTimeBoxRecyclerItemActTimeBoxList :
+//                    myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_EDIT);
+//                    break;
 
                 case R.id.btnDeleteTimeBoxRecyclerItemActTimeBoxList :
                     myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_DELETE);
                     break;
 
                 case R.id.cardViewActTimeBoxList :
-                    myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_SHOW_STEPS);
+                    myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_EDIT);
                     break;
             }
         }

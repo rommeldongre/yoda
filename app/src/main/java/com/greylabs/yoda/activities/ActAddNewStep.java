@@ -181,11 +181,11 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
                     ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, android.R.id.text1);
                     spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     stepPrioritySpinner.setAdapter(spinnerAdapter);
-                    spinnerAdapter.add("" + currentStep.getPriority());
-                    spinnerAdapter.add("Top-most");
-                    spinnerAdapter.add("Bottom-most");
-                    spinnerAdapter.add("Change Manually");
-                    stepPrioritySpinner.setSelection(0);
+                    spinnerAdapter.add(String.valueOf(currentStep.getPriority()));
+//                    spinnerAdapter.add("Top-most");
+//                    spinnerAdapter.add("Bottom-most");
+//                    spinnerAdapter.add("Change Manually");
+//                    stepPrioritySpinner.setSelection(0);
                     stepPrioritySpinner.setEnabled(false);
 
                     if(currentStep.getPendingStepType() == PendingStep.PendingStepType.SINGLE_STEP){

@@ -31,7 +31,7 @@ public class ActTimeBoxList extends ActionBarActivity implements OnClickOfRecycl
     private Toolbar toolbar;
     TextView emptyViewActTimeBoxList;
     ArrayList<TimeBox>  timeBoxArrayList = new ArrayList<>();
-    boolean isOperationEdit = false;
+    boolean isOperationEdit = true;
     Menu menu;
 
     RecyclerView recyclerView;
@@ -114,23 +114,23 @@ public class ActTimeBoxList extends ActionBarActivity implements OnClickOfRecycl
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home :
-                if(isOperationEdit){
-                    menu.findItem(R.id.actionEditActTimeBoxList).setVisible(true);
-                    menu.findItem(R.id.actionAddActTimeBoxList).setVisible(true);
-                    isOperationEdit = false;
-                    mAdapter = new AdapterRecyclerViewActTimeBoxList(this, timeBoxArrayList, isOperationEdit);
-                    recyclerView.setAdapter(mAdapter);
-                } else{
+//                if(isOperationEdit){
+//                    menu.findItem(R.id.actionEditActTimeBoxList).setVisible(true);
+//                    menu.findItem(R.id.actionAddActTimeBoxList).setVisible(true);
+//                    isOperationEdit = false;
+//                    mAdapter = new AdapterRecyclerViewActTimeBoxList(this, timeBoxArrayList, isOperationEdit);
+//                    recyclerView.setAdapter(mAdapter);
+//                } else{
                     this.finish();
-                }
+//                }
                 break;
-            case R.id.actionEditActTimeBoxList :
-                menu.findItem(R.id.actionEditActTimeBoxList).setVisible(false);
-                menu.findItem(R.id.actionAddActTimeBoxList).setVisible(false);
-                isOperationEdit = true;
-                mAdapter = new AdapterRecyclerViewActTimeBoxList(this, timeBoxArrayList, isOperationEdit);
-                recyclerView.setAdapter(mAdapter);
-                break;
+//            case R.id.actionEditActTimeBoxList :
+//                menu.findItem(R.id.actionEditActTimeBoxList).setVisible(false);
+//                menu.findItem(R.id.actionAddActTimeBoxList).setVisible(false);
+//                isOperationEdit = true;
+//                mAdapter = new AdapterRecyclerViewActTimeBoxList(this, timeBoxArrayList, isOperationEdit);
+//                recyclerView.setAdapter(mAdapter);
+//                break;
             case R.id.actionAddActTimeBoxList :
                 Intent intent = new Intent(this, ActAddTimeBox.class);
                 intent.putExtra(Constants.CALLER, Constants.ACT_TIMEBOX_LIST);
@@ -144,7 +144,7 @@ public class ActTimeBoxList extends ActionBarActivity implements OnClickOfRecycl
 
     @Override
     public void onClickRecyclerView(final int Position, String operation) {
-        if(isOperationEdit){
+//        if(isOperationEdit){
             switch (operation){
                 case Constants.OPERATION_EDIT :
                     if(!timeBoxArrayList.get(Position).getNickName().equals(Constants.NICKNAME_UNPLANNED_TIMEBOX)){
@@ -166,7 +166,7 @@ public class ActTimeBoxList extends ActionBarActivity implements OnClickOfRecycl
                     break;
 
                 case Constants.OPERATION_DELETE :
-                    if(!timeBoxArrayList.get(Position).getNickName().equals(Constants.NICKNAME_UNPLANNED_TIMEBOX)){
+//                    if(!timeBoxArrayList.get(Position).getNickName().equals(Constants.NICKNAME_UNPLANNED_TIMEBOX)){
                         AlertDialog.Builder alertLogout = new AlertDialog.Builder(this);
                         alertLogout.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
@@ -180,18 +180,18 @@ public class ActTimeBoxList extends ActionBarActivity implements OnClickOfRecycl
                         alertLogout.setNegativeButton("Cancel", null);
                         alertLogout.setMessage(Constants.MSG_DELETE_TIMEBOX);
                         alertLogout.show();
-                    }else {
-                        AlertDialog.Builder alertLogout = new AlertDialog.Builder(this);
-                        alertLogout.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                            }
-                        });
-                        alertLogout.setMessage(Constants.MSG_CANT_EDIT_DELETE_TIMEBOX);
-                        alertLogout.show();
-                    }
+//                    }else {
+//                        AlertDialog.Builder alertLogout = new AlertDialog.Builder(this);
+//                        alertLogout.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialogInterface, int i) {
+//                            }
+//                        });
+//                        alertLogout.setMessage(Constants.MSG_CANT_EDIT_DELETE_TIMEBOX);
+//                        alertLogout.show();
+//                    }
                     break;
             }
-        }
+//        }
     }
 }
