@@ -83,4 +83,5 @@ public class Constants {
     public static final String TEXT_PRIORITY_SPINNER_TOP_MOST ="Top-most" ;
     public static final String TEXT_PRIORITY_SPINNER_BOTTOM_MOST ="Bottom-most" ;
     public static final String TEXT_PRIORITY_SPINNER_CHANGE_MANUALLY ="Change Manually" ;
+    public static final String ADD_NEW_GOAL_SPINNER_ITEM = "Add new goal";
 }

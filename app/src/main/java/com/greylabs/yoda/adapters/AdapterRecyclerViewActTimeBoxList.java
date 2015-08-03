@@ -1,6 +1,7 @@
 package com.greylabs.yoda.adapters;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -45,8 +46,10 @@ public class AdapterRecyclerViewActTimeBoxList extends RecyclerView.Adapter<Adap
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.tvTimeBoxName.setText(timeBoxArrayList.get(position).getNickName());
+        holder.tvTimeBoxName.setTypeface(null, Typeface.ITALIC);
         if(timeBoxArrayList.get(position).getNickName().equals(Constants.NICKNAME_UNPLANNED_TIMEBOX))
             holder.btnDeleteTimeBox.setVisibility(View.GONE);
+        holder.circleView.setShowTitle(false);
         holder.circleView.setFillColor(context.getResources().getColor(R.color.gray));
 //        if(isEditOperation){
 //            holder.btnDeleteTimeBox.setVisibility(View.VISIBLE);

@@ -29,7 +29,7 @@ public class ActGoalList  extends ActionBarActivity implements OnClickOfRecycler
     private Toolbar toolbar;
     TextView emptyViewActGoalList;
     ArrayList<Goal> goalArrayList;
-    boolean isOperationEdit = false;
+    boolean isOperationEdit = false, isPriorityChanged = false;
     Menu menu;
 
     RecyclerView recyclerView;
@@ -75,8 +75,11 @@ public class ActGoalList  extends ActionBarActivity implements OnClickOfRecycler
         dragSortRecycler.setOnItemMovedListener(new DragSortRecycler.OnItemMovedListener() {
             @Override
             public void onItemMoved(int from, int to) {
-                if (from != to)
+                if (from != to){
                     goalArrayList.add(to, goalArrayList.remove(from));
+                    isPriorityChanged = true;
+                    menu.findItem(R.id.actionSaveActGoalList).setVisible(true);
+                }
                 mAdapter.notifyDataSetChanged();
             }
         });
@@ -128,7 +131,7 @@ public class ActGoalList  extends ActionBarActivity implements OnClickOfRecycler
                 break;
             case R.id.actionEditActGoalList :
                 menu.findItem(R.id.actionEditActGoalList).setVisible(false);
-                menu.findItem(R.id.actionSaveActGoalList).setVisible(true);
+//                menu.findItem(R.id.actionSaveActGoalList).setVisible(true);
                 isOperationEdit = true;
                 mAdapter = new AdapterRecyclerViewActGoalList(this, goalArrayList, isOperationEdit);
                 recyclerView.setAdapter(mAdapter);
