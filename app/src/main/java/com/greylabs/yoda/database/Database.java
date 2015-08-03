@@ -47,18 +47,25 @@ public class Database extends SQLiteOpenHelper implements Serializable{
         sqLiteDatabase.execSQL(TableTimeBoxOn.createTimeBoxOnTable);
         sqLiteDatabase.execSQL(TableTimeBoxWhen.createTimeBoxWhenTable);
         sqLiteDatabase.execSQL(TableGoal.createGoalTable);
-        //sqLiteDatabase.execSQL(TableGoal.createTrigger);
         sqLiteDatabase.execSQL(TablePendingStep.createPendingStepTable);
         sqLiteDatabase.execSQL(TableCompletedStep.createCompletedStepTable);
+        sqLiteDatabase.execSQL(TableDay.createTrigger);
+        sqLiteDatabase.execSQL(TableSlot.createTrigger);
+
         Logger.log(TAG, "All tables created successfully");
-
-        //populdate default data
-
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         sqLiteDatabase.delete(DATABASE_NAME, null, null);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TableDay.createDayTable);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TableSlot.createSlotTable);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TableTimeBox.createTimeBoxTable);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TableTimeBoxOn.createTimeBoxOnTable);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TableTimeBoxWhen.createTimeBoxWhenTable);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TableGoal.createGoalTable);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TablePendingStep.createPendingStepTable);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TableCompletedStep.createCompletedStepTable);
         onCreate(sqLiteDatabase);
     }
 }

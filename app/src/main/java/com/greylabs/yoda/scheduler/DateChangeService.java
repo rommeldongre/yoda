@@ -14,7 +14,7 @@ import com.greylabs.yoda.utils.Logger;
 public class DateChangeService extends Service {
 
     private static final String TAG="DateChangeService";
-
+    private YodaCalendar yodaCalendar;
     private final IBinder iBinder = new LocalBinder();
     public class LocalBinder extends Binder {
         DateChangeService getService() {
@@ -29,12 +29,13 @@ public class DateChangeService extends Service {
     public void onCreate() {
         super.onCreate();
         Logger.log(TAG, "Date Change Service created. Now updating database.");
+        yodaCalendar=new YodaCalendar(this);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(this, "DateChange on start command...", Toast.LENGTH_SHORT).show();
-        return START_NOT_STICKY;
+        yodaCalendar.updateCalendar();
+        return START_STICKY;
     }
 
 }

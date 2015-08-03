@@ -58,7 +58,6 @@ public class YodaCalendar {
      *@return None
      */
     public static void  init(Context context){
-
         //Create calender and set todays date
         Calendar cal=Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -132,6 +131,152 @@ public class YodaCalendar {
 
     }
 
+
+    private Calendar getCalendarInstance(){
+        Calendar cal=Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        return cal;
+    }
+    private int getMaxDays(Calendar cal){
+        int maxDays=365;
+        //Check for leap year condition
+        Calendar yr=Calendar.getInstance();
+        if(cal.get(Calendar.MONTH)>Calendar.FEBRUARY){
+            //Feb of current year passed, check for next year Feb month
+            Logger.log(TAG, "Feb of current month is passed.");
+            yr.add(Calendar.YEAR, 1);
+            yr.set(Calendar.MONTH, Calendar.FEBRUARY);
+        }else{
+            //Feb of next month is appearing in current year
+            Logger.log(TAG, "Feb of current month is coming.");
+            yr.set(Calendar.MONTH, Calendar.FEBRUARY);
+        }
+        if(yr.getActualMaximum(Calendar.DAY_OF_MONTH)==29) {
+            maxDays++;
+            Logger.log(TAG,"Detected Leap year. One more day added to maxDays");
+        }
+        Logger.log(TAG,"Maximum Days in Calender:"+maxDays);
+        return maxDays;
+    }
+    public void updateCalendar(){
+        //Create calender and set todays date
+        Calendar cal=getCalendarInstance();
+        Logger.log(TAG, "Updating calender from date:"+cal.getTime().toString());
+        //update database
+        Logger.log(TAG,"Updating entries in database.");
+        int dayOfYear=1;
+        int dayOfWeek=-1;
+        int weekOfMonth=-1;
+        int monthOfYear=-1;
+        int quarterOfYear=-1;
+        int year=-1;
+
+        Day day=new Day(context);
+        cal=Calendar.getInstance();Calendar cal1=Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 0);cal1.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);cal1.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);cal1.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);cal1.set(Calendar.MILLISECOND, 0);
+
+        //get all days of calendar
+        List<Day> days=day.getAll();
+        day=days.get(0);
+        int daysDeleted=0;
+        cal.set(Calendar.MONTH,Calendar.AUGUST);
+        cal.set(Calendar.DATE,8);
+        Calendar temp=Calendar.getInstance();
+        if(day.getDate().compareTo(cal.getTime())>0){
+            //first entry in the Calendar DB  is greater than  current
+            String startDate=CalendarUtils.getSqLiteDateFormat(cal);
+            cal1.setTime(day.getDate());
+            String endDate=CalendarUtils.getSqLiteDateFormat(cal1);
+            //daysDeleted=day.deleteNextDays(startDate, endDate);
+            int numberOfDays=cal1.get(Calendar.DAY_OF_YEAR)-cal.get(Calendar.DAY_OF_YEAR);
+            temp.setTime(cal.getTime());
+            for(int i=1;i<=numberOfDays;i++){
+                dayOfYear=i;
+                dayOfWeek=cal.get(Calendar.DAY_OF_WEEK);
+                weekOfMonth= CalendarUtils.getWeek(cal.get(Calendar.DATE));
+                monthOfYear= cal.get(Calendar.MONTH);
+                quarterOfYear=CalendarUtils.getQuarter(monthOfYear);
+                year=cal.get(Calendar.YEAR);
+
+                day.setId(0);
+                day.setDate(cal.getTime());
+                day.setDayOfYear(dayOfYear);
+                day.setDayOfWeek(dayOfWeek);
+                day.setWeekOfMonth(weekOfMonth);
+                day.setMonthOfYear(monthOfYear);
+                day.setQuarterOfYear(quarterOfYear);
+                day.setYear(year);
+                day.save();
+                slot=new Slot(context);
+                for(int j=0;j<6;j++){
+                    slot.setId(0);
+                    slot.setWhen(TimeBoxWhen.getIntegerToEnumType(j));
+                    slot.setTime(Constants.MAX_SLOT_DURATION);
+                    slot.setScheduleDate(day.getDate());
+                    slot.setGoalId(0);
+                    slot.setTimeBoxId(0);
+                    slot.setDayId(day.getId());
+                    slot.save();
+                }
+                int count=days.get(days.size()-i).delete();
+                cal.add(Calendar.DATE, 1);
+            }
+        }
+        else if(day.getDate().compareTo(cal.getTime())<0){
+            //first entry in the Calendar DB  is less than  current
+            cal1.setTime(day.getDate());
+            String startDate=CalendarUtils.getSqLiteDateFormat(cal1);
+            String endDate=CalendarUtils.getSqLiteDateFormat(cal);
+            daysDeleted=day.deletePrevDays(startDate, endDate);
+            int numberOfDays=cal.get(Calendar.DAY_OF_YEAR)-cal1.get(Calendar.DAY_OF_YEAR);
+            cal.setTime(days.get(days.size() - 1).getDate());
+            cal.add(Calendar.DATE, 1);
+            temp.setTime(cal1.getTime());
+            for(int i=1;i<=numberOfDays;i++){
+                dayOfWeek=cal.get(Calendar.DAY_OF_WEEK);
+                weekOfMonth= CalendarUtils.getWeek(cal.get(Calendar.DATE));
+                monthOfYear= cal.get(Calendar.MONTH);
+                quarterOfYear=CalendarUtils.getQuarter(monthOfYear);
+                year=cal.get(Calendar.YEAR);
+
+                day.setId(0);
+                day.setDate(cal.getTime());
+                day.setDayOfYear(dayOfYear);
+                day.setDayOfWeek(dayOfWeek);
+                day.setWeekOfMonth(weekOfMonth);
+                day.setMonthOfYear(monthOfYear);
+                day.setQuarterOfYear(quarterOfYear);
+                day.setYear(year);
+                day.save();
+                slot=new Slot(context);
+                for(int j=0;j<6;j++){
+                    slot.setId(0);
+                    slot.setWhen(TimeBoxWhen.getIntegerToEnumType(j));
+                    slot.setTime(Constants.MAX_SLOT_DURATION);
+                    slot.setScheduleDate(day.getDate());
+                    slot.setGoalId(0);
+                    slot.setTimeBoxId(0);
+                    slot.setDayId(day.getId());
+                    slot.save();
+                }
+                cal.add(Calendar.DATE,1);
+            }
+        }
+
+        //set dayOfYear
+        int maxDaysOfYear=getMaxDays(cal);
+        days=day.getAll();
+        for(int i=1;i<=maxDaysOfYear;i++) {
+            days.get(i-1).setDayOfYear(i);
+            days.get(i-1).save();
+        }
+    }
     /**
      *This method attach timebox to goal only if timebox fits into calender slots.This maps timebox
      * actual Calendar.

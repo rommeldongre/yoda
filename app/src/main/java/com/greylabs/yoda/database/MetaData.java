@@ -170,6 +170,13 @@ public class MetaData {
                 " "+quarterOfYear+" integer , " +
                 " "+year+" integer " +
                 " ) ";
+
+        public static final String createTrigger="" +
+                "create trigger deleteSlotOnDayDelete  before delete on "+TableDay.day+" " +
+                "begin" +
+                "    delete from  "+TableSlot.slot+" " +
+                "    where "+TableSlot.slot+"."+TableSlot.dayId+"="+"old."+TableDay.id +" ;" +
+                " end;  ";
     }
     public static class TableSlot{
         public static final String slot="slot";//table name
@@ -192,5 +199,12 @@ public class MetaData {
                 " "+dayId+" integer , " +
                 " "+"foreign key("+dayId+") references "+ TableDay.day+"("+ TableDay.id+") " +
                 " )";
+
+        public static final String createTrigger="" +
+                "create trigger updatePendingStepOnSlotDelete  before delete on "+TableSlot.slot+" " +
+                "begin" +
+                "    update  "+TablePendingStep.pendingStep+" set " +TablePendingStep.slotId+"=0"+
+                "    where "+"old."+TableSlot.id+"="+TablePendingStep.pendingStep+"."+TablePendingStep.slotId+" ;" +
+                " end;  ";
     }
 }

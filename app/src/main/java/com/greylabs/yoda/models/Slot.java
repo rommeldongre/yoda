@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.greylabs.yoda.database.Database;
+import com.greylabs.yoda.database.MetaData;
 import com.greylabs.yoda.database.MetaData.TableSlot;
 import com.greylabs.yoda.database.MetaData.TablePendingStep;
 import com.greylabs.yoda.database.MetaData.TableDay;
@@ -181,6 +182,7 @@ public class Slot {
     }
 
 
+
     /**
      * This method returns the all slots of corresponds to dayId.
      * @return list of slots having day ID =dayId
@@ -261,6 +263,12 @@ public class Slot {
             }while(c.moveToNext());
         }
         return slots;
+    }
+
+    public int delete(){
+        SQLiteDatabase db=database.getWritableDatabase();
+        int numOfRowAffected=db.delete(TableSlot.slot, TableSlot.id + "=" + id, null);
+        return numOfRowAffected;
     }
 
 }
