@@ -210,7 +210,7 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
         if(timeSpinner.getSelectedItemPosition()>0){
 
             if(yodaCalendar==null){
-                yodaCalendar=new YodaCalendar(this,timeBoxList.get(timeSpinner.getSelectedItemPosition()-1));
+                yodaCalendar=new YodaCalendar(this,timeBoxList.get(timeSpinner.getSelectedItemPosition()));
             }
             String caller=getIntent().getStringExtra(Constants.CALLER);
             boolean isValidTimeBox=false;
@@ -228,7 +228,7 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
             }else if(edtNickName.getText() != null && edtNickName.getText().length() > 0 ){
                 goal.initDatabase(this);
                 goal.setNickName(edtNickName.getText().toString());
-                goal.setTimeBoxId(timeBoxList.get(timeSpinner.getSelectedItemPosition() - 1).getId());
+                goal.setTimeBoxId(timeBoxList.get(timeSpinner.getSelectedItemPosition()).getId());
                 goal.setObjective(edtObjective.getText().toString());
                 goal.setKeyResult(edtKeyResult.getText().toString());
                 goal.setReason(edtGoalReason.getText().toString());

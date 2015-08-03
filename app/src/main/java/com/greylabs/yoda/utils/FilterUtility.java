@@ -35,39 +35,34 @@ public class FilterUtility {
         cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND,0);
         switch (stepFilterType){
             case TODAY:
                 startDate=CalendarUtils.getSqLiteDateFormat(cal);
-                Set<TimeBoxWhen> whens=CalendarUtils.getPossibleWhenTypesOfDay();
-                String strWhen="(";
-                for(TimeBoxWhen when:whens){
-                    strWhen+=" "+TableSlot.when+" = '"+when.getStartTime()+"' or";
-                }
-                strWhen=strWhen.substring(0,strWhen.lastIndexOf("or"));
-                strWhen=strWhen+")";
-                criteria=" and "+ TableSlot.scheduleDate+" = '"+startDate+"'" ;//+"and "+strWhen+" )";
+                criteria="  "+ TableSlot.scheduleDate+" = '"+startDate+"'" ;
                 break;
             case THIS_WEEK:
                 startDate=CalendarUtils.getSqLiteDateFormat(cal);
                 cal.add(Calendar.DAY_OF_WEEK, Calendar.SATURDAY-cal.get(Calendar.DAY_OF_WEEK));
                 endDate=CalendarUtils.getSqLiteDateFormat(cal);
-                criteria=" and ( "+TableSlot.scheduleDate+ ">= '"+startDate+"'"+
+                criteria="  ( "+TableSlot.scheduleDate+ ">= '"+startDate+"'"+
                         " and "+TableSlot.scheduleDate+" <= '"+endDate+"' )";
                 break;
             case THIS_MONTH:
                 startDate=CalendarUtils.getSqLiteDateFormat(cal);
                 cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
                 endDate=CalendarUtils.getSqLiteDateFormat(cal);
-                criteria=" and ( "+TableSlot.scheduleDate+ ">= '"+startDate+"'"+
+                criteria="  ( "+TableSlot.scheduleDate+ ">= '"+startDate+"'"+
                         " and "+TableSlot.scheduleDate+" <= '"+endDate+"' )";
 
                 break;
             case THIS_QUARTER:
                 startDate=CalendarUtils.getSqLiteDateFormat(cal);
                 cal.set(Calendar.MONTH, CalendarUtils.getLastMonthOfQuarter(cal.get(Calendar.MONTH)));
-                cal.set(Calendar.DAY_OF_MONTH,cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+                cal.add(Calendar.MONTH, -1);
+                cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
                 endDate=CalendarUtils.getSqLiteDateFormat(cal);
-                criteria=" and ( "+TableSlot.scheduleDate+ ">= '"+startDate+"'"+
+                criteria="  ( "+TableSlot.scheduleDate+ ">= '"+startDate+"'"+
                         " and "+TableSlot.scheduleDate+" <= '"+endDate+"' )";
                 break;
             case THIS_YEAR:
@@ -77,7 +72,7 @@ public class FilterUtility {
                 endDate=CalendarUtils.getSqLiteDateFormat(cal);
                // criteria=" and ( "+TableSlot.scheduleDate+ ">= '"+startDate+"'"+
                 //        " and "+TableSlot.scheduleDate+" <= '"+endDate+"' )";
-                criteria=" and ( datetime("+TableSlot.scheduleDate+") between datetime('"+startDate+"') and datetime('"+endDate+"') )";
+                criteria="  ( datetime("+TableSlot.scheduleDate+") between datetime('"+startDate+"') and datetime('"+endDate+"') )";
                 break;
         }
 
