@@ -1,5 +1,7 @@
 package com.greylabs.yoda.utils;
 
+import java.sql.DataTruncation;
+
 public class Constants {
 
     public static final String IS_APPLICATION_FIRST_TIME_INSTALLED ="IS_APPLICATION_FIRST_TIME_INSTALLED" ;
@@ -48,14 +50,11 @@ public class Constants {
     public static final String ACT_ADD_NEW_GOAL = "ACT_ADD_NEW_GOAL";
     public static final String MSG_ENTER_STEP_NAME = "Please Enter Step Name";
     public static final String STEP_ARRAY_LIST = "STEP_ARRAY_LIST";
-    public static final int RESULTCODE_OF_ACT_ADD_GOAL = 1;
-    public static final int RESULTCODE_OF_ACT_STEP_LIST = 2;
     public static final String TIMEBOX_OBJECT = "TIMEBOX_OBJECT";
     public static final String TIMEBOX_ATTACHED_IN_EXTRAS = "TIMEBOX_ATTACHED_IN_EXTRAS";
     public static final String ACT_TIMEBOX_LIST = "ACT_TIMEBOX_LIST";
     public static final String MSG_WALLPAPER_SET_SUCCESFULLY = "Wallpaper Set";
     public static final String WALLPAPER_RESOURCE_ID = "WALLPAPER_RESOURCE_ID";
-    public static final int RESULTCODE_ACT_SETTINGS_CHANGE_WALLPAPER = 21;
     public static final String OPERATION = "OPERATION";
     public static final String OPERATION_ADD = "OPERATION_ADD";
     public static final String NICKNAME_UNPLANNED_TIMEBOX = "Unplanned";
@@ -84,4 +83,12 @@ public class Constants {
     public static final String TEXT_PRIORITY_SPINNER_BOTTOM_MOST ="Bottom-most" ;
     public static final String TEXT_PRIORITY_SPINNER_CHANGE_MANUALLY ="Change Manually" ;
     public static final String ADD_NEW_GOAL_SPINNER_ITEM = "Add new goal";
+    public static final String GOAL_CREATED = "GOAL_CREATED";
+    public static final String TIMEBOX_CREATED = "TIMEBOX_CREATED";
+    public static final int RESULTCODE_OF_ACT_STEP_LIST = 1;
+    public static final int RESULTCODE_OF_ACT_ADD_GOAL = 2;
+    public static final int RESULTCODE_OF_ACT_ADD_TIMEBOX = 3;
+    public static final int RESULTCODE_ACT_SETTINGS_CHANGE_WALLPAPER = 21;
+    public static final int REQUEST_CODE_ACT_ACT_ADD_NEW_STEP = 1;
+    public static final int REQUEST_CODE_ACT_ACT_ADD_NEW_GOAL = 2;
 }

@@ -45,7 +45,7 @@ public class AdapterGoalSpinner extends BaseAdapter {
         CircleView circleView;
 
         if( convertView == null ) {
-            row = ((Activity)context).getLayoutInflater().inflate(R.layout.goal_spinner_item, parent, false);
+            row = ((Activity)context).getLayoutInflater().inflate(R.layout.spinner_item_goal, parent, false);
             tvGoalName = (TextView) row.findViewById(R.id.tvGoalNameSpinnerItemActAddNewStep);
             circleView = (CircleView) row.findViewById(R.id.btnBulletSpinnerItemActAddNewStep);
         }

@@ -217,12 +217,12 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
     }
 
     private void getGoalListFromLocal() {
+        if(goalList.size()>0){
+            goalList.clear();
+        }
         currentGoal = new Goal(this);
-        goalList = currentGoal.getAll();
-//        if(goalList.size()>0){
-//            goalList.clear();
-//            goalNamesList.clear();
-//        }
+        if(currentGoal.getAll()!=null)
+            goalList.addAll(currentGoal.getAll());
 //        if (goalList != null) {
 //            for (int i = 0; i < goalList.size(); i++) {
 //                goalNamesList.add(goalList.get(i).getNickName());
@@ -368,7 +368,7 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
                     Intent intent = new Intent(this, ActAddNewGoal.class);
                     intent.putExtra(Constants.CALLER, Constants.ACT_ADD_NEW_STEP);
                     intent.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, false);
-                    this.startActivity(intent);
+                    this.startActivityForResult(intent, Constants.REQUEST_CODE_ACT_ACT_ADD_NEW_STEP);
                 } else {
                     goalChosen = position;
                     getStepArrayFromLocal();
@@ -471,12 +471,12 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Constants.RESULTCODE_OF_ACT_ADD_GOAL && data.getExtras().getBoolean(Constants.GOAL_ATTACHED_IN_EXTRAS)) {// result from ActAddNewGoal
+        if (resultCode == Constants.RESULTCODE_OF_ACT_ADD_GOAL && data.getExtras().getBoolean(Constants.GOAL_CREATED)) {// result from ActAddNewGoal
             getGoalListFromLocal();
-            goalList.add((Goal) data.getExtras().getSerializable(Constants.GOAL_OBJECT));
-            goalNamesList.add(((Goal) data.getExtras().getSerializable(Constants.GOAL_OBJECT)).getNickName());
-            goalSpinner.setSelection(goalList.size() - 1);
-            goalChosen = goalList.size() - 1;
+            adapterGoalSpinner = new AdapterGoalSpinner(this, goalList);
+            goalSpinner.setAdapter(adapterGoalSpinner);
+            goalSpinner.setSelection(goalList.size() - 2);
+            goalChosen = goalList.size() - 2;
         }
 //        else if (resultCode == Constants.RESULTCODE_OF_ACT_STEP_LIST) {             // result from ActStepList
 //            if (!stepArrayList.isEmpty())
@@ -500,7 +500,8 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
 //            stepPrioritySpinner.setSelection(0);
 //        }
         else if (resultCode == Activity.RESULT_CANCELED) {
-            getStepArrayFromLocal();
+//            getStepArrayFromLocal();
+//            adapterGoalSpinner.notifyDataSetChanged();
             if (prefs.isPriorityNewStepBottomMost()) {
                 //choose bottom most
                 stepPrioritySpinner.setSelection(1);

@@ -150,6 +150,7 @@ public class AlarmScheduler implements Serializable{
         calTarget.add(Calendar.MINUTE,mins);
         Logger.log(TAG, "Target date:[Postpone to]" + calTarget.getTime().toString());
         Intent broadcastReceiver = new Intent(context, AlarmReceiver.class);
+        broadcastReceiver.putExtra(Constants.ALARM_SCHEDULER,this);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, -(int)stepId,broadcastReceiver,0);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calTarget.getTimeInMillis(), pendingIntent);
     }
@@ -161,6 +162,7 @@ public class AlarmScheduler implements Serializable{
      */
     public void cancel(){
         Intent broadcastReceiver = new Intent(context, AlarmReceiver.class);
+        broadcastReceiver.putExtra(Constants.ALARM_SCHEDULER,this);
         PendingIntent pendingIntentStart = PendingIntent.getBroadcast(context, (int)stepId,broadcastReceiver,0);
         PendingIntent pendingIntentEnd = PendingIntent.getBroadcast(context, -(int)stepId,broadcastReceiver,0);
         alarmManager.cancel(pendingIntentStart);

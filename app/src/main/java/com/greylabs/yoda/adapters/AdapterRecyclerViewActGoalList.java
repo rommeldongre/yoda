@@ -59,6 +59,10 @@ public class AdapterRecyclerViewActGoalList extends RecyclerView.Adapter<Adapter
             holder.btnHandle.setVisibility(View.GONE);
             holder.progressBar.setVisibility(View.VISIBLE);
         }
+        if(goalArrayList.get(position).getNickName().equals(Constants.NICKNAME_STRETCH_GOAL)){
+            holder.btnDeleteGoal.setVisibility(View.GONE);
+            holder.btnEditGoal.setVisibility(View.GONE);
+        }
 //        holder.btnDeleteTimeBox.getBackground().setColorFilter(R.color.white, PorterDuff.Mode.);
     }
 

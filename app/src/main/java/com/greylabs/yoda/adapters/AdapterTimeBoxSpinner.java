@@ -45,7 +45,7 @@ public class AdapterTimeBoxSpinner extends BaseAdapter {
         CircleView circleView;
 
         if( convertView == null ) {
-            row = ((Activity)context).getLayoutInflater().inflate(R.layout.timebox_spinner_item, parent, false);
+            row = ((Activity)context).getLayoutInflater().inflate(R.layout.spinner_item_timebox, parent, false);
             tvTimeBoxName = (TextView) row.findViewById(R.id.tvTimeBoxNameTimeBoxSpinnerItemActAddNewGoal);
             circleView = (CircleView) row.findViewById(R.id.btnBulletTimeBoxSpinnerItemActAddNewGoal);
         }

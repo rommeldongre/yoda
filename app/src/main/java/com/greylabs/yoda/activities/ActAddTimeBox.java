@@ -38,6 +38,7 @@ import java.util.TreeSet;
 
 public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnCheckedChangeListener,CompoundButton.OnCheckedChangeListener {
 
+    private String caller;
     private Toolbar toolbar;
     private LineColorPicker colorPicker;
     private CheckBox cbWhenEarlyMorning;
@@ -79,6 +80,7 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
     }
 
     private void initUI(){
+        caller = getIntent().getStringExtra(Constants.CALLER);
         toolbar = (Toolbar) findViewById(R.id.toolBarActCreateTimeBox);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -286,6 +288,11 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
                         }
                     }
                     if(isSaved) {
+                        if(caller.equals(Constants.ACT_ADD_NEW_GOAL)){
+                            Intent secIntent = new Intent();
+                            secIntent.putExtra(Constants.TIMEBOX_CREATED, true);
+                            setResult(Constants.RESULTCODE_OF_ACT_ADD_TIMEBOX, secIntent);
+                        }
                         Logger.showMsg(this, "TimeBox saved");
                         this.finish();
                     }
