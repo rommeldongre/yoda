@@ -43,6 +43,7 @@ public class YodaCalendar {
     public YodaCalendar(Context context){
         this.context = context;
         this.slot=new Slot(context);
+        Day day=new Day(context);
     }
     public YodaCalendar(Context context, TimeBox timeBox) {
         this(context);
@@ -185,8 +186,6 @@ public class YodaCalendar {
         List<Day> days=day.getAll();
         day=days.get(0);
         int daysDeleted=0;
-        cal.set(Calendar.MONTH,Calendar.AUGUST);
-        cal.set(Calendar.DATE,8);
         Calendar temp=Calendar.getInstance();
         if(day.getDate().compareTo(cal.getTime())>0){
             //first entry in the Calendar DB  is greater than  current
