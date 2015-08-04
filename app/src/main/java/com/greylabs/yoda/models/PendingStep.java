@@ -8,9 +8,12 @@ import android.provider.ContactsContract;
 import com.greylabs.yoda.database.Database;
 import com.greylabs.yoda.database.MetaData.TablePendingStep;
 import com.greylabs.yoda.database.MetaData.TableSlot;
+import com.greylabs.yoda.utils.CalendarUtils;
 import com.greylabs.yoda.utils.Constants;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class PendingStep implements Serializable {
@@ -20,6 +23,7 @@ public class PendingStep implements Serializable {
      * ******************************************************************************************
      */
     private long id;
+    private String stringId="";//used for google task
     private String nickName;
     private int priority;
     private int time;
@@ -28,6 +32,8 @@ public class PendingStep implements Serializable {
     private int skipCount;
     private PendingStepStatus pendingStepStatus;
     private long goalId;
+    private Date stepDate;
+    private String goalStringId="";//used for google task;
     private long slotId;
     private long subStepOf;
     transient private Database database;
@@ -47,6 +53,13 @@ public class PendingStep implements Serializable {
         this.id = id;
     }
 
+    public String getStringId() {
+        return stringId;
+    }
+
+    public void setStringId(String stringId) {
+        this.stringId = stringId;
+    }
     public String getNickName() {
         return nickName;
     }
@@ -119,6 +132,22 @@ public class PendingStep implements Serializable {
         this.goalId = goalId;
     }
 
+    public String getGoalStringId() {
+        return goalStringId;
+    }
+
+    public void setGoalStringId(String goalStringId) {
+        this.goalStringId = goalStringId;
+    }
+
+    public Date getStepDate() {
+        return stepDate;
+    }
+
+    public void setStepDate(Date stepDate) {
+        this.stepDate = stepDate;
+    }
+
     public long getSlotId() {
         return slotId;
     }
@@ -162,6 +191,7 @@ public class PendingStep implements Serializable {
         if (c.moveToFirst()) {
             do {
                 this.id = c.getInt(c.getColumnIndex(TablePendingStep.id));
+                this.stringId=c.getString(c.getColumnIndex(TablePendingStep.stringId));
                 this.nickName = c.getString(c.getColumnIndex(TablePendingStep.nickName));
                 this.priority = c.getInt(c.getColumnIndex(TablePendingStep.priority));
                 this.time = c.getInt(c.getColumnIndex(TablePendingStep.time));
@@ -172,6 +202,8 @@ public class PendingStep implements Serializable {
                 this.pendingStepStatus = PendingStepStatus.getPendingStepStatus(
                         c.getInt(c.getColumnIndex(TablePendingStep.status)));
                 this.goalId = c.getLong(c.getColumnIndex(TablePendingStep.goalId));
+                this.goalStringId=c.getString(c.getColumnIndex(TablePendingStep.goalStringId));
+                this.stepDate= CalendarUtils.parseDate(c.getString(c.getColumnIndex(TablePendingStep.stepDate)));
                 this.slotId = c.getLong(c.getColumnIndex(TablePendingStep.slotId));
                 this.subStepOf = c.getLong(c.getColumnIndex(TablePendingStep.subStepOf));
             } while (c.moveToNext());
@@ -192,6 +224,7 @@ public class PendingStep implements Serializable {
             do {
                 PendingStep pendingStep = new PendingStep(context);
                 pendingStep.id = c.getInt(c.getColumnIndex(TablePendingStep.id));
+                pendingStep.stringId=c.getString(c.getColumnIndex(TablePendingStep.stringId));
                 pendingStep.nickName = c.getString(c.getColumnIndex(TablePendingStep.nickName));
                 pendingStep.priority = c.getInt(c.getColumnIndex(TablePendingStep.priority));
                 pendingStep.time = c.getInt(c.getColumnIndex(TablePendingStep.time));
@@ -202,6 +235,8 @@ public class PendingStep implements Serializable {
                 pendingStep.pendingStepStatus = PendingStepStatus.getPendingStepStatus(
                         c.getInt(c.getColumnIndex(TablePendingStep.status)));
                 pendingStep.goalId = c.getInt(c.getColumnIndex(TablePendingStep.goalId));
+                pendingStep.goalStringId=c.getString(c.getColumnIndex(TablePendingStep.goalStringId));
+                pendingStep.stepDate= CalendarUtils.parseDate(c.getString(c.getColumnIndex(TablePendingStep.stepDate)));
                 pendingStep.slotId = c.getLong(c.getColumnIndex(TablePendingStep.slotId));
                 pendingStep.subStepOf = c.getLong(c.getColumnIndex(TablePendingStep.subStepOf));
                 pendingSteps.add(pendingStep);
@@ -233,6 +268,7 @@ public class PendingStep implements Serializable {
             do {
                 PendingStep pendingStep = new PendingStep(context);
                 pendingStep.id = c.getInt(c.getColumnIndex(TablePendingStep.id));
+                pendingStep.stringId=c.getString(c.getColumnIndex(TablePendingStep.stringId));
                 pendingStep.nickName = c.getString(c.getColumnIndex(TablePendingStep.nickName));
                 pendingStep.priority = c.getInt(c.getColumnIndex(TablePendingStep.priority));
                 pendingStep.time = c.getInt(c.getColumnIndex(TablePendingStep.time));
@@ -243,6 +279,8 @@ public class PendingStep implements Serializable {
                 pendingStep.pendingStepStatus = PendingStepStatus.getPendingStepStatus(
                         c.getInt(c.getColumnIndex(TablePendingStep.status)));
                 pendingStep.goalId = c.getInt(c.getColumnIndex(TablePendingStep.goalId));
+                pendingStep.goalStringId=c.getString(c.getColumnIndex(TablePendingStep.goalStringId));
+                pendingStep.stepDate= CalendarUtils.parseDate(c.getString(c.getColumnIndex(TablePendingStep.stepDate)));
                 pendingStep.slotId = c.getLong(c.getColumnIndex(TablePendingStep.slotId));
                 pendingStep.subStepOf = c.getLong(c.getColumnIndex(TablePendingStep.subStepOf));
                 pendingSteps.add(pendingStep);
@@ -267,6 +305,7 @@ public class PendingStep implements Serializable {
             do {
                 PendingStep pendingStep = new PendingStep(context);
                 pendingStep.id = c.getInt(c.getColumnIndex(TablePendingStep.id));
+                pendingStep.stringId=c.getString(c.getColumnIndex(TablePendingStep.stringId));
                 pendingStep.nickName = c.getString(c.getColumnIndex(TablePendingStep.nickName));
                 pendingStep.priority = c.getInt(c.getColumnIndex(TablePendingStep.priority));
                 pendingStep.time = c.getInt(c.getColumnIndex(TablePendingStep.time));
@@ -277,6 +316,8 @@ public class PendingStep implements Serializable {
                 pendingStep.pendingStepStatus = PendingStepStatus.getPendingStepStatus(
                         c.getInt(c.getColumnIndex(TablePendingStep.status)));
                 pendingStep.goalId = c.getInt(c.getColumnIndex(TablePendingStep.goalId));
+                pendingStep.goalStringId=c.getString(c.getColumnIndex(TablePendingStep.goalStringId));
+                pendingStep.stepDate= CalendarUtils.parseDate(c.getString(c.getColumnIndex(TablePendingStep.stepDate)));
                 pendingStep.slotId = c.getLong(c.getColumnIndex(TablePendingStep.slotId));
                 pendingStep.subStepOf = c.getLong(c.getColumnIndex(TablePendingStep.subStepOf));
                 pendingSteps.add(pendingStep);
@@ -290,6 +331,7 @@ public class PendingStep implements Serializable {
     public long save() {
         SQLiteDatabase db = database.getWritableDatabase();
         ContentValues values = new ContentValues();
+        values.put(TablePendingStep.stringId,this.stringId);
         values.put(TablePendingStep.nickName, this.nickName);
         values.put(TablePendingStep.priority, this.priority);
         values.put(TablePendingStep.time, this.time);
@@ -298,6 +340,11 @@ public class PendingStep implements Serializable {
         values.put(TablePendingStep.skipCount, this.skipCount);
         values.put(TablePendingStep.status, this.pendingStepStatus.ordinal());
         values.put(TablePendingStep.goalId, this.goalId);
+        values.put(TablePendingStep.goalStringId,this.goalStringId);
+        Calendar cal=Calendar.getInstance();
+        cal.set(Calendar.SECOND,0);cal.set(Calendar.MINUTE,0);cal.set(Calendar.HOUR_OF_DAY,0);
+        cal.setTime(this.getStepDate());
+        values.put(TablePendingStep.stepDate, CalendarUtils.getSqLiteDateFormat(cal));
         values.put(TablePendingStep.slotId, this.slotId);
         values.put(TablePendingStep.subStepOf, this.subStepOf);
         long rowId;
@@ -314,6 +361,7 @@ public class PendingStep implements Serializable {
         SQLiteDatabase db = database.getWritableDatabase();
         ContentValues values = new ContentValues();
         pendingStep.setId(0);
+        values.put(TablePendingStep.stringId, pendingStep.stringId);
         values.put(TablePendingStep.nickName, pendingStep.nickName);
         values.put(TablePendingStep.priority, pendingStep.priority);
         values.put(TablePendingStep.time, pendingStep.time);
@@ -322,6 +370,11 @@ public class PendingStep implements Serializable {
         values.put(TablePendingStep.skipCount, pendingStep.skipCount);
         values.put(TablePendingStep.status, pendingStep.pendingStepStatus.ordinal());
         values.put(TablePendingStep.goalId, pendingStep.goalId);
+        values.put(TablePendingStep.goalStringId,pendingStep.goalStringId);
+        Calendar cal=Calendar.getInstance();
+        cal.set(Calendar.SECOND,0);cal.set(Calendar.MINUTE, 0);cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.setTime(pendingStep.getStepDate());
+        values.put(TablePendingStep.stepDate,CalendarUtils.getSqLiteDateFormat(cal));
         values.put(TablePendingStep.slotId, pendingStep.slotId);
         values.put(TablePendingStep.subStepOf, pendingStep.subStepOf);
         long rowId;
@@ -346,17 +399,18 @@ public class PendingStep implements Serializable {
     public List<PendingStep> getAll(String filterCriteria){
         ArrayList<PendingStep> pendingSteps = null;
         SQLiteDatabase db = database.getReadableDatabase();
-        String cols=" s."+TablePendingStep.id+" as stepId , "+TablePendingStep.nickName+", " +
+        String cols=" s."+TablePendingStep.id+" as stepId , "+" s."+TablePendingStep.stringId+" as stepStringId , "+
+                TablePendingStep.nickName+", " +
                 TablePendingStep.priority+", "+TablePendingStep.time+", " +
                 TablePendingStep.type+", "+TablePendingStep.stepCount+","+
                 TablePendingStep.status+","+TablePendingStep.skipCount+", p."+
-                TablePendingStep.goalId+" as stepGoalId ,"+TablePendingStep.slotId+","+
+                TablePendingStep.goalId+" as stepGoalId , "+TablePendingStep.slotId+","+
                 TablePendingStep.subStepOf+","+TableSlot.scheduleDate;
         String query = "select "+ cols +
                 " " + " from " + TablePendingStep.pendingStep + " as p  join " + TableSlot.slot+" as s " +
                 " " + " on ( p." +TablePendingStep.slotId+" = s."+TableSlot.id+" ) "+
                 " " + " where "  + //TablePendingStep.type + "!=" + PendingStepType.SPLIT_STEP.ordinal()+" " +
-       //         " " + " or "+TablePendingStep.type+"!="+ PendingStepType.SERIES_STEP.ordinal()+" ) "+
+                //         " " + " or "+TablePendingStep.type+"!="+ PendingStepType.SERIES_STEP.ordinal()+" ) "+
                 " "+filterCriteria+" " +
                 " "+" order by "+TablePendingStep.priority+" asc ,"+TablePendingStep.nickName+" asc ";
 
@@ -366,6 +420,7 @@ public class PendingStep implements Serializable {
             do {
                 PendingStep pendingStep = new PendingStep(context);
                 pendingStep.id = c.getInt(c.getColumnIndex("stepId"));
+                pendingStep.stringId=c.getString(c.getColumnIndex("stepStringId"));
                 pendingStep.nickName = c.getString(c.getColumnIndex(TablePendingStep.nickName));
                 pendingStep.priority = c.getInt(c.getColumnIndex(TablePendingStep.priority));
                 pendingStep.time = c.getInt(c.getColumnIndex(TablePendingStep.time));
@@ -376,6 +431,8 @@ public class PendingStep implements Serializable {
                 pendingStep.pendingStepStatus = PendingStepStatus.getPendingStepStatus(
                         c.getInt(c.getColumnIndex(TablePendingStep.status)));
                 pendingStep.goalId = c.getInt(c.getColumnIndex("stepGoalId"));
+                pendingStep.goalStringId=c.getString(c.getColumnIndex(TablePendingStep.goalStringId));
+                pendingStep.stepDate= CalendarUtils.parseDate(c.getString(c.getColumnIndex(TablePendingStep.stepDate)));
                 pendingStep.slotId = c.getLong(c.getColumnIndex(TablePendingStep.slotId));
                 pendingStep.subStepOf = c.getLong(c.getColumnIndex(TablePendingStep.subStepOf));
                 pendingSteps.add(pendingStep);
@@ -408,6 +465,7 @@ public class PendingStep implements Serializable {
         long rowId=0;
         for (int i = start; i <= numberOfSteps; i++) {
             pendingStepNew.setId(0);
+            pendingStepNew.setGoalStringId("");
             pendingStepNew.setNickName("Part " + i + " of " + this.getNickName());
             pendingStepNew.setPriority(this.getPriority());
             pendingStepNew.setPendingStepType(PendingStepType.SUB_STEP);
@@ -415,6 +473,7 @@ public class PendingStep implements Serializable {
             pendingStepNew.setSkipCount(0);
             pendingStepNew.setPendingStepStatus(PendingStepStatus.TODO);
             pendingStepNew.setGoalId(this.getGoalId());
+            pendingStepNew.setGoalStringId(this.getGoalStringId());
             pendingStepNew.setTime(time);
             pendingStepNew.setSubStepOf(this.getId());
             rowId+=pendingStepNew.saveSubStep(pendingStepNew);

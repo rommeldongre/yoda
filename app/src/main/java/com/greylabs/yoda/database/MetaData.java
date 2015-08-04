@@ -14,6 +14,7 @@ public class MetaData {
     public static class TableGoal{
         public static final String goal="goal";//table name
         public static final String id="id";//pk
+        public static final String stringId="stringId";
         public static final String nickName="nickName";
         public static final String objective="objective";
         public static final String keyResult="keyResult";
@@ -28,6 +29,7 @@ public class MetaData {
         public static final String createGoalTable=
                 "create table "+goal+" (" +
                         " "+id+" integer primary key autoincrement, " +
+                        " "+stringId+" text ,"+
                         " "+nickName+" text, " +
                         " "+objective+" text, " +
                         " "+keyResult+" text, " +
@@ -61,6 +63,7 @@ public class MetaData {
     public static class TablePendingStep{
         public static final String pendingStep="pendingStep";//table name
         public static final String id="id";
+        public static final String stringId="stringId";
         public static final String nickName="nickName";
         public static final String priority="priority";
         public static final String time="time";
@@ -68,12 +71,15 @@ public class MetaData {
         public static final String stepCount="stepCount";
         public static final String status="status";
         public static final String skipCount="skipCount";
+        public static final String stepDate="stepDate";//date meaning is different according to its status
         public static final String goalId="goalId";//FK to Goal
+        public static final String goalStringId="goalStringId";//used for google task
         public static  final String slotId="slotId";
         public static final String subStepOf="subStepOf";
         public static final String createPendingStepTable="" +
                 "create table "+pendingStep+" ( " +
                 " "+id+" integer primary key autoincrement," +
+                " "+stringId+" text , "+
                 " "+nickName+" text, " +
                 " "+priority+" integer, " +
                 " "+time+" integer, " +
@@ -81,7 +87,9 @@ public class MetaData {
                 " "+stepCount+" integer, " +
                 " "+skipCount+" integer ," +
                 " "+status+" integer ," +
+                " "+stepDate+" text ,"+
                 " "+goalId+" integer, " +
+                " "+goalStringId+" text ,"+
                 " "+slotId+" integer, " +
                 " "+subStepOf+" integer, " +
                 " "+"foreign key("+goalId+") references "+ TableGoal.goal+"("+ TableGoal.id+") ," +
@@ -112,13 +120,15 @@ public class MetaData {
         public static final String nickName="nickName";
         public static final String on="onType";
         public static final String till="tillType";
+        public static final String colorCode="colorCode";
 
         public static final String createTimeBoxTable="" +
                 "create table  "+timeBox+" ( " +
                 " "+id+" integer primary key autoincrement, " +
                 " "+nickName+" text ," +
                 " "+on+" integer ," +
-                " "+till+" integer " +
+                " "+till+" integer ," +
+                " "+colorCode+" text "+
                 ")";
 
 

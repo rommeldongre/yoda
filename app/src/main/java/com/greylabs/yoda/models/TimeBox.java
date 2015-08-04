@@ -27,6 +27,7 @@ public class TimeBox implements Serializable{
     private TimeBoxTill tillType;
     private TimeBoxOn timeBoxOn;
     private TimeBoxWhen timeBoxWhen;
+    private String colorCode;
 
     /**********************************************************************************************/
     //Getters and Setters
@@ -70,6 +71,13 @@ public class TimeBox implements Serializable{
     public void setTillType(TimeBoxTill tillType) {
         this.tillType = tillType;
     }
+    public String getColorCode() {
+        return colorCode;
+    }
+    public void setColorCode(String colorCode) {
+        this.colorCode = colorCode;
+    }
+
     /**********************************************************************************************/
     // Constructors
     /**********************************************************************************************/
@@ -101,6 +109,7 @@ public class TimeBox implements Serializable{
             do{
                 this.id=c.getInt(c.getColumnIndex(TableTimeBox.id));
                 this.nickName=c.getString(c.getColumnIndex(TableTimeBox.nickName));
+                this.colorCode=c.getString(c.getColumnIndex(TableTimeBox.colorCode));
                 this.timeBoxOn=new TimeBoxOn(context,
                         com.greylabs.yoda.enums.TimeBoxOn.getIntegerToEnumType(c.getInt(c.getColumnIndex(TableTimeBox.on))));
                 this.timeBoxOn.setTimeBoxId(this.id);
@@ -143,7 +152,7 @@ public class TimeBox implements Serializable{
                 TimeBox timeBox=new TimeBox(context);
                 timeBox.id=c.getLong(c.getColumnIndex("tbId"));
                 timeBox.nickName=c.getString(c.getColumnIndex("timeBoxNickname"));
-
+                timeBox.colorCode=c.getString(c.getColumnIndex(TableTimeBox.colorCode));
                 timeBox.timeBoxOn=new TimeBoxOn(context,
                         com.greylabs.yoda.enums.TimeBoxOn.getIntegerToEnumType(c.getInt(c.getColumnIndex(TableTimeBox.on))));
                 timeBox.timeBoxOn.setTimeBoxId(timeBox.id);
@@ -167,6 +176,7 @@ public class TimeBox implements Serializable{
         values.put(TableTimeBox.nickName,this.nickName);
         values.put(TableTimeBox.on, com.greylabs.yoda.enums.TimeBoxOn.getEnumToIntegerType(this.timeBoxOn.getOnType()));
         values.put(TableTimeBox.till, TimeBoxTill.getEnumToIntegerType(this.tillType));
+        values.put(TableTimeBox.colorCode,this.colorCode);
         long rowId;
         if(this.id!=0){
             values.put(TableTimeBox.id,this.id);

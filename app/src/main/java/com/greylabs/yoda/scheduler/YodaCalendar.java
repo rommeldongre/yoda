@@ -379,6 +379,7 @@ public class YodaCalendar {
                             slot.setGoalId(ps.getGoalId());
                             ps.setSlotId(slot.getId());
                             slot.save();
+                            ps.setStepDate(slot.getScheduleDate());
                             ps.save();
                             AlarmScheduler alarmScheduler = new AlarmScheduler(context);
                             alarmScheduler.setStepId(ps.getId());
@@ -404,6 +405,7 @@ public class YodaCalendar {
                         slot.setGoalId(pendingStep.getGoalId());
                         pendingStep.setSlotId(slot.getId());
                         slot.save();
+                        pendingStep.setStepDate(slot.getScheduleDate());
                         pendingStep.save();
                         AlarmScheduler alarmScheduler = new AlarmScheduler(context);
                         alarmScheduler.setStepId(pendingStep.getId());
@@ -454,6 +456,7 @@ public class YodaCalendar {
                                     slot.setGoalId(substep.getGoalId());
                                     substep.setSlotId(slot.getId());
                                     slot.save();
+                                    substep.setStepDate(slot.getScheduleDate());
                                     substep.save();
                                     AlarmScheduler alarmScheduler = new AlarmScheduler(context);
                                     alarmScheduler.setStepId(substep.getId());
@@ -481,6 +484,7 @@ public class YodaCalendar {
                                 slot.setGoalId(pendingStep.getGoalId());
                                 pendingStep.setSlotId(slot.getId());
                                 slot.save();
+                                pendingStep.setStepDate(slot.getScheduleDate());
                                 pendingStep.save();
                                 AlarmScheduler alarmScheduler = new AlarmScheduler(context);
                                 alarmScheduler.setStepId(pendingStep.getId());

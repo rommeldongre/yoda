@@ -21,6 +21,7 @@ public class Goal implements Serializable{
     // Instance variables
     /**********************************************************************************************/
     private long id;
+    private String stringId="";//used for google tasks.
     private String nickName;
     private String objective;
     private String keyResult;
@@ -45,6 +46,14 @@ public class Goal implements Serializable{
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public String getStringId() {
+        return stringId;
+    }
+
+    public void setStringId(String stringId) {
+        this.stringId = stringId;
     }
 
     public String getNickName() {
@@ -166,6 +175,7 @@ public class Goal implements Serializable{
         if(c.moveToFirst()){
             do{
                 this.id=c.getInt(c.getColumnIndex(TableGoal.id));
+                this.stringId=c.getString(c.getColumnIndex(TableGoal.stringId));
                 this.nickName=c.getString(c.getColumnIndex(TableGoal.nickName));
                 this.objective=c.getString(c.getColumnIndex(TableGoal.objective));
                 this.keyResult=c.getString(c.getColumnIndex(TableGoal.keyResult));
@@ -191,6 +201,7 @@ public class Goal implements Serializable{
             do{
                 Goal goal=new Goal(context);
                 goal.id=c.getInt(c.getColumnIndex(TableGoal.id));
+                goal.stringId=c.getString(c.getColumnIndex(TableGoal.stringId));
                 goal.nickName=c.getString(c.getColumnIndex(TableGoal.nickName));
                 goal.objective=c.getString(c.getColumnIndex(TableGoal.objective));
                 goal.keyResult=c.getString(c.getColumnIndex(TableGoal.keyResult));
@@ -211,6 +222,7 @@ public class Goal implements Serializable{
         SQLiteDatabase db=database.getWritableDatabase();
 
         ContentValues values=new ContentValues();
+        values.put(TableGoal.stringId,this.stringId);
         values.put(TableGoal.nickName,this.nickName);
         values.put(TableGoal.objective,this.objective);
         values.put(TableGoal.keyResult,this.keyResult);
@@ -219,7 +231,7 @@ public class Goal implements Serializable{
         values.put(TableGoal.buddyEmail,this.buddyEmail);
         values.put(TableGoal.status,this.status);
         values.put(TableGoal.order,this.order);
-        values.put(TableGoal.dueDate,this.dueDate.toString());
+        values.put(TableGoal.dueDate, this.dueDate.toString());
         values.put(TableGoal.timeBoxId, this.timeBoxId);
         long rowId;
         if (this.id!=0){
@@ -299,5 +311,4 @@ public class Goal implements Serializable{
         }
         return goalId;
     }
-
 }
