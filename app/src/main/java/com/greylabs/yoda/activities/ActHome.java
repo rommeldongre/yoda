@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.greylabs.yoda.R;
+import com.greylabs.yoda.apis.TasksSample;
 import com.greylabs.yoda.models.Day;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.utils.Constants;
@@ -188,6 +189,7 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
                 break;
 
             case R.id.btnAutosyncWithGoogleActHome :
+                startActivity(new Intent(this, TasksSample.class));
                 btnSettings.collapse();
                 break;
 

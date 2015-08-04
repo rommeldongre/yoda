@@ -141,6 +141,15 @@
     <string name="label_pick_color_act_create_time_box">Pick a color</string>
     <string name="msgSelectTimeBoxActAddNewGoal">Please select a TimeBox</string>
     <string name="findContact">Search in Contacts</string>
+
+
+    <string name="accounts">Accounts</string>
+    <string name="icon_desc">Application icon</string>
+    <string name="title_separator_desc">Title separator</string>
+    <string name="refresh">Refresh</string>
+    <string name="error">Error</string>
+    <string name="error_format">[Error] %s</string>
+
     <string-array name="arrayStepTypeActAddNewStep">
         <item>Single Step</item>
         <item>Series</item>
