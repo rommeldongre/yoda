@@ -9,6 +9,7 @@ import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.utils.CalendarUtils;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Logger;
+import com.greylabs.yoda.utils.Prefs;
 import com.greylabs.yoda.utils.sorters.SortByDate;
 
 import java.text.SimpleDateFormat;
@@ -31,7 +32,7 @@ public class YodaCalendar {
     private Slot slot;
     private List<Slot> slots;
     private TimeBox timeBox;
-
+    private Prefs prefs;
     /**********************************************************************************************/
     //Getters and Setters
     /**********************************************************************************************/
@@ -43,12 +44,16 @@ public class YodaCalendar {
     public YodaCalendar(Context context){
         this.context = context;
         this.slot=new Slot(context);
-        Day day=new Day(context);
+        this.prefs=Prefs.getInstance(context);
     }
     public YodaCalendar(Context context, TimeBox timeBox) {
         this(context);
         this.timeBox = timeBox;
         slots=slot.getAll(timeBox);
+    }
+
+    public void setTimeBox(TimeBox timeBox){
+        this.timeBox=timeBox;
     }
     /**********************************************************************************************/
     //Methods
@@ -59,6 +64,7 @@ public class YodaCalendar {
      *@return None
      */
     public static void  init(Context context){
+        Prefs prefs=Prefs.getInstance(context);
         //Create calender and set todays date
         Calendar cal=Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -121,8 +127,8 @@ public class YodaCalendar {
                 slot.setWhen(TimeBoxWhen.getIntegerToEnumType(slotOfDay));
                 slot.setTime(Constants.MAX_SLOT_DURATION);
                 slot.setScheduleDate(day.getDate());
-                slot.setGoalId(0);
-                slot.setTimeBoxId(0);
+                slot.setGoalId(prefs.getStretchGoalId());
+                slot.setTimeBoxId(prefs.getUnplannedTimeBoxId());
                 slot.setDayId(day.getId());
                 slot.save();
                 Logger.log(TAG, " " + dayOfYear + "Day and Slot:" + slot.toString() + "|||" + day.toString());
@@ -218,8 +224,8 @@ public class YodaCalendar {
                     slot.setWhen(TimeBoxWhen.getIntegerToEnumType(j));
                     slot.setTime(Constants.MAX_SLOT_DURATION);
                     slot.setScheduleDate(day.getDate());
-                    slot.setGoalId(0);
-                    slot.setTimeBoxId(0);
+                    slot.setGoalId(prefs.getStretchGoalId());
+                    slot.setTimeBoxId(prefs.getUnplannedTimeBoxId());
                     slot.setDayId(day.getId());
                     slot.save();
                 }
@@ -259,8 +265,8 @@ public class YodaCalendar {
                     slot.setWhen(TimeBoxWhen.getIntegerToEnumType(j));
                     slot.setTime(Constants.MAX_SLOT_DURATION);
                     slot.setScheduleDate(day.getDate());
-                    slot.setGoalId(0);
-                    slot.setTimeBoxId(0);
+                    slot.setGoalId(prefs.getStretchGoalId());
+                    slot.setTimeBoxId(prefs.getUnplannedTimeBoxId());
                     slot.setDayId(day.getId());
                     slot.save();
                 }
@@ -284,11 +290,16 @@ public class YodaCalendar {
      */
     public int attachTimeBox(long goalId){
         int slotCount=0;
+        PendingStep pendingStep=new PendingStep(context);
         if(slots!=null && slots.size()>0) {
             for (Slot slot : slots) {
+                //following checks that any Unplanned Slot is assigned to some step or not
+                // If it is assigned then keep this slot as Unplanned TimeBox
+                if( pendingStep.isSlotAssigned(slot.getId()))
+                    continue;
                 slot.setTimeBoxId(timeBox.getId());
                 slot.setGoalId(goalId);
-                slot.setTime(3);
+                slot.setTime(Constants.MAX_SLOT_DURATION);
                 slot.save();
                 slotCount++;
             }
@@ -304,14 +315,14 @@ public class YodaCalendar {
      */
     public int detachTimeBox(long timeBoxId){
         List<Slot> slots=null;
-        if(timeBoxId!=0)
+        if(timeBoxId!=prefs.getUnplannedTimeBoxId())
             slots=slot.getAll(timeBoxId);
         int slotCount=0;
         if(slots!=null) {
             for (Slot slot : slots) {
-                slot.setTimeBoxId(0);
-                slot.setGoalId(0);
-                slot.setTime(0);
+                slot.setGoalId(prefs.getStretchGoalId());
+                slot.setTimeBoxId(prefs.getUnplannedTimeBoxId());
+                slot.setTime(Constants.MAX_SLOT_DURATION);
                 slot.save();
                 slotCount++;
             }
@@ -350,7 +361,7 @@ public class YodaCalendar {
     /**********************************************************************************************/
     public boolean scheduleStep(PendingStep pendingStep) {
         boolean isScheduled=false;
-        List<Slot> slots=slot.getAll(timeBox.getId());
+        slots=slot.getAll(timeBox.getId());
         //Collections.sort(slots, new SortByDate());
         removeTodaysPassedSlots();
         switch (pendingStep.getPendingStepType()){
@@ -363,7 +374,7 @@ public class YodaCalendar {
                     Iterator<Slot> it = slots.iterator();
                     while (it.hasNext()) {
                         Slot slot = it.next();
-                        if (slot.getTimeBoxId()==timeBox.getId() && ps.getTime() <=slot.getTime()) {
+                        if (ps.getTime() <=slot.getTime() && slot.getTimeBoxId()==timeBox.getId()  ) {
                             slot.setTime(slot.getTime() - ps.getTime());
                             slot.setGoalId(ps.getGoalId());
                             ps.setSlotId(slot.getId());
@@ -388,7 +399,7 @@ public class YodaCalendar {
                 Iterator<Slot> it = slots.iterator();
                 while (it.hasNext()) {
                     Slot slot = it.next();
-                    if (slot.getTimeBoxId()==timeBox.getId() && pendingStep.getTime() <=slot.getTime()) {
+                    if (pendingStep.getTime() <=slot.getTime() && slot.getTimeBoxId()==timeBox.getId()  ) {
                         slot.setTime(slot.getTime() - pendingStep.getTime());
                         slot.setGoalId(pendingStep.getGoalId());
                         pendingStep.setSlotId(slot.getId());
@@ -422,8 +433,8 @@ public class YodaCalendar {
         int count=0;
         List<PendingStep> pendingSteps= new PendingStep(context).getAll(goalId);
         if(pendingSteps!=null) {
-            List<Slot> slots=slot.getAll(timeBox.getId());
-            Iterator<Slot> it = slots.iterator();
+             slots=slot.getAll(timeBox.getId());
+            Iterator<Slot> it;
             for (PendingStep pendingStep : pendingSteps) {
                 //Collections.sort(slots, new SortByDate());
                 removeTodaysPassedSlots();
@@ -432,12 +443,13 @@ public class YodaCalendar {
                     case SERIES_STEP:
                         Iterator<PendingStep> substeps = pendingStep.
                                 getAllSubSteps(pendingStep.getId(), pendingStep.getGoalId()).iterator();
+                        it = slots.iterator();
                         while (substeps.hasNext()) {
                             PendingStep substep=substeps.next();
                             while (it.hasNext()) {
                                 Slot slot = it.next();
                                 slot.setTime(Constants.MAX_SLOT_DURATION);
-                                if (slot.getTimeBoxId()==timeBox.getId() && substep.getTime() <=slot.getTime()) {
+                                if (substep.getTime() <=slot.getTime() && slot.getTimeBoxId()==timeBox.getId()  ) {
                                     slot.setTime(slot.getTime() - substep.getTime());
                                     slot.setGoalId(substep.getGoalId());
                                     substep.setSlotId(slot.getId());
@@ -460,10 +472,11 @@ public class YodaCalendar {
                         }
                         break;
                     case SINGLE_STEP:
+                        it = slots.iterator();
                         while (it.hasNext()) {
                             Slot slot = it.next();
                             slot.setTime(Constants.MAX_SLOT_DURATION);
-                            if (slot.getTimeBoxId()==timeBox.getId() && pendingStep.getTime() <=slot.getTime()) {
+                            if (pendingStep.getTime() <=slot.getTime() && slot.getTimeBoxId()==timeBox.getId()  ) {
                                 slot.setTime(slot.getTime() - pendingStep.getTime());
                                 slot.setGoalId(pendingStep.getGoalId());
                                 pendingStep.setSlotId(slot.getId());
@@ -498,7 +511,7 @@ public class YodaCalendar {
         removeTodaysPassedSlots();
         if(slots!=null) {
             for (Slot slot : slots) {
-                if (slot.getTimeBoxId() != 0) {
+                if (slot.getTimeBoxId() != prefs.getUnplannedTimeBoxId()) {
                     isValid = false;
                     break;
                 }
@@ -516,7 +529,7 @@ public class YodaCalendar {
         removeTodaysPassedSlots();
         if(slots!=null) {
             for (Slot slot : slots) {
-                if (slot.getTimeBoxId() != 0 ) {
+                if (slot.getTimeBoxId() != prefs.getUnplannedTimeBoxId()) {
                     if(slot.getTimeBoxId() != oldTimeBoxId) {
                         isValid = false;
                         break;
@@ -540,23 +553,37 @@ public class YodaCalendar {
         cal.set(Calendar.MILLISECOND, 0);
         String  sqliteDate=CalendarUtils.getSqLiteDateFormat(cal);
         Date date=CalendarUtils.parseDate(sqliteDate);
-        Set<TimeBoxWhen> whens=CalendarUtils.getPossibleWhenTypesOfDay();
-        if(slots!=null) {
-            for (TimeBoxWhen when : whens) {
-                Slot slot = null;
-                Iterator<Slot> itSlots = slots.iterator();
 
-                while (itSlots.hasNext()) {
-                    slot = itSlots.next();
-                    if (date.compareTo(slot.getScheduleDate()) == 0 && (when != slot.getWhen())) {
-                        itSlots.remove();
-                        break;
-                    }
-                }
-                if (date.compareTo(slot.getScheduleDate()) != 0)
-                    break;
+       if (slots!=null) {
+           Slot slot;
+           Iterator<Slot> itSlots = slots.iterator();
+           while (itSlots.hasNext()) {
+               slot = itSlots.next();
+               if (date.compareTo(slot.getScheduleDate()) == 0) {
+                   itSlots.remove();
+               } else {
+                   break;
+               }
+           }
+       }
 
-            }
-        }
+//        Set<TimeBoxWhen> whens=CalendarUtils.getPossibleWhenTypesOfDay();
+//        if(slots!=null) {
+//            for (TimeBoxWhen when : whens) {
+//                Slot slot = null;
+//                Iterator<Slot> itSlots = slots.iterator();
+//
+//                while (itSlots.hasNext()) {
+//                    slot = itSlots.next();
+//                    if (date.compareTo(slot.getScheduleDate()) == 0 && (when != slot.getWhen())) {
+//                        itSlots.remove();
+//                        break;
+//                    }
+//                }
+//                if (date.compareTo(slot.getScheduleDate()) != 0)
+//                    break;
+//
+//            }
+//        }
     }
 }

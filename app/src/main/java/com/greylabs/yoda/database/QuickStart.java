@@ -13,6 +13,7 @@ import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Logger;
+import com.greylabs.yoda.utils.Prefs;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -210,6 +211,8 @@ public final class QuickStart {
         timeBox.setTimeBoxWhen(timeBoxWhen);
         timeBox.setTillType(TimeBoxTill.FOREVER);
         timeBox.save();
+        Prefs pref=Prefs.getInstance(context);
+        pref.setUnplannedTimeBoxId(timeBox.getId());
         timeBoxIds.add(timeBox.getId());
         Logger.log(TAG, "1 Added");
     }
@@ -290,6 +293,8 @@ public final class QuickStart {
         goal.setKeyResult("");
         goal.setTimeBoxId(timeBoxIds.get(7));
         goal.save();
+        Prefs pref=Prefs.getInstance(context);
+        pref.setStretchGoalId(goal.getId());
         goalIds.add(goal.getId());
     }
 

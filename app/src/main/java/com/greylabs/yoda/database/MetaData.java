@@ -1,8 +1,10 @@
 package com.greylabs.yoda.database;
 
+import com.greylabs.yoda.activities.Yoda;
 import com.greylabs.yoda.models.CompletedStep;
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.TimeBox;
+import com.greylabs.yoda.utils.Prefs;
 
 /**
  * Created by Jaybhay Vijay on 6/30/2015.
@@ -45,14 +47,15 @@ public class MetaData {
         //create Trigger to delete Steps when Goal is deleted.
         //this is same effect as Cascade on delete. This feature is not supported
         // below api level 16. To support all api levels we use Triggers
-
-        public static final String createTrigger="" +
-                "create trigger deleteStepsOnGoalDelete " +goal+" before delete on "+goal+" " +
-                "for each row " +
-                "begin" +
-                "    delete from  "+TablePendingStep.pendingStep+" " +
-                "    where "+goal+"."+id+"="+ TablePendingStep.pendingStep+"."+TablePendingStep.goalId+"" +
-                " end  ";
+//        static Prefs prefs=Prefs.getInstance(Yoda.getContext());
+//
+//        public static final String createTrigger="" +
+//                "create trigger updateStepsOnGoalDelete before delete on "+goal+" " +
+//                "begin" +
+//                "    update  "+TablePendingStep.pendingStep+" " +
+//                "    set " +TablePendingStep.goalId+" = "+prefs.getStretchGoalId()+" "+
+//                "    where "+"old."+id+"="+ TablePendingStep.pendingStep+"."+TablePendingStep.goalId+"" +
+//                " end ; ";
     }
 
     public static class TablePendingStep{

@@ -1,6 +1,7 @@
 package com.greylabs.yoda.activities;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.res.Configuration;
 
 import com.greylabs.yoda.R;
@@ -34,6 +35,7 @@ import org.acra.sender.HttpSender;
         resToastText = R.string.crashToast
 )
 public class Yoda extends Application {
+    private static  Context context;
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
@@ -43,6 +45,11 @@ public class Yoda extends Application {
     public void onCreate() {
         super.onCreate();
         ACRA.init(this);
+        context=getApplicationContext();
+    }
+
+    public static Context getContext(){
+        return context;
     }
 
     @Override

@@ -53,8 +53,6 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
 
         YodaCalendar yodaCalendar=new YodaCalendar(this);
         Day day=new Day(this);
-
-
         initialize();
     }
 
