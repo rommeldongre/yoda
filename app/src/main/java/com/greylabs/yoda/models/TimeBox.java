@@ -238,16 +238,6 @@ public class TimeBox implements Serializable{
     /**********************************************************************************************/
     // Utils
     /**********************************************************************************************/
-    /**
-     * This method returns TimeBox id  (of TimeBox having Forever as Till time) of and matching
-     * when time
-     * @param when
-     * @return timebox id which matched
-     */
-    public long getTimeBoxId(TimeBoxWhen when){
-
-        return 0;
-    }
     public enum TimeBoxStatus {
         ACTIVE,INACTIVE,NONE;
         public static TimeBoxStatus getIntegerToEnumType(int type){
