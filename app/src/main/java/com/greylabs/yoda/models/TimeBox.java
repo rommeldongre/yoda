@@ -27,7 +27,7 @@ public class TimeBox implements Serializable{
     private TimeBoxTill tillType;
     private TimeBoxOn timeBoxOn;
     private TimeBoxWhen timeBoxWhen;
-    private String colorCode;
+    private String colorCode="";
 
     /**********************************************************************************************/
     //Getters and Setters
@@ -130,7 +130,7 @@ public class TimeBox implements Serializable{
         SQLiteDatabase db=database.getReadableDatabase();
         String query="";
         String cols=" t."+TableTimeBox.id+" as tbId , t."+TableTimeBox.nickName+" as timeBoxNickname,"+TableTimeBox.on+"," +
-                " "+TableTimeBox.till;
+                " "+TableTimeBox.till+","+TableTimeBox.colorCode;
         String query1= " select  " +cols+
                 " "+" from "+ TableTimeBox.timeBox+" as t join  "+ MetaData.TableGoal.goal+" as g" +
                 " "+" on ( t."+TableTimeBox.id+" = g."+ MetaData.TableGoal.timeBoxId+" ) ";
@@ -238,6 +238,16 @@ public class TimeBox implements Serializable{
     /**********************************************************************************************/
     // Utils
     /**********************************************************************************************/
+    /**
+     * This method returns TimeBox id  (of TimeBox having Forever as Till time) of and matching
+     * when time
+     * @param when
+     * @return timebox id which matched
+     */
+    public long getTimeBoxId(TimeBoxWhen when){
+
+        return 0;
+    }
     public enum TimeBoxStatus {
         ACTIVE,INACTIVE,NONE;
         public static TimeBoxStatus getIntegerToEnumType(int type){
@@ -250,6 +260,5 @@ public class TimeBox implements Serializable{
             return timeBoxStatus;
         }
     }
-
 
 }
