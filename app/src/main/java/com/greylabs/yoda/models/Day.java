@@ -171,6 +171,7 @@ public class Day {
                 this.setDayOfYear(c.getInt(c.getColumnIndex(TableDay.dayOfYear)));
                 this.setDate(CalendarUtils.parseDate(c.getString(c.getColumnIndex(TableDay.date))));
                 this.setDayOfWeek(c.getInt(c.getColumnIndex(TableDay.dayOfWeek)));
+                this.setWeekOfMonth(c.getInt(c.getColumnIndex(TableDay.weekOfMonth)));
                 this.setMonthOfYear(c.getInt(c.getColumnIndex(TableDay.monthOfYear)));
                 this.setQuarterOfYear(c.getInt(c.getColumnIndex(TableDay.quarterOfYear)));
                 this.setYear(c.getInt(c.getColumnIndex(TableDay.year)));
@@ -184,7 +185,7 @@ public class Day {
         List<Day> days=null;
         String query="select * " +
                 " "+" from "+TableDay.day+" " +
-                " "+" where "+TableDay.id+" = "+id;
+                " "+" order by strftime('%Y-%m-%d %H:%M:%S',"+TableDay.date+") asc ";
         SQLiteDatabase db=database.getReadableDatabase();
         Cursor c=db.rawQuery(query,null);
         if(c.moveToFirst()){
@@ -195,6 +196,7 @@ public class Day {
                 day.setDayOfYear(c.getInt(c.getColumnIndex(TableDay.dayOfYear)));
                 day.setDate(CalendarUtils.parseDate(c.getString(c.getColumnIndex(TableDay.date))));
                 day.setDayOfWeek(c.getInt(c.getColumnIndex(TableDay.dayOfWeek)));
+                day.setWeekOfMonth(c.getInt(c.getColumnIndex(TableDay.weekOfMonth)));
                 day.setMonthOfYear(c.getInt(c.getColumnIndex(TableDay.monthOfYear)));
                 day.setQuarterOfYear(c.getInt(c.getColumnIndex(TableDay.quarterOfYear)));
                 day.setYear(c.getInt(c.getColumnIndex(TableDay.year)));
@@ -204,5 +206,22 @@ public class Day {
         return days;
     }
 
+    public int delete(){
+            SQLiteDatabase db=database.getWritableDatabase();
+            int numOfRowAffected=db.delete(TableDay.day, TableDay.id + "=" + id, null);
+            return numOfRowAffected;
+    }
+
+    public int deletePrevDays(String startDate,String endDate){
+        SQLiteDatabase db=database.getWritableDatabase();
+        int numOfRowAffected=db.delete(TableDay.day,TableDay.date+">='"+startDate+"'"+" and "+TableDay.date+"<'"+endDate+"'",null);
+        return numOfRowAffected;
+    }
+
+    public int deleteNextDays(String startDate,String endDate){
+        SQLiteDatabase db=database.getWritableDatabase();
+        int numOfRowAffected=db.delete(TableDay.day,TableDay.date+"<'"+startDate+"'"+" and "+TableDay.date+"=>'"+endDate+"'",null);
+        return numOfRowAffected;
+    }
 
 }

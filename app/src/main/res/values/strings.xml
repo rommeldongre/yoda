@@ -140,6 +140,7 @@
     <string name="timeSpinnerHintActAddNewGoal">Select a TimeBox</string>
     <string name="label_pick_color_act_create_time_box">Pick a color</string>
     <string name="msgSelectTimeBoxActAddNewGoal">Please select a TimeBox</string>
+    <string name="crashToast">Yoda Crashed. Error will be reported.</string>
     <string name="findContact">Search in Contacts</string>
 
 

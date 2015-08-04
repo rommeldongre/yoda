@@ -18,9 +18,12 @@ import com.greylabs.yoda.adapters.AdapterRecyclerViewActGoalList;
 import com.greylabs.yoda.adapters.DragSortRecycler;
 import com.greylabs.yoda.interfaces.OnClickOfRecyclerViewActGoalList;
 import com.greylabs.yoda.models.Goal;
+import com.greylabs.yoda.models.PendingStep;
+import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Logger;
+import com.greylabs.yoda.utils.Prefs;
 
 import java.util.ArrayList;
 
@@ -184,12 +187,19 @@ public class ActGoalList  extends ActionBarActivity implements OnClickOfRecycler
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 Goal goal=goalArrayList.get(Position);
+                                Prefs prefs= Prefs.getInstance(ActGoalList.this);
+                                PendingStep pendingStep=new PendingStep(ActGoalList.this);
+                                pendingStep.updateGoalId(goal.getId(),prefs.getStretchGoalId());
                                 int numberOfRowsAffected=goal.delete();
                                 if(numberOfRowsAffected==1) {
                                     getGoalArrayFromLocal();
                                     mAdapter.notifyDataSetChanged();
                                     yodaCalendar=new YodaCalendar(ActGoalList.this);
                                     yodaCalendar.detachTimeBox(goal.getTimeBoxId());
+                                    //move steps to Stretch Goal
+                                    TimeBox timeBox=new TimeBox(ActGoalList.this).get(prefs.getUnplannedTimeBoxId());
+                                    yodaCalendar.setTimeBox(timeBox);
+                                    yodaCalendar.rescheduleSteps(prefs.getStretchGoalId());
                                     Logger.showMsg(ActGoalList.this, Constants.MSG_GOAL_DELETED);
                                 }
                             }

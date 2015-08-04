@@ -14,6 +14,7 @@ import com.greylabs.yoda.R;
 import com.greylabs.yoda.apis.TasksSample;
 import com.greylabs.yoda.models.Day;
 import com.greylabs.yoda.models.Goal;
+import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Prefs;
 import com.greylabs.yoda.views.GoalView;
@@ -50,9 +51,9 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
 
 //        QuickStart quickStart = new QuickStart(this);
 //        quickStart.quickStart();
+
+        YodaCalendar yodaCalendar=new YodaCalendar(this);
         Day day=new Day(this);
-
-
         initialize();
     }
 

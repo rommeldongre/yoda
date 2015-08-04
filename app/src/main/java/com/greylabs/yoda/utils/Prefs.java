@@ -110,4 +110,22 @@ public class Prefs {
         editor.putBoolean(Constants.OPTION_FROM_ACTQUICKSTART_SELECTED, isChecked);
         editor.commit();
     }
+
+    public void setUnplannedTimeBoxId(long timeBoxId){
+        editor.putLong(Constants.ID_UNPLANNED_TIMEBOX, timeBoxId);
+        editor.commit();
+    }
+
+    public long getUnplannedTimeBoxId(){
+        return systemPrefs.getLong(Constants.ID_UNPLANNED_TIMEBOX,0);
+    }
+
+    public void setStretchGoalId(long stretchGoalId){
+        editor.putLong(Constants.ID_STRETCH_GOAL, stretchGoalId);
+        editor.commit();
+    }
+
+    public long getStretchGoalId(){
+        return systemPrefs.getLong(Constants.ID_STRETCH_GOAL,0);
+    }
 }

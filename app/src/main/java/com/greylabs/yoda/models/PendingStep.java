@@ -3,6 +3,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.provider.ContactsContract;
+
 import com.greylabs.yoda.database.Database;
 import com.greylabs.yoda.database.MetaData.TablePendingStep;
 import com.greylabs.yoda.database.MetaData.TableSlot;
@@ -440,6 +442,27 @@ public class PendingStep implements Serializable {
         return rowId;
     }
 
+    public boolean isSlotAssigned(long slotId){
+        String query=" select count(*) as isPresent " +
+                " "+"  from "+TablePendingStep.pendingStep+" "+
+                " "+" where "+TablePendingStep.slotId+" = "+slotId;
+        SQLiteDatabase db= database.getWritableDatabase();
+        Cursor c=db.rawQuery(query, null);
+        c.moveToFirst();
+        int isPresent=c.getInt(c.getColumnIndex("isPresent"));
+        c.close();
+        return  isPresent>0;
+    }
+
+    public void updateGoalId(long oldGoalId,long newGoalId){
+        String query="update "+TablePendingStep.pendingStep+" " +
+                " "+" set "+TablePendingStep.goalId+" = "+newGoalId+" " +
+                " "+" where "+TablePendingStep.goalId+" = "+oldGoalId;
+        SQLiteDatabase db=database.getWritableDatabase();
+        Cursor c=db.rawQuery(query,null);
+        c.moveToFirst();
+        c.close();
+    }
     /**********************************************************************************************/
     // Enum Constants
 

@@ -7,9 +7,13 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.greylabs.yoda.database.QuickStart;
+import com.greylabs.yoda.models.Slot;
 import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Logger;
+import com.greylabs.yoda.utils.Prefs;
+
+import java.util.List;
 
 public class QuickStartAsyncTask extends AsyncTask<String, String, String> {
 
@@ -33,8 +37,12 @@ public class QuickStartAsyncTask extends AsyncTask<String, String, String> {
 
     @Override
     protected String doInBackground(String... params) {
+        Prefs prefs= Prefs.getInstance(context);
         QuickStart quickStart = new QuickStart(context);
         quickStart.quickStart();
+        List<Slot> slots=new Slot(context).getAll(0);
+        Slot slot=new Slot(context);
+        slot.setDefaultGoalDetails();
         return null;
     }
 

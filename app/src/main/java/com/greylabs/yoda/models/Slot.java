@@ -6,11 +6,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.greylabs.yoda.database.Database;
+import com.greylabs.yoda.database.MetaData;
 import com.greylabs.yoda.database.MetaData.TableSlot;
 import com.greylabs.yoda.database.MetaData.TablePendingStep;
 import com.greylabs.yoda.database.MetaData.TableDay;
 import com.greylabs.yoda.enums.*;
 import com.greylabs.yoda.utils.CalendarUtils;
+import com.greylabs.yoda.utils.Prefs;
 import com.greylabs.yoda.utils.WhereConditionBuilder;
 
 import java.util.ArrayList;
@@ -181,6 +183,7 @@ public class Slot {
     }
 
 
+
     /**
      * This method returns the all slots of corresponds to dayId.
      * @return list of slots having day ID =dayId
@@ -188,7 +191,9 @@ public class Slot {
     public List<Slot> getAll(){
         List<Slot> slots = null;
         String query=" select * from "+TableSlot.slot+" " +
-                " "+"where "+TableSlot.dayId+" = "+dayId;
+                " "+"where "+TableSlot.dayId+" = "+dayId+
+                " "+" order by strftime('%Y-%m-%d %H:%M:%S',"+TableSlot.scheduleDate+") asc , " +
+                " "+" "+TableSlot.when+" asc " ;
 
         SQLiteDatabase db=database.getReadableDatabase();
         Cursor c=db.rawQuery(query,null);
@@ -261,6 +266,24 @@ public class Slot {
             }while(c.moveToNext());
         }
         return slots;
+    }
+
+    public int delete(){
+        SQLiteDatabase db=database.getWritableDatabase();
+        int numOfRowAffected=db.delete(TableSlot.slot, TableSlot.id + "=" + id, null);
+        return numOfRowAffected;
+    }
+
+    public void setDefaultGoalDetails(){
+        SQLiteDatabase db=database.getWritableDatabase();
+        Prefs prefs=Prefs.getInstance(context);
+        String query="update "+TableSlot.slot+" " +
+              " "+" set  "+TableSlot.goalId+" = "+prefs.getStretchGoalId()+" , " +
+              " "+" "+TableSlot.  timeBoxId+" = "+prefs.getUnplannedTimeBoxId()+" ";
+
+        Cursor c=db.rawQuery(query,null);
+        c.moveToFirst();
+        c.close();
     }
 
 }

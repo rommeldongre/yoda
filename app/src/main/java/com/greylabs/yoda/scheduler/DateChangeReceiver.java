@@ -14,8 +14,10 @@ import com.greylabs.yoda.utils.Logger;
 public class DateChangeReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-        Logger.log("DateChangeReceiver","Inside DateChangeReceiver");
-        Intent dateChangeService = new Intent(context, DateChangeService.class);
-        context.startService(dateChangeService);
+        if (intent.getAction().equals(Intent.ACTION_DATE_CHANGED)) {
+            Logger.log("DateChangeReceiver", "Inside DateChangeReceiver");
+            Intent dateChangeService = new Intent(context, DateChangeService.class);
+            context.startService(dateChangeService);
+        }
     }
 }
