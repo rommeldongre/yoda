@@ -13,7 +13,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         debug{
@@ -34,5 +34,9 @@ dependencies {
     compile 'net.i2p.android.ext:floatingactionbutton:1.9.0'
     compile 'com.jpardogo.materialtabstrip:library:1.1.0'
     compile 'com.github.lzyzsd.randomcolor:library:1.0.0'
+    compile 'com.google.apis:google-api-services-tasks:v1-rev35-1.19.0' exclude module: 'httpclient'
+    compile 'com.google.api-client:google-api-client-android:1.19.0' exclude module: 'httpclient'
+    compile 'com.google.http-client:google-http-client-gson:1.19.0' exclude module: 'httpclient'
+    compile 'com.google.android.gms:play-services-identity:7.3.0'
     compile 'ch.acra:acra:4.6.2'
 }

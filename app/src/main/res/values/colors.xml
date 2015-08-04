@@ -5,6 +5,11 @@
     <color name="transperent_total_arc_background">#33000000</color>
     <color name="transperent_white">#33ffffff</color>
 
+    <!--google tasks color values-->
+    <color name="title_background">#ff355689</color>
+    <color name="title_text">#ffffffff</color>
+    <color name="title_separator">#40ffffff</color>
+
     <color name="ColorPrimary">#4CAF50</color>
     <color name="ColorPrimaryDark">#388E3C</color>
     <color name="transperent_less">#55000000</color>

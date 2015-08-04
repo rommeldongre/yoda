@@ -153,6 +153,8 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
     }
 
     private void getTimeBoxListAndPopulate() {
+        if(timeBoxList.size()>0)
+            timeBoxList.clear();
         TimeBox tempTimeBox  = new TimeBox(this);
         timeBoxNames.add(getResources().getString(R.string.timeSpinnerHintActAddNewGoal));//add hint
 
