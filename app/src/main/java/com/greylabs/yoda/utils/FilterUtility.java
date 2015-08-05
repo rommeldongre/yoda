@@ -39,20 +39,20 @@ public class FilterUtility {
         switch (stepFilterType){
             case TODAY:
                 startDate=CalendarUtils.getSqLiteDateFormat(cal);
-                criteria="  "+ TableSlot.scheduleDate+" = '"+startDate+"'" ;
+                criteria=" and "+ TableSlot.scheduleDate+" = '"+startDate+"'" ;
                 break;
             case THIS_WEEK:
                 startDate=CalendarUtils.getSqLiteDateFormat(cal);
                 cal.add(Calendar.DAY_OF_WEEK, Calendar.SATURDAY-cal.get(Calendar.DAY_OF_WEEK));
                 endDate=CalendarUtils.getSqLiteDateFormat(cal);
-                criteria="  ( "+TableSlot.scheduleDate+ ">= '"+startDate+"'"+
+                criteria=" and  ( "+TableSlot.scheduleDate+ ">= '"+startDate+"'"+
                         " and "+TableSlot.scheduleDate+" <= '"+endDate+"' )";
                 break;
             case THIS_MONTH:
                 startDate=CalendarUtils.getSqLiteDateFormat(cal);
                 cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
                 endDate=CalendarUtils.getSqLiteDateFormat(cal);
-                criteria="  ( "+TableSlot.scheduleDate+ ">= '"+startDate+"'"+
+                criteria="and  ( "+TableSlot.scheduleDate+ ">= '"+startDate+"'"+
                         " and "+TableSlot.scheduleDate+" <= '"+endDate+"' )";
 
                 break;
@@ -62,7 +62,7 @@ public class FilterUtility {
                 cal.add(Calendar.MONTH, -1);
                 cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
                 endDate=CalendarUtils.getSqLiteDateFormat(cal);
-                criteria="  ( "+TableSlot.scheduleDate+ ">= '"+startDate+"'"+
+                criteria="and  ( "+TableSlot.scheduleDate+ ">= '"+startDate+"'"+
                         " and "+TableSlot.scheduleDate+" <= '"+endDate+"' )";
                 break;
             case THIS_YEAR:
@@ -72,7 +72,7 @@ public class FilterUtility {
                 endDate=CalendarUtils.getSqLiteDateFormat(cal);
                // criteria=" and ( "+TableSlot.scheduleDate+ ">= '"+startDate+"'"+
                 //        " and "+TableSlot.scheduleDate+" <= '"+endDate+"' )";
-                criteria="  ( datetime("+TableSlot.scheduleDate+") between datetime('"+startDate+"') and datetime('"+endDate+"') )";
+                criteria="and  ( datetime("+TableSlot.scheduleDate+") between datetime('"+startDate+"') and datetime('"+endDate+"') )";
                 break;
         }
 

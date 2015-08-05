@@ -246,6 +246,43 @@ public class PendingStep implements Serializable {
         return pendingSteps;
     }
 
+
+    public List<PendingStep> getAll(PendingStepStatus status) {
+        ArrayList<PendingStep> pendingSteps = null;
+        SQLiteDatabase db = database.getReadableDatabase();
+        String query = "select * " +
+                " " + " from " + TablePendingStep.pendingStep + " " +
+                " " + " where "+ TablePendingStep.status+"="+status.ordinal();
+
+        Cursor c = db.rawQuery(query, null);
+        if (c.moveToFirst()) {
+            pendingSteps = new ArrayList<>();
+            do {
+                PendingStep pendingStep = new PendingStep(context);
+                pendingStep.id = c.getInt(c.getColumnIndex(TablePendingStep.id));
+                pendingStep.stringId=c.getString(c.getColumnIndex(TablePendingStep.stringId));
+                pendingStep.nickName = c.getString(c.getColumnIndex(TablePendingStep.nickName));
+                pendingStep.priority = c.getInt(c.getColumnIndex(TablePendingStep.priority));
+                pendingStep.time = c.getInt(c.getColumnIndex(TablePendingStep.time));
+                pendingStep.pendingStepType = PendingStepType.getIntegerToEnumType(
+                        c.getInt(c.getColumnIndex(TablePendingStep.type)));
+                pendingStep.stepCount = c.getInt(c.getColumnIndex(TablePendingStep.stepCount));
+                pendingStep.skipCount = c.getInt(c.getColumnIndex(TablePendingStep.skipCount));
+                pendingStep.pendingStepStatus = PendingStepStatus.getPendingStepStatus(
+                        c.getInt(c.getColumnIndex(TablePendingStep.status)));
+                pendingStep.goalId = c.getInt(c.getColumnIndex(TablePendingStep.goalId));
+                pendingStep.goalStringId=c.getString(c.getColumnIndex(TablePendingStep.goalStringId));
+                pendingStep.stepDate= CalendarUtils.parseDate(c.getString(c.getColumnIndex(TablePendingStep.stepDate)));
+                pendingStep.slotId = c.getLong(c.getColumnIndex(TablePendingStep.slotId));
+                pendingStep.subStepOf = c.getLong(c.getColumnIndex(TablePendingStep.subStepOf));
+                pendingSteps.add(pendingStep);
+            } while (c.moveToNext());
+        }
+        c.close();
+        return pendingSteps;
+    }
+
+
     /**
      * This method return list of PendingStep of given goal and that are not substeps of some other
      * steps
@@ -403,6 +440,8 @@ public class PendingStep implements Serializable {
         SQLiteDatabase db = database.getReadableDatabase();
         String cols=" s."+TablePendingStep.id+" as stepId , "+" p."+TablePendingStep.stringId+" as stepStringId , "+
                 TablePendingStep.nickName+", " +
+                TablePendingStep.goalStringId+", " +
+                TablePendingStep.stepDate+", " +
                 TablePendingStep.priority+", "+TablePendingStep.time+", " +
                 TablePendingStep.type+", "+TablePendingStep.stepCount+","+
                 TablePendingStep.status+","+TablePendingStep.skipCount+", p."+
@@ -411,8 +450,8 @@ public class PendingStep implements Serializable {
         String query = "select "+ cols +
                 " " + " from " + TablePendingStep.pendingStep + " as p  join " + TableSlot.slot+" as s " +
                 " " + " on ( p." +TablePendingStep.slotId+" = s."+TableSlot.id+" ) "+
-                " " + " where "  + //TablePendingStep.type + "!=" + PendingStepType.SPLIT_STEP.ordinal()+" " +
-                //         " " + " or "+TablePendingStep.type+"!="+ PendingStepType.SERIES_STEP.ordinal()+" ) "+
+                " " + " where ("  + TablePendingStep.type + "!=" + PendingStepType.SPLIT_STEP.ordinal()+" " +
+                         " " + " or "+TablePendingStep.type+"!="+ PendingStepType.SERIES_STEP.ordinal()+" ) "+
                 " "+filterCriteria+" " +
                 " "+" order by "+TablePendingStep.priority+" asc ,"+TablePendingStep.nickName+" asc ";
 

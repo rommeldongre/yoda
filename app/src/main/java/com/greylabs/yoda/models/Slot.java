@@ -183,6 +183,28 @@ public class Slot {
     }
 
 
+    public Slot get(long slotId){
+        Slot slot=null;
+        String query=" select * from "+TableSlot.slot+" " +
+                " "+"where "+TableSlot.id+" = "+slotId+" " ;
+
+        SQLiteDatabase db=database.getReadableDatabase();
+        Cursor c=db.rawQuery(query,null);
+        if(c.moveToFirst()){
+             slot=new Slot(context);
+            do{
+                slot.setId(c.getInt(c.getColumnIndex(TableSlot.id)));
+                slot.setWhen(com.greylabs.yoda.enums.TimeBoxWhen.getIntegerToEnumType(c.getInt(c.getColumnIndex(TableSlot.when))));
+                slot.setScheduleDate(CalendarUtils.parseDate(c.getString(c.getColumnIndex(TableSlot.scheduleDate))));
+                slot.setTime(c.getInt(c.getColumnIndex(TableSlot.time)));
+                slot.setGoalId(c.getInt(c.getColumnIndex(TableSlot.goalId)));
+                slot.setTimeBoxId(c.getInt(c.getColumnIndex(TableSlot.timeBoxId)));
+                slot.setDayId(c.getInt(c.getColumnIndex(TableSlot.dayId)));
+            }while(c.moveToNext());
+        }
+        return slot;
+    }
+
 
     /**
      * This method returns the all slots of corresponds to dayId.

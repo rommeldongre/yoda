@@ -29,6 +29,14 @@ public class BootCompleteService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Toast.makeText(this, "BootCompleteService on start command...", Toast.LENGTH_SHORT).show();
+        //set calendat update interval
+       // AlarmScheduler alarmScheduler=new AlarmScheduler(this);
+        //alarmScheduler.setCalendarUpdateInterval();
+
+        //reschedule all step alarms
+       // alarmScheduler.rescheduleAllSteps();
+
+
         return START_STICKY;
     }
 

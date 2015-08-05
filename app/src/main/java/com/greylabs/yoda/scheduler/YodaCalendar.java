@@ -394,7 +394,7 @@ public class YodaCalendar {
                             ps.save();
                             AlarmScheduler alarmScheduler = new AlarmScheduler(context);
                             alarmScheduler.setStepId(ps.getId());
-                            alarmScheduler.setSubStepId(ps.getId());
+                            alarmScheduler.setSubStepId(ps.getSubStepOf());
                             alarmScheduler.setPendingStepType(PendingStep.PendingStepType.SUB_STEP);
                             alarmScheduler.setStartTime(slot.getWhen().getStartTime());
                             alarmScheduler.setDuration(ps.getTime());
@@ -471,7 +471,7 @@ public class YodaCalendar {
                                     substep.save();
                                     AlarmScheduler alarmScheduler = new AlarmScheduler(context);
                                     alarmScheduler.setStepId(substep.getId());
-                                    alarmScheduler.setSubStepId(substep.getId());
+                                    alarmScheduler.setSubStepId(pendingStep.getSubStepOf());
                                     alarmScheduler.setPendingStepType(PendingStep.PendingStepType.SUB_STEP);
                                     alarmScheduler.setStartTime(slot.getWhen().getStartTime());
                                     alarmScheduler.setDuration(substep.getTime());

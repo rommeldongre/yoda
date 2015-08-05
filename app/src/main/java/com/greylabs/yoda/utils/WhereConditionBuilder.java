@@ -24,6 +24,8 @@ public class WhereConditionBuilder {
      */
     public static String buildWhereCondition(TimeBox timeBox){
         String whereClause="";
+        if(timeBox.getNickName().equals(Constants.NICKNAME_UNPLANNED_TIMEBOX))
+            return whereClause;
         if(timeBox.getTillType()!=TimeBoxTill.FOREVER) {
             if(timeBox.getTimeBoxOn().getOnType()!= com.greylabs.yoda.enums.TimeBoxOn.DAILY) {
                 whereClause += "where " + buildWhen(timeBox.getTimeBoxWhen()) + " and " +

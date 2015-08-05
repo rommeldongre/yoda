@@ -88,8 +88,8 @@ public class MetaData {
                 " "+skipCount+" integer ," +
                 " "+status+" integer ," +
                 " "+stepDate+" text ,"+
-                " "+goalId+" integer, " +
                 " "+goalStringId+" text ,"+
+                " "+goalId+" integer, " +
                 " "+slotId+" integer, " +
                 " "+subStepOf+" integer, " +
                 " "+"foreign key("+goalId+") references "+ TableGoal.goal+"("+ TableGoal.id+") ," +

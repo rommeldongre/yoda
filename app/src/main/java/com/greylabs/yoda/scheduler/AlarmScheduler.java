@@ -5,11 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.greylabs.yoda.models.PendingStep;
+import com.greylabs.yoda.models.Slot;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Logger;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Jaybhay Vijay on 7/13/2015.
@@ -143,6 +145,11 @@ public class AlarmScheduler implements Serializable{
         alarmManager.set(AlarmManager.RTC_WAKEUP, calTarget.getTimeInMillis(), pendingIntent);
     }
 
+    public void setRepeatingAlarm(Calendar calendar,long interval,PendingIntent pendingIntent){
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                interval, pendingIntent);
+    }
+
     public void postponeAlarm(int mins){
         Calendar calTarget=Calendar.getInstance();
         calTarget.setTime(alarmDate);
@@ -150,7 +157,7 @@ public class AlarmScheduler implements Serializable{
         calTarget.add(Calendar.MINUTE,mins);
         Logger.log(TAG, "Target date:[Postpone to]" + calTarget.getTime().toString());
         Intent broadcastReceiver = new Intent(context, AlarmReceiver.class);
-        broadcastReceiver.putExtra(Constants.ALARM_SCHEDULER,this);
+        broadcastReceiver.putExtra(Constants.ALARM_SCHEDULER, this);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, -(int)stepId,broadcastReceiver,0);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calTarget.getTimeInMillis(), pendingIntent);
     }
@@ -167,5 +174,33 @@ public class AlarmScheduler implements Serializable{
         PendingIntent pendingIntentEnd = PendingIntent.getBroadcast(context, -(int)stepId,broadcastReceiver,0);
         alarmManager.cancel(pendingIntentStart);
         alarmManager.cancel(pendingIntentEnd);
+    }
+
+    public  void setCalendarUpdateInterval(){
+        Intent broadcastReceiver = new Intent(context, DateChangeReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,-2,broadcastReceiver,0);
+        Calendar calendar=Calendar.getInstance();
+        calendar.add(Calendar.DATE,1);
+        calendar.set(Calendar.HOUR_OF_DAY, 1);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND,0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        this.setRepeatingAlarm(calendar, AlarmManager.INTERVAL_DAY, pendingIntent);
+    }
+
+    public void rescheduleAllSteps(){
+        List<PendingStep> pendingSteps=new PendingStep(context).getAll(PendingStep.PendingStepStatus.TODO);
+        for (PendingStep pendingStep:pendingSteps) {
+            Slot slot=new Slot(context).get(pendingStep.getSlotId());
+            AlarmScheduler alarmScheduler = new AlarmScheduler(context);
+            alarmScheduler.setStepId(pendingStep.getId());
+            alarmScheduler.setSubStepId(pendingStep.getSubStepOf());
+            alarmScheduler.setPendingStepType(pendingStep.getPendingStepType());
+            alarmScheduler.setStartTime(slot.getWhen().getStartTime());
+            alarmScheduler.setDuration(pendingStep.getTime());
+            alarmScheduler.setAlarmDate(slot.getScheduleDate());
+            alarmScheduler.cancel();//cancel previous alarm if any
+            alarmScheduler.setAlarm();
+        }
     }
 }
