@@ -136,7 +136,7 @@ public final class QuickStart {
         timeBox=new TimeBox(context);
         timeBox.setNickName("Afternoon-Weekly-Sunday,Saturday till Forever");
        //on
-        timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,TimeBoxOn.DAILY);
+        timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,TimeBoxOn.WEEKLY);
         timeBoxOns=new TreeSet<>();
         timeBoxOns.add(WeekDay.SATURDAY);
         timeBoxOns.add(WeekDay.SUNDAY);
