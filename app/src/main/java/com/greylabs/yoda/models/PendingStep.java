@@ -401,7 +401,7 @@ public class PendingStep implements Serializable {
     public List<PendingStep> getAll(String filterCriteria){
         ArrayList<PendingStep> pendingSteps = null;
         SQLiteDatabase db = database.getReadableDatabase();
-        String cols=" s."+TablePendingStep.id+" as stepId , "+" s."+TablePendingStep.stringId+" as stepStringId , "+
+        String cols=" s."+TablePendingStep.id+" as stepId , "+" p."+TablePendingStep.stringId+" as stepStringId , "+
                 TablePendingStep.nickName+", " +
                 TablePendingStep.priority+", "+TablePendingStep.time+", " +
                 TablePendingStep.type+", "+TablePendingStep.stepCount+","+
