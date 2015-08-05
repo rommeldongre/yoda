@@ -5,10 +5,6 @@ import android.content.Context;
 import android.content.res.Configuration;
 
 import com.greylabs.yoda.R;
-import com.greylabs.yoda.database.Database;
-import com.greylabs.yoda.database.QuickStart;
-import com.greylabs.yoda.scheduler.YodaCalendar;
-import com.greylabs.yoda.utils.Prefs;
 
 import org.acra.ACRA;
 import org.acra.ReportField;

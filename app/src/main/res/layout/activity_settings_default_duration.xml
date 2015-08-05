@@ -233,6 +233,28 @@
                         android:background="@color/button_material_light" />
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_margin="10dip" >
+
+                    <Button
+                        android:id="@+id/btnResetYodaActSettingsDefaultDuration"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/btnResetYodaActSettingsDefaultDuration"
+                        android:textColor="@color/white"
+                        android:background="@color/btnResetYodaActSettingsDefaultDuration" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginLeft="20dip"
+                        android:background="@color/button_material_light" />
+                </LinearLayout>
+
             </LinearLayout>
         </android.support.v7.widget.CardView>
     </ScrollView>

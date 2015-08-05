@@ -78,9 +78,9 @@ public class FragFilter extends Fragment {
 
             @Override
             public void onGroupExpand(int groupPosition) {
-                Toast.makeText(context,
-                        listGoals.get(groupPosition) + " Expanded",
-                        Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context,
+//                        listGoals.get(groupPosition) + " Expanded",
+//                        Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -89,26 +89,20 @@ public class FragFilter extends Fragment {
 
             @Override
             public void onGroupCollapse(int groupPosition) {
-                Toast.makeText(context,
-                        listGoals.get(groupPosition) + " Collapsed",
-                        Toast.LENGTH_SHORT).show();
-
+//                Toast.makeText(context,
+//                        listGoals.get(groupPosition) + " Collapsed",
+//                        Toast.LENGTH_SHORT).show();
             }
         });
 
         // Listview on child click listener
         expListView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
-
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
-                Toast.makeText(context,
-                        listGoals.get(groupPosition)
-                                + " : "
-                                + filteredData.get(
-                                listGoals.get(groupPosition)).get(
-                                childPosition), Toast.LENGTH_SHORT)
-                        .show();
+//                Toast.makeText(context, listGoals.get(groupPosition) + " : " + filteredData.get(
+//                                listGoals.get(groupPosition)).get( childPosition), Toast.LENGTH_SHORT)
+//                        .show();
                 return false;
             }
         });

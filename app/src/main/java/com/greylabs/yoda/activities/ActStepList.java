@@ -141,6 +141,8 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
 
     private void checkForEmptyViewVisibility(ArrayList<PendingStep> arrayList, String msg) {
         if (arrayList.isEmpty()) {
+            if(menu!=null)
+                menu.findItem(R.id.actionToggleActStepList).setVisible(false);
             recyclerView.setVisibility(View.GONE);
             emptyViewActChangeStepPriority.setVisibility(View.VISIBLE);
             emptyViewActChangeStepPriority.setText(msg);
@@ -300,11 +302,9 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
                         }
 
                         Logger.showMsg(ActStepList.this, Constants.MSG_STEP_DELETED);
-//                        getStepArrayFromLocal();
-//                        mAdapter.notifyDataSetChanged();
-//                        mAdapter.notifyItemRemoved(Position);
                         stepArrayList.remove(Position);
                         mAdapter.notifyDataSetChanged();
+                        checkForEmptyViewVisibility(stepArrayList, getString(R.string.tvEmptyViewActStepList));
                     }
                 });
                 alertLogout.setNegativeButton("Cancel", null);

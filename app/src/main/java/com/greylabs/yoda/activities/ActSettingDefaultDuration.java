@@ -1,5 +1,8 @@
 package com.greylabs.yoda.activities;
 
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -8,24 +11,35 @@ import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 
 import com.greylabs.yoda.R;
+import com.greylabs.yoda.models.Goal;
+import com.greylabs.yoda.models.PendingStep;
+import com.greylabs.yoda.models.TimeBox;
+import com.greylabs.yoda.scheduler.YodaCalendar;
+import com.greylabs.yoda.utils.Constants;
+import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.Prefs;
+import com.greylabs.yoda.utils.ResetYoda;
 
 
-public class ActSettingDefaultDuration extends ActionBarActivity implements SeekBar.OnSeekBarChangeListener, RadioGroup.OnCheckedChangeListener {
+public class ActSettingDefaultDuration extends ActionBarActivity implements SeekBar.OnSeekBarChangeListener, RadioGroup.OnCheckedChangeListener, View.OnClickListener {
 
     Toolbar toolbar;
     SeekBar sbStepDuration, sbSessionDuration, sbYodaSaysNotification, sbExportToCalendar;
     Paint thumbPaint, textPaint;
     RadioButton rbTopMost, rbBottomMost, rbDontExpire, rbExpire;
     RadioGroup rgPriorityNewStep, rgBehaviourOfExpiredSteps;
+    Button btnResetYoda;
     Prefs prefs;
 
     @Override
@@ -51,11 +65,13 @@ public class ActSettingDefaultDuration extends ActionBarActivity implements Seek
         rbBottomMost = (RadioButton) findViewById(R.id.rbBottomMostActSettingsDefaultDuration);
         rbDontExpire = (RadioButton) findViewById(R.id.rbDontExpireActSettingsDefaultDuration);
         rbExpire = (RadioButton) findViewById(R.id.rbExpireActSettingsDefaultDuration);
+        btnResetYoda = (Button) findViewById(R.id.btnResetYodaActSettingsDefaultDuration);
 
         sbStepDuration.setOnSeekBarChangeListener(this);
         sbSessionDuration.setOnSeekBarChangeListener(this);
         sbYodaSaysNotification.setOnSeekBarChangeListener(this);
         sbExportToCalendar.setOnSeekBarChangeListener(this);
+        btnResetYoda.setOnClickListener(this);
 
 //        rbTopMost.setOnCheckedChangeListener(this);
 //        rbBottomMost.setOnCheckedChangeListener(this);
@@ -210,5 +226,31 @@ public class ActSettingDefaultDuration extends ActionBarActivity implements Seek
                     prefs.setBehaviourDoNotExpire(false);
                 break;
         }
+    }
+
+    @Override
+    public void onClick(View v) {
+//        switch (v.getId()){
+//            case R.id.btnResetYodaActSettingsDefaultDuration :
+        AlertDialog.Builder alertLogout = new AlertDialog.Builder(this);
+        alertLogout.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                ProgressDialog progressDialog = new ProgressDialog(ActSettingDefaultDuration.this);
+                progressDialog.setMessage(Constants.MSG_RESETTING_YODA);
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                progressDialog.setCancelable(false);
+                progressDialog.show();
+                ResetYoda.reset(ActSettingDefaultDuration.this);
+                progressDialog.dismiss();
+                startActivity(new Intent(ActSettingDefaultDuration.this, ActSplashScreen.class));
+                ActSettingDefaultDuration.this.finish();
+            }
+        });
+        alertLogout.setNegativeButton("Cancel", null);
+        alertLogout.setMessage(Constants.MSG_RESET_YODA);
+        alertLogout.show();
+//                break;
+//        }
     }
 }

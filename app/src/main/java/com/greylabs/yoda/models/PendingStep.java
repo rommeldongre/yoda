@@ -341,10 +341,14 @@ public class PendingStep implements Serializable {
         values.put(TablePendingStep.status, this.pendingStepStatus.ordinal());
         values.put(TablePendingStep.goalId, this.goalId);
         values.put(TablePendingStep.goalStringId,this.goalStringId);
-        Calendar cal=Calendar.getInstance();
-        cal.set(Calendar.SECOND,0);cal.set(Calendar.MINUTE,0);cal.set(Calendar.HOUR_OF_DAY,0);
-        cal.setTime(this.getStepDate());
-        values.put(TablePendingStep.stepDate, CalendarUtils.getSqLiteDateFormat(cal));
+        if(this.getStepDate()!=null) {
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.SECOND, 0);
+            cal.set(Calendar.MINUTE, 0);
+            cal.set(Calendar.HOUR_OF_DAY, 0);
+            cal.setTime(this.getStepDate());
+            values.put(TablePendingStep.stepDate, CalendarUtils.getSqLiteDateFormat(cal));
+        }
         values.put(TablePendingStep.slotId, this.slotId);
         values.put(TablePendingStep.subStepOf, this.subStepOf);
         long rowId;

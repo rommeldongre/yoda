@@ -93,4 +93,6 @@ public class Constants {
     public static final int REQUEST_CODE_ACT_ACT_ADD_NEW_GOAL = 2;
     public static final String ID_UNPLANNED_TIMEBOX ="Unplanned TimeBoxId" ;
     public static final String ID_STRETCH_GOAL ="Stretch GoalId" ;
+    public static final String MSG_RESET_YODA = "Resetting App will erase all the data! Are you sure, you want to delete all alarms and start over again?";
+    public static final String MSG_RESETTING_YODA = "Resetting App, Please wait...";
 }

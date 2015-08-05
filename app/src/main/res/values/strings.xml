@@ -150,6 +150,7 @@
     <string name="refresh">Refresh</string>
     <string name="error">Error</string>
     <string name="error_format">[Error] %s</string>
+    <string name="btnResetYodaActSettingsDefaultDuration">Reset Application</string>
 
     <string-array name="arrayStepTypeActAddNewStep">
         <item>Single Step</item>
