@@ -42,7 +42,7 @@ public final class QuickStart {
         Set<SubValue> timeBoxOns;
         //1
         timeBox=new TimeBox(context);
-        timeBox.setNickName("Daily Early Morning Forever");
+        timeBox.setNickName("Early Morning-Daily till Forever");
         ////set when
         com.greylabs.yoda.models.TimeBoxWhen timeBoxWhen=new com.greylabs.yoda.models.TimeBoxWhen(context);
         timeBoxWhens=new TreeSet<>();
@@ -63,7 +63,7 @@ public final class QuickStart {
 
         //2
         timeBox=new TimeBox(context);
-        timeBox.setNickName("Weekday Afternoons till this year");
+        timeBox.setNickName("Afternoon-Weekly-Monday,Tuesday,Wednesday,Thursday,Friday till this year");
        //on
         timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,TimeBoxOn.WEEKLY);
         timeBoxOns=new TreeSet<>();
@@ -88,12 +88,15 @@ public final class QuickStart {
 
         //3
         timeBox=new TimeBox(context);
-        timeBox.setNickName("Weekday Evenings Forever");
+        timeBox.setNickName("Evening-Weekly-Monday,Tuesday,Wednesday,Thursday,Friday till this year");
         //on
         timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,TimeBoxOn.WEEKLY);
         timeBoxOns=new TreeSet<>();
-        timeBoxOns.add(WeekDay.SATURDAY);
-        timeBoxOns.add(WeekDay.SUNDAY);
+        timeBoxOns.add(WeekDay.MONDAY);
+        timeBoxOns.add(WeekDay.TUESDAY);
+        timeBoxOns.add(WeekDay.WEDNESDAY);
+        timeBoxOns.add(WeekDay.THURSDAY);
+        timeBoxOns.add(WeekDay.FRIDAY);
         timeBoxOn.setSubValues(timeBoxOns);
         timeBox.setTimeBoxOn(timeBoxOn);
         //when
@@ -110,7 +113,7 @@ public final class QuickStart {
 
         //4
         timeBox=new TimeBox(context);
-        timeBox.setNickName("Sunday Morning Forever");
+        timeBox.setNickName("Morning-Weekly-Sunday till Forever");
         //on
         timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,TimeBoxOn.WEEKLY);
         timeBoxOns=new TreeSet<>();
@@ -131,32 +134,34 @@ public final class QuickStart {
 
         //5
         timeBox=new TimeBox(context);
-        timeBox.setNickName("Weekend Afternoon Forever");
+        timeBox.setNickName("Afternoon-Weekly-Sunday,Saturday till Forever");
        //on
         timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,TimeBoxOn.DAILY);
         timeBoxOns=new TreeSet<>();
-        timeBoxOns.add(Daily.DAILY);
+        timeBoxOns.add(WeekDay.SATURDAY);
+        timeBoxOns.add(WeekDay.SUNDAY);
         timeBoxOn.setSubValues(timeBoxOns);
         timeBox.setTimeBoxOn(timeBoxOn);
         //when
         timeBoxWhen=new com.greylabs.yoda.models.TimeBoxWhen(context);
         timeBoxWhens=new TreeSet<>();
-        timeBoxWhens.add(TimeBoxWhen.EVENING);
+        timeBoxWhens.add(TimeBoxWhen.AFTERNOON);
         timeBoxWhen.setWhenValues(timeBoxWhens);
         timeBox.setTimeBoxWhen(timeBoxWhen);
         //till
-        timeBox.setTillType(TimeBoxTill.YEAR);
+        timeBox.setTillType(TimeBoxTill.FOREVER);
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
         Logger.log(TAG, "1 Added");
 
         //6
         timeBox=new TimeBox(context);
-        timeBox.setNickName("Weekend Evenings ");
+        timeBox.setNickName("Evening-Weekly-Sunday,Saturday till this Quarter");
         //on
         timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,TimeBoxOn.WEEKLY);
         timeBoxOns=new TreeSet<>();
         timeBoxOns.add(WeekDay.SUNDAY);
+        timeBoxOns.add(WeekDay.SATURDAY);
         timeBoxOn.setSubValues(timeBoxOns);
         timeBox.setTimeBoxOn(timeBoxOn);
         //when
@@ -173,7 +178,7 @@ public final class QuickStart {
 
         //7
         timeBox=new TimeBox(context);
-        timeBox.setNickName("Week Nights");
+        timeBox.setNickName("Night-Weekly-Monday,Tuesday,Wednesday,Thursday,Friday till Forever");
         //on
         timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,TimeBoxOn.WEEKLY);
         timeBoxOns=new TreeSet<>();
@@ -187,11 +192,11 @@ public final class QuickStart {
         //when
         timeBoxWhen=new com.greylabs.yoda.models.TimeBoxWhen(context);
         timeBoxWhens=new TreeSet<>();
-        timeBoxWhens.add(TimeBoxWhen.LATE_NIGHT);
+        timeBoxWhens.add(TimeBoxWhen.NIGHT);
         timeBoxWhen.setWhenValues(timeBoxWhens);
         timeBox.setTimeBoxWhen(timeBoxWhen);
         //till
-        timeBox.setTillType(TimeBoxTill.YEAR);
+        timeBox.setTillType(TimeBoxTill.FOREVER);
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
         Logger.log(TAG, "1 Added");
