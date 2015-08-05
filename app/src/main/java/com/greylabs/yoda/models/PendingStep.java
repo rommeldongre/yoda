@@ -361,7 +361,6 @@ public class PendingStep implements Serializable {
     }
 
     public long saveSubStep(PendingStep pendingStep){
-
         SQLiteDatabase db = database.getWritableDatabase();
         ContentValues values = new ContentValues();
         pendingStep.setId(0);
@@ -398,7 +397,6 @@ public class PendingStep implements Serializable {
     }
     /**********************************************************************************************/
     //Utility Methods
-
     /********************************************************************************************/
     public List<PendingStep> getAll(String filterCriteria){
         ArrayList<PendingStep> pendingSteps = null;

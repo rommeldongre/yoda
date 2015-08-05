@@ -1,8 +1,10 @@
 package com.greylabs.yoda.scheduler;
 import android.content.Context;
 
+import com.greylabs.yoda.enums.TimeBoxTill;
 import com.greylabs.yoda.enums.TimeBoxWhen;
 import com.greylabs.yoda.models.Day;
+import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.Slot;
 import com.greylabs.yoda.models.TimeBox;
@@ -281,9 +283,15 @@ public class YodaCalendar {
             days.get(i-1).setDayOfYear(i);
             days.get(i-1).save();
         }
-        //update for all timeboxes having forever as Till time
-//        List<TimeBox> timeBoxes=new TimeBox(context).getAll(TimeBox.TimeBoxStatus.ACTIVE);
-//        for(TimeBox timeBox:tim)
+        //update for all timeboxes having forever as Till time-need optimization
+        List<TimeBox> timeBoxes=new TimeBox(context).getAll(TimeBox.TimeBoxStatus.ACTIVE);
+        Goal goal=new Goal(context);
+        for(TimeBox timeBox:timeBoxes){
+            if(timeBox.getTillType()== TimeBoxTill.FOREVER){
+                this.timeBox=timeBox;
+                attachTimeBox(goal.getGoalId(timeBox.getId()));
+            }
+        }
     }
     /**
      *This method attach timebox to goal only if timebox fits into calender slots.This maps timebox

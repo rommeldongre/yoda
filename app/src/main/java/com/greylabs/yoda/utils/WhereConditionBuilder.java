@@ -32,6 +32,13 @@ public class WhereConditionBuilder {
                 whereClause += "where " + buildWhen(timeBox.getTimeBoxWhen()) +
                          " and " + buildTill(timeBox.getTillType(), timeBox.getTimeBoxOn());
             }
+        }else{
+            if(timeBox.getTimeBoxOn().getOnType()!= com.greylabs.yoda.enums.TimeBoxOn.DAILY) {
+                whereClause += "where " + buildWhen(timeBox.getTimeBoxWhen()) + " and " +
+                        " " + buildOn(timeBox.getTimeBoxOn());
+            }else{
+                whereClause += "where " + buildWhen(timeBox.getTimeBoxWhen()) ;
+            }
         }
         return whereClause;
 
