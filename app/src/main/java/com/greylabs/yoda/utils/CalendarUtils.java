@@ -66,7 +66,8 @@ public class CalendarUtils {
         //SimpleDateFormat sdf=new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy");
         SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         try {
-            return sdf.parse(dateInString);
+            if(dateInString!=null)
+                return sdf.parse(dateInString);
         } catch (ParseException e) {
             e.printStackTrace();
             Logger.log(TAG,"Unable to parse date.");
