@@ -55,6 +55,7 @@ public final class NewStep {
         timeBoxWhen.setWhenValues(timeBoxWhens);
         timeBox.setTimeBoxWhen(timeBoxWhen);
         timeBox.setTillType(TimeBoxTill.FOREVER);
+        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_UNPLANNED_TIMEBOX));
         timeBox.save();
         Prefs pref=Prefs.getInstance(context);
         pref.setUnplannedTimeBoxId(timeBox.getId());

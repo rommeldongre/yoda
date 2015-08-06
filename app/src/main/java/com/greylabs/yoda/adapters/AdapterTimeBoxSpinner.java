@@ -55,7 +55,7 @@ public class AdapterTimeBoxSpinner extends BaseAdapter {
             circleView = (CircleView) row.findViewById(R.id.btnBulletTimeBoxSpinnerItemActAddNewGoal);
         }
         tvTimeBoxName.setText(timeBoxArrayList.get(position).getNickName());
-        circleView.setFillColor(context.getResources().getColor(R.color.ColorPrimary));
+        circleView.setFillColor(Integer.parseInt(timeBoxArrayList.get(position).getColorCode()));
         circleView.setShowTitle(false);
         return row;
     }

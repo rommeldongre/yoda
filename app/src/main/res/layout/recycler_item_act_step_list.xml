@@ -23,34 +23,54 @@
             <!--android:background="@drawable/ic_btn_edit_gray" />-->
 
         <Button
+            android:id="@+id/btnHandleRecyclerItemActStepList"
+            android:layout_width="20dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="10dp"
+            android:background="@drawable/ic_btn_handle_gray" />
+
+        <Button
             android:id="@+id/btnDeleteStepRecyclerItemActStepList"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="10dip"
-            android:layout_margin="15dp"
+            android:layout_toLeftOf="@id/btnHandleRecyclerItemActStepList"
             android:background="@drawable/ic_btn_delete_gray" />
         <!--android:layout_toLeftOf="@+id/btnEditStepRecyclerItemActStepList"-->
 
-        <Button
-            android:id="@+id/btnHandleRecyclerItemActStepList"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+        <CheckBox
+            android:id="@+id/cbRecyclerItemActStepList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:gravity="center_vertical"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:background="@drawable/ic_btn_handle_gray" />
+            android:layout_marginLeft="10dp" />
 
-        <TextView
-            android:id="@+id/tvStepNameRecyclerItemActStepList"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:layout_centerVertical="true"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-            android:layout_toRightOf="@+id/btnHandleRecyclerItemActStepList"
+            android:layout_toRightOf="@+id/cbRecyclerItemActStepList"
             android:layout_marginLeft="10dp"
-            android:layout_toLeftOf="@id/btnDeleteStepRecyclerItemActStepList" />
+            android:layout_toLeftOf="@id/btnDeleteStepRecyclerItemActStepList">
+
+            <TextView
+                android:id="@+id/tvStepNameRecyclerItemActStepList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+
+            <TextView
+                android:id="@+id/tvETAOfStepRecyclerItemActStepList"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+
+        </LinearLayout>
+
     </RelativeLayout>
 </android.support.v7.widget.CardView>

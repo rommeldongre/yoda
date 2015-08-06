@@ -1,7 +1,5 @@
 package com.greylabs.yoda.utils;
 
-import java.sql.DataTruncation;
-
 public class Constants {
 
     public static final String IS_APPLICATION_FIRST_TIME_INSTALLED ="IS_APPLICATION_FIRST_TIME_INSTALLED" ;
@@ -30,6 +28,7 @@ public class Constants {
     public static final boolean BEHAVIOUR_DO_NOT_EXPIRE_VALUE = false;
     public static final String OPERATION_DELETE = "DELETE";
     public static final String OPERATION_EDIT = "EDIT";
+    public static final String OPERATION_MARK_STEP_DONE = "OPERATION_MARK_STEP_DONE";
     public static final String OPERATION_SHOW_STEPS = "OPERATION_SHOW_STEPS";
     public static final String MSG_DELETE_STEP = "Are you sure you want to delete the step?";
     public static final String MSG_STEP_DELETED = "Step Deleted";
@@ -95,4 +94,5 @@ public class Constants {
     public static final String ID_STRETCH_GOAL ="Stretch GoalId" ;
     public static final String MSG_RESET_YODA = "Resetting App will erase all the data! Are you sure, you want to delete all alarms and start over again?";
     public static final String MSG_RESETTING_YODA = "Resetting App, Please wait...";
+    public static final int COLORCODE_UNPLANNED_TIMEBOX = -3931905;
 }

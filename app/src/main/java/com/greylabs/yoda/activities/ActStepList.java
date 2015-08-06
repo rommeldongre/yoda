@@ -282,12 +282,12 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
                 alertLogout.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        PendingStep pendingStep=stepArrayList.get(Position);
-                        switch (pendingStep.getPendingStepType()){
+                        PendingStep pendingStep = stepArrayList.get(Position);
+                        switch (pendingStep.getPendingStepType()) {
                             case SPLIT_STEP:
                             case SERIES_STEP:
-                                List<PendingStep> pendingSteps=pendingStep.getAllSubSteps(pendingStep.getId(),pendingStep.getGoalId());
-                                for (PendingStep ps:pendingSteps) {
+                                List<PendingStep> pendingSteps = pendingStep.getAllSubSteps(pendingStep.getId(), pendingStep.getGoalId());
+                                for (PendingStep ps : pendingSteps) {
                                     cancelAlarm(pendingStep);
                                     ps.delete();
                                 }
@@ -310,6 +310,11 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
                 alertLogout.setNegativeButton("Cancel", null);
                 alertLogout.setMessage(Constants.MSG_DELETE_STEP);
                 alertLogout.show();
+                break;
+
+            case Constants.OPERATION_MARK_STEP_DONE :
+                stepArrayList.get(Position).setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
+                stepArrayList.get(Position).save();
                 break;
         }
     }

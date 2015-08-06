@@ -58,8 +58,11 @@ public class AdapterExpandableList extends BaseExpandableListAdapter {
         
         TextView txtListChild = (TextView) convertView
                 .findViewById(R.id.lblListItem);
+        TextView tvETAOfStep = (TextView) convertView
+                .findViewById(R.id.tvETAOfStepListItemActFilters);
 
         txtListChild.setText(pendingStep.getNickName());
+        tvETAOfStep.setText(pendingStep.getStepDate().toString());
         return convertView;
     }
 

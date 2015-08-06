@@ -159,6 +159,13 @@ public class ActGoalList  extends ActionBarActivity implements OnClickOfRecycler
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        getGoalArrayFromLocal();
+        mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
     public void onClickRecyclerView(final int Position, String operation) {
         if(isOperationEdit){
             switch (operation){

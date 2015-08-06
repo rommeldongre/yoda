@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.greylabs.yoda.R;
@@ -45,6 +47,11 @@ public class AdapterRecyclerViewActStepList extends RecyclerView.Adapter<Adapter
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.tvStepName.setText(stepsArrayList.get(position).getNickName());
+        holder.tvETAOfStep.setText(stepsArrayList.get(position).getStepDate().toString());
+        if(stepsArrayList.get(position).getPendingStepStatus().equals(PendingStep.PendingStepStatus.COMPLETED)){
+            holder.checkBox.setChecked(true);
+            holder.checkBox.setEnabled(false);
+        }
         if(isEditOperation){
             holder.btnHandle.setVisibility(View.VISIBLE);
             switch (caller){
@@ -75,12 +82,13 @@ public class AdapterRecyclerViewActStepList extends RecyclerView.Adapter<Adapter
         return 0;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
         int Holderid;
         onClickOfRecyclerViewActStepList myOnClickRecyclerView;
         Context contxt;
 
-        TextView tvStepName;
+        CheckBox checkBox;
+        TextView tvStepName, tvETAOfStep;
         Button btnDeleteStep, btnHandle;//btnEditStep,
         CardView cardView;
 
@@ -90,12 +98,15 @@ public class AdapterRecyclerViewActStepList extends RecyclerView.Adapter<Adapter
             itemView.setClickable(true);
             itemView.setOnClickListener(this);
 
+            checkBox = (CheckBox) itemView.findViewById(R.id.cbRecyclerItemActStepList);
             tvStepName = (TextView)itemView.findViewById(R.id.tvStepNameRecyclerItemActStepList);
+            tvETAOfStep = (TextView)itemView.findViewById(R.id.tvETAOfStepRecyclerItemActStepList);
             btnDeleteStep = (Button) itemView.findViewById(R.id.btnDeleteStepRecyclerItemActStepList);
             btnHandle =  (Button) itemView.findViewById(R.id.btnHandleRecyclerItemActStepList);
 //            btnEditStep = (Button) itemView.findViewById(R.id.btnEditStepRecyclerItemActStepList);
             cardView = (CardView) itemView.findViewById(R.id.cardViewActStepList);
 
+            checkBox.setOnCheckedChangeListener(this);
             btnDeleteStep.setOnClickListener(this);
             cardView.setOnClickListener(this);
 //            btnEditStep.setOnClickListener(this);
@@ -121,6 +132,20 @@ public class AdapterRecyclerViewActStepList extends RecyclerView.Adapter<Adapter
                 case R.id.cardViewActStepList :
                     myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_EDIT);
                     break;
+            }
+        }
+
+        @Override
+        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            try {
+                myOnClickRecyclerView = (onClickOfRecyclerViewActStepList) contxt;
+            } catch (ClassCastException e) {
+                throw new ClassCastException(contxt.toString()
+                        + " must implement OnHeadlineSelectedListener");
+            }
+            if(isChecked){
+                myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_MARK_STEP_DONE);
+                buttonView.setEnabled(false);
             }
         }
     }

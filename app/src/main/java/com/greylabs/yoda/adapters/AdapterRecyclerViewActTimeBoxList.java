@@ -50,7 +50,8 @@ public class AdapterRecyclerViewActTimeBoxList extends RecyclerView.Adapter<Adap
         if(timeBoxArrayList.get(position).getNickName().equals(Constants.NICKNAME_UNPLANNED_TIMEBOX))
             holder.btnDeleteTimeBox.setVisibility(View.GONE);
         holder.circleView.setShowTitle(false);
-        holder.circleView.setFillColor(context.getResources().getColor(R.color.gray));
+        holder.circleView.setFillColor(Integer.parseInt(timeBoxArrayList.get(position).getColorCode()));
+//        holder.circleView.setFillColor(context.getResources().getColor(R.color.gray));
 //        if(isEditOperation){
 //            holder.btnDeleteTimeBox.setVisibility(View.VISIBLE);
 ////            holder.btnEditTimeBox.setVisibility(View.VISIBLE);

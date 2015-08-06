@@ -159,6 +159,7 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
         timeBoxNames.add(getResources().getString(R.string.timeSpinnerHintActAddNewGoal));//add hint
 
         tempTimeBox.setNickName(getResources().getString(R.string.timeSpinnerHintActAddNewGoal));
+        tempTimeBox.setColorCode(String.valueOf(getResources().getColor(R.color.ColorPrimaryDark)));
         timeBoxList.add(tempTimeBox);
 
         if(tempTimeBox.getAll(TimeBox.TimeBoxStatus.INACTIVE)!=null)
@@ -174,6 +175,7 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
 //        timeSpinner.setAdapter(spinnerArrayAdapter);
         TimeBox tempTimeBox1 = new TimeBox(this);
         tempTimeBox1.setNickName(getResources().getString(R.string.addNewTimeBoxSpinnerItemActAddNewGoal));
+        tempTimeBox1.setColorCode(String.valueOf(getResources().getColor(R.color.ColorPrimary)));
         timeBoxList.add(tempTimeBox1);
         adapterTimeBoxSpinner = new AdapterTimeBoxSpinner(this, timeBoxList);
         timeSpinner.setAdapter(adapterTimeBoxSpinner);

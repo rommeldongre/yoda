@@ -55,7 +55,11 @@ public class AdapterGoalSpinner extends BaseAdapter {
             circleView = (CircleView) row.findViewById(R.id.btnBulletSpinnerItemActAddNewStep);
         }
         tvGoalName.setText(goalsArrayList.get(position).getNickName());
-        circleView.setFillColor(context.getResources().getColor(R.color.ColorPrimary));
+        if(!goalsArrayList.get(position).getColorCode().isEmpty()){
+            circleView.setFillColor(Integer.parseInt(goalsArrayList.get(position).getColorCode()));
+        }else{
+            circleView.setFillColor(context.getResources().getColor(R.color.ColorPrimary));
+        }
         circleView.setShowTitle(false);
         return row;
     }

@@ -649,6 +649,7 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
            currentTimeBox.setTimeBoxWhen(timeBoxWhen);
            currentTimeBox.setTimeBoxOn(timeBoxOn);
            currentTimeBox.setTillType(timeBoxTill);
+           currentTimeBox.setColorCode(String.valueOf(colorPicker.getColor()));
            isValid=true;
        }else if(timeBoxWhenSet.isEmpty()){
            Logger.showMsg(this,getString(R.string.msgActCreateTimeBoxSelectWhenTime));
