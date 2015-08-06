@@ -251,4 +251,18 @@ public class TimeBox implements Serializable{
         }
     }
 
+    public boolean isActive(){
+        SQLiteDatabase db=database.getReadableDatabase();
+        String query="select count(*) as timeBoxActiveCount " +
+                " "+" from "+ MetaData.TableGoal.goal+"" +
+                " "+" where "+ MetaData.TableGoal.timeBoxId+" = "+this.id;
+        Cursor  c=db.rawQuery(query,null);
+        int numOfRows=0;
+        if(c.moveToFirst()){
+            numOfRows=c.getInt(c.getColumnIndex("timeBoxActiveCount"));
+        }
+        return numOfRows>0;
+
+    }
+
 }

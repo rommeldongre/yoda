@@ -3,6 +3,8 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.Slot;
@@ -26,7 +28,7 @@ import java.util.List;
 //
 //        alarmInfo.setStepId(2);
 //        alarmInfo.cancel();
-public class AlarmScheduler implements Serializable{
+public class AlarmScheduler implements Parcelable{
     /**********************************************************************************************/
     // Instance variables
     /**********************************************************************************************/
@@ -180,10 +182,10 @@ public class AlarmScheduler implements Serializable{
         Intent broadcastReceiver = new Intent(context, DateChangeReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context,-2,broadcastReceiver,0);
         Calendar calendar=Calendar.getInstance();
-        calendar.add(Calendar.DATE,1);
+        calendar.add(Calendar.DATE, 1);
         calendar.set(Calendar.HOUR_OF_DAY, 1);
         calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND,0);
+        calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
         this.setRepeatingAlarm(calendar, AlarmManager.INTERVAL_DAY, pendingIntent);
     }
@@ -205,5 +207,17 @@ public class AlarmScheduler implements Serializable{
                 alarmScheduler.setAlarm();
             }
         }
+    }
+
+    @Override
+    public int describeContents() {
+        // TODO Auto-generated method stub
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        // TODO Auto-generated method stub
+
     }
 }
