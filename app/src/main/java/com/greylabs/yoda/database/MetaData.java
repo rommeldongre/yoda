@@ -216,7 +216,8 @@ public class MetaData {
         public static final String createTrigger="" +
                 "create trigger updatePendingStepOnSlotDelete  before delete on "+TableSlot.slot+" " +
                 "begin" +
-                "    update  "+TablePendingStep.pendingStep+" set " +TablePendingStep.slotId+"=0"+
+                "    update  "+TablePendingStep.pendingStep+" set " +TablePendingStep.slotId+" = 0 , " +
+                "     "+TablePendingStep.status+" = "+ PendingStep.PendingStepStatus.MISSED+"  "+
                 "    where "+"old."+TableSlot.id+"="+TablePendingStep.pendingStep+"."+TablePendingStep.slotId+" ;" +
                 " end;  ";
     }

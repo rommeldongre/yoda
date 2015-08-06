@@ -252,7 +252,9 @@ public class PendingStep implements Serializable {
         SQLiteDatabase db = database.getReadableDatabase();
         String query = "select * " +
                 " " + " from " + TablePendingStep.pendingStep + " " +
-                " " + " where "+ TablePendingStep.status+"="+status.ordinal();
+                " " + " where "+ TablePendingStep.status+"="+status.ordinal()+" " +
+                " " + " and ("+TablePendingStep.type+"!="+PendingStepType.SERIES_STEP.ordinal()+" or " +
+                " " + " "+TablePendingStep.type+"!="+PendingStepType.SPLIT_STEP.ordinal()+" )";
 
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
@@ -451,7 +453,8 @@ public class PendingStep implements Serializable {
                 " " + " from " + TablePendingStep.pendingStep + " as p  join " + TableSlot.slot+" as s " +
                 " " + " on ( p." +TablePendingStep.slotId+" = s."+TableSlot.id+" ) "+
                 " " + " where ("  + TablePendingStep.type + "!=" + PendingStepType.SPLIT_STEP.ordinal()+" " +
-                         " " + " or "+TablePendingStep.type+"!="+ PendingStepType.SERIES_STEP.ordinal()+" ) "+
+                         " " + " or "+TablePendingStep.type+"!="+ PendingStepType.SERIES_STEP.ordinal()+" ) " +
+                " "+ "  and "+TablePendingStep.status+" = "+PendingStepStatus.TODO.ordinal()+" "+
                 " "+filterCriteria+" " +
                 " "+" order by "+TablePendingStep.priority+" asc ,"+TablePendingStep.nickName+" asc ";
 

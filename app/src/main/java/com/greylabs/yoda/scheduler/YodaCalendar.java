@@ -371,6 +371,7 @@ public class YodaCalendar {
     // Step Scheduler
     /**********************************************************************************************/
     public boolean scheduleStep(PendingStep pendingStep) {
+        Calendar calendar=Calendar.getInstance();
         boolean isScheduled=false;
         slots=slot.getAll(timeBox.getId());
         //Collections.sort(slots, new SortByDate());
@@ -388,9 +389,11 @@ public class YodaCalendar {
                         if (ps.getTime() <=slot.getTime() && slot.getTimeBoxId()==timeBox.getId()  ) {
                             slot.setTime(slot.getTime() - ps.getTime());
                             slot.setGoalId(ps.getGoalId());
-                            ps.setSlotId(slot.getId());
                             slot.save();
-                            ps.setStepDate(slot.getScheduleDate());
+                            ps.setSlotId(slot.getId());
+                            calendar.setTime(slot.getScheduleDate());
+                            calendar.add(Calendar.HOUR_OF_DAY, slot.getWhen().getStartTime());
+                            ps.setStepDate(calendar.getTime());
                             ps.save();
                             AlarmScheduler alarmScheduler = new AlarmScheduler(context);
                             alarmScheduler.setStepId(ps.getId());
@@ -414,9 +417,11 @@ public class YodaCalendar {
                     if (pendingStep.getTime() <=slot.getTime() && slot.getTimeBoxId()==timeBox.getId()  ) {
                         slot.setTime(slot.getTime() - pendingStep.getTime());
                         slot.setGoalId(pendingStep.getGoalId());
-                        pendingStep.setSlotId(slot.getId());
                         slot.save();
-                        pendingStep.setStepDate(slot.getScheduleDate());
+                        pendingStep.setSlotId(slot.getId());
+                        calendar.setTime(slot.getScheduleDate());
+                        calendar.add(Calendar.HOUR_OF_DAY, slot.getWhen().getStartTime());
+                        pendingStep.setStepDate(calendar.getTime());
                         pendingStep.save();
                         AlarmScheduler alarmScheduler = new AlarmScheduler(context);
                         alarmScheduler.setStepId(pendingStep.getId());
@@ -444,6 +449,7 @@ public class YodaCalendar {
      */
     public int rescheduleSteps(long goalId){
         int count=0;
+        Calendar calendar=Calendar.getInstance();
         List<PendingStep> pendingSteps= new PendingStep(context).getAll(goalId);
         if(pendingSteps!=null) {
              slots=slot.getAll(timeBox.getId());
@@ -465,9 +471,11 @@ public class YodaCalendar {
                                 if (substep.getTime() <=slot.getTime() && slot.getTimeBoxId()==timeBox.getId()  ) {
                                     slot.setTime(slot.getTime() - substep.getTime());
                                     slot.setGoalId(substep.getGoalId());
-                                    substep.setSlotId(slot.getId());
                                     slot.save();
-                                    substep.setStepDate(slot.getScheduleDate());
+                                    substep.setSlotId(slot.getId());
+                                    calendar.setTime(slot.getScheduleDate());
+                                    calendar.add(Calendar.HOUR_OF_DAY,slot.getWhen().getStartTime());
+                                    substep.setStepDate(calendar.getTime());
                                     substep.save();
                                     AlarmScheduler alarmScheduler = new AlarmScheduler(context);
                                     alarmScheduler.setStepId(substep.getId());
@@ -493,9 +501,11 @@ public class YodaCalendar {
                             if (pendingStep.getTime() <=slot.getTime() && slot.getTimeBoxId()==timeBox.getId()  ) {
                                 slot.setTime(slot.getTime() - pendingStep.getTime());
                                 slot.setGoalId(pendingStep.getGoalId());
-                                pendingStep.setSlotId(slot.getId());
                                 slot.save();
-                                pendingStep.setStepDate(slot.getScheduleDate());
+                                pendingStep.setSlotId(slot.getId());
+                                calendar.setTime(slot.getScheduleDate());
+                                calendar.add(Calendar.HOUR_OF_DAY, slot.getWhen().getStartTime());
+                                pendingStep.setStepDate(calendar.getTime());
                                 pendingStep.save();
                                 AlarmScheduler alarmScheduler = new AlarmScheduler(context);
                                 alarmScheduler.setStepId(pendingStep.getId());

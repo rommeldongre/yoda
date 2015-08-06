@@ -14,6 +14,7 @@ import com.greylabs.yoda.R;
 import com.greylabs.yoda.apis.TasksSample;
 import com.greylabs.yoda.models.Day;
 import com.greylabs.yoda.models.Goal;
+import com.greylabs.yoda.scheduler.BootCompleteService;
 import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Prefs;
@@ -54,6 +55,8 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
 
         YodaCalendar yodaCalendar=new YodaCalendar(this);
         Day day=new Day(this);
+        Intent intent=new Intent(this, BootCompleteService.class);
+        startService(intent);
         initialize();
     }
 

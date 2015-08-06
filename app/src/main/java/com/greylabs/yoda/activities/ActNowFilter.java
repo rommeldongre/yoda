@@ -64,15 +64,16 @@ public class ActNowFilter extends Activity implements View.OnClickListener {
         caller = getIntent().getStringExtra(Constants.CALLER);
         if(caller.equals(Constants.ALARM_SERVICE)){
             AlarmScheduler alarmScheduler=(AlarmScheduler)getIntent().getSerializableExtra(Constants.ALARM_SCHEDULER);
-            pendingStep=new PendingStep(this).get(alarmScheduler.getStepId());
-            goal=new Goal(this).get(pendingStep.getGoalId());
-            tvGoalName.setText(goal.getNickName());
-            tvStepName.setText(pendingStep.getNickName());
-            tvTime.setText(String.valueOf(alarmScheduler.getStartTime()));
+            if(alarmScheduler!=null) {
+                pendingStep = new PendingStep(this).get(alarmScheduler.getStepId());
+                goal = new Goal(this).get(pendingStep.getGoalId());
+                tvGoalName.setText(goal.getNickName());
+                tvStepName.setText(pendingStep.getNickName());
+                tvTime.setText(String.valueOf(alarmScheduler.getStartTime()));
+            }
         }else if(caller.equals(Constants.ACT_HOME)){
             // get the current step from local
             pendingStep = new PendingStep(this);
-
             checkForEmptyViewVisibility();
         }
     }
