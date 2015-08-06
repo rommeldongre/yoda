@@ -562,9 +562,14 @@ public class PendingStep implements Serializable {
                 " "+" set "+TablePendingStep.goalId+" = "+newGoalId+" " +
                 " "+" where "+TablePendingStep.goalId+" = "+oldGoalId;
         SQLiteDatabase db=database.getWritableDatabase();
-        Cursor c=db.rawQuery(query,null);
+        Cursor c=db.rawQuery(query, null);
         c.moveToFirst();
         c.close();
+    }
+
+    public  String getColorCode(){
+        Goal goal=new Goal(context).get(this.getGoalId());
+        return goal.getColorCode();
     }
     /**********************************************************************************************/
     // Enum Constants

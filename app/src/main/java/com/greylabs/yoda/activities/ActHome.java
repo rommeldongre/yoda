@@ -49,14 +49,6 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
-//        QuickStart quickStart = new QuickStart(this);
-//        quickStart.quickStart();
-
-        YodaCalendar yodaCalendar=new YodaCalendar(this);
-        Day day=new Day(this);
-        Intent intent=new Intent(this, BootCompleteService.class);
-        startService(intent);
         initialize();
     }
 

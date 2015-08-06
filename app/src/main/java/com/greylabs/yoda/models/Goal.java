@@ -311,4 +311,16 @@ public class Goal implements Serializable{
         }
         return goalId;
     }
+    public String getColorCode(){
+        String colorCode="";
+        String query="select colorCode " +
+                " "+" from "+ MetaData.TableTimeBox.timeBox+" " +
+                " "+" where "+ MetaData.TableTimeBox.id+" = "+this.timeBoxId;
+        SQLiteDatabase db=database.getReadableDatabase();
+        Cursor c=db.rawQuery(query,null);
+        if(c.moveToFirst()){
+            colorCode=c.getString(c.getColumnIndex(MetaData.TableTimeBox.colorCode));
+        }
+        return colorCode;
+    }
 }
