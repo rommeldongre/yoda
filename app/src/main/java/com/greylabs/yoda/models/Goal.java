@@ -9,10 +9,12 @@ import com.greylabs.yoda.database.Database;
 import com.greylabs.yoda.database.MetaData;
 import com.greylabs.yoda.database.MetaData.TableGoal;
 import com.greylabs.yoda.database.MetaData.TablePendingStep;
+import com.greylabs.yoda.utils.CalendarUtils;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -31,7 +33,7 @@ public class Goal implements Serializable{
     private byte status;
     private int order;
     private int progress;//progress of goal in percent
-    private Timestamp dueDate;
+    private Date dueDate;
     private long timeBoxId;
     transient private Database database;
     transient private Context context;
@@ -119,14 +121,14 @@ public class Goal implements Serializable{
     public void setOrder(int order) {
         this.order = order;
     }
-
-    public Timestamp getDueDate() {
+    public Date getDueDate() {
         return dueDate;
     }
 
-    public void setDueDate(Timestamp dueDate) {
+    public void setDueDate(Date dueDate) {
         this.dueDate = dueDate;
     }
+
     public long getTimeBoxId() {
         return timeBoxId;
     }
@@ -182,7 +184,7 @@ public class Goal implements Serializable{
                 this.reason=c.getString(c.getColumnIndex(TableGoal.reason));
                 this.reward=c.getString(c.getColumnIndex(TableGoal.buddyEmail));
                 this.status=(byte)c.getInt(c.getColumnIndex(TableGoal.status));
-                this.dueDate=Timestamp.valueOf(c.getString(c.getColumnIndex(TableGoal.dueDate)));
+                this.dueDate= CalendarUtils.parseDate(c.getString(c.getColumnIndex(TableGoal.dueDate)));
                 this.timeBoxId=c.getInt(c.getColumnIndex(TableGoal.timeBoxId));
             }while (c.moveToNext());
         }
@@ -208,7 +210,7 @@ public class Goal implements Serializable{
                 goal.reason=c.getString(c.getColumnIndex(TableGoal.reason));
                 goal.reward=c.getString(c.getColumnIndex(TableGoal.buddyEmail));
                 goal.status=(byte)c.getInt(c.getColumnIndex(TableGoal.status));
-                goal.dueDate=Timestamp.valueOf(c.getString(c.getColumnIndex(TableGoal.dueDate)));
+                goal.dueDate=CalendarUtils.parseDate(c.getString(c.getColumnIndex(TableGoal.dueDate)));
                 goal.timeBoxId=c.getInt(c.getColumnIndex(TableGoal.timeBoxId));
 
                 goals.add(goal);
@@ -230,8 +232,11 @@ public class Goal implements Serializable{
         values.put(TableGoal.reward,this.reward);
         values.put(TableGoal.buddyEmail,this.buddyEmail);
         values.put(TableGoal.status,this.status);
-        values.put(TableGoal.order,this.order);
-        values.put(TableGoal.dueDate, this.dueDate.toString());
+        values.put(TableGoal.order, this.order);
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.SECOND, 0);cal.set(Calendar.MINUTE, 0);cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.setTime(this.getDueDate());
+        values.put(TableGoal.dueDate, CalendarUtils.getSqLiteDateFormat(cal));
         values.put(TableGoal.timeBoxId, this.timeBoxId);
         long rowId;
         if (this.id!=0){

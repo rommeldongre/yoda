@@ -450,6 +450,7 @@ public class YodaCalendar {
     public int rescheduleSteps(long goalId){
         int count=0;
         Calendar calendar=Calendar.getInstance();
+        Goal goal=new Goal(context).get(goalId);
         List<PendingStep> pendingSteps= new PendingStep(context).getAll(goalId);
         if(pendingSteps!=null) {
              slots=slot.getAll(timeBox.getId());
@@ -477,6 +478,7 @@ public class YodaCalendar {
                                     calendar.add(Calendar.HOUR_OF_DAY,slot.getWhen().getStartTime());
                                     substep.setStepDate(calendar.getTime());
                                     substep.save();
+                                    goal.setDueDate(substep.getStepDate());
                                     AlarmScheduler alarmScheduler = new AlarmScheduler(context);
                                     alarmScheduler.setStepId(substep.getId());
                                     alarmScheduler.setSubStepId(pendingStep.getSubStepOf());
@@ -492,6 +494,7 @@ public class YodaCalendar {
                                 }
                             }
                         }
+                        goal.save();
                         break;
                     case SINGLE_STEP:
                         it = slots.iterator();
@@ -507,6 +510,7 @@ public class YodaCalendar {
                                 calendar.add(Calendar.HOUR_OF_DAY, slot.getWhen().getStartTime());
                                 pendingStep.setStepDate(calendar.getTime());
                                 pendingStep.save();
+                                goal.setDueDate(pendingStep.getStepDate());
                                 AlarmScheduler alarmScheduler = new AlarmScheduler(context);
                                 alarmScheduler.setStepId(pendingStep.getId());
                                 alarmScheduler.setSubStepId(pendingStep.getId());
@@ -521,6 +525,7 @@ public class YodaCalendar {
                                 break;
                             }
                         }
+                        goal.save();
                         break;
                 }
             }

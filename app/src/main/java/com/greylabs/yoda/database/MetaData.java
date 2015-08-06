@@ -97,6 +97,13 @@ public class MetaData {
                 " "+"foreign key("+subStepOf+") references "+ TablePendingStep.pendingStep+"("+ TablePendingStep.id+") " +
                 " )";
 
+        public static final String createTriggerBeforeDelete="" +
+                "create trigger updateSlotOnPendingStepDelete  before delete on "+TableDay.day+" " +
+                "begin" +
+                "    delete from  "+TableSlot.slot+" " +
+                "    where "+TableSlot.slot+"."+TableSlot.dayId+"="+"old."+TableDay.id +" ;" +
+                " end;  ";
+
     }
 
     public static class TableCompletedStep{

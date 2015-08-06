@@ -519,6 +519,7 @@ public class PendingStep implements Serializable {
             pendingStepNew.setGoalId(this.getGoalId());
             pendingStepNew.setGoalStringId(this.getGoalStringId());
             pendingStepNew.setTime(time);
+            pendingStepNew.setStepDate(new Date());
             pendingStepNew.setSubStepOf(this.getId());
             rowId+=pendingStepNew.saveSubStep(pendingStepNew);
         }
