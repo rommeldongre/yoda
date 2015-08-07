@@ -170,6 +170,7 @@ public class MetaData {
 
     public static class TableDay{
         public static final String day="day";//table name
+        public static  final String triggerDeleteSlotOnDayDelete="deleteSlotOnDayDelete";
         public static final String id="id";
         public static final String date="date";
         public static final String dayOfYear="dayOfYear";
@@ -192,7 +193,7 @@ public class MetaData {
                 " ) ";
 
         public static final String createTrigger="" +
-                "create trigger deleteSlotOnDayDelete  before delete on "+TableDay.day+" " +
+                "create trigger "+triggerDeleteSlotOnDayDelete+"  before delete on "+TableDay.day+" " +
                 "begin" +
                 "    delete from  "+TableSlot.slot+" " +
                 "    where "+TableSlot.slot+"."+TableSlot.dayId+"="+"old."+TableDay.id +" ;" +
@@ -200,6 +201,7 @@ public class MetaData {
     }
     public static class TableSlot{
         public static final String slot="slot";//table name
+        public static final String triggerUpdatePendingStepOnSlotDelete="updatePendingStepOnSlotDelete";
         public static final String id="id";
         public static final String when="whenType";
         public static final String scheduleDate="scheduleDate";
@@ -221,7 +223,7 @@ public class MetaData {
                 " )";
 
         public static final String createTrigger="" +
-                "create trigger updatePendingStepOnSlotDelete  before delete on "+TableSlot.slot+" " +
+                "create trigger "+ triggerUpdatePendingStepOnSlotDelete+ " before delete on "+TableSlot.slot+" " +
                 "begin" +
                 "    update  "+TablePendingStep.pendingStep+" set " +TablePendingStep.slotId+" = 0 , " +
                 "     "+TablePendingStep.status+" = "+ PendingStep.PendingStepStatus.MISSED+"  "+

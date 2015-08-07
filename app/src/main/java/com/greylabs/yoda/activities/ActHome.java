@@ -49,6 +49,7 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        Day d=new Day(this);
         initialize();
     }
 

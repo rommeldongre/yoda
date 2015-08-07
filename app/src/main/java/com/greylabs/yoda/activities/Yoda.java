@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.Configuration;
 
 import com.greylabs.yoda.R;
+import com.greylabs.yoda.scheduler.AlarmScheduler;
 
 import org.acra.ACRA;
 import org.acra.ReportField;
@@ -41,7 +42,10 @@ public class Yoda extends Application {
     public void onCreate() {
         super.onCreate();
         ACRA.init(this);
+
         context=getApplicationContext();
+        AlarmScheduler alarmScheduler=new AlarmScheduler(context);
+        alarmScheduler.setCalendarUpdateInterval();
     }
 
     public static Context getContext(){

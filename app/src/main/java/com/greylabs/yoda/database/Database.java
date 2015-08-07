@@ -16,8 +16,8 @@ public class Database extends SQLiteOpenHelper implements Serializable{
     //Database Details
     /**********************************************************************************************/
     private static final String TAG="Database";
-    private static final String DATABASE_NAME="yoda";
-    private static final int DATABASE_VERSION=1;
+    public static final String DATABASE_NAME="yoda";
+    public static final int DATABASE_VERSION=1;
 
     /**********************************************************************************************/
     //Instance and class variables

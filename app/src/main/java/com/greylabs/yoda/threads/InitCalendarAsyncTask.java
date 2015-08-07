@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 
+import com.greylabs.yoda.database.Database;
 import com.greylabs.yoda.scheduler.AlarmReceiver;
 import com.greylabs.yoda.scheduler.AlarmScheduler;
 import com.greylabs.yoda.scheduler.DateChangeReceiver;
@@ -40,6 +41,8 @@ public class InitCalendarAsyncTask extends AsyncTask<String, String, String> {
 
     @Override
     protected String doInBackground(String... params) {
+        Database database=Database.getInstance(context);
+        database.onCreate(database.getWritableDatabase());
         YodaCalendar.init(context);
         AlarmScheduler alarmScheduler=new AlarmScheduler(context);
         alarmScheduler.setCalendarUpdateInterval();
