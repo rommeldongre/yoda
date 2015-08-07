@@ -94,5 +94,14 @@ public class Constants {
     public static final String ID_STRETCH_GOAL ="Stretch GoalId" ;
     public static final String MSG_RESET_YODA = "Resetting App will erase all the data! Are you sure, you want to delete all alarms and start over again?";
     public static final String MSG_RESETTING_YODA = "Resetting App, Please wait...";
+    public static final String MSG_CANT_DELETE_ACTIVE_TIMEBOX = "Active TimeBox can not be deleted";
     public static final int COLORCODE_UNPLANNED_TIMEBOX = -3931905;
+    public static final int COLORCODE_TIMEBOX_1 = -39424; //orange
+    public static final int COLORCODE_TIMEBOX_2 = -3931905; //purple
+    public static final int COLORCODE_TIMEBOX_3 = -65476; //red
+    public static final int COLORCODE_TIMEBOX_4 = -16745217; //blue
+    public static final int COLORCODE_TIMEBOX_5 = -8960; //yellow
+    public static final int COLORCODE_TIMEBOX_6 = -13041920; //green
+    public static final int COLORCODE_TIMEBOX_7 = -16736513; //sky blue
+    public static final int COLORCODE_TIMEBOX_8 = -65391; //pink
 }

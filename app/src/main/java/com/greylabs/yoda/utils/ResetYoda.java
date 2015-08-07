@@ -17,13 +17,13 @@ public class ResetYoda {
 
     private static void clearDatabase(Context context) {
         Database database = Database.getInstance(context);
-        database.getWritableDatabase().execSQL("DELETE FROM " + TableCompletedStep.completedStep);
-        database.getWritableDatabase().execSQL("DELETE FROM " + TableGoal.goal);
-        database.getWritableDatabase().execSQL("DELETE FROM " + TablePendingStep.pendingStep);
-        database.getWritableDatabase().execSQL("DELETE FROM " + TableTimeBox.timeBox);
-        database.getWritableDatabase().execSQL("DELETE FROM " + TableTimeBoxOn.timeBoxOn);
-        database.getWritableDatabase().execSQL("DELETE FROM " + TableTimeBoxWhen.timeBoxWhen);
-        database.getWritableDatabase().execSQL("DELETE FROM " + TableDay.day);
-        database.getWritableDatabase().execSQL("DELETE FROM " + TableSlot.slot);
+        database.getWritableDatabase().execSQL("DROP TABLE " + TableCompletedStep.completedStep);
+        database.getWritableDatabase().execSQL("DROP TABLE " + TableGoal.goal);
+        database.getWritableDatabase().execSQL("DROP TABLE " + TablePendingStep.pendingStep);
+        database.getWritableDatabase().execSQL("DROP TABLE " + TableTimeBox.timeBox);
+        database.getWritableDatabase().execSQL("DROP TABLE " + TableTimeBoxOn.timeBoxOn);
+        database.getWritableDatabase().execSQL("DROP TABLE " + TableTimeBoxWhen.timeBoxWhen);
+        database.getWritableDatabase().execSQL("DROP TABLE " + TableDay.day);
+        database.getWritableDatabase().execSQL("DROP TABLE " + TableSlot.slot);
     }
 }

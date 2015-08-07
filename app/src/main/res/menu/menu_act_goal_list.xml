@@ -9,6 +9,13 @@
         app:showAsAction="ifRoom" />
 
     <item
+        android:id="@+id/actionAddActGoalList"
+        android:title="@string/actionAdd"
+        android:icon="@drawable/ic_btn_add_white"
+        app:showAsAction="ifRoom"
+        android:visible="false" />
+
+    <item
         android:id="@+id/actionSaveActGoalList"
         android:title="@string/actionSave"
         android:icon="@drawable/ic_btn_save_act_add_new_goal"

@@ -47,7 +47,8 @@ public class AdapterRecyclerViewActStepList extends RecyclerView.Adapter<Adapter
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.tvStepName.setText(stepsArrayList.get(position).getNickName());
-        holder.tvETAOfStep.setText(stepsArrayList.get(position).getStepDate().toString());
+        if(stepsArrayList.get(position).getStepDate()!=null)
+            holder.tvETAOfStep.setText(stepsArrayList.get(position).getStepDate().toString());
         if(stepsArrayList.get(position).getPendingStepStatus().equals(PendingStep.PendingStepStatus.COMPLETED)){
             holder.checkBox.setChecked(true);
             holder.checkBox.setEnabled(false);

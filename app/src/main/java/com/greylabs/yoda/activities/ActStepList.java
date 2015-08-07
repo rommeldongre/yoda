@@ -89,11 +89,11 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        if(currentGoal != null){
+//        if(currentGoal != null){
             getSupportActionBar().setTitle(currentGoal.getNickName());
-        }else{
-            getSupportActionBar().setTitle(getResources().getString(R.string.titleActChangeStepPriority));
-        }
+//        }else{
+//            getSupportActionBar().setTitle(getResources().getString(R.string.titleActChangeStepPriority));
+//        }
 
         DragSortRecycler dragSortRecycler = new DragSortRecycler();
         dragSortRecycler.setViewHandleId(R.id.btnHandleRecyclerItemActStepList);
@@ -219,20 +219,21 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
             case R.id.actionAddActStepList :
                 Intent intent = new Intent(this, ActAddNewStep.class);
                 intent.putExtra(Constants.CALLER, Constants.ACT_STEP_LIST);
+                intent.putExtra(Constants.GOAL_OBJECT, currentGoal);
                 intent.putExtra(Constants.OPERATION, Constants.OPERATION_ADD);
                 this.startActivity(intent);
                 break;
 
             case R.id.actionToggleActStepList :
                 if(isShowingPendingSteps){
-                    getSupportActionBar().setTitle(currentGoal.getNickName());
+//                    getSupportActionBar().setTitle(currentGoal.getNickName());
                     checkForEmptyViewVisibility(stepArrayList, getString(R.string.tvEmptyViewActStepList));
                     isShowingPendingSteps = false;
                     mAdapter = new AdapterRecyclerViewActStepList(this, stepArrayList, isOperationEdit, caller);
                     recyclerView.setAdapter(mAdapter);
                 }else {
                     isShowingPendingSteps = true;
-                    getSupportActionBar().setTitle(getResources().getString(R.string.titlePendingStepsActStepsList));
+//                    getSupportActionBar().setTitle(getResources().getString(R.string.titlePendingStepsActStepsList));
                     mAdapter = new AdapterRecyclerViewActStepList(this, pendingStepsArrayList, isOperationEdit, caller);
                     recyclerView.setAdapter(mAdapter);
                     checkForEmptyViewVisibility(pendingStepsArrayList, getString(R.string.tvEmptyViewPendingStepsActStepList));
