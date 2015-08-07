@@ -163,6 +163,15 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
             case Constants.ACT_STEP_LIST :
                 if(intent.getStringExtra(Constants.OPERATION).equals(Constants.OPERATION_ADD)){
                     getGoalListFromLocal();
+                    currentGoal = (Goal) intent.getSerializableExtra(Constants.GOAL_OBJECT);
+                    int oldGoalPosition = 0;
+                    for(int i=0; i<goalList.size();i++){
+                        if(currentGoal.getId() == goalList.get(i).getId())
+                            oldGoalPosition = i;
+                    }
+                    goalSpinner.setSelection(oldGoalPosition);
+                    goalChosen = oldGoalPosition;
+//                    getGoalListFromLocal();
                     currentStep = new PendingStep(this);
                 }else {
                     currentStep = (PendingStep) intent.getSerializableExtra(Constants.STEP_OBJECT);

@@ -125,6 +125,7 @@ public class ActGoalList  extends ActionBarActivity implements OnClickOfRecycler
                 if(isOperationEdit){
                     menu.findItem(R.id.actionEditActGoalList).setVisible(true);
                     menu.findItem(R.id.actionSaveActGoalList).setVisible(false);
+                    menu.findItem(R.id.actionAddActGoalList).setVisible(false);
                     isOperationEdit = false;
                     mAdapter = new AdapterRecyclerViewActGoalList(this, goalArrayList, isOperationEdit);
                     recyclerView.setAdapter(mAdapter);
@@ -132,9 +133,15 @@ public class ActGoalList  extends ActionBarActivity implements OnClickOfRecycler
                     this.finish();
                 }
                 break;
+            case R.id.actionAddActGoalList :
+                Intent intent = new Intent(this, ActAddNewGoal.class);
+                intent.putExtra(Constants.CALLER, Constants.ACT_HOME);
+                intent.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, false);
+                this.startActivity(intent);
+                break;
             case R.id.actionEditActGoalList :
                 menu.findItem(R.id.actionEditActGoalList).setVisible(false);
-//                menu.findItem(R.id.actionSaveActGoalList).setVisible(true);
+                menu.findItem(R.id.actionAddActGoalList).setVisible(true);
                 isOperationEdit = true;
                 mAdapter = new AdapterRecyclerViewActGoalList(this, goalArrayList, isOperationEdit);
                 recyclerView.setAdapter(mAdapter);

@@ -166,7 +166,7 @@ public class ActTimeBoxList extends ActionBarActivity implements OnClickOfRecycl
                     break;
 
                 case Constants.OPERATION_DELETE :
-//                    if(!timeBoxArrayList.get(Position).getNickName().equals(Constants.NICKNAME_UNPLANNED_TIMEBOX)){
+                    if(!timeBoxArrayList.get(Position).isActive()){
                         AlertDialog.Builder alertLogout = new AlertDialog.Builder(this);
                         alertLogout.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
@@ -180,16 +180,16 @@ public class ActTimeBoxList extends ActionBarActivity implements OnClickOfRecycl
                         alertLogout.setNegativeButton("Cancel", null);
                         alertLogout.setMessage(Constants.MSG_DELETE_TIMEBOX);
                         alertLogout.show();
-//                    }else {
-//                        AlertDialog.Builder alertLogout = new AlertDialog.Builder(this);
-//                        alertLogout.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialogInterface, int i) {
-//                            }
-//                        });
-//                        alertLogout.setMessage(Constants.MSG_CANT_EDIT_DELETE_TIMEBOX);
-//                        alertLogout.show();
-//                    }
+                    }else {
+                        AlertDialog.Builder alertLogout = new AlertDialog.Builder(this);
+                        alertLogout.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                            }
+                        });
+                        alertLogout.setMessage(Constants.MSG_CANT_DELETE_ACTIVE_TIMEBOX);
+                        alertLogout.show();
+                    }
                     break;
             }
 //        }

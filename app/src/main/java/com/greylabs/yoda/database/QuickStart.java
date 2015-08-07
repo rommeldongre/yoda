@@ -57,6 +57,7 @@ public final class QuickStart {
         timeBox.setTimeBoxOn(timeBoxOn);
         //set till
         timeBox.setTillType(TimeBoxTill.FOREVER);
+        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_1));
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
         Logger.log(TAG, "1 Added");
@@ -82,6 +83,7 @@ public final class QuickStart {
         timeBox.setTimeBoxWhen(timeBoxWhen);
         //till
         timeBox.setTillType(TimeBoxTill.YEAR);
+        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_2));
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
         Logger.log(TAG, "1 Added");
@@ -107,6 +109,7 @@ public final class QuickStart {
         timeBox.setTimeBoxWhen(timeBoxWhen);
         //till
         timeBox.setTillType(TimeBoxTill.YEAR);
+        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_3));
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
         Logger.log(TAG, "1 Added");
@@ -128,6 +131,7 @@ public final class QuickStart {
         timeBox.setTimeBoxWhen(timeBoxWhen);
         //till
         timeBox.setTillType(TimeBoxTill.FOREVER);
+        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_4));
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
         Logger.log(TAG, "1 Added");
@@ -150,6 +154,7 @@ public final class QuickStart {
         timeBox.setTimeBoxWhen(timeBoxWhen);
         //till
         timeBox.setTillType(TimeBoxTill.FOREVER);
+        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_5));
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
         Logger.log(TAG, "1 Added");
@@ -172,6 +177,7 @@ public final class QuickStart {
         timeBox.setTimeBoxWhen(timeBoxWhen);
         //till
         timeBox.setTillType(TimeBoxTill.QUARTER);
+        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_6));
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
         Logger.log(TAG, "1 Added");
@@ -197,6 +203,7 @@ public final class QuickStart {
         timeBox.setTimeBoxWhen(timeBoxWhen);
         //till
         timeBox.setTillType(TimeBoxTill.FOREVER);
+        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_7));
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
         Logger.log(TAG, "1 Added");
@@ -215,6 +222,7 @@ public final class QuickStart {
         timeBoxWhen.setWhenValues(timeBoxWhens);
         timeBox.setTimeBoxWhen(timeBoxWhen);
         timeBox.setTillType(TimeBoxTill.FOREVER);
+        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_8));
         timeBox.save();
         Prefs pref=Prefs.getInstance(context);
         pref.setUnplannedTimeBoxId(timeBox.getId());

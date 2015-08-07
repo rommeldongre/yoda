@@ -41,8 +41,7 @@ public class InitCalendarAsyncTask extends AsyncTask<String, String, String> {
 
     @Override
     protected String doInBackground(String... params) {
-        Database database=Database.getInstance(context);
-        database.onCreate(database.getWritableDatabase());
+        Database.getInstance(context);
         YodaCalendar.init(context);
         AlarmScheduler alarmScheduler=new AlarmScheduler(context);
         alarmScheduler.setCalendarUpdateInterval();
