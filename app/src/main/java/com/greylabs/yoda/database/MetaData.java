@@ -27,7 +27,7 @@ public class MetaData {
         public static final String timeBoxId="timeBoxId";//FK to timebox
 
         public static final String createGoalTable=
-                "create table "+goal+" (" +
+                "create table if not exists  "+goal+" (" +
                         " "+id+" integer primary key autoincrement, " +
                         " "+stringId+" text ,"+
                         " "+nickName+" text, " +
@@ -77,7 +77,7 @@ public class MetaData {
         public static  final String slotId="slotId";
         public static final String subStepOf="subStepOf";
         public static final String createPendingStepTable="" +
-                "create table "+pendingStep+" ( " +
+                "create table if not exists  "+pendingStep+" ( " +
                 " "+id+" integer primary key autoincrement," +
                 " "+stringId+" text , "+
                 " "+nickName+" text, " +
@@ -98,7 +98,7 @@ public class MetaData {
                 " )";
 
         public static final String createTriggerBeforeDelete="" +
-                "create trigger updateSlotOnPendingStepDelete  before delete on "+TableDay.day+" " +
+                "create trigger if not exists  updateSlotOnPendingStepDelete  before delete on "+TableDay.day+" " +
                 "begin" +
                 "    delete from  "+TableSlot.slot+" " +
                 "    where "+TableSlot.slot+"."+TableSlot.dayId+"="+"old."+TableDay.id +" ;" +
@@ -113,7 +113,7 @@ public class MetaData {
         public static final String stepCount="stepCount";
 
         public static final String createCompletedStepTable="" +
-                "create table "+completedStep+" ( " +
+                "create table if not exists  "+completedStep+" ( " +
                 " "+id+" integer ," +
                 " "+series+" integer, " +
                 " "+stepCount+" integer, " +
@@ -130,7 +130,7 @@ public class MetaData {
         public static final String colorCode="colorCode";
 
         public static final String createTimeBoxTable="" +
-                "create table  "+timeBox+" ( " +
+                "create table  if not exists  "+timeBox+" ( " +
                 " "+id+" integer primary key autoincrement, " +
                 " "+nickName+" text ," +
                 " "+on+" integer ," +
@@ -148,7 +148,7 @@ public class MetaData {
 
 
         public static final String createTimeBoxOnTable="" +
-                "create table  "+timeBoxOn+" ( " +
+                "create table  if not exists  "+timeBoxOn+" ( " +
                 " "+id+" integer , " +
                 " "+on+" integer ," +
                 " "+"foreign key("+id+") references "+ TableTimeBox.timeBox+"("+ TableTimeBox.id+") " +
@@ -161,7 +161,7 @@ public class MetaData {
         public static final String when="whenType";
 
         public static final String createTimeBoxWhenTable="" +
-                "create table  "+timeBoxWhen+" ( " +
+                "create table  if not exists  "+timeBoxWhen+" ( " +
                 " "+id+" integer , " +
                 " "+when+" integer ," +
                 " "+"foreign key("+id+") references "+ TableTimeBox.timeBox+"("+ TableTimeBox.id+") " +
@@ -181,7 +181,7 @@ public class MetaData {
         public static final String year="year";
 
         public static final String createDayTable=" " +
-                " create table "+day+" ( " +
+                " create table if not exists "+day+" ( " +
                 " "+id+" integer primary key autoincrement, " +
                 " "+date+" text , " +
                 " "+dayOfYear+" integer , " +
@@ -193,7 +193,7 @@ public class MetaData {
                 " ) ";
 
         public static final String createTrigger="" +
-                "create trigger "+triggerDeleteSlotOnDayDelete+"  before delete on "+TableDay.day+" " +
+                "create trigger if not exists  "+triggerDeleteSlotOnDayDelete+"  before delete on "+TableDay.day+" " +
                 "begin" +
                 "    delete from  "+TableSlot.slot+" " +
                 "    where "+TableSlot.slot+"."+TableSlot.dayId+"="+"old."+TableDay.id +" ;" +
@@ -211,7 +211,7 @@ public class MetaData {
         public static final String dayId="dayId";
 
         public static final String createSlotTable=" " +
-                " create table "+slot+" ( " +
+                " create table if not exists  "+slot+" ( " +
                 " "+id+" integer primary key autoincrement , " +
                 " "+when+" integer ," +
                 " "+scheduleDate+" text ," +
@@ -223,7 +223,7 @@ public class MetaData {
                 " )";
 
         public static final String createTrigger="" +
-                "create trigger "+ triggerUpdatePendingStepOnSlotDelete+ " before delete on "+TableSlot.slot+" " +
+                "create trigger if not exists  "+ triggerUpdatePendingStepOnSlotDelete+ " before delete on "+TableSlot.slot+" " +
                 "begin" +
                 "    update  "+TablePendingStep.pendingStep+" set " +TablePendingStep.slotId+" = 0 , " +
                 "     "+TablePendingStep.status+" = "+ PendingStep.PendingStepStatus.MISSED+"  "+

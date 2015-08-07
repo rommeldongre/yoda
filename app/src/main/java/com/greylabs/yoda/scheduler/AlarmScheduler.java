@@ -28,7 +28,7 @@ import java.util.List;
 //
 //        alarmInfo.setStepId(2);
 //        alarmInfo.cancel();
-public class AlarmScheduler implements Parcelable{
+public class AlarmScheduler implements Serializable{
     /**********************************************************************************************/
     // Instance variables
     /**********************************************************************************************/
@@ -135,15 +135,15 @@ public class AlarmScheduler implements Parcelable{
         Logger.log(TAG, "Target date:[Start Time]" + calTarget.getTime().toString());
         Intent broadcastReceiver = new Intent(context, AlarmReceiver.class);
         broadcastReceiver.putExtra(Constants.ALARM_SCHEDULER,this);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int)stepId,broadcastReceiver,0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int)stepId,broadcastReceiver,PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calTarget.getTimeInMillis(), pendingIntent);
 
         //end time
         calTarget.add(Calendar.HOUR_OF_DAY, duration);
         Logger.log(TAG, "Target date:[End Time]" + calTarget.getTime().toString());
         broadcastReceiver = new Intent(context, AlarmReceiver.class);
-        broadcastReceiver.putExtra(Constants.ALARM_SCHEDULER,this);
-        pendingIntent = PendingIntent.getBroadcast(context, -(int)stepId,broadcastReceiver,0);
+        broadcastReceiver.putExtra(Constants.ALARM_SCHEDULER, this);
+        pendingIntent = PendingIntent.getBroadcast(context, -(int)stepId,broadcastReceiver,PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calTarget.getTimeInMillis(), pendingIntent);
     }
 
@@ -156,11 +156,11 @@ public class AlarmScheduler implements Parcelable{
         Calendar calTarget=Calendar.getInstance();
         calTarget.setTime(alarmDate);
         calTarget.set(Calendar.HOUR_OF_DAY, startTime);
-        calTarget.add(Calendar.MINUTE,mins);
+        calTarget.add(Calendar.MINUTE, mins);
         Logger.log(TAG, "Target date:[Postpone to]" + calTarget.getTime().toString());
         Intent broadcastReceiver = new Intent(context, AlarmReceiver.class);
         broadcastReceiver.putExtra(Constants.ALARM_SCHEDULER, this);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, -(int)stepId,broadcastReceiver,0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, -(int)stepId,broadcastReceiver,PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calTarget.getTimeInMillis(), pendingIntent);
     }
 
@@ -172,8 +172,8 @@ public class AlarmScheduler implements Parcelable{
     public void cancel(){
         Intent broadcastReceiver = new Intent(context, AlarmReceiver.class);
         broadcastReceiver.putExtra(Constants.ALARM_SCHEDULER,this);
-        PendingIntent pendingIntentStart = PendingIntent.getBroadcast(context, (int)stepId,broadcastReceiver,0);
-        PendingIntent pendingIntentEnd = PendingIntent.getBroadcast(context, -(int)stepId,broadcastReceiver,0);
+        PendingIntent pendingIntentStart = PendingIntent.getBroadcast(context, (int)stepId,broadcastReceiver,PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntentEnd = PendingIntent.getBroadcast(context, -(int)stepId,broadcastReceiver,PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.cancel(pendingIntentStart);
         alarmManager.cancel(pendingIntentEnd);
     }
@@ -207,17 +207,5 @@ public class AlarmScheduler implements Parcelable{
                 alarmScheduler.setAlarm();
             }
         }
-    }
-
-    @Override
-    public int describeContents() {
-        // TODO Auto-generated method stub
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        // TODO Auto-generated method stub
-
     }
 }

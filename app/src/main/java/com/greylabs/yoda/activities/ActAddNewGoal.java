@@ -232,7 +232,8 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
                 alert.setMessage(getString(R.string.msgActAddNewGoalTimeBoxNotApplicable));
                 alert.show();
             }else if(edtNickName.getText() != null && edtNickName.getText().length() > 0 ){
-                if(timeSpinner.getSelectedItemPosition()!=1){               // if new timebox selected
+                TimeBox timeBox=timeBoxList.get(timeSpinner.getSelectedItemPosition());
+                if(timeBox.getId()!=goal.getTimeBoxId()){               // if new timebox selected
                     yodaCalendar.detachTimeBox(goal.getTimeBoxId());
                     yodaCalendar.attachTimeBox(goal.getId());
                     yodaCalendar.rescheduleSteps(goal.getId());

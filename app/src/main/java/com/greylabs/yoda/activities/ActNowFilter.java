@@ -73,7 +73,7 @@ public class ActNowFilter extends Activity implements View.OnClickListener {
             }
         }else if(caller.equals(Constants.ACT_HOME)){
             // get the current step from local
-            pendingStep = new PendingStep(this);
+           // pendingStep = new PendingStep(this);
             checkForEmptyViewVisibility();
         }
     }
@@ -94,20 +94,32 @@ public class ActNowFilter extends Activity implements View.OnClickListener {
         switch (v.getId()){
             case R.id.llDidActNowFilter :
                 Logger.showMsg(this, "Did it");
+                if(pendingStep!=null){
+                    pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
+                    pendingStep.save();
+                }
                 finish();
                 break;
 
             case R.id.llDoingItActNowFilter :
                 Logger.showMsg(this, "Doing it");
-                finish();
-                break;
-
-            case R.id.llMissedActNowFilter :
-                Logger.showMsg(this, "Missed it");
+                if(pendingStep!=null){
+                    pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.DOING);
+                    AlarmScheduler alarmScheduler=new AlarmScheduler(this);
+                    alarmScheduler.postponeAlarm(5);
+                    pendingStep.save();
+                }
                 finish();
                 break;
 
             case R.id.btnCloseNotEmptyViewActNowFilter:
+            case R.id.llMissedActNowFilter :
+                Logger.showMsg(this, "Missed it");
+                if(pendingStep!=null){
+                    pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.MISSED);
+                    pendingStep.setSkipCount(pendingStep.getSkipCount() + 1);
+                    pendingStep.save();
+                }
                 finish();
                 break;
 
