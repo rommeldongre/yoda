@@ -2,13 +2,18 @@ package com.greylabs.yoda.utils;
 
 import android.content.Context;
 import com.greylabs.yoda.database.Database;
+import com.greylabs.yoda.models.Goal;
+import com.greylabs.yoda.models.PendingStep;
+import com.greylabs.yoda.scheduler.AlarmScheduler;
 
 import java.io.File;
+import java.util.List;
 
 import static com.greylabs.yoda.database.MetaData.*;
 
 public class ResetYoda {
     public static void reset(Context context) {
+        clearAlarms(context);
         clearPrefs(context);
         clearDatabase(context);
     }
@@ -41,5 +46,20 @@ public class ResetYoda {
         database.getWritableDatabase().execSQL("DELETE FROM " + TableGoal.goal);
         database.getWritableDatabase().execSQL("DELETE FROM " + TablePendingStep.pendingStep);
         database.getWritableDatabase().execSQL("DELETE FROM " + TableCompletedStep.completedStep);
+    }
+
+    private  static void clearAlarms(Context context){
+        List<Goal> goals=new Goal(context).getAll();
+        PendingStep pendingStep=new PendingStep(context);
+        AlarmScheduler alarmScheduler=new AlarmScheduler(context);
+        for(Goal goal:goals){
+            List<Integer> stepIds=pendingStep.getStepIds(goal.getId());
+            if(stepIds!=null){
+                for (Integer i:stepIds){
+                    alarmScheduler.setStepId(i);
+                    alarmScheduler.cancel();
+                }
+            }
+        }
     }
 }
