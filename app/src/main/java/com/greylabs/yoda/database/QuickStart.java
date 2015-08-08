@@ -64,34 +64,8 @@ public final class QuickStart {
 
         //2
         timeBox=new TimeBox(context);
-        timeBox.setNickName("Afternoon-Weekly-Monday,Tuesday,Wednesday,Thursday,Friday till this year");
-       //on
-        timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,TimeBoxOn.WEEKLY);
-        timeBoxOns=new TreeSet<>();
-        timeBoxOns.add(WeekDay.MONDAY);
-        timeBoxOns.add(WeekDay.TUESDAY);
-        timeBoxOns.add(WeekDay.WEDNESDAY);
-        timeBoxOns.add(WeekDay.THURSDAY);
-        timeBoxOns.add(WeekDay.FRIDAY);
-        timeBoxOn.setSubValues(timeBoxOns);
-        timeBox.setTimeBoxOn(timeBoxOn);
-        //when
-        timeBoxWhen=new com.greylabs.yoda.models.TimeBoxWhen(context);
-        timeBoxWhens=new TreeSet<>();
-        timeBoxWhens.add(TimeBoxWhen.AFTERNOON);
-        timeBoxWhen.setWhenValues(timeBoxWhens);
-        timeBox.setTimeBoxWhen(timeBoxWhen);
-        //till
-        timeBox.setTillType(TimeBoxTill.YEAR);
-        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_2));
-        timeBox.save();
-        timeBoxIds.add(timeBox.getId());
-        Logger.log(TAG, "1 Added");
-
-        //3
-        timeBox=new TimeBox(context);
         timeBox.setNickName("Evening-Weekly-Monday,Tuesday,Wednesday,Thursday,Friday till this year");
-        //on
+       //on
         timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,TimeBoxOn.WEEKLY);
         timeBoxOns=new TreeSet<>();
         timeBoxOns.add(WeekDay.MONDAY);
@@ -109,14 +83,14 @@ public final class QuickStart {
         timeBox.setTimeBoxWhen(timeBoxWhen);
         //till
         timeBox.setTillType(TimeBoxTill.YEAR);
-        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_3));
+        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_2));
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
         Logger.log(TAG, "1 Added");
 
-        //4
+        //3
         timeBox=new TimeBox(context);
-        timeBox.setNickName("Morning-Weekly-Sunday till Forever");
+        timeBox.setNickName("Morning-Weekly-Sunday till this year");
         //on
         timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,TimeBoxOn.WEEKLY);
         timeBoxOns=new TreeSet<>();
@@ -130,36 +104,13 @@ public final class QuickStart {
         timeBoxWhen.setWhenValues(timeBoxWhens);
         timeBox.setTimeBoxWhen(timeBoxWhen);
         //till
-        timeBox.setTillType(TimeBoxTill.FOREVER);
-        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_4));
+        timeBox.setTillType(TimeBoxTill.QUARTER);
+        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_3));
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
         Logger.log(TAG, "1 Added");
 
-        //5
-        timeBox=new TimeBox(context);
-        timeBox.setNickName("Afternoon-Weekly-Sunday,Saturday till Forever");
-       //on
-        timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,TimeBoxOn.WEEKLY);
-        timeBoxOns=new TreeSet<>();
-        timeBoxOns.add(WeekDay.SATURDAY);
-        timeBoxOns.add(WeekDay.SUNDAY);
-        timeBoxOn.setSubValues(timeBoxOns);
-        timeBox.setTimeBoxOn(timeBoxOn);
-        //when
-        timeBoxWhen=new com.greylabs.yoda.models.TimeBoxWhen(context);
-        timeBoxWhens=new TreeSet<>();
-        timeBoxWhens.add(TimeBoxWhen.AFTERNOON);
-        timeBoxWhen.setWhenValues(timeBoxWhens);
-        timeBox.setTimeBoxWhen(timeBoxWhen);
-        //till
-        timeBox.setTillType(TimeBoxTill.FOREVER);
-        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_5));
-        timeBox.save();
-        timeBoxIds.add(timeBox.getId());
-        Logger.log(TAG, "1 Added");
-
-        //6
+        //4
         timeBox=new TimeBox(context);
         timeBox.setNickName("Evening-Weekly-Sunday,Saturday till this Quarter");
         //on
@@ -177,15 +128,15 @@ public final class QuickStart {
         timeBox.setTimeBoxWhen(timeBoxWhen);
         //till
         timeBox.setTillType(TimeBoxTill.QUARTER);
-        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_6));
+        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_4));
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
         Logger.log(TAG, "1 Added");
 
-        //7
+        //5
         timeBox=new TimeBox(context);
-        timeBox.setNickName("Night-Weekly-Monday,Tuesday,Wednesday,Thursday,Friday till Forever");
-        //on
+        timeBox.setNickName("Late Night-Weekly-Monday,Tuesday,Wednesday,Thursday,Friday till this Month");
+       //on
         timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,TimeBoxOn.WEEKLY);
         timeBoxOns=new TreeSet<>();
         timeBoxOns.add(WeekDay.MONDAY);
@@ -198,17 +149,66 @@ public final class QuickStart {
         //when
         timeBoxWhen=new com.greylabs.yoda.models.TimeBoxWhen(context);
         timeBoxWhens=new TreeSet<>();
-        timeBoxWhens.add(TimeBoxWhen.NIGHT);
+        timeBoxWhens.add(TimeBoxWhen.LATE_NIGHT);
         timeBoxWhen.setWhenValues(timeBoxWhens);
         timeBox.setTimeBoxWhen(timeBoxWhen);
         //till
-        timeBox.setTillType(TimeBoxTill.FOREVER);
-        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_7));
+        timeBox.setTillType(TimeBoxTill.MONTH);
+        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_5));
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
         Logger.log(TAG, "1 Added");
 
-        //8
+//        //6
+//        timeBox=new TimeBox(context);
+//        timeBox.setNickName("Evening-Weekly-Sunday,Saturday till this Quarter");
+//        //on
+//        timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,TimeBoxOn.WEEKLY);
+//        timeBoxOns=new TreeSet<>();
+//        timeBoxOns.add(WeekDay.SUNDAY);
+//        timeBoxOns.add(WeekDay.SATURDAY);
+//        timeBoxOn.setSubValues(timeBoxOns);
+//        timeBox.setTimeBoxOn(timeBoxOn);
+//        //when
+//        timeBoxWhen=new com.greylabs.yoda.models.TimeBoxWhen(context);
+//        timeBoxWhens=new TreeSet<>();
+//        timeBoxWhens.add(TimeBoxWhen.EVENING);
+//        timeBoxWhen.setWhenValues(timeBoxWhens);
+//        timeBox.setTimeBoxWhen(timeBoxWhen);
+//        //till
+//        timeBox.setTillType(TimeBoxTill.QUARTER);
+//        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_6));
+//        timeBox.save();
+//        timeBoxIds.add(timeBox.getId());
+//        Logger.log(TAG, "1 Added");
+//
+//        //7
+//        timeBox=new TimeBox(context);
+//        timeBox.setNickName("Night-Weekly-Monday,Tuesday,Wednesday,Thursday,Friday till Forever");
+//        //on
+//        timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,TimeBoxOn.WEEKLY);
+//        timeBoxOns=new TreeSet<>();
+//        timeBoxOns.add(WeekDay.MONDAY);
+//        timeBoxOns.add(WeekDay.TUESDAY);
+//        timeBoxOns.add(WeekDay.WEDNESDAY);
+//        timeBoxOns.add(WeekDay.THURSDAY);
+//        timeBoxOns.add(WeekDay.FRIDAY);
+//        timeBoxOn.setSubValues(timeBoxOns);
+//        timeBox.setTimeBoxOn(timeBoxOn);
+//        //when
+//        timeBoxWhen=new com.greylabs.yoda.models.TimeBoxWhen(context);
+//        timeBoxWhens=new TreeSet<>();
+//        timeBoxWhens.add(TimeBoxWhen.NIGHT);
+//        timeBoxWhen.setWhenValues(timeBoxWhens);
+//        timeBox.setTimeBoxWhen(timeBoxWhen);
+//        //till
+//        timeBox.setTillType(TimeBoxTill.FOREVER);
+//        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_7));
+//        timeBox.save();
+//        timeBoxIds.add(timeBox.getId());
+//        Logger.log(TAG, "1 Added");
+
+        //6
         timeBox=new TimeBox(context);
         timeBox.setNickName(Constants.NICKNAME_UNPLANNED_TIMEBOX);
         //on
@@ -242,12 +242,11 @@ public final class QuickStart {
         goal.save();
         goalIds.add(goal.getId());
 
-
         //2
         goal=new Goal(context);
-        goal.setNickName("Wealth");
-        goal.setObjective("Make more money");
-        goal.setKeyResult("Increase in income stream");
+        goal.setNickName("Family");
+        goal.setObjective("Stay with Family");
+        goal.setKeyResult("Happy Life");
         goal.setTimeBoxId(timeBoxIds.get(1));
         goal.save();
         goalIds.add(goal.getId());
@@ -255,9 +254,9 @@ public final class QuickStart {
 
         //3
         goal=new Goal(context);
-        goal.setNickName("Family");
-        goal.setObjective("Stay with Family");
-        goal.setKeyResult("Happy Life");
+        goal.setNickName("Organize");
+        goal.setObjective("");
+        goal.setKeyResult("");
         goal.setTimeBoxId(timeBoxIds.get(2));
         goal.save();
         goalIds.add(goal.getId());
@@ -265,7 +264,7 @@ public final class QuickStart {
 
         //4
         goal=new Goal(context);
-        goal.setNickName("Distress");
+        goal.setNickName("Socialize");
         goal.setObjective("");
         goal.setKeyResult("");
         goal.setTimeBoxId(timeBoxIds.get(3));
@@ -274,7 +273,7 @@ public final class QuickStart {
 
         //5
         goal=new Goal(context);
-        goal.setNickName("Wise1");
+        goal.setNickName("Wise");
         goal.setObjective("");
         goal.setKeyResult("");
         goal.setTimeBoxId(timeBoxIds.get(4));
@@ -283,28 +282,10 @@ public final class QuickStart {
 
         //6
         goal=new Goal(context);
-        goal.setNickName("Socialize");
-        goal.setObjective("");
-        goal.setKeyResult("");
-        goal.setTimeBoxId(timeBoxIds.get(5));
-        goal.save();
-        goalIds.add(goal.getId());
-
-        //7
-        goal=new Goal(context);
-        goal.setNickName("Wise2");
-        goal.setObjective("");
-        goal.setKeyResult("");
-        goal.setTimeBoxId(timeBoxIds.get(6));
-        goal.save();
-        goalIds.add(goal.getId());
-
-        //8
-        goal=new Goal(context);
         goal.setNickName(Constants.NICKNAME_STRETCH_GOAL);
         goal.setObjective("");
         goal.setKeyResult("");
-        goal.setTimeBoxId(timeBoxIds.get(7));
+        goal.setTimeBoxId(timeBoxIds.get(5));
         goal.save();
         Prefs pref=Prefs.getInstance(context);
         pref.setStretchGoalId(goal.getId());
@@ -321,7 +302,7 @@ public final class QuickStart {
         pendingStep.setStepCount(1);
         pendingStep.setTime(3);
         pendingStep.setGoalId(goalIds.get(0));
-        pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
+        pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.save();
         pendingStep=new PendingStep(context);
         pendingStep.setNickName("Oatmeal breakfast");
@@ -330,45 +311,45 @@ public final class QuickStart {
         pendingStep.setStepCount(1);
         pendingStep.setTime(3);
         pendingStep.setGoalId(goalIds.get(0));
-        pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
+        pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.save();
 
-        pendingStep=new PendingStep(context);
-        pendingStep.setNickName("Make 5 calls");
-        pendingStep.setPriority(1);
-        pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
-        pendingStep.setStepCount(1);
-        pendingStep.setTime(3);
-        pendingStep.setGoalId(goalIds.get(1));
-        pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
-        pendingStep.save();
-        pendingStep=new PendingStep(context);
-        pendingStep.setNickName("Write blog article");
-        pendingStep.setPriority(2);
-        pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
-        pendingStep.setStepCount(1);
-        pendingStep.setTime(3);
-        pendingStep.setGoalId(goalIds.get(1));
-        pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
-        pendingStep.save();
-        pendingStep=new PendingStep(context);
-        pendingStep.setNickName("Follow up on claim");
-        pendingStep.setPriority(3);
-        pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
-        pendingStep.setStepCount(1);
-        pendingStep.setTime(3);
-        pendingStep.setGoalId(goalIds.get(1));
-        pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
-        pendingStep.save();
-        pendingStep=new PendingStep(context);
-        pendingStep.setNickName("Finish");
-        pendingStep.setPriority(4);
-        pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
-        pendingStep.setStepCount(1);
-        pendingStep.setTime(3);
-        pendingStep.setGoalId(goalIds.get(1));
-        pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
-        pendingStep.save();
+//        pendingStep=new PendingStep(context);
+//        pendingStep.setNickName("Make 5 calls");
+//        pendingStep.setPriority(1);
+//        pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
+//        pendingStep.setStepCount(1);
+//        pendingStep.setTime(3);
+//        pendingStep.setGoalId(goalIds.get(1));
+//        pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+//        pendingStep.save();
+//        pendingStep=new PendingStep(context);
+//        pendingStep.setNickName("Write blog article");
+//        pendingStep.setPriority(2);
+//        pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
+//        pendingStep.setStepCount(1);
+//        pendingStep.setTime(3);
+//        pendingStep.setGoalId(goalIds.get(1));
+//        pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+//        pendingStep.save();
+//        pendingStep=new PendingStep(context);
+//        pendingStep.setNickName("Follow up on claim");
+//        pendingStep.setPriority(3);
+//        pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
+//        pendingStep.setStepCount(1);
+//        pendingStep.setTime(3);
+//        pendingStep.setGoalId(goalIds.get(1));
+//        pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+//        pendingStep.save();
+//        pendingStep=new PendingStep(context);
+//        pendingStep.setNickName("Finish");
+//        pendingStep.setPriority(4);
+//        pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
+//        pendingStep.setStepCount(1);
+//        pendingStep.setTime(3);
+//        pendingStep.setGoalId(goalIds.get(1));
+//        pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+//        pendingStep.save();
 
 
         pendingStep=new PendingStep(context);
@@ -377,7 +358,7 @@ public final class QuickStart {
         pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
         pendingStep.setStepCount(1);
         pendingStep.setTime(3);
-        pendingStep.setGoalId(goalIds.get(2));
+        pendingStep.setGoalId(goalIds.get(1));
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.save();
         pendingStep=new PendingStep(context);
@@ -386,7 +367,7 @@ public final class QuickStart {
         pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
         pendingStep.setStepCount(1);
         pendingStep.setTime(3);
-        pendingStep.setGoalId(goalIds.get(2));
+        pendingStep.setGoalId(goalIds.get(1));
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.save();
         pendingStep=new PendingStep(context);
@@ -395,7 +376,7 @@ public final class QuickStart {
         pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
         pendingStep.setStepCount(1);
         pendingStep.setTime(3);
-        pendingStep.setGoalId(goalIds.get(2));
+        pendingStep.setGoalId(goalIds.get(1));
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.save();
 
@@ -405,7 +386,7 @@ public final class QuickStart {
         pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
         pendingStep.setStepCount(1);
         pendingStep.setTime(3);
-        pendingStep.setGoalId(goalIds.get(3));
+        pendingStep.setGoalId(goalIds.get(2));
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.save();
         pendingStep=new PendingStep(context);
@@ -414,19 +395,19 @@ public final class QuickStart {
         pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
         pendingStep.setStepCount(1);
         pendingStep.setTime(3);
-        pendingStep.setGoalId(goalIds.get(3));
+        pendingStep.setGoalId(goalIds.get(2));
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.save();
 
-        pendingStep=new PendingStep(context);
-        pendingStep.setNickName("Play tennis");
-        pendingStep.setPriority(1);
-        pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
-        pendingStep.setStepCount(1);
-        pendingStep.setTime(3);
-        pendingStep.setGoalId(goalIds.get(4));
-        pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
-        pendingStep.save();
+//        pendingStep=new PendingStep(context);
+//        pendingStep.setNickName("Play tennis");
+//        pendingStep.setPriority(1);
+//        pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
+//        pendingStep.setStepCount(1);
+//        pendingStep.setTime(3);
+//        pendingStep.setGoalId(goalIds.get(4));
+//        pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+//        pendingStep.save();
 
         pendingStep=new PendingStep(context);
         pendingStep.setNickName("Dinner with friends");
@@ -434,7 +415,7 @@ public final class QuickStart {
         pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
         pendingStep.setStepCount(1);
         pendingStep.setTime(3);
-        pendingStep.setGoalId(goalIds.get(5));
+        pendingStep.setGoalId(goalIds.get(3));
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.save();
 
@@ -444,8 +425,30 @@ public final class QuickStart {
         pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
         pendingStep.setStepCount(1);
         pendingStep.setTime(3);
-        pendingStep.setGoalId(goalIds.get(6));
+        pendingStep.setGoalId(goalIds.get(4));
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.save();
+
+
+        pendingStep=new PendingStep(context);
+        pendingStep.setNickName("Get Cable");
+        pendingStep.setPriority(1);
+        pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
+        pendingStep.setStepCount(1);
+        pendingStep.setTime(3);
+        pendingStep.setGoalId(goalIds.get(5));
+        pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+        pendingStep.save();
+        pendingStep=new PendingStep(context);
+        pendingStep.setNickName("Fix Piano");
+        pendingStep.setPriority(2);
+        pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
+        pendingStep.setStepCount(1);
+        pendingStep.setTime(3);
+        pendingStep.setGoalId(goalIds.get(5));
+        pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+        pendingStep.save();
+
+
     }
 }

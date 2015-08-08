@@ -301,6 +301,7 @@ public class YodaCalendar {
      */
     public int attachTimeBox(long goalId){
         int slotCount=0;
+        slots=slot.getAll(timeBox);
         PendingStep pendingStep=new PendingStep(context);
         if(slots!=null && slots.size()>0) {
             for (Slot slot : slots) {
