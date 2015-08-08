@@ -200,25 +200,41 @@ public class ActGoalList  extends ActionBarActivity implements OnClickOfRecycler
                         alertLogout.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                Goal goal=goalArrayList.get(Position);
-                                Prefs prefs= Prefs.getInstance(ActGoalList.this);
-                                PendingStep pendingStep=new PendingStep(ActGoalList.this);
-                                pendingStep.updateGoalId(goal.getId(),prefs.getStretchGoalId());
-                                int numberOfRowsAffected=goal.delete();
-                                if(numberOfRowsAffected==1) {
+                                Goal goal = goalArrayList.get(Position);
+                                Prefs prefs = Prefs.getInstance(ActGoalList.this);
+                                PendingStep pendingStep = new PendingStep(ActGoalList.this);
+                                pendingStep.updateGoalId(goal.getId(), prefs.getStretchGoalId());
+                                int numberOfRowsAffected = goal.delete();
+                                if (numberOfRowsAffected == 1) {
                                     getGoalArrayFromLocal();
                                     mAdapter.notifyDataSetChanged();
-                                    yodaCalendar=new YodaCalendar(ActGoalList.this);
+                                    yodaCalendar = new YodaCalendar(ActGoalList.this);
                                     yodaCalendar.detachTimeBox(goal.getTimeBoxId());
                                     //move steps to Stretch Goal
-                                    TimeBox timeBox=new TimeBox(ActGoalList.this).get(prefs.getUnplannedTimeBoxId());
+                                    TimeBox timeBox = new TimeBox(ActGoalList.this).get(prefs.getUnplannedTimeBoxId());
                                     yodaCalendar.setTimeBox(timeBox);
                                     yodaCalendar.rescheduleSteps(prefs.getStretchGoalId());
                                     Logger.showMsg(ActGoalList.this, Constants.MSG_GOAL_DELETED);
                                 }
                             }
                         });
-                        alertLogout.setNegativeButton("Cancel", null);
+                        alertLogout.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                //delete goal here and all the steps related to it
+
+//                                Goal goal = goalArrayList.get(Position);
+//                                int numberOfRowsAffected = goal.delete();
+//                                if (numberOfRowsAffected == 1) {
+//                                    getGoalArrayFromLocal();
+//                                    mAdapter.notifyDataSetChanged();
+//                                    yodaCalendar = new YodaCalendar(ActGoalList.this);
+//                                    yodaCalendar.detachTimeBox(goal.getTimeBoxId());
+//                                    Logger.showMsg(ActGoalList.this, Constants.MSG_GOAL_DELETED);
+//                                }
+                            }
+                        });
+                        alertLogout.setNeutralButton("Cancel", null);
                         alertLogout.setMessage(Constants.MSG_DELETE_GOAL);
                         alertLogout.show();
                     }else {

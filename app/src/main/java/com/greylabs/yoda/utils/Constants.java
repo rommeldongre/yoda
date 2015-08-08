@@ -32,7 +32,7 @@ public class Constants {
     public static final String OPERATION_SHOW_STEPS = "OPERATION_SHOW_STEPS";
     public static final String MSG_DELETE_STEP = "Are you sure you want to delete the step?";
     public static final String MSG_STEP_DELETED = "Step Deleted";
-    public static final String MSG_DELETE_GOAL = "Are you sure you want to delete the goal?";
+    public static final String MSG_DELETE_GOAL = "Do you want to move Steps of this Goal to Stretch Goal after deletion?";
     public static final String MSG_GOAL_DELETED = "Goal Deleted";
     public static final String MSG_DELETE_TIMEBOX = "Are you sure you want to delete the TimeBox?";
     public static final String MSG_TIMEBOX_DELETED = "TimeBox Deleted";
