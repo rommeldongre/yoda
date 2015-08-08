@@ -49,14 +49,10 @@ public class ActSplashScreen extends Activity{
         iv.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (prefs.isCalendarInitialized() && !prefs.isOptionFromActQuickStartSelected()){
-                    startActivity(new Intent(ActSplashScreen.this, ActQuickStart.class));
-                    ActSplashScreen.this.finish();
-                }else if (!prefs.isCalendarInitialized()) {
+                if (prefs.isCalendarInitialized()) {
+                    checkIfOptionFromActQuickStartSelected();
+                } else if (!prefs.isCalendarInitialized()) {
                     new InitCalendarAsyncTask(ActSplashScreen.this, new MyHandler()).execute();
-                }else {
-                    startActivity(new Intent(ActSplashScreen.this, ActHome.class));
-                    ActSplashScreen.this.finish();
                 }
             }
         }, 3000);
@@ -74,11 +70,24 @@ public class ActSplashScreen extends Activity{
         iv.startAnimation(anim);
     }
 
+
+
     class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
             prefs.setCalendarInitialized(true);
+            checkIfOptionFromActQuickStartSelected();
+//            startActivity(new Intent(ActSplashScreen.this, ActQuickStart.class));
+//            ActSplashScreen.this.finish();
+        }
+    }
+
+    private void checkIfOptionFromActQuickStartSelected() {
+        if(prefs.isOptionFromActQuickStartSelected() == false){
             startActivity(new Intent(ActSplashScreen.this, ActQuickStart.class));
+            ActSplashScreen.this.finish();
+        }else if(prefs.isOptionFromActQuickStartSelected()) {
+            startActivity(new Intent(ActSplashScreen.this, ActHome.class));
             ActSplashScreen.this.finish();
         }
     }

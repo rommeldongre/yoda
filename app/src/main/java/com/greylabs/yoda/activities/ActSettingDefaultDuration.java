@@ -236,13 +236,13 @@ public class ActSettingDefaultDuration extends ActionBarActivity implements Seek
         alertLogout.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                ProgressDialog progressDialog = new ProgressDialog(ActSettingDefaultDuration.this);
-                progressDialog.setMessage(Constants.MSG_RESETTING_YODA);
-                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                progressDialog.setCancelable(false);
-                progressDialog.show();
+//                ProgressDialog progressDialog = new ProgressDialog(ActSettingDefaultDuration.this);
+//                progressDialog.setMessage(Constants.MSG_RESETTING_YODA);
+//                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+//                progressDialog.setCancelable(false);
+//                progressDialog.show();
                 ResetYoda.reset(ActSettingDefaultDuration.this);
-                progressDialog.dismiss();
+//                progressDialog.dismiss();
                 startActivity(new Intent(ActSettingDefaultDuration.this, ActSplashScreen.class));
                 ActSettingDefaultDuration.this.finish();
             }
