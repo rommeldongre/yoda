@@ -61,6 +61,7 @@ public class FragFilter extends Fragment {
             listAdapter = new AdapterExpandableList(context, listGoals, filteredData);
             expListView.setAdapter(listAdapter);
         }
+        //expand all the items
         if(!listGoals.isEmpty()){
             for(int i =0;i<listGoals.size();i++){
                 expListView.expandGroup(i);
