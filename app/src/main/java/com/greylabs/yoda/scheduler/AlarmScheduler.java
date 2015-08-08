@@ -119,6 +119,10 @@ public class AlarmScheduler implements Serializable{
     /**********************************************************************************************/
     // Methods
     /**********************************************************************************************/
+    public void initContext(Context context){
+        this.context=context;
+        alarmManager= (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+    }
     /**
      *This method sets the slarm for given target date. You need to specify the target date in the
      * * AlarmInfo object attributes.The stepId used as request code for PendingIntent to enable
@@ -154,13 +158,11 @@ public class AlarmScheduler implements Serializable{
 
     public void postponeAlarm(int mins){
         Calendar calTarget=Calendar.getInstance();
-        calTarget.setTime(alarmDate);
-        calTarget.set(Calendar.HOUR_OF_DAY, startTime);
         calTarget.add(Calendar.MINUTE, mins);
         Logger.log(TAG, "Target date:[Postpone to]" + calTarget.getTime().toString());
         Intent broadcastReceiver = new Intent(context, AlarmReceiver.class);
         broadcastReceiver.putExtra(Constants.ALARM_SCHEDULER, this);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, -(int)stepId,broadcastReceiver,PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int)stepId,broadcastReceiver,PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calTarget.getTimeInMillis(), pendingIntent);
     }
 
@@ -192,19 +194,21 @@ public class AlarmScheduler implements Serializable{
 
     public void rescheduleAllSteps(){
         List<PendingStep> pendingSteps=new PendingStep(context).getAll(PendingStep.PendingStepStatus.TODO);
-
+        Calendar calendar=Calendar.getInstance();
         if(pendingSteps!=null) {
             for (PendingStep pendingStep : pendingSteps) {
                 Slot slot = new Slot(context).get(pendingStep.getSlotId());
-                AlarmScheduler alarmScheduler = new AlarmScheduler(context);
-                alarmScheduler.setStepId(pendingStep.getId());
-                alarmScheduler.setSubStepId(pendingStep.getSubStepOf());
-                alarmScheduler.setPendingStepType(pendingStep.getPendingStepType());
-                alarmScheduler.setStartTime(slot.getWhen().getStartTime());
-                alarmScheduler.setDuration(pendingStep.getTime());
-                alarmScheduler.setAlarmDate(slot.getScheduleDate());
-                alarmScheduler.cancel();//cancel previous alarm if any
-                alarmScheduler.setAlarm();
+                if(slot.getScheduleDate().compareTo(calendar.getTime())>0) {
+                    AlarmScheduler alarmScheduler = new AlarmScheduler(context);
+                    alarmScheduler.setStepId(pendingStep.getId());
+                    alarmScheduler.setSubStepId(pendingStep.getSubStepOf());
+                    alarmScheduler.setPendingStepType(pendingStep.getPendingStepType());
+                    alarmScheduler.setStartTime(slot.getWhen().getStartTime());
+                    alarmScheduler.setDuration(pendingStep.getTime());
+                    alarmScheduler.setAlarmDate(slot.getScheduleDate());
+                    alarmScheduler.cancel();//cancel previous alarm if any
+                    alarmScheduler.setAlarm();
+                }
             }
         }
     }

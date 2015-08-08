@@ -31,15 +31,19 @@ public class AlarmService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(this, "Alarm on start command...", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Alarm on start command...", Toast.LENGTH_SHORT).show();
        // YodaNotificationManager yodaNotificationManager=new YodaNotificationManager(this);
         //yodaNotificationManager.showNotification();
-        AlarmScheduler alarmScheduler=(AlarmScheduler)intent.getSerializableExtra(Constants.ALARM_SCHEDULER);
-        Intent actNowFilter=new Intent(this,ActNowFilter.class);
-        actNowFilter.putExtra(Constants.CALLER,Constants.ALARM_SERVICE);
-        actNowFilter.putExtra(Constants.ALARM_SCHEDULER,alarmScheduler);
-        actNowFilter.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(actNowFilter);
+        AlarmScheduler alarmScheduler=null;
+        if(intent!=null)
+             alarmScheduler=(AlarmScheduler)intent.getSerializableExtra(Constants.ALARM_SCHEDULER);
+        if(alarmScheduler!=null) {
+            Intent actNowFilter = new Intent(this, ActNowFilter.class);
+            actNowFilter.putExtra(Constants.CALLER, Constants.ALARM_SERVICE);
+            actNowFilter.putExtra(Constants.ALARM_SCHEDULER, alarmScheduler);
+            actNowFilter.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(actNowFilter);
+        }
         return START_STICKY;
     }
 

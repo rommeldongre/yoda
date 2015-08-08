@@ -118,8 +118,6 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
 
         setDefaultValues();
         getStepArrayFromLocal();
-
-        currentStep = new PendingStep(this);
     }
 
     private void setDefaultValues() {
@@ -175,6 +173,7 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
                     currentStep = new PendingStep(this);
                 }else {
                     currentStep = (PendingStep) intent.getSerializableExtra(Constants.STEP_OBJECT);
+                    currentStep.initDatabase(this);
                     getGoalListFromLocal();
                     getSupportActionBar().setTitle(currentStep.getNickName());
                     edtStepName.setText(currentStep.getNickName());

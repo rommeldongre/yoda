@@ -26,7 +26,7 @@ public class ActNowFilter extends Activity implements View.OnClickListener {
     private PendingStep pendingStep;
     private Goal goal;
     String caller;
-
+    AlarmScheduler alarmScheduler;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +63,7 @@ public class ActNowFilter extends Activity implements View.OnClickListener {
     private void getCurrentStepScheduledFromLocal() {
         caller = getIntent().getStringExtra(Constants.CALLER);
         if(caller.equals(Constants.ALARM_SERVICE)){
-            AlarmScheduler alarmScheduler=(AlarmScheduler)getIntent().getSerializableExtra(Constants.ALARM_SCHEDULER);
+            alarmScheduler=(AlarmScheduler)getIntent().getSerializableExtra(Constants.ALARM_SCHEDULER);
             if(alarmScheduler!=null) {
                 pendingStep = new PendingStep(this).get(alarmScheduler.getStepId());
                 goal = new Goal(this).get(pendingStep.getGoalId());
@@ -105,9 +105,14 @@ public class ActNowFilter extends Activity implements View.OnClickListener {
                 Logger.showMsg(this, "Doing it");
                 if(pendingStep!=null){
                     pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.DOING);
-                    AlarmScheduler alarmScheduler=new AlarmScheduler(this);
-                    alarmScheduler.postponeAlarm(5);
                     pendingStep.save();
+                    Logger.log("TAG","Alarm Scheduler : "+alarmScheduler);
+                    if(alarmScheduler==null)
+                        alarmScheduler=new AlarmScheduler(this);
+                    else
+                        alarmScheduler.initContext(this);
+                    alarmScheduler.setStepId(pendingStep.getId());
+                    alarmScheduler.postponeAlarm(5);
                 }
                 finish();
                 break;
