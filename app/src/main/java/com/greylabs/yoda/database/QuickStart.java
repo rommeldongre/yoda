@@ -295,6 +295,7 @@ public final class QuickStart {
     private void addDefaultSteps(){
         PendingStep pendingStep;
 
+        //steps for goal 1
         pendingStep=new PendingStep(context);
         pendingStep.setNickName("Swim 30 mins");
         pendingStep.setPriority(1);
@@ -351,7 +352,7 @@ public final class QuickStart {
 //        pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
 //        pendingStep.save();
 
-
+        //steps for goal 2
         pendingStep=new PendingStep(context);
         pendingStep.setNickName("Play with kids");
         pendingStep.setPriority(1);
@@ -380,6 +381,7 @@ public final class QuickStart {
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.save();
 
+        //steps for goal 3
         pendingStep=new PendingStep(context);
         pendingStep.setNickName("Pay weekly bills");
         pendingStep.setPriority(1);
@@ -409,6 +411,7 @@ public final class QuickStart {
 //        pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
 //        pendingStep.save();
 
+        //steps for goal 4
         pendingStep=new PendingStep(context);
         pendingStep.setNickName("Dinner with friends");
         pendingStep.setPriority(2);
@@ -419,6 +422,7 @@ public final class QuickStart {
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.save();
 
+        //steps for goal 5
         pendingStep=new PendingStep(context);
         pendingStep.setNickName("Read book");
         pendingStep.setPriority(1);
@@ -429,7 +433,7 @@ public final class QuickStart {
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.save();
 
-
+        //steps for goal 6
         pendingStep=new PendingStep(context);
         pendingStep.setNickName("Get Cable");
         pendingStep.setPriority(1);
@@ -448,7 +452,5 @@ public final class QuickStart {
         pendingStep.setGoalId(goalIds.get(5));
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.save();
-
-
     }
 }

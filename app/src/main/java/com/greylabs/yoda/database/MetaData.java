@@ -1,10 +1,5 @@
 package com.greylabs.yoda.database;
-
-import com.greylabs.yoda.activities.Yoda;
-import com.greylabs.yoda.models.CompletedStep;
 import com.greylabs.yoda.models.PendingStep;
-import com.greylabs.yoda.models.TimeBox;
-import com.greylabs.yoda.utils.Prefs;
 
 /**
  * Created by Jaybhay Vijay on 6/30/2015.

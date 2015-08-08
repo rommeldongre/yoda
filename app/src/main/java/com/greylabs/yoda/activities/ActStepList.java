@@ -289,14 +289,13 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
                             case SERIES_STEP:
                                 List<PendingStep> pendingSteps = pendingStep.getAllSubSteps(pendingStep.getId(), pendingStep.getGoalId());
                                 for (PendingStep ps : pendingSteps) {
-                                    cancelAlarm(pendingStep);
-                                    ps.delete();
+                                    if(ps.delete()==1) ps.cancelAlarm();
                                 }
                                 pendingStep.delete();
                                 saveStepsByNewOrder();
                                 break;
                             case SINGLE_STEP:
-                                cancelAlarm(pendingStep);
+                                if(pendingStep.delete()==1) pendingStep.cancelAlarm();
                                 pendingStep.delete();
                                 saveStepsByNewOrder();
                                 break;
@@ -320,12 +319,5 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
         }
     }
 
-    private void cancelAlarm(PendingStep ps){
-        AlarmScheduler alarmScheduler = new AlarmScheduler(ActStepList.this);
-        alarmScheduler.setStepId(ps.getId());
-        alarmScheduler.setSubStepId(ps.getId());
-        alarmScheduler.setPendingStepType(PendingStep.PendingStepType.SUB_STEP);
-        alarmScheduler.setDuration(ps.getTime());
-        alarmScheduler.cancel();
-    }
+
 }

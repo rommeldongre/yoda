@@ -20,12 +20,14 @@ import com.greylabs.yoda.interfaces.OnClickOfRecyclerViewActGoalList;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.TimeBox;
+import com.greylabs.yoda.scheduler.AlarmScheduler;
 import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.Prefs;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ActGoalList  extends ActionBarActivity implements OnClickOfRecyclerViewActGoalList {
 
@@ -200,38 +202,13 @@ public class ActGoalList  extends ActionBarActivity implements OnClickOfRecycler
                         alertLogout.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                Goal goal = goalArrayList.get(Position);
-                                Prefs prefs = Prefs.getInstance(ActGoalList.this);
-                                PendingStep pendingStep = new PendingStep(ActGoalList.this);
-                                pendingStep.updateGoalId(goal.getId(), prefs.getStretchGoalId());
-                                int numberOfRowsAffected = goal.delete();
-                                if (numberOfRowsAffected == 1) {
-                                    getGoalArrayFromLocal();
-                                    mAdapter.notifyDataSetChanged();
-                                    yodaCalendar = new YodaCalendar(ActGoalList.this);
-                                    yodaCalendar.detachTimeBox(goal.getTimeBoxId());
-                                    //move steps to Stretch Goal
-                                    TimeBox timeBox = new TimeBox(ActGoalList.this).get(prefs.getUnplannedTimeBoxId());
-                                    yodaCalendar.setTimeBox(timeBox);
-                                    yodaCalendar.rescheduleSteps(prefs.getStretchGoalId());
-                                    Logger.showMsg(ActGoalList.this, Constants.MSG_GOAL_DELETED);
-                                }
+                                performActionDeleteGoalYes(Position);
                             }
                         });
                         alertLogout.setNegativeButton("No", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                //delete goal here and all the steps related to it
-
-//                                Goal goal = goalArrayList.get(Position);
-//                                int numberOfRowsAffected = goal.delete();
-//                                if (numberOfRowsAffected == 1) {
-//                                    getGoalArrayFromLocal();
-//                                    mAdapter.notifyDataSetChanged();
-//                                    yodaCalendar = new YodaCalendar(ActGoalList.this);
-//                                    yodaCalendar.detachTimeBox(goal.getTimeBoxId());
-//                                    Logger.showMsg(ActGoalList.this, Constants.MSG_GOAL_DELETED);
-//                                }
+                                performActionDeleteGoalNo(Position);
                             }
                         });
                         alertLogout.setNeutralButton("Cancel", null);
@@ -257,4 +234,59 @@ public class ActGoalList  extends ActionBarActivity implements OnClickOfRecycler
             startActivity(i);
         }
     }
+
+    private void performActionDeleteGoalYes(int position){
+        Goal goal = goalArrayList.get(position);
+        Prefs prefs = Prefs.getInstance(ActGoalList.this);
+        PendingStep pendingStep = new PendingStep(ActGoalList.this);
+        pendingStep.updateGoalId(goal.getId(), prefs.getStretchGoalId());
+        int numberOfRowsAffected = goal.delete();
+        if (numberOfRowsAffected == 1) {
+            getGoalArrayFromLocal();
+            mAdapter.notifyDataSetChanged();
+            yodaCalendar = new YodaCalendar(ActGoalList.this);
+            yodaCalendar.detachTimeBox(goal.getTimeBoxId());
+            //move steps to Stretch Goal
+            TimeBox timeBox = new TimeBox(ActGoalList.this).get(prefs.getUnplannedTimeBoxId());
+            yodaCalendar.setTimeBox(timeBox);
+            yodaCalendar.rescheduleSteps(prefs.getStretchGoalId());
+            Logger.showMsg(ActGoalList.this, Constants.MSG_GOAL_DELETED);
+        }
+
+    }
+
+    private void performActionDeleteGoalNo(int position){
+    //delete goal here and all the steps related to it
+        Goal goal = goalArrayList.get(position);
+        PendingStep ps=new PendingStep(ActGoalList.this);
+        ps.setGoalId(goal.getId());
+        List<PendingStep> pendingSteps=ps.getAll(goal.getId());
+        for (PendingStep pendingStep:pendingSteps){
+            switch (pendingStep.getPendingStepType()){
+                case SUB_STEP:
+                case SERIES_STEP:
+                    List<PendingStep> subSteps=pendingStep.getAllSubSteps(pendingStep.getId(),goal.getId());
+                    for(PendingStep subStep:subSteps){
+                        subStep.cancelAlarm();
+                        subStep.delete();
+                    }
+
+                    break;
+                case SINGLE_STEP:
+                    pendingStep.cancelAlarm();
+                    pendingStep.delete();
+                    break;
+            }
+        }
+        //ps.deleteAllPendingSteps();
+        int numberOfRowsAffected = goal.delete();
+        if (numberOfRowsAffected == 1) {
+            getGoalArrayFromLocal();
+            mAdapter.notifyDataSetChanged();
+            yodaCalendar = new YodaCalendar(ActGoalList.this);
+            yodaCalendar.detachTimeBox(goal.getTimeBoxId());
+            Logger.showMsg(ActGoalList.this, Constants.MSG_GOAL_DELETED);
+        }
+    }
+
 }

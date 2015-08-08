@@ -8,6 +8,7 @@ import android.provider.ContactsContract;
 import com.greylabs.yoda.database.Database;
 import com.greylabs.yoda.database.MetaData.TablePendingStep;
 import com.greylabs.yoda.database.MetaData.TableSlot;
+import com.greylabs.yoda.scheduler.AlarmScheduler;
 import com.greylabs.yoda.utils.CalendarUtils;
 import com.greylabs.yoda.utils.Constants;
 import java.io.Serializable;
@@ -38,6 +39,7 @@ public class PendingStep implements Serializable {
     private long subStepOf;
     transient private Database database;
     transient private Context context;
+    transient private AlarmScheduler alarmScheduler;
 
     /**********************************************************************************************/
     //Getters and Setters
@@ -428,6 +430,11 @@ public class PendingStep implements Serializable {
         int numOfRowAffected = db.delete(TablePendingStep.pendingStep, TablePendingStep.id + "=" + id, null);
         return numOfRowAffected;
     }
+    public int deleteAllPendingSteps() {
+        SQLiteDatabase db = database.getWritableDatabase();
+        int numOfRowAffected = db.delete(TablePendingStep.pendingStep, TablePendingStep.id + "=" + goalId, null);
+        return numOfRowAffected;
+    }
 
     public int deleteSubSteps() {
         SQLiteDatabase db = database.getWritableDatabase();
@@ -580,12 +587,18 @@ public class PendingStep implements Serializable {
         Goal goal=new Goal(context).get(this.getGoalId());
         return goal.getColorCode();
     }
+
+    public void cancelAlarm(){
+        if(alarmScheduler==null)
+            alarmScheduler=new AlarmScheduler(context);
+        alarmScheduler.setStepId(this.getId());
+        alarmScheduler.cancel();
+    }
+
     /**********************************************************************************************/
     // Enum Constants
 
-    /**
-     * ******************************************************************************************
-     */
+    /**********************************************************************************************/
     public enum PendingStepType {
         SPLIT_STEP, SERIES_STEP, SINGLE_STEP, SUB_STEP;
 
