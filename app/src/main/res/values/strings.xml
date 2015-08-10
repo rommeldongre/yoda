@@ -151,6 +151,9 @@
     <string name="error">Error</string>
     <string name="error_format">[Error] %s</string>
     <string name="btnResetYodaActSettingsDefaultDuration">Reset Application</string>
+    <string name="label_loading_act_splash_screen">Loading...</string>
+    <string name="label_comapny_info1">YodA - You can DO Anything, v2</string>
+    <string name="label_comapny_info2">© Grey Labs, LLP. All Rights Reserved.</string>
 
     <string-array name="arrayStepTypeActAddNewStep">
         <item>Single Step</item>

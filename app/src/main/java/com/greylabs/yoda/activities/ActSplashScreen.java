@@ -1,16 +1,21 @@
 package com.greylabs.yoda.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.greylabs.yoda.R;
@@ -44,8 +49,15 @@ public class ActSplashScreen extends Activity{
     private void initialize() {
         rl = (RelativeLayout) findViewById(R.id.rlActSplashScreen);
         iv = (ImageView) findViewById(R.id.ivActSplashScreen);
+
+//        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+//        float dpHeight = displayMetrics.heightPixels / displayMetrics.density;
+//        float dpWidth = displayMetrics.widthPixels / displayMetrics.density;
+//        int logoWidth = Math.round(dpWidth);
+//        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(logoWidth, logoWidth);
+//        iv.setLayoutParams(layoutParams);
         prefs = Prefs.getInstance(this);
-        StartAnimations();
+//        StartAnimations();
         iv.postDelayed(new Runnable() {
             @Override
             public void run() {
