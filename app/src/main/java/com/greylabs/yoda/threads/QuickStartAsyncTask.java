@@ -39,16 +39,17 @@ public class QuickStartAsyncTask extends AsyncTask<String, String, String> {
 
     @Override
     protected String doInBackground(String... params) {
-        Prefs prefs= Prefs.getInstance(context);
         QuickStart quickStart = new QuickStart(context);
         quickStart.quickStart();
-        List<Slot> slots=new Slot(context).getAll(0);
         Slot slot=new Slot(context);
         slot.setDefaultGoalDetails();
         //schedule all steps
         YodaCalendar yodaCalendar=new YodaCalendar(context);
         List<Goal> goals=new Goal(context).getAll();
         TimeBox timeBox=new TimeBox(context);
+        Goal stretchGoal=new Goal(context);
+        stretchGoal.setId(Prefs.getInstance(context).getStretchGoalId());
+        goals.remove(stretchGoal);
         for (Goal goal:goals ){
             timeBox=timeBox.get(goal.getTimeBoxId());
             yodaCalendar.setTimeBox(timeBox);

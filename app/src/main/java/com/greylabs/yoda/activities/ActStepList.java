@@ -252,7 +252,7 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
             for (int i = 0; i < stepArrayList.size(); i++) {
                 stepArrayList.get(i).initDatabase(this);
                 stepArrayList.get(i).setPriority(i + 1);
-                stepArrayList.get(i).setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+//                stepArrayList.get(i).setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
                 stepArrayList.get(i).save();
                 stepArrayList.get(i).updateSubSteps();
             }

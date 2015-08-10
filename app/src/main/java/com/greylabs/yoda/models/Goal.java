@@ -168,6 +168,13 @@ public class Goal implements Serializable{
                 ", timeBoxId=" + timeBoxId +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        Goal goal=(Goal)o;
+        return goal.id==this.id;
+    }
+
     public Goal get(long id){
         SQLiteDatabase db=database.getReadableDatabase();
         String query="select * " +
@@ -258,36 +265,38 @@ public class Goal implements Serializable{
      * @return percentage of goal completion
      */
     public float getGoalProgress(){
-        int totalStepsCompleted=0;
-        int totalStepsUnCompleted=0;
+        int totalStepsCompletedTime=0;
+        int totalStepsUnCompletedTime=0;
         SQLiteDatabase db=database.getReadableDatabase();
         //this query returns sum of time of all steps that are present in the Complpeted Step table
-        String sumOfTimeComplete=" select count(*) as totalStepsCompleted  " +
+        String sumOfTimeComplete=" select sum(" +TablePendingStep.time+") as  totalStepsCompletedTime "+
                 " "+" from "+TablePendingStep.pendingStep+" " +
-                " "+" where ("+TablePendingStep.type+"= "+ PendingStep.PendingStepType.SINGLE_STEP+" or " +
-                " "+TablePendingStep.type+"= "+ PendingStep.PendingStepType.SUB_STEP.ordinal()+" ) and " +
-                " " +TablePendingStep.status+" = "+PendingStep.PendingStepStatus.COMPLETED.ordinal();
+                " "+" where ("+TablePendingStep.type+"= "+ PendingStep.PendingStepType.SINGLE_STEP.ordinal()+" or " +
+                " "+TablePendingStep.type+"= "+ PendingStep.PendingStepType.SUB_STEP.ordinal()+" ) and (" +
+                " " +TablePendingStep.status+" = "+PendingStep.PendingStepStatus.COMPLETED.ordinal()+" )" +
+                " "+" and "+ TablePendingStep.goalId+" = "+this.id;
         Cursor c=db.rawQuery(sumOfTimeComplete,null);
         if(c.moveToFirst()){
             do{
-                totalStepsCompleted=c.getInt(c.getColumnIndex("sumTime"));
+                totalStepsCompletedTime=c.getInt(c.getColumnIndex("totalStepsCompletedTime"));
             }while(c.moveToNext());
         }
         c.close();
-        String sumOfTimePending=" select count(*) as totalStepsUnCompleted  " +
+        String sumOfTimePending=" select sum("+TablePendingStep.time+") as totalStepsUnCompletedTime  " +
                 " "+" from "+TablePendingStep.pendingStep+" " +
-                " "+" where ("+TablePendingStep.type+"= "+ PendingStep.PendingStepType.SINGLE_STEP+" or " +
+                " "+" where ("+TablePendingStep.type+"= "+ PendingStep.PendingStepType.SINGLE_STEP.ordinal()+" or " +
                 " "+TablePendingStep.type+"= "+ PendingStep.PendingStepType.SUB_STEP.ordinal()+" ) and (" +
-                " " +TablePendingStep.status+" = "+PendingStep.PendingStepStatus.TODO.ordinal()+ " )";
+                " " +TablePendingStep.status+" = "+PendingStep.PendingStepStatus.TODO.ordinal()+ " )"+
+                " "+" and "+ TablePendingStep.goalId+" = "+this.id;
+
          c=db.rawQuery(sumOfTimePending,null);
         if(c.moveToFirst()){
             do{
-                totalStepsUnCompleted=c.getInt(c.getColumnIndex("sumTime"));
+                totalStepsUnCompletedTime=c.getInt(c.getColumnIndex("totalStepsUnCompletedTime"));
             }while(c.moveToNext());
         }
         c.close();
-
-        float percentage=(totalStepsCompleted/(totalStepsCompleted+totalStepsUnCompleted))*100;
+        float percentage=(float)((totalStepsCompletedTime/(float)(totalStepsCompletedTime+totalStepsUnCompletedTime))*100.0);
         return percentage;
     }
 
@@ -297,6 +306,19 @@ public class Goal implements Serializable{
                 " "+" from "+TablePendingStep.pendingStep+" " +
                 " "+" where "+TablePendingStep.goalId+" = "+this.id+" " +
                 " "+" and "+TablePendingStep.type+"!="+ PendingStep.PendingStepType.SUB_STEP.ordinal();
+        SQLiteDatabase db=database.getReadableDatabase();
+        Cursor c=db.rawQuery(query,null);
+        c.moveToFirst();
+        stepCount=c.getInt(c.getColumnIndex("stepCount"));
+        return stepCount;
+    }
+    public int getRemainingStepCount(){
+        int stepCount=0;
+        String query="select count(*) as stepCount" +
+                " "+" from "+TablePendingStep.pendingStep+" " +
+                " "+" where "+TablePendingStep.goalId+" = "+this.id+" " +
+                " "+" and "+TablePendingStep.type+"!="+ PendingStep.PendingStepType.SUB_STEP.ordinal()+" " +
+                " "+" and "+TablePendingStep.status+" = "+PendingStep.PendingStepStatus.TODO.ordinal();
         SQLiteDatabase db=database.getReadableDatabase();
         Cursor c=db.rawQuery(query,null);
         c.moveToFirst();

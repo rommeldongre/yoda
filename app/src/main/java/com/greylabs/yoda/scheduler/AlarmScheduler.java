@@ -144,6 +144,7 @@ public class AlarmScheduler implements Serializable{
 
         //end time
         calTarget.add(Calendar.HOUR_OF_DAY, duration);
+        calTarget.add(Calendar.MINUTE,-1);
         Logger.log(TAG, "Target date:[End Time]" + calTarget.getTime().toString());
         broadcastReceiver = new Intent(context, AlarmReceiver.class);
         broadcastReceiver.putExtra(Constants.ALARM_SCHEDULER, this);

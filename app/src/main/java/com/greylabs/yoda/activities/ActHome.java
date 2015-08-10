@@ -14,6 +14,8 @@ import com.greylabs.yoda.R;
 import com.greylabs.yoda.apis.TasksSample;
 import com.greylabs.yoda.models.Day;
 import com.greylabs.yoda.models.Goal;
+import com.greylabs.yoda.models.PendingStep;
+import com.greylabs.yoda.models.Slot;
 import com.greylabs.yoda.scheduler.BootCompleteService;
 import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.Constants;
@@ -26,6 +28,7 @@ import com.greylabs.yoda.views.MyFloatingActionsMenu;
 import net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class ActHome extends Activity implements View.OnClickListener, FloatingActionsMenu.OnFloatingActionsMenuUpdateListener, MyFloatingActionsMenu.OnFloatingActionsMenuUpdateListener {
@@ -40,6 +43,10 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
     Prefs prefs;
 
     ArrayList<Goal> goalList = new ArrayList<>();
+    private Slot slot;
+    private PendingStep nowPendingStep;
+    private Goal nowGoal;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +83,6 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
         prefs = Prefs.getInstance(this);
         layoutWallpaper.setBackgroundResource(prefs.getWallpaperResourceId());
 
-        setStyleToArcTotalProgress();
         getGoalsFromLocalAndPopulate();
         arcTotalProgress.setOnClickListener(this);
         btnAddStep.setOnClickListener(this);
@@ -90,10 +96,44 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
         btnExportToGoogleCalender.setOnClickListener(this);
         btnImportGoogleTasks.setOnClickListener(this);
         btnChangeWallpaper.setOnClickListener(this);
+        populateNowInfo();
+        setStyleToArcTotalProgress();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        populateNowInfo();
+    }
+
+    private void populateNowInfo() {
+        if(slot==null) slot=new Slot(this);
+        if(nowPendingStep==null) nowPendingStep=new PendingStep(this);
+        if(nowGoal==null) nowGoal=new Goal(this);
+        List<PendingStep> pendingSteps=nowPendingStep.getPendingSteps(slot.getActiveSlotId());
+        if(pendingSteps!=null && pendingSteps.size()>0) {
+            for (PendingStep ps : pendingSteps) {
+                if (ps.isNowStep()) {
+                    nowPendingStep = ps;
+                    break;
+                }
+            }
+            if(nowPendingStep!=null){
+                arcTotalProgress.setStepName(nowPendingStep.getNickName());
+                nowGoal=nowGoal.get(nowPendingStep.getGoalId());
+                arcTotalProgress.setGoalName(nowGoal.getNickName());
+            }
+        }else{
+            Prefs prefs=Prefs.getInstance(this);
+            nowGoal=nowGoal.get(prefs.getStretchGoalId());
+            arcTotalProgress.setGoalName(Constants.NICKNAME_STRETCH_GOAL);
+            arcTotalProgress.setStepName(" No Step");
+        }
+        setStyleToArcTotalProgress();
     }
 
     private void setStyleToArcTotalProgress() {
-        arcTotalProgress.setProgress(65);
+        arcTotalProgress.setProgress((int)nowGoal.getGoalProgress());
         arcTotalProgress.setStrokeWidth(30);
         arcTotalProgress.setFinishedStrokeColor(getResources().getColor(R.color.luminous_green));
         arcTotalProgress.setUnfinishedStrokeColor(getResources().getColor(R.color.gray_unfinished_progress));
@@ -104,11 +144,15 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
         // check for string lengths first and strip accordingly
         arcTotalProgress.setTextSize(20);
         arcTotalProgress.setTextColor(getResources().getColor(R.color.white));
-        arcTotalProgress.setStepName("Step Name");
-        arcTotalProgress.setGoalName("Goal Name");
+        if(nowPendingStep==null || nowPendingStep.getNickName()==null) {
+            arcTotalProgress.setStepName("No Step");
+        }else{
+            arcTotalProgress.setStepName(nowPendingStep.getNickName());
+        }
+        arcTotalProgress.setGoalName(nowGoal.getNickName());
 
         arcTotalProgress.setBottomTextSize(30);
-        arcTotalProgress.setBottomText("38");
+        arcTotalProgress.setBottomText(String.valueOf(nowGoal.getRemainingStepCount()));
 //        arcTotalProgress.setSuffixTextSize(float suffixTextSize);
 //        arcTotalProgress.setMax(int max);
 //        arcTotalProgress.setSuffixText(String suffixText);
@@ -153,8 +197,10 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
                 break;
 
             case R.id.arcTotalProgressActHome :
+
                 Intent intent1 = new Intent(this, ActNowFilter.class);
                 intent1.putExtra(Constants.CALLER, Constants.ACT_HOME);
+                intent1.putExtra(Constants.KEY_PENDING_STEP_OBJECT,nowPendingStep);
                 this.startActivity(intent1);
                 break;
 

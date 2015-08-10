@@ -376,6 +376,8 @@ public class YodaCalendar {
         boolean isScheduled=false;
         slots=slot.getAll(timeBox.getId());
         //Collections.sort(slots, new SortByDate());
+        if(slots==null | slots.size()==0)
+            return false;
         removeTodaysPassedSlots();
         switch (pendingStep.getPendingStepType()){
             case SPLIT_STEP:
@@ -452,18 +454,19 @@ public class YodaCalendar {
         int count=0;
         Calendar calendar=Calendar.getInstance();
         Goal goal=new Goal(context).get(goalId);
-        List<PendingStep> pendingSteps= new PendingStep(context).getAll(goalId);
+        List<PendingStep> pendingSteps= new PendingStep(context).getAll(PendingStep.PendingStepStatus.TODO,goalId);
         if(pendingSteps!=null) {
              slots=slot.getAll(timeBox.getId());
             Iterator<Slot> it;
             for (PendingStep pendingStep : pendingSteps) {
                 //Collections.sort(slots, new SortByDate());
                 removeTodaysPassedSlots();
+
                 switch (pendingStep.getPendingStepType()){
                     case SPLIT_STEP:
                     case SERIES_STEP:
                         Iterator<PendingStep> substeps = pendingStep.
-                                getAllSubSteps(pendingStep.getId(), pendingStep.getGoalId()).iterator();
+                                getAllSubSteps(PendingStep.PendingStepStatus.TODO,pendingStep.getId(), pendingStep.getGoalId()).iterator();
                         it = slots.iterator();
                         while (substeps.hasNext()) {
                             PendingStep substep=substeps.next();

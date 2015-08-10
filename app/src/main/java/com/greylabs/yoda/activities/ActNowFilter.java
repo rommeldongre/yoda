@@ -15,6 +15,7 @@ import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.scheduler.AlarmScheduler;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Logger;
+import com.greylabs.yoda.utils.Prefs;
 
 public class ActNowFilter extends Activity implements View.OnClickListener {
 
@@ -66,20 +67,30 @@ public class ActNowFilter extends Activity implements View.OnClickListener {
             alarmScheduler=(AlarmScheduler)getIntent().getSerializableExtra(Constants.ALARM_SCHEDULER);
             if(alarmScheduler!=null) {
                 pendingStep = new PendingStep(this).get(alarmScheduler.getStepId());
-                goal = new Goal(this).get(pendingStep.getGoalId());
-                tvGoalName.setText(goal.getNickName());
-                tvStepName.setText(pendingStep.getNickName());
-                tvTime.setText(String.valueOf(alarmScheduler.getStartTime()));
             }
         }else if(caller.equals(Constants.ACT_HOME)){
             // get the current step from local
            // pendingStep = new PendingStep(this);
+            pendingStep=(PendingStep)getIntent().getSerializableExtra(Constants.KEY_PENDING_STEP_OBJECT);
+            pendingStep.initDatabase(this);
             checkForEmptyViewVisibility();
+        }
+
+        if(pendingStep!=null){
+            goal = new Goal(this).get(pendingStep.getGoalId());
+            tvGoalName.setText(goal.getNickName());
+            tvStepName.setText(pendingStep.getNickName());
+            //tvTime.setText(String.valueOf(alarmScheduler.getStartTime()));
+        }else{
+            Prefs prefs=Prefs.getInstance(this);
+            goal = new Goal(this).get(prefs.getStretchGoalId());
+            tvGoalName.setText(goal.getNickName());
+            tvStepName.setText("No Step ");
         }
     }
 
     private void checkForEmptyViewVisibility() {
-        if (pendingStep == null) {
+        if (pendingStep == null || pendingStep.getNickName()==null) {
             cvEmptyView.setVisibility(View.VISIBLE);
             cvNotEmptyView.setVisibility(View.GONE);
         }
@@ -117,7 +128,6 @@ public class ActNowFilter extends Activity implements View.OnClickListener {
                 finish();
                 break;
 
-            case R.id.btnCloseNotEmptyViewActNowFilter:
             case R.id.llMissedActNowFilter :
                 Logger.showMsg(this, "Missed it");
                 if(pendingStep!=null){
@@ -126,6 +136,9 @@ public class ActNowFilter extends Activity implements View.OnClickListener {
                     pendingStep.save();
                 }
                 finish();
+                break;
+            case R.id.btnCloseNotEmptyViewActNowFilter:
+                this.finish();
                 break;
 
             case R.id.btnCloseEmptyViewActNowFilter:

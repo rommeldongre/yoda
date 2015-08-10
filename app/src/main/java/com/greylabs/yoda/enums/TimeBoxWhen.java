@@ -1,5 +1,9 @@
 package com.greylabs.yoda.enums;
 
+import java.util.Calendar;
+import java.util.Set;
+import java.util.TreeSet;
+
 public enum TimeBoxWhen {
     /**********************************************************************************************/
     // Enum Constants
@@ -68,6 +72,25 @@ public enum TimeBoxWhen {
     /**********************************************************************************************/
     // Methods
     /**********************************************************************************************/
+    public static TimeBoxWhen getWhen(Calendar calendar){
+        Calendar calStart=Calendar.getInstance();
+        calStart.set(Calendar.MINUTE,0);calStart.set(Calendar.SECOND,0);calStart.set(Calendar.MILLISECOND,0);
+        Calendar calEnd=Calendar.getInstance();
+        calEnd.set(Calendar.MINUTE, 0);calEnd.set(Calendar.SECOND, 0);calEnd.set(Calendar.MILLISECOND, 0);
+
+
+        Set<TimeBoxWhen> whens=new TreeSet<>();
+        whens.add(EARLY_MORNING);whens.add(MORNING);whens.add(AFTERNOON);
+        whens.add(EVENING);whens.add(NIGHT);whens.add(LATE_NIGHT);
+        for(TimeBoxWhen when:whens){
+            calStart.set(Calendar.HOUR_OF_DAY,when.getStartTime());
+            calEnd.set(Calendar.HOUR_OF_DAY,when.getEndTime());
+            calEnd.add(Calendar.MINUTE, -1);
+            if(calendar.getTime().compareTo(calStart.getTime())>0 && calendar.getTime().compareTo(calEnd.getTime())<0)
+                return when;
+        }
+        return EARLY_MORNING;
+    }
     public static  TimeBoxWhen getIntegerToEnumType(int id){
         TimeBoxWhen timeBoxWhen=null;
         switch (id){

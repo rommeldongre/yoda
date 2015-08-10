@@ -11,6 +11,7 @@ import com.greylabs.yoda.database.MetaData.TableSlot;
 import com.greylabs.yoda.database.MetaData.TablePendingStep;
 import com.greylabs.yoda.database.MetaData.TableDay;
 import com.greylabs.yoda.enums.*;
+import com.greylabs.yoda.enums.TimeBoxWhen;
 import com.greylabs.yoda.utils.CalendarUtils;
 import com.greylabs.yoda.utils.Prefs;
 import com.greylabs.yoda.utils.WhereConditionBuilder;
@@ -306,6 +307,26 @@ public class Slot {
         Cursor c=db.rawQuery(query,null);
         c.moveToFirst();
         c.close();
+    }
+
+    public long getActiveSlotId(){
+        Calendar cal=Calendar.getInstance();
+        cal.set(Calendar.SECOND,0);cal.set(Calendar.MILLISECOND,0);
+        TimeBoxWhen timeBoxWhen=TimeBoxWhen.getWhen(cal);
+        String nowDate=CalendarUtils.getSqLiteDateFormat(cal);
+
+
+        String query="select  "+TableSlot.id+" " +
+                " " +" from "+TableSlot.slot+" " +
+                " " +" where strftime('%Y-%m-%d',"+TableSlot.scheduleDate+") = strftime('%Y-%m-%d','"+nowDate+"')" +
+                " " +" and "+TableSlot.when+" = "+TimeBoxWhen.getEnumToIntegerType(timeBoxWhen);
+
+        SQLiteDatabase db=database.getReadableDatabase();
+        Cursor c=db.rawQuery(query,null);
+        c.moveToFirst();
+        long id=c.getLong(c.getColumnIndex(TableSlot.id));
+        c.close();
+        return id;
     }
 
 }

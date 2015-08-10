@@ -90,7 +90,7 @@ public final class QuickStart {
 
         //3
         timeBox=new TimeBox(context);
-        timeBox.setNickName("Morning-Weekly-Sunday till this year");
+        timeBox.setNickName("Morning-Weekly-Sunday till this Quarter");
         //on
         timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(context,TimeBoxOn.WEEKLY);
         timeBoxOns=new TreeSet<>();
@@ -232,7 +232,6 @@ public final class QuickStart {
 
     private void addDefaultsGoals(){
         Goal goal;
-
         //1
         goal=new Goal(context);
         goal.setNickName("Health");

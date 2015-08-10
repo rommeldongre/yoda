@@ -129,6 +129,7 @@ public class Prefs {
         return systemPrefs.getLong(Constants.ID_STRETCH_GOAL,0);
     }
 
+
     public void clear() {
         editor.clear();
         editor.commit();
