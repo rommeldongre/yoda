@@ -124,6 +124,12 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
         recyclerView.setOnScrollListener(dragSortRecycler.getScrollListener());
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getStepArrayFromLocal();
+        mAdapter.notifyDataSetChanged();
+    }
 
     private void getStepArrayFromLocal() {
         pendingStepsArrayList.clear();
