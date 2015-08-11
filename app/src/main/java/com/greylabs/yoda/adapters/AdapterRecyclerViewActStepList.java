@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.interfaces.onClickOfRecyclerViewActStepList;
 import com.greylabs.yoda.models.PendingStep;
+import com.greylabs.yoda.utils.CalendarUtils;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Logger;
 
@@ -48,7 +49,7 @@ public class AdapterRecyclerViewActStepList extends RecyclerView.Adapter<Adapter
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.tvStepName.setText(stepsArrayList.get(position).getNickName());
         if(stepsArrayList.get(position).getStepDate()!=null)
-            holder.tvETAOfStep.setText(stepsArrayList.get(position).getStepDate().toString());
+            holder.tvETAOfStep.setText(CalendarUtils.getFormatedDate(stepsArrayList.get(position).getStepDate()));
         if(stepsArrayList.get(position).getPendingStepStatus().equals(PendingStep.PendingStepStatus.COMPLETED)){
             holder.checkBox.setChecked(true);
             holder.checkBox.setEnabled(false);

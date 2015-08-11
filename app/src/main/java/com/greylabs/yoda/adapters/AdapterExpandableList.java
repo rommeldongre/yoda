@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
+import com.greylabs.yoda.utils.CalendarUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -64,7 +65,7 @@ public class AdapterExpandableList extends BaseExpandableListAdapter {
                 .findViewById(R.id.cbListItemActFilters);
 
         txtListChild.setText(pendingStep.getNickName());
-        tvETAOfStep.setText(pendingStep.getStepDate().toString());
+        tvETAOfStep.setText(CalendarUtils.getFormatedDate(pendingStep.getStepDate()));
 
         if(pendingStep.getPendingStepStatus().equals(PendingStep.PendingStepStatus.COMPLETED)){
             cbCompleted.setChecked(true);

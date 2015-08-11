@@ -27,6 +27,23 @@ public class CalendarUtils {
     private final static String TAG="CalendarUtils";
 
 
+    public static String getFormatedDate(Date d){
+
+        SimpleDateFormat sdf=new SimpleDateFormat("EEE MMM dd");
+        String strDate=sdf.format(d);
+        Calendar cal=Calendar.getInstance();
+        cal.setTime(d);
+        switch (cal.get(Calendar.HOUR_OF_DAY)){
+            case 6: strDate+=" "+TimeBoxWhen.EARLY_MORNING.getDisplayName();break;
+            case 9: strDate+=" "+TimeBoxWhen.MORNING.getDisplayName();break;
+            case 12: strDate+=" "+TimeBoxWhen.AFTERNOON.getDisplayName();break;
+            case 15: strDate+=" "+TimeBoxWhen.EVENING.getDisplayName();break;
+            case 18: strDate+=" "+TimeBoxWhen.NIGHT.getDisplayName();break;
+            case 21: strDate+=" "+TimeBoxWhen.LATE_NIGHT.getDisplayName();break;
+        }
+
+        return strDate;
+    }
     public static String printYodaCalendar(Context context){
         Database database=Database.getInstance(context);
         String cols=" s."+ MetaData.TableSlot.id+" as slotId ,"+ MetaData.TableSlot.when+","+ MetaData.TableSlot.time+","+ MetaData.TableSlot.scheduleDate+","+ MetaData.TableSlot.goalId+"," +
