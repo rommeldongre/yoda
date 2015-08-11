@@ -45,7 +45,7 @@ public class AdapterRecyclerViewActGoalList extends RecyclerView.Adapter<Adapter
 //            switch (holder.Holderid) {
         holder.tvGoalName.setText(goalArrayList.get(position).getNickName());
         holder.btnBullet.setFillColor(Integer.parseInt(goalArrayList.get(position).getColorCode()));
-        holder.btnBullet.setTitleText(String.valueOf(goalArrayList.get(position).getStepCount()));
+        holder.btnBullet.setTitleText(String.valueOf(goalArrayList.get(position).getRemainingStepCount()));
         holder.progressBar.setProgress((int)goalArrayList.get(position).getGoalProgress());
         if(isEditOperation){
             holder.btnBullet.setVisibility(View.GONE);
