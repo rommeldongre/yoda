@@ -350,6 +350,8 @@ public class MyArcProgress extends View {
             float textBaseline = ((float)this.getHeight() - bottomTextBaseline) / 3.0F;
             canvas.drawText(stepName, ((float)this.getWidth() - this.textPaint.measureText(stepName)) / 2.0F, textBaseline, this.textPaint);
             textBaseline = ((float)this.getHeight() - bottomTextBaseline) / 1.5F;
+            if(goalName==null)
+                goalName="";
             canvas.drawText(goalName, ((float)this.getWidth() - this.textPaint.measureText(goalName)) / 2.0F, textBaseline, this.textPaint);
         }
 
