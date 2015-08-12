@@ -2,6 +2,7 @@ package com.greylabs.yoda.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,6 +14,7 @@ import android.widget.RelativeLayout;
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.apis.googleacc.GoogleSync;
 import com.greylabs.yoda.database.NewStep;
+import com.greylabs.yoda.threads.ImportTaskAsyncThread;
 import com.greylabs.yoda.threads.NewStepAsyncTask;
 import com.greylabs.yoda.threads.QuickStartAsyncTask;
 import com.greylabs.yoda.utils.Logger;
@@ -61,14 +63,7 @@ public class ActQuickStart extends Activity implements View.OnClickListener {
                 break;
 
             case R.id.rlImportTaskActQuickStart :
-                NewStep newStep=new NewStep(this);
-                newStep.newStep();
-                GoogleSync googleSync=new GoogleSync(this);
-                try {
-                    googleSync.sync();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                new ImportTaskAsyncThread(this,new MyHandler()).execute();
                 Logger.showMsg(this, "import");
                 break;
         }

@@ -42,10 +42,11 @@ public class GoogleAccount  {
     GoogleAccountCredential credential;
     com.google.api.services.tasks.Tasks service;
     private Context context;
+    SharedPreferences settings;
 
     public GoogleAccount(Context context){
         this.context=context;
-        SharedPreferences settings =context.getSharedPreferences(Constants.SHARED_PREFS_ACCOUNT,Context.MODE_PRIVATE);
+        settings =context.getSharedPreferences(Constants.SHARED_PREFS_ACCOUNT,Context.MODE_PRIVATE);
         settings.edit().putString(PREF_ACCOUNT_NAME,getEmail(context));
         settings.edit().commit();
         credential = GoogleAccountCredential.usingOAuth2(context, Collections.singleton(TasksScopes.TASKS));
@@ -102,16 +103,19 @@ public class GoogleAccount  {
         try {
             goal.setId(Integer.parseInt(taskList.getId()));
         }catch (Exception e){
-            if(taskList.getTitle().equals("@default")) {
+            if(taskList.getTitle().equals(settings.getString(PREF_ACCOUNT_NAME,"@default")+"'s list")) {
                 goal.setId(Prefs.getInstance(context).getStretchGoalId());
                 isStretchGoal=true;
             }
-            else
+            else {
                 goal.setId(0);
+                goal.setDueDate(new Date());
+            }
         }
 
-        goal=goal.get(goal.getId());
-        if(!isStretchGoal)
+        if(goal.getId()!=0)
+            goal = goal.get(goal.getId());
+        if (!isStretchGoal)
             goal.setNickName(taskList.getTitle());
         return goal;
     }
@@ -122,9 +126,12 @@ public class GoogleAccount  {
             pendingStep.setId(Integer.parseInt(task.getId()));
         }catch (Exception e){
             pendingStep.setId(0);
+            pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
+            pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         }
 
-        pendingStep=pendingStep.get(pendingStep.getId());
+        if(pendingStep.getId()!=0)
+            pendingStep=pendingStep.get(pendingStep.getId());
         pendingStep.setNickName(task.getTitle());
 
         return pendingStep;

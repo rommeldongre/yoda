@@ -101,23 +101,6 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
         btnChangeWallpaper.setOnClickListener(this);
         populateNowInfo();
         setStyleToArcTotalProgress();
-
-        AsyncTask a = new AsyncTask()
-        {
-            @Override
-            protected Object doInBackground(Object[] objects) {
-                GoogleSync googleSync = new GoogleSync(ActHome.this);
-                try {
-                    googleSync.sync();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                return null;
-            }
-        };
-        a.execute();
-
     }
 
     @Override
