@@ -2,6 +2,7 @@ package com.greylabs.yoda.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -12,6 +13,7 @@ import android.widget.RelativeLayout;
 
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.apis.TasksSample;
+import com.greylabs.yoda.apis.googleacc.GoogleSync;
 import com.greylabs.yoda.models.Day;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
@@ -27,6 +29,7 @@ import com.greylabs.yoda.views.MyFloatingActionsMenu;
 
 import net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -98,6 +101,23 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
         btnChangeWallpaper.setOnClickListener(this);
         populateNowInfo();
         setStyleToArcTotalProgress();
+
+        AsyncTask a = new AsyncTask()
+        {
+            @Override
+            protected Object doInBackground(Object[] objects) {
+                GoogleSync googleSync = new GoogleSync(ActHome.this);
+                try {
+                    googleSync.sync();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                return null;
+            }
+        };
+        a.execute();
+
     }
 
     @Override

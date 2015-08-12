@@ -11,10 +11,14 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 import com.greylabs.yoda.R;
+import com.greylabs.yoda.apis.googleacc.GoogleSync;
+import com.greylabs.yoda.database.NewStep;
 import com.greylabs.yoda.threads.NewStepAsyncTask;
 import com.greylabs.yoda.threads.QuickStartAsyncTask;
 import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.Prefs;
+
+import java.io.IOException;
 
 public class ActQuickStart extends Activity implements View.OnClickListener {
 
@@ -57,10 +61,19 @@ public class ActQuickStart extends Activity implements View.OnClickListener {
                 break;
 
             case R.id.rlImportTaskActQuickStart :
+                NewStep newStep=new NewStep(this);
+                newStep.newStep();
+                GoogleSync googleSync=new GoogleSync(this);
+                try {
+                    googleSync.sync();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 Logger.showMsg(this, "import");
                 break;
         }
     }
+
 
     class MyHandler extends Handler {
         @Override

@@ -13,16 +13,18 @@ package com.greylabs.yoda.apis;
  * the License.
  */
 
-        import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.GooglePlayServicesUtil;
         import com.google.api.client.extensions.android.http.AndroidHttp;
         import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
         import com.google.api.client.http.HttpTransport;
         import com.google.api.client.json.JsonFactory;
         import com.google.api.client.json.gson.GsonFactory;
         import com.google.api.services.tasks.TasksScopes;
+        import com.google.api.services.tasks.model.Task;
         import com.greylabs.yoda.R;
 
-        import android.accounts.AccountManager;
+import android.accounts.Account;
+import android.accounts.AccountManager;
         import android.app.Activity;
         import android.app.Dialog;
         import android.content.Context;
@@ -35,6 +37,7 @@ package com.greylabs.yoda.apis;
         import android.widget.ArrayAdapter;
         import android.widget.ListView;
 
+        import java.io.IOException;
         import java.util.Collections;
         import java.util.List;
         import java.util.logging.Level;
@@ -60,21 +63,13 @@ public final class TasksSample extends Activity {
      * </pre>
      */
     private static final Level LOGGING_LEVEL = Level.OFF;
-
     private static final String PREF_ACCOUNT_NAME = "accountName";
-
     static final String TAG = "TasksSample";
-
     static final int REQUEST_GOOGLE_PLAY_SERVICES = 0;
-
     static final int REQUEST_AUTHORIZATION = 1;
-
     static final int REQUEST_ACCOUNT_PICKER = 2;
-
     final HttpTransport httpTransport = AndroidHttp.newCompatibleTransport();
-
     final JsonFactory jsonFactory = GsonFactory.getDefaultInstance();
-
     GoogleAccountCredential credential;
 
     List<String> tasksList;
@@ -96,14 +91,27 @@ public final class TasksSample extends Activity {
         setContentView(R.layout.calendarlist);
         listView = (ListView) findViewById(R.id.list);
         // Google Accounts
+        SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
         credential =
                 GoogleAccountCredential.usingOAuth2(this, Collections.singleton(TasksScopes.TASKS));
-        SharedPreferences settings = getPreferences(Context.MODE_PRIVATE);
         credential.setSelectedAccountName(settings.getString(PREF_ACCOUNT_NAME, null));
         // Tasks client
         service =
                 new com.google.api.services.tasks.Tasks.Builder(httpTransport, jsonFactory, credential)
                         .setApplicationName("Google-TasksAndroidSample/1.0").build();
+
+//        Task task = new Task();
+//        task.setId("123");
+//        task.setTitle("New Task---Vijay");
+//        task.setNotes("Please complete me");
+//        try {
+//            Task result = service.tasks().insert("@default", task).execute();
+//            com.greylabs.yoda.utils.Logger.log(TAG,"Task::::"+result);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+
     }
 
     void showGooglePlayServicesAvailabilityErrorDialog(final int connectionStatusCode) {
@@ -208,5 +216,6 @@ public final class TasksSample extends Activity {
     private void chooseAccount() {
         startActivityForResult(credential.newChooseAccountIntent(), REQUEST_ACCOUNT_PICKER);
     }
+
 
 }

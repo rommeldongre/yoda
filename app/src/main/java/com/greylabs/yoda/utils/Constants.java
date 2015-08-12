@@ -105,4 +105,5 @@ public class Constants {
     public static final int COLORCODE_TIMEBOX_7 = -16736513; //sky blue
     public static final int COLORCODE_TIMEBOX_8 = -65391; //pink
     public static final String KEY_PENDING_STEP_OBJECT ="Pending Step Object" ;
+    public static final String SHARED_PREFS_ACCOUNT ="Shared Pref Account" ;
 }

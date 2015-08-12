@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 
 import com.greylabs.yoda.R;
 
-public class Prefs {
+public class Prefs  {
     Context context;
     SharedPreferences systemPrefs;
     SharedPreferences.Editor editor;
