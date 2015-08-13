@@ -10,6 +10,7 @@ import com.greylabs.yoda.database.MetaData;
 import com.greylabs.yoda.database.MetaData.TableGoal;
 import com.greylabs.yoda.database.MetaData.TablePendingStep;
 import com.greylabs.yoda.utils.CalendarUtils;
+import com.greylabs.yoda.utils.Prefs;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -349,5 +350,18 @@ public class Goal implements Serializable{
             colorCode=c.getString(c.getColumnIndex(MetaData.TableTimeBox.colorCode));
         }
         return colorCode;
+    }
+
+    public long getIdIfExists(String stringGoalId){
+        long id= Prefs.getInstance(context).getStretchGoalId();
+        String query="select  "+TableGoal.id +" "+
+                " "+" from "+ TableGoal.goal+" " +
+                " "+" where "+ TableGoal.stringId+" = '"+stringGoalId+"'";
+        SQLiteDatabase db=database.getReadableDatabase();
+        Cursor c=db.rawQuery(query,null);
+        if(c.moveToFirst()){
+            id=c.getLong(c.getColumnIndex(TableGoal.id));
+        }
+        return id;
     }
 }

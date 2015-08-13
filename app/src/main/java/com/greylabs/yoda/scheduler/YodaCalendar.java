@@ -511,7 +511,7 @@ public class YodaCalendar {
                                 slot.save();
                                 pendingStep.setSlotId(slot.getId());
                                 calendar.setTime(slot.getScheduleDate());
-                                calendar.add(Calendar.HOUR_OF_DAY, slot.getWhen().getStartTime());
+                                calendar.set(Calendar.HOUR_OF_DAY, slot.getWhen().getStartTime());
                                 pendingStep.setStepDate(calendar.getTime());
                                 pendingStep.save();
                                 goal.setDueDate(pendingStep.getStepDate());

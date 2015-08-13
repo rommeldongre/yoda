@@ -41,7 +41,6 @@ public class CalendarUtils {
             case 18: strDate+=" "+TimeBoxWhen.NIGHT.getDisplayName();break;
             case 21: strDate+=" "+TimeBoxWhen.LATE_NIGHT.getDisplayName();break;
         }
-
         return strDate;
     }
     public static String printYodaCalendar(Context context){

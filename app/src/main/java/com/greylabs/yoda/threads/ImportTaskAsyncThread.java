@@ -38,7 +38,7 @@ public class ImportTaskAsyncThread extends AsyncTask<Void, Void, Void> {
         slot.setDefaultGoalDetails();
         GoogleSync googleSync = new GoogleSync(context);
         try {
-            googleSync.importToStretchGoal();
+            googleSync.sync();
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -464,9 +464,6 @@ public class PendingStep implements Serializable {
         values.put(TablePendingStep.goalStringId,this.goalStringId);
         if(this.getStepDate()!=null) {
             Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.HOUR_OF_DAY, 0);
             cal.setTime(this.getStepDate());
             values.put(TablePendingStep.stepDate, CalendarUtils.getSqLiteDateFormat(cal));
         }
@@ -524,6 +521,19 @@ public class PendingStep implements Serializable {
     /**********************************************************************************************/
     //Utility Methods
     /********************************************************************************************/
+
+    public long getIdIfExists(String stringId) {
+        SQLiteDatabase db = database.getReadableDatabase();
+        String query = "select  "+TablePendingStep.id+
+                " " + " from " + TablePendingStep.pendingStep + " " +
+                " " + " where " + TablePendingStep.stringId + " = '" + stringId + "' ";
+        Cursor c = db.rawQuery(query, null);
+        long id=0;
+        if (c.moveToFirst()) {
+            id=c.getLong(c.getColumnIndex(TablePendingStep.id));
+         }
+        return id;
+    }
     public List<PendingStep> getAll(String filterCriteria){
         ArrayList<PendingStep> pendingSteps = null;
         SQLiteDatabase db = database.getReadableDatabase();

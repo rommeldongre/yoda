@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -13,6 +14,7 @@ import android.widget.RelativeLayout;
 
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.apis.TasksSample;
+import com.greylabs.yoda.apis.googleacc.GoogleAccount;
 import com.greylabs.yoda.apis.googleacc.GoogleSync;
 import com.greylabs.yoda.models.Day;
 import com.greylabs.yoda.models.Goal;
@@ -20,6 +22,7 @@ import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.Slot;
 import com.greylabs.yoda.scheduler.BootCompleteService;
 import com.greylabs.yoda.scheduler.YodaCalendar;
+import com.greylabs.yoda.threads.ImportTaskAsyncThread;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Prefs;
 import com.greylabs.yoda.views.GoalView;
@@ -234,7 +237,20 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
                 break;
 
             case R.id.btnAutosyncWithGoogleActHome :
-                startActivity(new Intent(this, TasksSample.class));
+                //startActivity(new Intent(this, TasksSample.class));
+                AsyncTask asyncTask=new AsyncTask() {
+                    @Override
+                    protected Object doInBackground(Object[] objects) {
+                        GoogleSync googleSync=new GoogleSync(ActHome.this);
+                        try {
+                            googleSync.sync();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    }
+                };
+                asyncTask.execute();
                 btnSettings.collapse();
                 break;
 
