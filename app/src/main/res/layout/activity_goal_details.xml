@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -67,13 +68,32 @@
                         android:textStyle="bold"
                         android:text="@string/tvTimeActAddNewGoal" />
 
-                    <TextView
-                        android:id="@+id/tvTimeActGoalDetails"
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dip"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                        android:layout_marginTop="8dip" />
+                        android:layout_height="wrap_content">
+
+                        <com.greylabs.yoda.views.CircleView
+                            android:id="@+id/btnBulletActGoalDetails"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_alignParentLeft="true"
+                            android:gravity="center_vertical"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginTop="8dip"
+                            app:strokeColorValue="@color/ColorPrimary"
+                            app:fillRadius="0.9"/>
+
+                        <TextView
+                            android:id="@+id/tvTimeActGoalDetails"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@id/btnBulletActGoalDetails"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                            android:layout_marginLeft="15dp" />
+                    </RelativeLayout>
 
                     <View
                         android:layout_width="match_parent"

@@ -6,13 +6,13 @@ public enum WeekDay implements SubValue {
     /**********************************************************************************************/
     // Enum Constants
     /**********************************************************************************************/
-    SUNDAY("Sunday","S", Calendar.SUNDAY),
-    MONDAY("Monday","M",Calendar.MONDAY),
-    TUESDAY("Tuesday","T",Calendar.TUESDAY),
-    WEDNESDAY("Wednesday","W",Calendar.WEDNESDAY),
-    THURSDAY("Thursday","T",Calendar.THURSDAY),
-    FRIDAY("Friday","F",Calendar.FRIDAY),
-    SATURDAY("Saturday","S",Calendar.SATURDAY);
+    SUNDAY("Sun","S", Calendar.SUNDAY),
+    MONDAY("Mon","M",Calendar.MONDAY),
+    TUESDAY("Tue","T",Calendar.TUESDAY),
+    WEDNESDAY("Wed","W",Calendar.WEDNESDAY),
+    THURSDAY("Thu","T",Calendar.THURSDAY),
+    FRIDAY("Fri","F",Calendar.FRIDAY),
+    SATURDAY("Sat","S",Calendar.SATURDAY);
 
     /**********************************************************************************************/
     // Enum properties

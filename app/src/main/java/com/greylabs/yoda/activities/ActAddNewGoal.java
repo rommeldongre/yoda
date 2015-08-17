@@ -253,10 +253,17 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
 
                 isSaved = true;
                 Logger.showMsg(this, getResources().getString(R.string.msgGoalSavedActAddNewGoal));
-                if(caller.equals(Constants.ACT_ADD_NEW_STEP)){
-                    Intent secIntent = new Intent();
-                    secIntent.putExtra(Constants.GOAL_CREATED, true);
-                    setResult(Constants.RESULTCODE_OF_ACT_ADD_GOAL, secIntent);
+                switch (caller){
+                    case Constants.ACT_ADD_NEW_STEP :
+                        Intent secIntent = new Intent();
+                        secIntent.putExtra(Constants.GOAL_CREATED, true);
+                        setResult(Constants.RESULTCODE_OF_ACT_ADD_GOAL, secIntent);
+                        break;
+
+                    case Constants.ACT_GOAL_DETAILS :
+                        Intent thirdIntent = new Intent();
+                        thirdIntent.putExtra(Constants.GOAL_UPDATED, true);
+                        setResult(Constants.RESULTCODE_OF_ACT_ADD_GOAL, thirdIntent);
                 }
                 this.finish();
             }else {

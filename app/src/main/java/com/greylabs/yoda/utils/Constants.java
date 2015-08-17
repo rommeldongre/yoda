@@ -1,5 +1,7 @@
 package com.greylabs.yoda.utils;
 
+import android.os.Bundle;
+
 public class Constants {
 
     public static final String IS_APPLICATION_FIRST_TIME_INSTALLED ="IS_APPLICATION_FIRST_TIME_INSTALLED" ;
@@ -32,7 +34,7 @@ public class Constants {
     public static final String OPERATION_SHOW_STEPS = "OPERATION_SHOW_STEPS";
     public static final String MSG_DELETE_STEP = "Are you sure you want to delete the step?";
     public static final String MSG_STEP_DELETED = "Step Deleted";
-    public static final String MSG_DELETE_GOAL = "Do you want to move Steps of this Goal to Stretch Goal after deletion?";
+    public static final String MSG_DELETE_GOAL = "Steps there are, in this Goal. Move them to Stretch Goals, or Delete them?";
     public static final String MSG_GOAL_DELETED = "Goal Deleted";
     public static final String MSG_DELETE_TIMEBOX = "Are you sure you want to delete the TimeBox?";
     public static final String MSG_TIMEBOX_DELETED = "TimeBox Deleted";
@@ -75,7 +77,7 @@ public class Constants {
     public static final String ALARM_SERVICE = "ALARM_SERVICE";
     public static final String ALARM_SCHEDULER ="ALARM_SCHEDULER" ;
     public static final String IS_CALENDAR_INITIALIZED = "IS_CALENDAR_INITIALIZED";
-    public static final String MSG_INITIALIZING_CALENDAR = "Initializing Calendar, Please Wait";
+    public static final String MSG_INITIALIZING_CALENDAR = "Reinitializing the universe so you can feel the Force.";
     public static final String OPTION_FROM_ACTQUICKSTART_SELECTED = "OPTION_FROM_ACTQUICKSTART_SELECTED";
     public static final String MSG_INITIALIZING_QUICK_START = "Please Wait...";
     public static final String TEXT_PRIORITY_SPINNER_TOP_MOST ="Top-most" ;
@@ -83,6 +85,7 @@ public class Constants {
     public static final String TEXT_PRIORITY_SPINNER_CHANGE_MANUALLY ="Change Manually" ;
     public static final String ADD_NEW_GOAL_SPINNER_ITEM = "Add new goal";
     public static final String GOAL_CREATED = "GOAL_CREATED";
+    public static final String GOAL_UPDATED = "GOAL_UPDATED";
     public static final String TIMEBOX_CREATED = "TIMEBOX_CREATED";
     public static final int RESULTCODE_OF_ACT_STEP_LIST = 1;
     public static final int RESULTCODE_OF_ACT_ADD_GOAL = 2;
@@ -90,6 +93,7 @@ public class Constants {
     public static final int RESULTCODE_ACT_SETTINGS_CHANGE_WALLPAPER = 21;
     public static final int REQUEST_CODE_ACT_ACT_ADD_NEW_STEP = 1;
     public static final int REQUEST_CODE_ACT_ACT_ADD_NEW_GOAL = 2;
+    public static final int REQUEST_CODE_ACT_ACT_GOAL_DETAILS = 3;
     public static final String ID_UNPLANNED_TIMEBOX ="Unplanned TimeBoxId" ;
     public static final String ID_STRETCH_GOAL ="Stretch GoalId" ;
     public static final String MSG_RESET_YODA = "Resetting App will erase all the data! Are you sure, you want to delete all alarms and start over again?";

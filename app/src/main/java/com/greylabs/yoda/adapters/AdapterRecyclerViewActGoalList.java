@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.interfaces.OnClickOfRecyclerViewActGoalList;
 import com.greylabs.yoda.models.Goal;
+import com.greylabs.yoda.utils.CalendarUtils;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.views.CircleView;
 
@@ -44,7 +45,7 @@ public class AdapterRecyclerViewActGoalList extends RecyclerView.Adapter<Adapter
     public void onBindViewHolder(ViewHolder holder, int position) {
 //            switch (holder.Holderid) {
         holder.tvGoalName.setText(goalArrayList.get(position).getNickName());
-        holder.tvEndDateGoal.setText(goalArrayList.get(position).getDueDate().toString());
+        holder.tvEndDateGoal.setText(CalendarUtils.getFormatedDate(goalArrayList.get(position).getDueDate()));
         holder.btnBullet.setFillColor(Integer.parseInt(goalArrayList.get(position).getColorCode()));
         holder.btnBullet.setTitleText(String.valueOf(goalArrayList.get(position).getRemainingStepCount()));
         holder.progressBar.setProgress((int)goalArrayList.get(position).getGoalProgress());
@@ -53,13 +54,13 @@ public class AdapterRecyclerViewActGoalList extends RecyclerView.Adapter<Adapter
             holder.btnHandle.setVisibility(View.VISIBLE);
             holder.btnDeleteGoal.setVisibility(View.VISIBLE);
             holder.btnEditGoal.setVisibility(View.VISIBLE);
-            holder.progressBar.setVisibility(View.GONE);
+//            holder.progressBar.setVisibility(View.GONE);
         }else {
             holder.btnBullet.setVisibility(View.VISIBLE);
             holder.btnDeleteGoal.setVisibility(View.GONE);
             holder.btnEditGoal.setVisibility(View.GONE);
             holder.btnHandle.setVisibility(View.GONE);
-            holder.progressBar.setVisibility(View.VISIBLE);
+//            holder.progressBar.setVisibility(View.VISIBLE);
         }
         if(goalArrayList.get(position).getNickName().equals(Constants.NICKNAME_STRETCH_GOAL)){
             holder.btnDeleteGoal.setVisibility(View.GONE);
