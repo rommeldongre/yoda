@@ -180,10 +180,18 @@ public class ActGoalList  extends ActionBarActivity implements OnClickOfRecycler
             switch (operation){
                 case Constants.OPERATION_EDIT :
                     if(!goalArrayList.get(Position).getNickName().equals(Constants.NICKNAME_STRETCH_GOAL)){
-                        Intent intent = new Intent(ActGoalList.this, ActGoalDetails.class);
-                        intent.putExtra(Constants.GOAL_OBJECT, goalArrayList.get(Position));
+//                        Intent intent = new Intent(ActGoalList.this, ActGoalDetails.class);
+//                        intent.putExtra(Constants.GOAL_OBJECT, goalArrayList.get(Position));
+//                        intent.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, true);
+//                        startActivity(intent);
+                        Goal currentGoal = goalArrayList.get(Position);
+                        TimeBox currentTimeBox = new TimeBox(this).get(goalArrayList.get(Position).getTimeBoxId());
+                        Intent intent = new Intent(this, ActAddNewGoal.class);
+                        intent.putExtra(Constants.GOAL_OBJECT, currentGoal);
+                        intent.putExtra(Constants.CALLER, Constants.ACT_GOAL_DETAILS);
                         intent.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, true);
-                        startActivity(intent);
+                        intent.putExtra(Constants.TIMEBOX_NICK_NAME, currentTimeBox.getNickName());
+                        this.startActivity(intent);
                     }else {
                         AlertDialog.Builder alertLogout = new AlertDialog.Builder(this);
                         alertLogout.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -199,13 +207,13 @@ public class ActGoalList  extends ActionBarActivity implements OnClickOfRecycler
                 case Constants.OPERATION_DELETE :
                     if(!goalArrayList.get(Position).getNickName().equals(Constants.NICKNAME_STRETCH_GOAL)){
                         AlertDialog.Builder alertLogout = new AlertDialog.Builder(this);
-                        alertLogout.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        alertLogout.setPositiveButton("Move", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 performActionDeleteGoalYes(Position);
                             }
                         });
-                        alertLogout.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        alertLogout.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 performActionDeleteGoalNo(Position);
