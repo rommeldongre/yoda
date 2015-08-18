@@ -12,6 +12,8 @@ import android.widget.TextView;
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
+import com.greylabs.yoda.models.TimeBox;
+import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.CalendarUtils;
 
 import java.util.List;
@@ -45,7 +47,7 @@ public class AdapterExpandableList extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getChildView(int groupPosition, final int childPosition,
+    public View getChildView(final int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
        // final String childText = ((PendingStep) getChild(groupPosition, childPosition)).getNickName();
@@ -65,11 +67,11 @@ public class AdapterExpandableList extends BaseExpandableListAdapter {
                 .findViewById(R.id.cbListItemActFilters);
 
         txtListChild.setText(pendingStep.getNickName());
-        tvETAOfStep.setText(CalendarUtils.getFormatedDate(pendingStep.getStepDate()));
+        tvETAOfStep.setText(CalendarUtils.getFormattedDateWithSlot(pendingStep.getStepDate()));
 
         if(pendingStep.getPendingStepStatus().equals(PendingStep.PendingStepStatus.COMPLETED)){
             cbCompleted.setChecked(true);
-            cbCompleted.setEnabled(false);
+//            cbCompleted.setEnabled(false);
         }
 
         cbCompleted.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -79,7 +81,14 @@ public class AdapterExpandableList extends BaseExpandableListAdapter {
                     pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
                     pendingStep.cancelAlarm();
                     pendingStep.save();
-                    cbCompleted.setEnabled(false);
+//                    cbCompleted.setEnabled(false);
+                }else {
+                    pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+                    pendingStep.save();
+                    Goal currentGoal = goalList.get(groupPosition);
+                    TimeBox currentTimeBox = new TimeBox(context).get(currentGoal.getTimeBoxId());
+                    YodaCalendar yodaCalendar = new YodaCalendar(context, currentTimeBox);
+                    yodaCalendar.rescheduleSteps(currentGoal.getId());
                 }
             }
         });

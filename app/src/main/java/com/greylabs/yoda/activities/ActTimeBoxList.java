@@ -1,5 +1,6 @@
 package com.greylabs.yoda.activities;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,10 +15,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.greylabs.yoda.R;
-import com.greylabs.yoda.adapters.AdapterRecyclerViewActGoalList;
+import com.greylabs.yoda.adapters.AdapterGoalSpinner;
 import com.greylabs.yoda.adapters.AdapterRecyclerViewActTimeBoxList;
-import com.greylabs.yoda.adapters.DragSortRecycler;
-import com.greylabs.yoda.interfaces.OnClickOfRecyclerViewActGoalList;
 import com.greylabs.yoda.interfaces.OnClickOfRecyclerViewActTimeboxList;
 import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.scheduler.YodaCalendar;
@@ -136,8 +135,7 @@ public class ActTimeBoxList extends ActionBarActivity implements OnClickOfRecycl
                 Intent intent = new Intent(this, ActAddTimeBox.class);
                 intent.putExtra(Constants.CALLER, Constants.ACT_TIMEBOX_LIST);
                 intent.putExtra(Constants.OPERATION, Constants.OPERATION_ADD);
-                startActivity(intent);
-                finish();
+                startActivityForResult(intent, Constants.REQUEST_CODE_ACT_TIMEBOX_LIST);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -196,5 +194,16 @@ public class ActTimeBoxList extends ActionBarActivity implements OnClickOfRecycl
                     break;
             }
 //        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Constants.RESULTCODE_OF_ACT_ADD_TIMEBOX && data.getExtras().getBoolean(Constants.TIMEBOX_EDITED)) {// result from ActAddNewTB
+            getTimeBoxArrayFromLocal();
+            mAdapter.notifyDataSetChanged();
+        }
+        else if (resultCode == Activity.RESULT_CANCELED) {
+        }
     }
 }

@@ -46,8 +46,11 @@ public class AdapterRecyclerViewActTimeBoxList extends RecyclerView.Adapter<Adap
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.tvTimeBoxName.setText(timeBoxArrayList.get(position).getNickName());
-        if(timeBoxArrayList.get(position).isActive())
+        if(timeBoxArrayList.get(position).isActive()){
             holder.tvTimeBoxName.setTypeface(null, Typeface.ITALIC);
+        }else{
+            holder.tvTimeBoxName.setTypeface(null, Typeface.BOLD);
+        }
         if(timeBoxArrayList.get(position).getNickName().equals(Constants.NICKNAME_UNPLANNED_TIMEBOX))
             holder.btnDeleteTimeBox.setVisibility(View.GONE);
         holder.circleView.setShowTitle(false);

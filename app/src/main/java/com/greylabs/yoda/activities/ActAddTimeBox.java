@@ -288,10 +288,18 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
                         }
                     }
                     if(isSaved) {
-                        if(caller.equals(Constants.ACT_ADD_NEW_GOAL)){
-                            Intent secIntent = new Intent();
-                            secIntent.putExtra(Constants.TIMEBOX_CREATED, true);
-                            setResult(Constants.RESULTCODE_OF_ACT_ADD_TIMEBOX, secIntent);
+                        switch (caller){
+                            case Constants.ACT_ADD_NEW_GOAL :
+                                Intent secIntent = new Intent();
+                                secIntent.putExtra(Constants.TIMEBOX_CREATED, true);
+                                setResult(Constants.RESULTCODE_OF_ACT_ADD_TIMEBOX, secIntent);
+                                break;
+
+                            case Constants.ACT_TIMEBOX_LIST :
+                                Intent intent = new Intent();
+                                intent.putExtra(Constants.TIMEBOX_EDITED, true);
+                                setResult(Constants.RESULTCODE_OF_ACT_ADD_TIMEBOX, intent);
+                                break;
                         }
                         Logger.showMsg(this, "TimeBox saved");
                         this.finish();

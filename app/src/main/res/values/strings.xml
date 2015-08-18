@@ -26,7 +26,6 @@
     <string name="msgEnterGoalNickNameActAddNewGoal">Please Enter Goal Nick Name</string>
     <string name="titleActAddNewStep">New Step</string>
     <string name="actionSaveActAddNewStep">Save</string>
-    <string name="msgStepSavedActAddNewStep">Step Saved Successfully</string>
     <string name="msgEnterStepNameActAddNewStep">Please Enter Step Name</string>
 
 
@@ -114,7 +113,7 @@
     <string name="tvEmptyViewActTimeBoxList">No TimeBoxes to Show</string>
     <string name="actionAdd">Add</string>
     <string name="titleActTimeBoxList">My TimeBoxes</string>
-    <string name="titleActAddNewTimeBoxEdit">Edit TimebBox</string>
+    <string name="titleActAddNewTimeBoxEdit">Edit TimeBox</string>
     <string name="btnSetWallpaperActSettingsChangeWallpaper">Set Wallpaper</string>
     <string name="msgActCreateTimeBoxSelectWhenTime">Select at least one When Time</string>
     <string name="msgActCreateTimeBoxSelectOnTime">Select On Time</string>

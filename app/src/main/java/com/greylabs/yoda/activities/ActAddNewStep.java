@@ -2,6 +2,7 @@ package com.greylabs.yoda.activities;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -32,6 +33,7 @@ import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.scheduler.YodaCalendar;
+import com.greylabs.yoda.utils.CalendarUtils;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.Prefs;
@@ -338,8 +340,19 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
                 if (!stepPrioritySpinner.getSelectedItem().toString().equals(Constants.TEXT_PRIORITY_SPINNER_BOTTOM_MOST)) {
                     yodaCalendar.rescheduleSteps(goalList.get(goalSpinner.getSelectedItemPosition()).getId());
                 }
-                Logger.showMsg(this, getResources().getString(R.string.msgStepSavedActAddNewStep));
-                this.finish();
+                currentStep = currentStep.get(currentStep.getId());
+                AlertDialog.Builder alertStepAdded = new AlertDialog.Builder(this);
+                alertStepAdded.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        ActAddNewStep.this.finish();
+                    }
+                });
+                alertStepAdded.setMessage("Step " + currentStep.getNickName() + " added towards Goal " +
+                        currentGoal.getNickName() + " with Done date of " +
+                        CalendarUtils.getOnlyFormattedDate(currentStep.getStepDate()));
+                alertStepAdded.setCancelable(false);
+                alertStepAdded.show();
             }
         } else {
         Logger.showMsg(this, getResources().getString(R.string.msgEnterStepNameActAddNewStep));
@@ -381,7 +394,7 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
                     Intent intent = new Intent(this, ActAddNewGoal.class);
                     intent.putExtra(Constants.CALLER, Constants.ACT_ADD_NEW_STEP);
                     intent.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, false);
-                    this.startActivityForResult(intent, Constants.REQUEST_CODE_ACT_ACT_ADD_NEW_STEP);
+                    this.startActivityForResult(intent, Constants.REQUEST_CODE_ACT_ADD_NEW_STEP);
                 } else {
                     goalChosen = position;
                     getStepArrayFromLocal();

@@ -36,7 +36,7 @@ public class CalendarUtils {
     public static String getRFCTimestampToString(DateTime date){
        return date.toStringRfc3339();
     }
-    public static String getFormatedDate(Date d){
+    public static String getFormattedDateWithSlot(Date d){
 
         SimpleDateFormat sdf=new SimpleDateFormat("EEE MMM dd");
         String strDate=sdf.format(d);
@@ -52,6 +52,13 @@ public class CalendarUtils {
         }
         return strDate;
     }
+
+    public static String getOnlyFormattedDate(Date d){
+        SimpleDateFormat sdf=new SimpleDateFormat("MMM dd");
+        String strDate=sdf.format(d);
+        return strDate;
+    }
+
     public static String printYodaCalendar(Context context){
         Database database=Database.getInstance(context);
         String cols=" s."+ MetaData.TableSlot.id+" as slotId ,"+ MetaData.TableSlot.when+","+ MetaData.TableSlot.time+","+ MetaData.TableSlot.scheduleDate+","+ MetaData.TableSlot.goalId+"," +

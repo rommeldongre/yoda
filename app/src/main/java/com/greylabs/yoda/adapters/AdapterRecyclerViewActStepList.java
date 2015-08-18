@@ -16,7 +16,6 @@ import com.greylabs.yoda.interfaces.onClickOfRecyclerViewActStepList;
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.utils.CalendarUtils;
 import com.greylabs.yoda.utils.Constants;
-import com.greylabs.yoda.utils.Logger;
 
 import java.util.ArrayList;
 
@@ -56,10 +55,10 @@ public class AdapterRecyclerViewActStepList extends RecyclerView.Adapter<Adapter
         }
 
         if(stepsArrayList.get(position).getStepDate()!=null)
-            holder.tvETAOfStep.setText(CalendarUtils.getFormatedDate(stepsArrayList.get(position).getStepDate()));
+            holder.tvETAOfStep.setText(CalendarUtils.getFormattedDateWithSlot(stepsArrayList.get(position).getStepDate()));
         if(stepsArrayList.get(position).getPendingStepStatus().equals(PendingStep.PendingStepStatus.COMPLETED)){
             holder.checkBox.setChecked(true);
-            holder.checkBox.setEnabled(false);
+//            holder.checkBox.setEnabled(false);
         }
         if(isEditOperation){
             holder.btnHandle.setVisibility(View.VISIBLE);
@@ -154,7 +153,9 @@ public class AdapterRecyclerViewActStepList extends RecyclerView.Adapter<Adapter
             }
             if(isChecked){
                 myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_MARK_STEP_DONE);
-                buttonView.setEnabled(false);
+//                buttonView.setEnabled(false);
+            }else {
+                myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_MARK_STEP_UNDONE);
             }
         }
     }

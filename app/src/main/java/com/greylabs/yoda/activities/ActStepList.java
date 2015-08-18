@@ -325,16 +325,33 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
                 break;
 
             case Constants.OPERATION_MARK_STEP_DONE :
-                stepArrayList.get(Position).setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
-                stepArrayList.get(Position).save();
-                for(int i=0;i<pendingStepsArrayList.size();i++){
-                    if(stepArrayList.get(Position).getId()==pendingStepsArrayList.get(i).getId())
-                        pendingStepsArrayList.remove(i);
-                }
                 if(isShowingPendingSteps){
+                    pendingStepsArrayList.get(Position).setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
+                    pendingStepsArrayList.get(Position).save();
+                    pendingStepsArrayList.get(Position).cancelAlarm();
+                    pendingStepsArrayList.remove(Position);
                     mAdapter.notifyDataSetChanged();
                     checkForEmptyViewVisibility(pendingStepsArrayList, getString(R.string.tvEmptyViewPendingStepsActStepList));
+                }else {
+                    stepArrayList.get(Position).setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
+                    stepArrayList.get(Position).save();
+                    stepArrayList.get(Position).cancelAlarm();
+                    for(int i=0;i<pendingStepsArrayList.size();i++){
+                        if(stepArrayList.get(Position).getId()==pendingStepsArrayList.get(i).getId())
+                            pendingStepsArrayList.remove(i);
+                    }
                 }
+                break;
+
+            case Constants.OPERATION_MARK_STEP_UNDONE :
+                stepArrayList.get(Position).setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+                stepArrayList.get(Position).save();
+                TimeBox currentTimeBox = new TimeBox(this).get(currentGoal.getTimeBoxId());
+                YodaCalendar yodaCalendar = new YodaCalendar(this, currentTimeBox);
+                yodaCalendar.rescheduleSteps(currentGoal.getId());
+//                pendingStepsArrayList.add(stepArrayList.get(Position));
+                getStepArrayFromLocal();
+                mAdapter.notifyDataSetChanged();
                 break;
         }
     }

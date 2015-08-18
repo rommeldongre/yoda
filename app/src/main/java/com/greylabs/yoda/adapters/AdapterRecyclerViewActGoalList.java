@@ -45,7 +45,7 @@ public class AdapterRecyclerViewActGoalList extends RecyclerView.Adapter<Adapter
     public void onBindViewHolder(ViewHolder holder, int position) {
 //            switch (holder.Holderid) {
         holder.tvGoalName.setText(goalArrayList.get(position).getNickName());
-        holder.tvEndDateGoal.setText(CalendarUtils.getFormatedDate(goalArrayList.get(position).getDueDate()));
+        holder.tvEndDateGoal.setText(CalendarUtils.getFormattedDateWithSlot(goalArrayList.get(position).getDueDate()));
         holder.btnBullet.setFillColor(Integer.parseInt(goalArrayList.get(position).getColorCode()));
         holder.btnBullet.setTitleText(String.valueOf(goalArrayList.get(position).getRemainingStepCount()));
         holder.progressBar.setProgress((int)goalArrayList.get(position).getGoalProgress());
