@@ -497,6 +497,8 @@ public class YodaCalendar {
                                     break;
                                 }
                             }
+                            pendingStep.setStepDate(substep.getStepDate());
+                            pendingStep.save();
                         }
                         goal.save();
                         break;

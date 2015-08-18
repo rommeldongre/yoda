@@ -15,7 +15,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.ViewFlipper;
 
-import com.github.lzyzsd.randomcolor.RandomColor;
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.enums.Daily;
 import com.greylabs.yoda.enums.Month;
@@ -179,11 +178,22 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
     }
 
     private void initializeColorPicker() {
-        RandomColor randomColor = new RandomColor();
-        int[] color = randomColor.randomColor(9);
+//        RandomColor randomColor = new RandomColor();
+//        int[] color = randomColor.randomColor(9);
+
+        int[] colors = {getResources().getColor(R.color.colorcode_red),
+                getResources().getColor(R.color.colorcode_blue),
+                getResources().getColor(R.color.colorcode_green),
+                getResources().getColor(R.color.colorcode_yellow),
+                getResources().getColor(R.color.colorcode_orange),
+                getResources().getColor(R.color.colorcode_brown),
+                getResources().getColor(R.color.colorcode_teal),
+                getResources().getColor(R.color.colorcode_purple),
+                getResources().getColor(R.color.colorcode_black)
+        };
         // set color palette
 //        colorPicker.setColors(new int[] {Color.RED,Color.GREEN,Color.BLUE,Color.YELLOW});
-        colorPicker.setColors(color);
+        colorPicker.setColors(colors);
         // set selected color [optional]
         colorPicker.setSelectedColorPosition(5);//SelectedColor(Color.RED);
         // set on change listener
@@ -297,7 +307,6 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
 
                             case Constants.ACT_TIMEBOX_LIST :
                                 Intent intent = new Intent();
-                                intent.putExtra(Constants.TIMEBOX_EDITED, true);
                                 setResult(Constants.RESULTCODE_OF_ACT_ADD_TIMEBOX, intent);
                                 break;
                         }
@@ -516,6 +525,45 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
     }
     private void initEditUI(){
         if(currentTimeBox!=null){
+            //set old color
+            int red = getResources().getColor(R.color.colorcode_red);
+            int blue = getResources().getColor(R.color.colorcode_blue);
+            int green = getResources().getColor(R.color.colorcode_green);
+            int yellow = getResources().getColor(R.color.colorcode_yellow);
+            int orange = getResources().getColor(R.color.colorcode_orange);
+            int brown = getResources().getColor(R.color.colorcode_brown);
+            int teal = getResources().getColor(R.color.colorcode_teal);
+            int purple = getResources().getColor(R.color.colorcode_purple);
+            int black = getResources().getColor(R.color.colorcode_black);
+            Integer i = Integer.valueOf(currentTimeBox.getColorCode());
+            if (i.equals(red)) {
+                colorPicker.setSelectedColorPosition(0);
+
+            } else if (i.equals(blue)) {
+                colorPicker.setSelectedColorPosition(1);
+
+            } else if (i.equals(green)) {
+                colorPicker.setSelectedColorPosition(2);
+
+            } else if (i.equals(yellow)) {
+                colorPicker.setSelectedColorPosition(3);
+
+            } else if (i.equals(orange)) {
+                colorPicker.setSelectedColorPosition(4);
+
+            } else if (i.equals(brown)) {
+                colorPicker.setSelectedColorPosition(5);
+
+            } else if (i.equals(teal)) {
+                colorPicker.setSelectedColorPosition(6);
+
+            } else if (i.equals(purple)) {
+                colorPicker.setSelectedColorPosition(7);
+
+            } else if (i.equals(black)) {
+                colorPicker.setSelectedColorPosition(8);
+            }
+
             //set when
             for(TimeBoxWhen when:currentTimeBox.getTimeBoxWhen().getWhenValues()) {
                 switch (when){

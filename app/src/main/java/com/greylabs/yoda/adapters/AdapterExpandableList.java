@@ -67,7 +67,7 @@ public class AdapterExpandableList extends BaseExpandableListAdapter {
                 .findViewById(R.id.cbListItemActFilters);
 
         txtListChild.setText(pendingStep.getNickName());
-        tvETAOfStep.setText(CalendarUtils.getFormattedDateWithSlot(pendingStep.getStepDate()));
+        tvETAOfStep.setText(CalendarUtils.getFormattedDateWithoutSlot(pendingStep.getStepDate()));
 
         if(pendingStep.getPendingStepStatus().equals(PendingStep.PendingStepStatus.COMPLETED)){
             cbCompleted.setChecked(true);

@@ -37,7 +37,6 @@ public class CalendarUtils {
        return date.toStringRfc3339();
     }
     public static String getFormattedDateWithSlot(Date d){
-
         SimpleDateFormat sdf=new SimpleDateFormat("EEE MMM dd");
         String strDate=sdf.format(d);
         Calendar cal=Calendar.getInstance();
@@ -50,6 +49,12 @@ public class CalendarUtils {
             case 18: strDate+=" "+TimeBoxWhen.NIGHT.getDisplayName();break;
             case 21: strDate+=" "+TimeBoxWhen.LATE_NIGHT.getDisplayName();break;
         }
+        return strDate;
+    }
+
+    public static String getFormattedDateWithoutSlot(Date d){
+        SimpleDateFormat sdf=new SimpleDateFormat("EEE MMM dd");
+        String strDate=sdf.format(d);
         return strDate;
     }
 

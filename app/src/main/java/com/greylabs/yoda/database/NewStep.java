@@ -3,6 +3,7 @@ package com.greylabs.yoda.database;
 import android.content.Context;
 
 import com.google.api.client.util.DateTime;
+import com.greylabs.yoda.R;
 import com.greylabs.yoda.enums.AccountType;
 import com.greylabs.yoda.enums.Daily;
 import com.greylabs.yoda.enums.SubValue;
@@ -64,7 +65,7 @@ public final class NewStep {
         timeBoxWhen.setWhenValues(timeBoxWhens);
         timeBox.setTimeBoxWhen(timeBoxWhen);
         timeBox.setTillType(TimeBoxTill.FOREVER);
-        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_UNPLANNED_TIMEBOX));
+        timeBox.setColorCode(String.valueOf(context.getResources().getColor(R.color.black)));
         timeBox.save();
         Prefs pref=Prefs.getInstance(context);
         pref.setUnplannedTimeBoxId(timeBox.getId());

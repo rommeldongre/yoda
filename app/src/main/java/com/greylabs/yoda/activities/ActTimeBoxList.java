@@ -151,7 +151,7 @@ public class ActTimeBoxList extends ActionBarActivity implements OnClickOfRecycl
                         intent.putExtra(Constants.CALLER, Constants.ACT_TIMEBOX_LIST);
                         intent.putExtra(Constants.TIMEBOX_OBJECT, timeBoxArrayList.get(Position));
                         intent.putExtra(Constants.OPERATION, Constants.OPERATION_EDIT);
-                        startActivity(intent);
+                        startActivityForResult(intent, Constants.REQUEST_CODE_ACT_TIMEBOX_LIST);
                     }else {
                         AlertDialog.Builder alertLogout = new AlertDialog.Builder(this);
                         alertLogout.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -199,7 +199,7 @@ public class ActTimeBoxList extends ActionBarActivity implements OnClickOfRecycl
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Constants.RESULTCODE_OF_ACT_ADD_TIMEBOX && data.getExtras().getBoolean(Constants.TIMEBOX_EDITED)) {// result from ActAddNewTB
+        if (resultCode == Constants.RESULTCODE_OF_ACT_ADD_TIMEBOX) {// result from ActAddNewTB
             getTimeBoxArrayFromLocal();
             mAdapter.notifyDataSetChanged();
         }

@@ -3,6 +3,7 @@ package com.greylabs.yoda.database;
 import android.content.Context;
 
 import com.google.api.client.util.DateTime;
+import com.greylabs.yoda.R;
 import com.greylabs.yoda.enums.AccountType;
 import com.greylabs.yoda.enums.Daily;
 import com.greylabs.yoda.enums.SubValue;
@@ -63,7 +64,7 @@ public final class QuickStart {
         timeBox.setTimeBoxOn(timeBoxOn);
         //set till
         timeBox.setTillType(TimeBoxTill.FOREVER);
-        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_1));
+        timeBox.setColorCode(String.valueOf(context.getResources().getColor(R.color.colorcode_red)));
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
         Logger.log(TAG, "1 Added");
@@ -89,7 +90,7 @@ public final class QuickStart {
         timeBox.setTimeBoxWhen(timeBoxWhen);
         //till
         timeBox.setTillType(TimeBoxTill.YEAR);
-        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_2));
+        timeBox.setColorCode(String.valueOf(context.getResources().getColor(R.color.colorcode_blue)));
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
         Logger.log(TAG, "1 Added");
@@ -111,7 +112,7 @@ public final class QuickStart {
         timeBox.setTimeBoxWhen(timeBoxWhen);
         //till
         timeBox.setTillType(TimeBoxTill.QUARTER);
-        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_3));
+        timeBox.setColorCode(String.valueOf(context.getResources().getColor(R.color.colorcode_green)));
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
         Logger.log(TAG, "1 Added");
@@ -134,7 +135,7 @@ public final class QuickStart {
         timeBox.setTimeBoxWhen(timeBoxWhen);
         //till
         timeBox.setTillType(TimeBoxTill.QUARTER);
-        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_4));
+        timeBox.setColorCode(String.valueOf(context.getResources().getColor(R.color.colorcode_yellow)));
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
         Logger.log(TAG, "1 Added");
@@ -160,7 +161,7 @@ public final class QuickStart {
         timeBox.setTimeBoxWhen(timeBoxWhen);
         //till
         timeBox.setTillType(TimeBoxTill.MONTH);
-        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_5));
+        timeBox.setColorCode(String.valueOf(context.getResources().getColor(R.color.colorcode_orange)));
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
         Logger.log(TAG, "1 Added");
@@ -228,7 +229,7 @@ public final class QuickStart {
         timeBoxWhen.setWhenValues(timeBoxWhens);
         timeBox.setTimeBoxWhen(timeBoxWhen);
         timeBox.setTillType(TimeBoxTill.FOREVER);
-        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_8));
+        timeBox.setColorCode(String.valueOf(context.getResources().getColor(R.color.colorcode_black)));
         timeBox.save();
         Prefs pref=Prefs.getInstance(context);
         pref.setUnplannedTimeBoxId(timeBox.getId());
