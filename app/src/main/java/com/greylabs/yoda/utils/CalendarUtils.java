@@ -31,7 +31,7 @@ public class CalendarUtils {
 
     public static DateTime getStringToRFCTimestamp(String rfcTimestamp){
 
-        return  DateTime.parseRfc3339(rfcTimestamp);
+        return  DateTime.parseRfc3339(rfcTimestamp.substring(0,23)+"Z");
     }
     public static String getRFCTimestampToString(DateTime date){
        return date.toStringRfc3339();

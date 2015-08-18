@@ -286,7 +286,8 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
             }
 //            currentStep.setSkipCount();
             currentStep.setGoalId(currentGoal.getId());
-            currentStep.setGoalStringId(currentGoal.getStringId());
+            if(currentStep.getStringId()==null || currentStep.getStringId().equals(""))
+                currentStep.setGoalStringId(currentGoal.getStringId());
 
 
             if (stepPrioritySpinner.getSelectedItem().equals(Constants.PENDING_STEP_PRIORITY_TOP_MOST)) {

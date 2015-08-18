@@ -497,7 +497,7 @@ public class PendingStep implements Serializable {
         values.put(TablePendingStep.status, this.pendingStepStatus.ordinal());
         values.put(TablePendingStep.goalId, this.goalId);
         values.put(TablePendingStep.goalStringId,this.goalStringId);
-        values.put(TablePendingStep.updated,CalendarUtils.getRFCTimestampToString(this.getUpdated()));
+        values.put(TablePendingStep.updated,CalendarUtils.getRFCTimestampToString(new DateTime(new Date())));
         values.put(TablePendingStep.deleted,(this.deleted)?1:0);
         if(this.getStepDate()!=null) {
             Calendar cal = Calendar.getInstance();
@@ -705,7 +705,7 @@ public class PendingStep implements Serializable {
             pendingStepNew.setTime(time);
             pendingStepNew.setStepDate(new Date());
             pendingStepNew.setSubStepOf(this.getId());
-            pendingStepNew.setUpdated(this.getUpdated());
+            pendingStepNew.setUpdated(new DateTime(new Date()));
             pendingStepNew.setDeleted(this.isDeleted());
             pendingStepNew.setGoalStringId(this.getGoalStringId());
             pendingStepNew.setStringId(this.getStringId());

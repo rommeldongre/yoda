@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.gesture.GestureOverlayView;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.AdapterView;
@@ -32,6 +33,7 @@ import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.Prefs;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -133,7 +135,9 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
         switch (pendingStep.getPendingStepStatus()){
             case DOING:
             case MISSED:
-            case TODO:task.setStatus("needsAction");break;
+            case TODO:
+                task.setStatus("needsAction");
+                break;
             case COMPLETED:task.setStatus("completed");
         }
         task.setTitle(pendingStep.getNickName());
@@ -154,12 +158,15 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
             goal.setId(prefs.getStretchGoalId());
             goal.setTimeBoxId(prefs.getUnplannedTimeBoxId());
             goal.setUpdated(taskList.getUpdated());
+            goal.setStringId("@default");
+            if(!taskList.getId().equals("@default"))
+                goal.setStringId(taskList.getId());
         }else{
             //update tasklist,need to update goal
             goal = goal.get(id);
             goal.setNickName(taskList.getTitle());
         }
-        goal.setStringId(taskList.getId());
+
         return goal;
     }
 
@@ -170,34 +177,38 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
         Task task=(Task)taskObject;
         PendingStep pendingStep=new PendingStep(context);
         long id=pendingStep.getIdIfExists(task.getId());
-        if(id==0){
+        if(id==0 ){
             //new step ,need to insert
-            pendingStep.setId(0);
-            pendingStep.setTime(Constants.MAX_SLOT_DURATION);
-            pendingStep.setStringId(task.getId());
-            pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
-            pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
-            pendingStep.setUpdated(task.getUpdated());
+            if( task.getStatus().equals("needsAction")|| (task.getDeleted()==Boolean.FALSE)) {
+                pendingStep.setId(0);
+                pendingStep.setTime(Constants.MAX_SLOT_DURATION);
+                pendingStep.setStringId(task.getId());
+                pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
+                pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+                pendingStep.setUpdated(task.getUpdated());
+            }
         }else{
             pendingStep = pendingStep.get(id);
-            if(task.getStatus().equals("needsAction"))
+            if (task.getStatus().equals("needsAction"))
                 pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
             else {
                 pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
             }
-            pendingStep.save();
+
+
+            if (task.getDeleted() != null) {
+                pendingStep.setDeleted(task.getDeleted());
+            }
+            id=pendingStep.getIdIfExists(task.getParent());
+            if(id!=0) {
+                pendingStep.setSubStepOf(id);
+                pendingStep.setPendingStepType(PendingStep.PendingStepType.SUB_STEP);
+                //and its parents type set to Series Step
+                PendingStep ps=pendingStep.get(id);
+                ps.setPendingStepType(PendingStep.PendingStepType.SERIES_STEP);
+            }
+            //pendingStep.save();
         }
-        if(task.getDeleted()!=null) {
-            pendingStep.setDeleted(task.getDeleted());
-        }
-        id=pendingStep.getIdIfExists(task.getParent());
-       if(id!=0) {
-           pendingStep.setSubStepOf(id);
-           pendingStep.setPendingStepType(PendingStep.PendingStepType.SUB_STEP);
-           //and its parents type set to Series Step
-           PendingStep ps=pendingStep.get(id);
-           ps.setPendingStepType(PendingStep.PendingStepType.SERIES_STEP);
-       }
         //pendingStep.setUpdated(CalendarUtils.getStringToRFCTimestamp(task.getUpdated().toStringRfc3339()));
         pendingStep.setNickName(task.getTitle());
         return pendingStep;
@@ -221,25 +232,38 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                 Goal goal=convertToGoal(taskList);
                 if(taskList.getUpdated().getValue()>=goal.getUpdated().getValue()){
                     goal.setUpdated(taskList.getUpdated());
-                    goal.save();
+                    if(prefs.getStretchGoalId()!=goal.getId())
+                        goal.save();
                 }
                 yodaCalendar.setTimeBox(timeBox.get(goal.getTimeBoxId()));
-                Logger.log("TAGe", "Task List: " + taskList.toString() + "  Goal: " + goal.toString());
+                Logger.log("TAG", "Task List: " + taskList.toString() + "  Goal: " + goal.toString());
                 com.google.api.services.tasks.model.Tasks tasks=service.tasks().list(taskList.getId()).setShowDeleted(true).setShowCompleted(true).execute();
                 //com.google.api.services.tasks.model.Tasks tasks=service.tasks().list(taskList.getId()).execute();
                 if(tasks!=null) {
-                    for (Task task : tasks.getItems()) {
-                        PendingStep pendingStep = convertToPendingStep(task);
-                        if(pendingStep.isDeleted()){
-                            pendingStep.delete();
-                        }else{
-                            if(task.getUpdated().getValue()>=pendingStep.getUpdated().getValue()) {
-                                pendingStep.setGoalId(goal.getId());
-                                pendingStep.setGoalStringId(taskList.getId());
-                                pendingStep.save();//insert ot update
+                    List<Task> myTasks=tasks.getItems();
+                    if(myTasks!=null) {
+                        for (Task task : myTasks) {
+                            PendingStep pendingStep = convertToPendingStep(task);
+                            if (pendingStep.getId()!=0 && pendingStep.isDeleted()) {
+                                service.tasks().delete(goal.getStringId(), pendingStep.getStringId()).execute();
+                                pendingStep.delete();
+                            } else if (pendingStep.getId() != 0 && pendingStep.getPendingStepStatus() == PendingStep.PendingStepStatus.COMPLETED) {
+                                pendingStep.save();
+                                pendingStep.setTime(Constants.MAX_SLOT_DURATION);
+                                pendingStep.cancelAlarm();
+                                service.tasks().update(goal.getStringId(), pendingStep.getStringId(), task).execute();
+                            } else {
+                                //SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+                                if (task.getUpdated().getValue() >= pendingStep.getUpdated().getValue()) {
+                                    if(task.getDeleted()==Boolean.FALSE || !task.getStatus().equals("completed")) {
+                                        pendingStep.setGoalId(goal.getId());
+                                        pendingStep.setGoalStringId(goal.getStringId());
+                                        pendingStep.save();//insert or update
+                                    }
+                                }
                             }
+                            Logger.log("TAG", "Task : " + task.toString() + "  Pending Step: " + pendingStep.toString());
                         }
-                        Logger.log("TAG", "Task : " + task.toString() + "  Pending Step: " + pendingStep.toString());
                     }
                 }
                 yodaCalendar.rescheduleSteps(goal.getId());
@@ -280,7 +304,10 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                 PendingStep pendingStep = new PendingStep(context);
                 List<PendingStep> pendingSteps = pendingStep.getAll(PendingStep.PendingStepStatus.TODO, g.getId());
                 if(pendingSteps!=null) {
-                    //pendingSteps.addAll(pendingStep.getAll(PendingStep.PendingStepStatus.MISSED, g.getId()));
+                    List<PendingStep> completed=pendingStep.getAll(PendingStep.PendingStepStatus.COMPLETED,g.getId());
+                    if(completed!=null)
+                        pendingSteps.addAll(completed);
+
                     for (PendingStep ps : pendingSteps) {
                         Task task =(Task) buildPendingStep(ps);
                         switch (ps.getPendingStepType()) {
