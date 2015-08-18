@@ -694,7 +694,7 @@ public class PendingStep implements Serializable {
         for (int i = start; i <= numberOfSteps; i++) {
             pendingStepNew.setId(0);
             pendingStepNew.setGoalStringId("");
-            pendingStepNew.setNickName("Part " + i + " of " + this.getNickName());
+            pendingStepNew.setNickName(this.getNickName()+" Session "+i);
             pendingStepNew.setPriority(this.getPriority());
             pendingStepNew.setPendingStepType(PendingStepType.SUB_STEP);
             pendingStepNew.setStepCount(1);

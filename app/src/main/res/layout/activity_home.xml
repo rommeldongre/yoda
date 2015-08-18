@@ -159,22 +159,27 @@
                     android:layout_alignParentRight="true"/>
             </RelativeLayout>
 
-            <com.greylabs.yoda.views.MyArcProgress
-                android:id="@+id/arcTotalProgressActHome"
-                android:background="@drawable/shape_ring"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <LinearLayout
+                android:id="@+id/llActSplashScreen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_above="@id/BottomLayoutActHome"
                 android:layout_below="@id/scrollViewActHome"
-                android:layout_margin="10dp" />
+                android:layout_margin="10dp">
+
+                <com.greylabs.yoda.views.MyArcProgress
+                    android:id="@+id/arcTotalProgressActHome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <!--ring was used as its background previously, check if its still used -->
+            </LinearLayout>
 
             <RelativeLayout
                 android:id="@+id/layoutOverlappingActHome"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:visibility="gone"
-                android:background="@color/overlapping_background_act_home"
-                />
+                android:background="@color/overlapping_background_act_home" />
         </RelativeLayout>
     </RelativeLayout>
 </RelativeLayout>

@@ -33,7 +33,6 @@ dependencies {
     compile 'com.github.lzyzsd:circleprogress:1.1.0@aar'
     compile 'net.i2p.android.ext:floatingactionbutton:1.9.0'
     compile 'com.jpardogo.materialtabstrip:library:1.1.0'
-    compile 'com.github.lzyzsd.randomcolor:library:1.0.0'
     compile 'com.google.apis:google-api-services-tasks:v1-rev35-1.19.0' exclude module: 'httpclient'
     compile 'com.google.api-client:google-api-client-android:1.19.0' exclude module: 'httpclient'
     compile 'com.google.http-client:google-http-client-gson:1.19.0' exclude module: 'httpclient'
