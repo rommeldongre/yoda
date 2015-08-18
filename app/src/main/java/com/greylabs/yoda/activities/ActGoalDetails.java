@@ -1,5 +1,6 @@
 package com.greylabs.yoda.activities;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,15 +12,18 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.greylabs.yoda.R;
+import com.greylabs.yoda.adapters.AdapterGoalSpinner;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.utils.Constants;
+import com.greylabs.yoda.views.CircleView;
 
 public class ActGoalDetails extends ActionBarActivity {
 
     Toolbar toolbar;
     Goal currentGoal;
     TimeBox currentTimeBox;
+    CircleView btnBullet;
     TextView tvNickName, tvTime, tvObjective, tvKeyResult, tvReason, tvReward, tvBuddy;
 
     @Override
@@ -30,8 +34,8 @@ public class ActGoalDetails extends ActionBarActivity {
     }
 
     private void initialize() {
-
         currentGoal  = (Goal)getIntent().getSerializableExtra(Constants.GOAL_OBJECT);
+        currentGoal.initDatabase(this);
 
         toolbar = (Toolbar) findViewById(R.id.toolBarActGoalDetails);
         setSupportActionBar(toolbar);
@@ -39,6 +43,7 @@ public class ActGoalDetails extends ActionBarActivity {
         getSupportActionBar().setTitle(currentGoal.getNickName().toString());
 
         tvNickName = (TextView) findViewById(R.id.tvNickNameActGoalDetails);
+        btnBullet = (CircleView) findViewById(R.id.btnBulletActGoalDetails);
         tvTime = (TextView) findViewById(R.id.tvTimeActGoalDetails);
         tvObjective = (TextView) findViewById(R.id.tvObjectiveActGoalDetails);
         tvKeyResult = (TextView) findViewById(R.id.tvKeyResultActGoalDetails);
@@ -46,7 +51,13 @@ public class ActGoalDetails extends ActionBarActivity {
         tvReward = (TextView) findViewById(R.id.tvGoalRewardActGoalDetails);
         tvBuddy = (TextView) findViewById(R.id.tvGoalBuddyActGoalDetails);
 
+        populateUI();
+    }
+
+    private void populateUI() {
         tvNickName.setText(currentGoal.getNickName());
+        btnBullet.setFillColor(Integer.parseInt(currentGoal.getColorCode()));
+        btnBullet.setShowTitle(false);
         currentTimeBox = new TimeBox(this).get(currentGoal.getTimeBoxId());
         tvTime.setText(currentTimeBox.getNickName().toString());
         tvObjective.setText(currentGoal.getObjective());
@@ -75,7 +86,7 @@ public class ActGoalDetails extends ActionBarActivity {
                     intent.putExtra(Constants.CALLER, Constants.ACT_GOAL_DETAILS);
                     intent.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, true);
                     intent.putExtra(Constants.TIMEBOX_NICK_NAME, currentTimeBox.getNickName());
-                    this.startActivity(intent);
+                    this.startActivityForResult(intent, Constants.REQUEST_CODE_ACT_ACT_GOAL_DETAILS);
                 }else {
                     AlertDialog.Builder alertLogout = new AlertDialog.Builder(this);
                     alertLogout.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -89,5 +100,16 @@ public class ActGoalDetails extends ActionBarActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Constants.RESULTCODE_OF_ACT_ADD_GOAL && data.getExtras().getBoolean(Constants.GOAL_UPDATED)) {// result from ActAddNewGoal
+            currentGoal = currentGoal.get(currentGoal.getId());
+            populateUI();
+        }
+        else if (resultCode == Activity.RESULT_CANCELED) {
+        }
     }
 }

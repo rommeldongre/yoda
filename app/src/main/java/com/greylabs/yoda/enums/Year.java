@@ -4,18 +4,18 @@ public enum Year implements SubValue{
     /**********************************************************************************************/
     // Enum Constants
     /**********************************************************************************************/
-    JANUARY("January","Jan",0),
-    FEBRUARY("February","Feb",1),
-    MARCH("March","Mar",2),
-    APRIL("April","Apr",3),
+    JANUARY("Jan","Jan",0),
+    FEBRUARY("Feb","Feb",1),
+    MARCH("Mar","Mar",2),
+    APRIL("Apr","Apr",3),
     MAY("May","May",4),
-    JUNE("June","Jun",5),
-    JULY("July","Jul",6),
-    AUGUST("August","Aug",7),
-    SEPTEMBER("September","Sep",8),
-    OCTOBER("October","Oct",9),
-    NOVEMBER("November","Nov",10),
-    DECEMBER("December","Dec",11);
+    JUNE("Jun","Jun",5),
+    JULY("Jul","Jul",6),
+    AUGUST("Aug","Aug",7),
+    SEPTEMBER("Sep","Sep",8),
+    OCTOBER("Oct","Oct",9),
+    NOVEMBER("Nov","Nov",10),
+    DECEMBER("Dec","Dec",11);
 
 
 

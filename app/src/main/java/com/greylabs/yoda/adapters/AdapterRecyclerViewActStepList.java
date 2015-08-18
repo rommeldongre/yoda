@@ -47,7 +47,14 @@ public class AdapterRecyclerViewActStepList extends RecyclerView.Adapter<Adapter
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.tvStepName.setText(stepsArrayList.get(position).getNickName());
+        String noOfSteps="";
+        if(stepsArrayList.get(position).getPendingStepType().equals(PendingStep.PendingStepType.SERIES_STEP)){
+            noOfSteps = String.valueOf(stepsArrayList.get(position).getStepCount());
+            holder.tvStepName.setText(stepsArrayList.get(position).getNickName()+" - "+noOfSteps+" session");
+        }else {
+            holder.tvStepName.setText(stepsArrayList.get(position).getNickName());
+        }
+
         if(stepsArrayList.get(position).getStepDate()!=null)
             holder.tvETAOfStep.setText(CalendarUtils.getFormatedDate(stepsArrayList.get(position).getStepDate()));
         if(stepsArrayList.get(position).getPendingStepStatus().equals(PendingStep.PendingStepStatus.COMPLETED)){

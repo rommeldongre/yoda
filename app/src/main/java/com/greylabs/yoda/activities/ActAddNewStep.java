@@ -141,7 +141,8 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
         PendingStep pendingStep = new PendingStep(this);
         currentGoal = goalList.get(goalSpinner.getSelectedItemPosition());
         if (currentGoal != null && pendingStep.getAll(currentGoal.getId()) != null)
-            stepArrayList.addAll(pendingStep.getAll(PendingStep.PendingStepStatus.TODO,currentGoal.getId()));
+            if(pendingStep.getAll(PendingStep.PendingStepStatus.TODO,currentGoal.getId())!=null)
+                stepArrayList.addAll(pendingStep.getAll(PendingStep.PendingStepStatus.TODO,currentGoal.getId()));
     }
 
     private void getGoalListAndPopulate() {

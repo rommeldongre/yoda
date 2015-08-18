@@ -20,22 +20,22 @@ import java.util.Map;
 public class AdapterExpandableList extends BaseExpandableListAdapter {
 
     private Context context;
-    private List<Goal> _listDataHeader; // header titles         string
+    private List<Goal> goalList; // header titles         string
     // child data in format of header title, child title         string string
     private Map<Long, List<PendingStep>> _listDataChild;
 
     public AdapterExpandableList(Context context, List<Goal> listDataHeader,
                                  Map<Long, List<PendingStep>> listChildData) {
         this.context = context;
-        this._listDataHeader = listDataHeader;
+        this.goalList = listDataHeader;
         this._listDataChild = listChildData;
     }
 
     @Override
     public Object getChild(int groupPosition, int childPosititon) {
-//        return this._listDataChild.get(this._listDataHeader.get(groupPosition))
+//        return this._listDataChild.get(this.goalList.get(groupPosition))
 //                .get(childPosititon);
-        Goal goal=this._listDataHeader.get(groupPosition);
+        Goal goal=this.goalList.get(groupPosition);
         return this._listDataChild.get(new Long(goal.getId()));
     }
 
@@ -88,19 +88,19 @@ public class AdapterExpandableList extends BaseExpandableListAdapter {
 
     @Override
     public int getChildrenCount(int groupPosition) {
-        Goal goal=this._listDataHeader.get(groupPosition);
+        Goal goal=this.goalList.get(groupPosition);
         return this._listDataChild.get(new Long(goal.getId()))
                 .size();
     }
 
     @Override
     public Object getGroup(int groupPosition) {
-        return this._listDataHeader.get(groupPosition);
+        return this.goalList.get(groupPosition);
     }
 
     @Override
     public int getGroupCount() {
-        return this._listDataHeader.size();
+        return this.goalList.size();
     }
 
     @Override
