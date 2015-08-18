@@ -25,6 +25,7 @@ import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 
+import com.google.api.client.util.DateTime;
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.adapters.AdapterGoalSpinner;
 import com.greylabs.yoda.models.Goal;
@@ -36,6 +37,7 @@ import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.Prefs;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ActAddNewStep extends ActionBarActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener, SeekBar.OnSeekBarChangeListener {
@@ -281,6 +283,7 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
             }
 //            currentStep.setSkipCount();
             currentStep.setGoalId(currentGoal.getId());
+            currentStep.setGoalStringId(currentGoal.getStringId());
 
 
             if (stepPrioritySpinner.getSelectedItem().equals(Constants.PENDING_STEP_PRIORITY_TOP_MOST)) {
@@ -297,7 +300,9 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
             for (int i = 0; i < stepArrayList.size(); i++) {
                 stepArrayList.get(i).initDatabase(this);
                 stepArrayList.get(i).setPriority(i + 1);
+                stepArrayList.get(i).setUpdated(new DateTime(new Date()));
                 stepArrayList.get(i).save();
+
                 stepArrayList.get(i).updateSubSteps();
             }
             PendingStep ps =currentStep;

@@ -2,6 +2,8 @@ package com.greylabs.yoda.database;
 
 import android.content.Context;
 
+import com.google.api.client.util.DateTime;
+import com.greylabs.yoda.enums.AccountType;
 import com.greylabs.yoda.enums.Daily;
 import com.greylabs.yoda.enums.SubValue;
 import com.greylabs.yoda.enums.TimeBoxOn;
@@ -16,6 +18,7 @@ import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.Prefs;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -32,6 +35,9 @@ public final class QuickStart {
         goalIds=new ArrayList<>();
     }
     public void quickStart(){
+        Prefs prefs=Prefs.getInstance(context);
+        prefs.setDefaultAccountEmailId("");
+        prefs.setDefaultAccountType(AccountType.LOCAL.ordinal());
         addDefaultTimeBoxes();
         addDefaultsGoals();
         addDefaultSteps();
@@ -231,6 +237,7 @@ public final class QuickStart {
     }
 
     private void addDefaultsGoals(){
+        Prefs prefs=Prefs.getInstance(context);
         Goal goal;
         //1
         goal=new Goal(context);
@@ -238,6 +245,10 @@ public final class QuickStart {
         goal.setObjective("Stay Healthy");
         goal.setKeyResult("Weight under 70Kg");
         goal.setTimeBoxId(timeBoxIds.get(0));
+        goal.setDeleted(false);
+        goal.setUpdated(new DateTime(new Date()));
+        goal.setAccount(prefs.getDefaultAccountEmailId());
+        goal.setAccountType(AccountType.getIntegerToEnum(prefs.getDefaultAccountType()));
         goal.save();
         goalIds.add(goal.getId());
 
@@ -247,6 +258,10 @@ public final class QuickStart {
         goal.setObjective("Stay with Family");
         goal.setKeyResult("Happy Life");
         goal.setTimeBoxId(timeBoxIds.get(1));
+        goal.setDeleted(false);
+        goal.setUpdated(new DateTime(new Date()));
+        goal.setAccount(prefs.getDefaultAccountEmailId());
+        goal.setAccountType(AccountType.getIntegerToEnum(prefs.getDefaultAccountType()));
         goal.save();
         goalIds.add(goal.getId());
 
@@ -257,6 +272,10 @@ public final class QuickStart {
         goal.setObjective("");
         goal.setKeyResult("");
         goal.setTimeBoxId(timeBoxIds.get(2));
+        goal.setDeleted(false);
+        goal.setUpdated(new DateTime(new Date()));
+        goal.setAccount(prefs.getDefaultAccountEmailId());
+        goal.setAccountType(AccountType.getIntegerToEnum(prefs.getDefaultAccountType()));
         goal.save();
         goalIds.add(goal.getId());
 
@@ -267,6 +286,10 @@ public final class QuickStart {
         goal.setObjective("");
         goal.setKeyResult("");
         goal.setTimeBoxId(timeBoxIds.get(3));
+        goal.setDeleted(false);
+        goal.setUpdated(new DateTime(new Date()));
+        goal.setAccount(prefs.getDefaultAccountEmailId());
+        goal.setAccountType(AccountType.getIntegerToEnum(prefs.getDefaultAccountType()));
         goal.save();
         goalIds.add(goal.getId());
 
@@ -276,6 +299,10 @@ public final class QuickStart {
         goal.setObjective("");
         goal.setKeyResult("");
         goal.setTimeBoxId(timeBoxIds.get(4));
+        goal.setDeleted(false);
+        goal.setUpdated(new DateTime(new Date()));
+        goal.setAccount(prefs.getDefaultAccountEmailId());
+        goal.setAccountType(AccountType.getIntegerToEnum(prefs.getDefaultAccountType()));
         goal.save();
         goalIds.add(goal.getId());
 
@@ -285,6 +312,11 @@ public final class QuickStart {
         goal.setObjective("");
         goal.setKeyResult("");
         goal.setTimeBoxId(timeBoxIds.get(5));
+        goal.setDeleted(false);
+        goal.setUpdated(new DateTime(new Date()));
+        goal.setAccount(prefs.getDefaultAccountEmailId());
+        goal.setAccountType(AccountType.getIntegerToEnum(prefs.getDefaultAccountType()));
+        goal.setStringId("@default");
         goal.save();
         Prefs pref=Prefs.getInstance(context);
         pref.setStretchGoalId(goal.getId());
@@ -303,6 +335,8 @@ public final class QuickStart {
         pendingStep.setTime(3);
         pendingStep.setGoalId(goalIds.get(0));
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+        pendingStep.setDeleted(false);
+        pendingStep.setUpdated(new DateTime(new Date()));
         pendingStep.save();
         pendingStep=new PendingStep(context);
         pendingStep.setNickName("Oatmeal breakfast");
@@ -312,6 +346,8 @@ public final class QuickStart {
         pendingStep.setTime(3);
         pendingStep.setGoalId(goalIds.get(0));
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+        pendingStep.setDeleted(false);
+        pendingStep.setUpdated(new DateTime(new Date()));
         pendingStep.save();
 
 //        pendingStep=new PendingStep(context);
@@ -360,6 +396,8 @@ public final class QuickStart {
         pendingStep.setTime(3);
         pendingStep.setGoalId(goalIds.get(1));
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+        pendingStep.setDeleted(false);
+        pendingStep.setUpdated(new DateTime(new Date()));
         pendingStep.save();
         pendingStep=new PendingStep(context);
         pendingStep.setNickName("Cook with spouse");
@@ -369,6 +407,8 @@ public final class QuickStart {
         pendingStep.setTime(3);
         pendingStep.setGoalId(goalIds.get(1));
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+        pendingStep.setDeleted(false);
+        pendingStep.setUpdated(new DateTime(new Date()));
         pendingStep.save();
         pendingStep=new PendingStep(context);
         pendingStep.setNickName("Skype with parents");
@@ -378,6 +418,8 @@ public final class QuickStart {
         pendingStep.setTime(3);
         pendingStep.setGoalId(goalIds.get(1));
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+        pendingStep.setDeleted(false);
+        pendingStep.setUpdated(new DateTime(new Date()));
         pendingStep.save();
 
         //steps for goal 3
@@ -389,6 +431,8 @@ public final class QuickStart {
         pendingStep.setTime(3);
         pendingStep.setGoalId(goalIds.get(2));
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+        pendingStep.setDeleted(false);
+        pendingStep.setUpdated(new DateTime(new Date()));
         pendingStep.save();
         pendingStep=new PendingStep(context);
         pendingStep.setNickName("Clean out inbox");
@@ -398,6 +442,8 @@ public final class QuickStart {
         pendingStep.setTime(3);
         pendingStep.setGoalId(goalIds.get(2));
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+        pendingStep.setDeleted(false);
+        pendingStep.setUpdated(new DateTime(new Date()));
         pendingStep.save();
 
 //        pendingStep=new PendingStep(context);
@@ -419,6 +465,8 @@ public final class QuickStart {
         pendingStep.setTime(3);
         pendingStep.setGoalId(goalIds.get(3));
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+        pendingStep.setDeleted(false);
+        pendingStep.setUpdated(new DateTime(new Date()));
         pendingStep.save();
 
         //steps for goal 5
@@ -430,6 +478,8 @@ public final class QuickStart {
         pendingStep.setTime(3);
         pendingStep.setGoalId(goalIds.get(4));
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+        pendingStep.setDeleted(false);
+        pendingStep.setUpdated(new DateTime(new Date()));
         pendingStep.save();
 
         //steps for goal 6
@@ -441,6 +491,8 @@ public final class QuickStart {
         pendingStep.setTime(3);
         pendingStep.setGoalId(goalIds.get(5));
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+        pendingStep.setDeleted(false);
+        pendingStep.setUpdated(new DateTime(new Date()));
         pendingStep.save();
         pendingStep=new PendingStep(context);
         pendingStep.setNickName("Fix Piano");
@@ -450,6 +502,8 @@ public final class QuickStart {
         pendingStep.setTime(3);
         pendingStep.setGoalId(goalIds.get(5));
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+        pendingStep.setDeleted(false);
+        pendingStep.setUpdated(new DateTime(new Date()));
         pendingStep.save();
     }
 }

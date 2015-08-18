@@ -4,12 +4,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.google.api.client.util.DateTime;
 import com.greylabs.yoda.database.Database;
 import com.greylabs.yoda.database.MetaData;
 import com.greylabs.yoda.enums.TimeBoxWhen;
 import com.greylabs.yoda.models.Day;
 import com.greylabs.yoda.models.Slot;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,6 +29,13 @@ public class CalendarUtils {
     private final static String TAG="CalendarUtils";
 
 
+    public static DateTime getStringToRFCTimestamp(String rfcTimestamp){
+
+        return  DateTime.parseRfc3339(rfcTimestamp);
+    }
+    public static String getRFCTimestampToString(DateTime date){
+       return date.toStringRfc3339();
+    }
     public static String getFormatedDate(Date d){
 
         SimpleDateFormat sdf=new SimpleDateFormat("EEE MMM dd");

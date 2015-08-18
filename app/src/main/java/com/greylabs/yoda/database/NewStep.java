@@ -2,6 +2,8 @@ package com.greylabs.yoda.database;
 
 import android.content.Context;
 
+import com.google.api.client.util.DateTime;
+import com.greylabs.yoda.enums.AccountType;
 import com.greylabs.yoda.enums.Daily;
 import com.greylabs.yoda.enums.SubValue;
 import com.greylabs.yoda.enums.TimeBoxOn;
@@ -14,6 +16,7 @@ import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.Prefs;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -30,6 +33,12 @@ public final class NewStep {
         goalIds=new ArrayList<>();
     }
     public void newStep(){
+        Prefs prefs=Prefs.getInstance(context);
+        if(prefs.getDefaultAccountEmailId()==null)
+            prefs.setDefaultAccountEmailId("");
+        if(prefs.getDefaultAccountType()==0)
+            prefs.setDefaultAccountType(AccountType.GOOGLE.ordinal());
+        prefs.setDefaultAccountType(AccountType.LOCAL.ordinal());
         addDefaultTimeBoxes();
         addDefaultsGoals();
     }
@@ -65,12 +74,18 @@ public final class NewStep {
 
     private void addDefaultsGoals(){
         //unplanned goal
+        Prefs prefs=Prefs.getInstance(context);
         Goal goal;
         goal=new Goal(context);
         goal.setNickName(Constants.NICKNAME_STRETCH_GOAL);
         goal.setObjective("");
         goal.setKeyResult("");
         goal.setTimeBoxId(timeBoxIds.get(0));
+        goal.setDeleted(false);
+        goal.setUpdated(new DateTime(new Date()));
+        goal.setAccount(prefs.getDefaultAccountEmailId());
+        goal.setAccountType(AccountType.getIntegerToEnum(prefs.getDefaultAccountType()));
+        goal.setStringId("@default");
         goal.save();
         Prefs pref=Prefs.getInstance(context);
         pref.setStretchGoalId(goal.getId());

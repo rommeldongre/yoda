@@ -295,14 +295,20 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
                             case SERIES_STEP:
                                 List<PendingStep> pendingSteps = pendingStep.getAllSubSteps(pendingStep.getId(), pendingStep.getGoalId());
                                 for (PendingStep ps : pendingSteps) {
-                                    if(ps.delete()==1) ps.cancelAlarm();
+                                    //if(ps.delete()==1) ps.cancelAlarm();
+                                    ps.cancelAlarm();
+                                    ps.setDeleted(true);
+                                    ps.save();
                                 }
-                                pendingStep.delete();
+                                pendingStep.setDeleted(true);
+                                pendingStep.save();
                                 saveStepsByNewOrder();
                                 break;
                             case SINGLE_STEP:
-                                if(pendingStep.delete()==1) pendingStep.cancelAlarm();
-                                pendingStep.delete();
+                               // if(pendingStep.delete()==1) pendingStep.cancelAlarm();
+                                pendingStep.cancelAlarm();
+                                pendingStep.setDeleted(true);
+                                pendingStep.save();
                                 saveStepsByNewOrder();
                                 break;
                         }

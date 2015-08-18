@@ -1,6 +1,7 @@
 package com.greylabs.yoda.activities;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -9,11 +10,14 @@ import android.os.Message;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.RelativeLayout;
 
 import com.greylabs.yoda.R;
+import com.greylabs.yoda.apis.googleacc.GoogleAccount;
 import com.greylabs.yoda.apis.googleacc.GoogleSync;
 import com.greylabs.yoda.database.NewStep;
+import com.greylabs.yoda.enums.AccountType;
 import com.greylabs.yoda.threads.ImportTaskAsyncThread;
 import com.greylabs.yoda.threads.NewStepAsyncTask;
 import com.greylabs.yoda.threads.QuickStartAsyncTask;
@@ -51,7 +55,7 @@ public class ActQuickStart extends Activity implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        Prefs prefs = Prefs.getInstance(this);
+        final Prefs prefs = Prefs.getInstance(this);
         prefs.setOptionFromActQuickStartSelected(true);
         switch(v.getId()){
             case R.id.rlQuickStartActQuickStart :
@@ -63,8 +67,22 @@ public class ActQuickStart extends Activity implements View.OnClickListener {
                 break;
 
             case R.id.rlImportTaskActQuickStart :
-                new ImportTaskAsyncThread(this,new MyHandler()).execute();
-                Logger.showMsg(this, "import");
+                //new ImportTaskAsyncThread(this,new MyHandler()).execute();
+                final GoogleAccount googleAccount=new GoogleAccount(this);
+                googleAccount.chooseAccountDialog(GoogleAccount.ACCOUNT_TYPE, "Choose Account", new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+                        prefs.setDefaultAccountEmailId(googleAccount.getUsers().get(position));
+                        prefs.setDefaultAccountType(AccountType.GOOGLE.ordinal());
+                        googleAccount.dismissChooseAccountDialog();
+                    }
+                }, new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        new ImportTaskAsyncThread(ActQuickStart.this, new MyHandler()).execute();
+                    }
+                });
                 break;
         }
     }

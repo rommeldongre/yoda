@@ -22,7 +22,7 @@ public class Prefs  {
 
     private Prefs(Context context) {
         this.context = context;
-        this.systemPrefs = context.getSharedPreferences("user_prefs", Activity.MODE_PRIVATE);
+        this.systemPrefs = context.getSharedPreferences(Constants.USER_PREFS,Activity.MODE_PRIVATE);
         this.editor = systemPrefs.edit();
     }
 
@@ -129,6 +129,26 @@ public class Prefs  {
         return systemPrefs.getLong(Constants.ID_STRETCH_GOAL,0);
     }
 
+    /**
+     * Account Prefs
+     */
+    public String getDefaultAccountEmailId(){
+        return systemPrefs.getString(Constants.ACCOUNT_DEFAULT_EMAIL_ID, null);
+    }
+
+    public void setDefaultAccountEmailId(String emailId){
+        editor.putString(Constants.ACCOUNT_DEFAULT_EMAIL_ID, emailId);
+        editor.commit();
+    }
+
+    public int getDefaultAccountType(){
+        return systemPrefs.getInt(Constants.ACCOUNT_DEFAULT_ACC_TYPE, 0);
+    }
+
+    public void setDefaultAccountType(int type){
+        editor.putInt(Constants.ACCOUNT_DEFAULT_ACC_TYPE, type);
+        editor.commit();
+    }
 
     public void clear() {
         editor.clear();

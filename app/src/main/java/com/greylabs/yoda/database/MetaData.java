@@ -20,6 +20,11 @@ public class MetaData {
         public static final String order="orderValue";
         public static final String dueDate="dueDate";
         public static final String timeBoxId="timeBoxId";//FK to timebox
+        //account info
+        public static final String updated="updated";//last updated date
+        public static final String deleted="deleted";//boolean flag indicating this goal is delted or not
+        public static final String account="account";//to identify from which Account this goal belongs
+        public static final String accountType="accountType";
 
         public static final String createGoalTable=
                 "create table if not exists  "+goal+" (" +
@@ -35,6 +40,10 @@ public class MetaData {
                         " "+order+" integer, " +
                         " "+dueDate+" text, " +
                         " "+timeBoxId+" text, " +
+                        " "+updated+" text, " +
+                        " "+deleted+" integer, " +
+                        " "+account+" text, " +
+                        " "+accountType+" integer, " +
                         " "+"foreign key("+timeBoxId+") references "+ TableTimeBox.timeBox+"("+ TableTimeBox.id+") " +
                         ")";
 //        db.execSQL("CREATE TRIGGER delete_days_with track BEFORE DELETE ON track "
@@ -71,6 +80,8 @@ public class MetaData {
         public static final String goalStringId="goalStringId";//used for google task
         public static  final String slotId="slotId";
         public static final String subStepOf="subStepOf";
+        public static final String updated="updated";//last updated date
+        public static final String deleted="deleted";//boolean flag indicating this pending step is delted or not
         public static final String createPendingStepTable="" +
                 "create table if not exists  "+pendingStep+" ( " +
                 " "+id+" integer primary key autoincrement," +
@@ -87,6 +98,8 @@ public class MetaData {
                 " "+goalId+" integer, " +
                 " "+slotId+" integer, " +
                 " "+subStepOf+" integer, " +
+                " "+updated+" text, " +
+                " "+deleted+" integer, " +
                 " "+"foreign key("+goalId+") references "+ TableGoal.goal+"("+ TableGoal.id+") ," +
                 " "+"foreign key("+slotId+") references "+ TableSlot.slot+"("+ TableSlot.id+") , " +
                 " "+"foreign key("+subStepOf+") references "+ TablePendingStep.pendingStep+"("+ TablePendingStep.id+") " +

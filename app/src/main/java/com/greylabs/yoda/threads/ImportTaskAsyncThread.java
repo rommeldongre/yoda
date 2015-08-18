@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 
+import com.greylabs.yoda.apis.googleacc.GoogleAccount;
 import com.greylabs.yoda.apis.googleacc.GoogleSync;
 import com.greylabs.yoda.database.NewStep;
 import com.greylabs.yoda.models.Slot;
@@ -36,12 +37,8 @@ public class ImportTaskAsyncThread extends AsyncTask<Void, Void, Void> {
         newStep.newStep();
         Slot slot=new Slot(context);
         slot.setDefaultGoalDetails();
-        GoogleSync googleSync = new GoogleSync(context);
-        try {
-            googleSync.sync();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        GoogleAccount googleAccount=new GoogleAccount(context);
+        googleAccount.authenticate();
         return null;
     }
 

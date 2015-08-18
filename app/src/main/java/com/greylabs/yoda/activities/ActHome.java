@@ -1,6 +1,7 @@
 package com.greylabs.yoda.activities;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.os.Handler;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -16,6 +18,7 @@ import com.greylabs.yoda.R;
 import com.greylabs.yoda.apis.TasksSample;
 import com.greylabs.yoda.apis.googleacc.GoogleAccount;
 import com.greylabs.yoda.apis.googleacc.GoogleSync;
+import com.greylabs.yoda.enums.AccountType;
 import com.greylabs.yoda.models.Day;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
@@ -238,19 +241,31 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
 
             case R.id.btnAutosyncWithGoogleActHome :
                 //startActivity(new Intent(this, TasksSample.class));
-                AsyncTask asyncTask=new AsyncTask() {
+                final GoogleAccount googleAccount=new GoogleAccount(this);
+                googleAccount.chooseAccountDialog(GoogleAccount.ACCOUNT_TYPE, "Choose Account", new AdapterView.OnItemClickListener() {
                     @Override
-                    protected Object doInBackground(Object[] objects) {
-                        GoogleSync googleSync=new GoogleSync(ActHome.this);
-                        try {
-                            googleSync.sync();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        return null;
+                    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+
+                        prefs.setDefaultAccountEmailId(googleAccount.getUsers().get(position));
+                        prefs.setDefaultAccountType(AccountType.GOOGLE.ordinal());
+                        googleAccount.dismissChooseAccountDialog();
                     }
-                };
-                asyncTask.execute();
+                }, new DialogInterface.OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialogInterface) {
+                        AsyncTask asyncTask = new AsyncTask() {
+                            @Override
+                            protected Object doInBackground(Object[] objects) {
+                                GoogleAccount googleAccount = new GoogleAccount(ActHome.this);
+                                googleAccount.authenticate();
+
+                                return null;
+                            }
+                        };
+                        asyncTask.execute();
+                    }
+                });
+
                 btnSettings.collapse();
                 break;
 

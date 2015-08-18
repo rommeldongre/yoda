@@ -107,4 +107,7 @@ public class Constants {
     public static final String KEY_PENDING_STEP_OBJECT ="Pending Step Object" ;
     public static final String SHARED_PREFS_ACCOUNT ="Shared Pref Account" ;
     public static final  String MSG_IMPORTING_TASKS ="Importing Tasks" ;
+    public static final String ACCOUNT_DEFAULT_EMAIL_ID ="Default Acc Email Id" ;
+    public static final String ACCOUNT_DEFAULT_ACC_TYPE ="Default Acc Type" ;
+    public static final String USER_PREFS ="user_prefs" ;
 }

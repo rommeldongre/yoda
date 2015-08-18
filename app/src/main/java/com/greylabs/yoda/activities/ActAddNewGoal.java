@@ -28,16 +28,20 @@ import android.widget.ScrollView;
 import android.widget.SearchView;
 import android.widget.Spinner;
 
+import com.google.api.client.util.DateTime;
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.adapters.AdapterTimeBoxSpinner;
 import com.greylabs.yoda.asynctask.AysncTaskWithProgressBar;
+import com.greylabs.yoda.enums.AccountType;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Logger;
+import com.greylabs.yoda.utils.Prefs;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ActAddNewGoal extends ActionBarActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
@@ -246,6 +250,10 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
                 goal.setReason(edtGoalReason.getText().toString());
                 goal.setReward(edtGoalReward.getText().toString());
                 goal.setBuddyEmail(edtGoalBuddy.getText().toString());
+                Prefs prefs=Prefs.getInstance(this);
+                goal.setAccount(prefs.getDefaultAccountEmailId());
+                goal.setAccountType(AccountType.getIntegerToEnum(prefs.getDefaultAccountType()));
+                goal.setUpdated(new DateTime(new Date()));
                 goal.save();
 
 //                AsyncTaskAttachTimeBox asyncTaskAttachTimeBox=new AsyncTaskAttachTimeBox(this,new MyHandler(),yodaCalendar,"Please Wait,Attaching TimeBox",goal.getId());

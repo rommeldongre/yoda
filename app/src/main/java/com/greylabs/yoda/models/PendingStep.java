@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.ContactsContract;
 
+import com.google.api.client.util.DateTime;
 import com.greylabs.yoda.database.Database;
 import com.greylabs.yoda.database.MetaData.TablePendingStep;
 import com.greylabs.yoda.database.MetaData.TableSlot;
@@ -37,6 +38,8 @@ public class PendingStep implements Serializable {
     private String goalStringId="";//used for google task;
     private long slotId;
     private long subStepOf;
+    private DateTime updated=new DateTime(new Date());//last updated date
+    private boolean deleted;//true if deleted
     transient private Database database;
     transient private Context context;
     transient private AlarmScheduler alarmScheduler;
@@ -163,6 +166,24 @@ public class PendingStep implements Serializable {
         this.database = Database.getInstance(context);
     }
 
+
+    public DateTime getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(DateTime updated) {
+        this.updated = updated;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+
     /**********************************************************************************************/
     // Constructors
 
@@ -208,6 +229,8 @@ public class PendingStep implements Serializable {
                 this.stepDate= CalendarUtils.parseDate(c.getString(c.getColumnIndex(TablePendingStep.stepDate)));
                 this.slotId = c.getLong(c.getColumnIndex(TablePendingStep.slotId));
                 this.subStepOf = c.getLong(c.getColumnIndex(TablePendingStep.subStepOf));
+                this.updated=CalendarUtils.getStringToRFCTimestamp(c.getString(c.getColumnIndex(TablePendingStep.updated)));
+                this.deleted=(c.getInt(c.getColumnIndex(TablePendingStep.deleted))==1)?true:false;
             } while (c.moveToNext());
         }
         c.close();
@@ -241,6 +264,8 @@ public class PendingStep implements Serializable {
                 pendingStep.stepDate= CalendarUtils.parseDate(c.getString(c.getColumnIndex(TablePendingStep.stepDate)));
                 pendingStep.slotId = c.getLong(c.getColumnIndex(TablePendingStep.slotId));
                 pendingStep.subStepOf = c.getLong(c.getColumnIndex(TablePendingStep.subStepOf));
+                pendingStep.updated=CalendarUtils.getStringToRFCTimestamp(c.getString(c.getColumnIndex(TablePendingStep.updated)));
+                pendingStep.deleted=(c.getInt(c.getColumnIndex(TablePendingStep.deleted))==1)?true:false;
                 pendingSteps.add(pendingStep);
             } while (c.moveToNext());
         }
@@ -281,6 +306,8 @@ public class PendingStep implements Serializable {
                 pendingStep.stepDate= CalendarUtils.parseDate(c.getString(c.getColumnIndex(TablePendingStep.stepDate)));
                 pendingStep.slotId = c.getLong(c.getColumnIndex(TablePendingStep.slotId));
                 pendingStep.subStepOf = c.getLong(c.getColumnIndex(TablePendingStep.subStepOf));
+                pendingStep.updated=CalendarUtils.getStringToRFCTimestamp(c.getString(c.getColumnIndex(TablePendingStep.updated)));
+                pendingStep.deleted=(c.getInt(c.getColumnIndex(TablePendingStep.deleted))==1)?true:false;
                 pendingSteps.add(pendingStep);
             } while (c.moveToNext());
         }
@@ -319,6 +346,8 @@ public class PendingStep implements Serializable {
                 pendingStep.stepDate= CalendarUtils.parseDate(c.getString(c.getColumnIndex(TablePendingStep.stepDate)));
                 pendingStep.slotId = c.getLong(c.getColumnIndex(TablePendingStep.slotId));
                 pendingStep.subStepOf = c.getLong(c.getColumnIndex(TablePendingStep.subStepOf));
+                pendingStep.updated=CalendarUtils.getStringToRFCTimestamp(c.getString(c.getColumnIndex(TablePendingStep.updated)));
+                pendingStep.deleted=(c.getInt(c.getColumnIndex(TablePendingStep.deleted))==1)?true:false;
                 pendingSteps.add(pendingStep);
             } while (c.moveToNext());
         }
@@ -364,6 +393,8 @@ public class PendingStep implements Serializable {
                 pendingStep.stepDate= CalendarUtils.parseDate(c.getString(c.getColumnIndex(TablePendingStep.stepDate)));
                 pendingStep.slotId = c.getLong(c.getColumnIndex(TablePendingStep.slotId));
                 pendingStep.subStepOf = c.getLong(c.getColumnIndex(TablePendingStep.subStepOf));
+                pendingStep.updated=CalendarUtils.getStringToRFCTimestamp(c.getString(c.getColumnIndex(TablePendingStep.updated)));
+                pendingStep.deleted=(c.getInt(c.getColumnIndex(TablePendingStep.deleted))==1)?true:false;
                 pendingSteps.add(pendingStep);
             } while (c.moveToNext());
         }
@@ -401,6 +432,8 @@ public class PendingStep implements Serializable {
                 pendingStep.stepDate= CalendarUtils.parseDate(c.getString(c.getColumnIndex(TablePendingStep.stepDate)));
                 pendingStep.slotId = c.getLong(c.getColumnIndex(TablePendingStep.slotId));
                 pendingStep.subStepOf = c.getLong(c.getColumnIndex(TablePendingStep.subStepOf));
+                pendingStep.updated=CalendarUtils.getStringToRFCTimestamp(c.getString(c.getColumnIndex(TablePendingStep.updated)));
+                pendingStep.deleted=(c.getInt(c.getColumnIndex(TablePendingStep.deleted))==1)?true:false;
                 pendingSteps.add(pendingStep);
             } while (c.moveToNext());
         }
@@ -440,6 +473,8 @@ public class PendingStep implements Serializable {
                 pendingStep.stepDate= CalendarUtils.parseDate(c.getString(c.getColumnIndex(TablePendingStep.stepDate)));
                 pendingStep.slotId = c.getLong(c.getColumnIndex(TablePendingStep.slotId));
                 pendingStep.subStepOf = c.getLong(c.getColumnIndex(TablePendingStep.subStepOf));
+                pendingStep.updated=CalendarUtils.getStringToRFCTimestamp(c.getString(c.getColumnIndex(TablePendingStep.updated)));
+                pendingStep.deleted=(c.getInt(c.getColumnIndex(TablePendingStep.deleted))==1)?true:false;
                 pendingSteps.add(pendingStep);
             } while (c.moveToNext());
         }
@@ -462,6 +497,8 @@ public class PendingStep implements Serializable {
         values.put(TablePendingStep.status, this.pendingStepStatus.ordinal());
         values.put(TablePendingStep.goalId, this.goalId);
         values.put(TablePendingStep.goalStringId,this.goalStringId);
+        values.put(TablePendingStep.updated,CalendarUtils.getRFCTimestampToString(this.getUpdated()));
+        values.put(TablePendingStep.deleted,(this.deleted)?1:0);
         if(this.getStepDate()!=null) {
             Calendar cal = Calendar.getInstance();
             cal.setTime(this.getStepDate());
@@ -495,9 +532,12 @@ public class PendingStep implements Serializable {
         Calendar cal=Calendar.getInstance();
         cal.set(Calendar.SECOND,0);cal.set(Calendar.MINUTE, 0);cal.set(Calendar.HOUR_OF_DAY, 0);
         cal.setTime(pendingStep.getStepDate());
-        values.put(TablePendingStep.stepDate,CalendarUtils.getSqLiteDateFormat(cal));
+        values.put(TablePendingStep.stepDate, CalendarUtils.getSqLiteDateFormat(cal));
         values.put(TablePendingStep.slotId, pendingStep.slotId);
         values.put(TablePendingStep.subStepOf, pendingStep.subStepOf);
+        values.put(TablePendingStep.updated,CalendarUtils.getRFCTimestampToString(pendingStep.getUpdated()));
+        values.put(TablePendingStep.deleted,(pendingStep.deleted)?1:0);
+
         long rowId;
         rowId=db.insert(TablePendingStep.pendingStep, null, values);
         return rowId;
@@ -524,7 +564,7 @@ public class PendingStep implements Serializable {
 
     public long getIdIfExists(String stringId) {
         SQLiteDatabase db = database.getReadableDatabase();
-        String query = "select  "+TablePendingStep.id+
+        String query = "select  "+TablePendingStep.id+","+TablePendingStep.stringId+" "+
                 " " + " from " + TablePendingStep.pendingStep + " " +
                 " " + " where " + TablePendingStep.stringId + " = '" + stringId + "' ";
         Cursor c = db.rawQuery(query, null);
@@ -584,6 +624,8 @@ public class PendingStep implements Serializable {
                 pendingStep.stepDate= CalendarUtils.parseDate(c.getString(c.getColumnIndex(TablePendingStep.stepDate)));
                 pendingStep.slotId = c.getLong(c.getColumnIndex(TablePendingStep.slotId));
                 pendingStep.subStepOf = c.getLong(c.getColumnIndex(TablePendingStep.subStepOf));
+                pendingStep.updated=CalendarUtils.getStringToRFCTimestamp(c.getString(c.getColumnIndex(TablePendingStep.updated)));
+                pendingStep.deleted=(c.getInt(c.getColumnIndex(TablePendingStep.deleted))==1)?true:false;
                 pendingSteps.add(pendingStep);
             } while (c.moveToNext());
         }
@@ -619,6 +661,8 @@ public class PendingStep implements Serializable {
                 pendingStep.stepDate= CalendarUtils.parseDate(c.getString(c.getColumnIndex(TablePendingStep.stepDate)));
                 pendingStep.slotId = c.getLong(c.getColumnIndex(TablePendingStep.slotId));
                 pendingStep.subStepOf = c.getLong(c.getColumnIndex(TablePendingStep.subStepOf));
+                pendingStep.updated=CalendarUtils.getStringToRFCTimestamp(c.getString(c.getColumnIndex(TablePendingStep.updated)));
+                pendingStep.deleted=(c.getInt(c.getColumnIndex(TablePendingStep.deleted))==1)?true:false;
                 pendingSteps.add(pendingStep);
             } while (c.moveToNext());
         }
@@ -661,6 +705,10 @@ public class PendingStep implements Serializable {
             pendingStepNew.setTime(time);
             pendingStepNew.setStepDate(new Date());
             pendingStepNew.setSubStepOf(this.getId());
+            pendingStepNew.setUpdated(this.getUpdated());
+            pendingStepNew.setDeleted(this.isDeleted());
+            pendingStepNew.setGoalStringId(this.getGoalStringId());
+            pendingStepNew.setStringId(this.getStringId());
             rowId+=pendingStepNew.saveSubStep(pendingStepNew);
         }
         return rowId;
@@ -680,6 +728,8 @@ public class PendingStep implements Serializable {
                 subStep.setGoalId(subStep.getGoalId());
                 subStep.setTime(subStep.time);
                 subStep.setSubStepOf(this.getId());
+                subStep.setGoalStringId(this.getGoalStringId());
+                subStep.setStringId(this.getStringId());
                 rowId += subStep.save();
             }
         }

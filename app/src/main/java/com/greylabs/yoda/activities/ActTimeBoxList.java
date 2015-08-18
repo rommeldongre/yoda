@@ -20,6 +20,7 @@ import com.greylabs.yoda.adapters.DragSortRecycler;
 import com.greylabs.yoda.interfaces.OnClickOfRecyclerViewActGoalList;
 import com.greylabs.yoda.interfaces.OnClickOfRecyclerViewActTimeboxList;
 import com.greylabs.yoda.models.TimeBox;
+import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Logger;
 
@@ -171,6 +172,8 @@ public class ActTimeBoxList extends ActionBarActivity implements OnClickOfRecycl
                         alertLogout.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
+                                YodaCalendar yodaCalendar=new YodaCalendar(ActTimeBoxList.this);
+                                yodaCalendar.detachTimeBox(timeBoxArrayList.get(Position).getId());
                                 timeBoxArrayList.get(Position).delete();
                                 Logger.showMsg(ActTimeBoxList.this, Constants.MSG_TIMEBOX_DELETED);
                                 getTimeBoxArrayFromLocal();

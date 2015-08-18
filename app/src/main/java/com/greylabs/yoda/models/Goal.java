@@ -5,10 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.google.api.client.util.DateTime;
 import com.greylabs.yoda.database.Database;
 import com.greylabs.yoda.database.MetaData;
 import com.greylabs.yoda.database.MetaData.TableGoal;
 import com.greylabs.yoda.database.MetaData.TablePendingStep;
+import com.greylabs.yoda.enums.AccountType;
 import com.greylabs.yoda.utils.CalendarUtils;
 import com.greylabs.yoda.utils.Prefs;
 
@@ -36,6 +38,10 @@ public class Goal implements Serializable{
     private int progress;//progress of goal in percent
     private Date dueDate;
     private long timeBoxId;
+    private DateTime updated=new DateTime(new Date());//last updated date
+    private boolean deleted;//true if deleted
+    private String account;
+    private AccountType accountType;
     transient private Database database;
     transient private Context context;
 
@@ -140,6 +146,39 @@ public class Goal implements Serializable{
         this.timeBoxId = timeBoxId;
     }
 
+
+    public DateTime getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(DateTime updated) {
+        this.updated = updated;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public String getAccount() {
+        return account;
+    }
+
+    public void setAccount(String account) {
+        this.account = account;
+    }
+
+    public AccountType getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(AccountType accountType) {
+        this.accountType = accountType;
+    }
+
     /**********************************************************************************************/
     // Constructors
     /**********************************************************************************************/
@@ -194,6 +233,10 @@ public class Goal implements Serializable{
                 this.status=(byte)c.getInt(c.getColumnIndex(TableGoal.status));
                 this.dueDate= CalendarUtils.parseDate(c.getString(c.getColumnIndex(TableGoal.dueDate)));
                 this.timeBoxId=c.getInt(c.getColumnIndex(TableGoal.timeBoxId));
+                this.updated=CalendarUtils.getStringToRFCTimestamp(c.getString(c.getColumnIndex(TableGoal.updated)));
+                this.deleted=(c.getInt(c.getColumnIndex(TableGoal.deleted))==1)?true:false;
+                this.account=c.getString(c.getColumnIndex(TableGoal.account));
+                this.accountType=AccountType.getIntegerToEnum(c.getInt(c.getColumnIndex(TableGoal.accountType)));
             }while (c.moveToNext());
         }
         c.close();
@@ -220,7 +263,10 @@ public class Goal implements Serializable{
                 goal.status=(byte)c.getInt(c.getColumnIndex(TableGoal.status));
                 goal.dueDate=CalendarUtils.parseDate(c.getString(c.getColumnIndex(TableGoal.dueDate)));
                 goal.timeBoxId=c.getInt(c.getColumnIndex(TableGoal.timeBoxId));
-
+                goal.updated=CalendarUtils.getStringToRFCTimestamp(c.getString(c.getColumnIndex(TableGoal.updated)));
+                goal.deleted=(c.getInt(c.getColumnIndex(TableGoal.deleted))==1)?true:false;
+                goal.account=c.getString(c.getColumnIndex(TableGoal.account));
+                goal.accountType=AccountType.getIntegerToEnum(c.getInt(c.getColumnIndex(TableGoal.accountType)));
                 goals.add(goal);
             }while (c.moveToNext());
         }
@@ -246,6 +292,10 @@ public class Goal implements Serializable{
         cal.setTime(this.getDueDate());
         values.put(TableGoal.dueDate, CalendarUtils.getSqLiteDateFormat(cal));
         values.put(TableGoal.timeBoxId, this.timeBoxId);
+        values.put(TableGoal.updated,CalendarUtils.getRFCTimestampToString(this.getUpdated()));
+        values.put(TableGoal.deleted,(this.deleted)?1:0);
+        values.put(TableGoal.account,this.account);
+        values.put(TableGoal.accountType,this.accountType.ordinal());
         long rowId;
         if (this.id!=0){
             values.put(TableGoal.id,this.id);
@@ -341,7 +391,7 @@ public class Goal implements Serializable{
     }
     public String getColorCode(){
         String colorCode="";
-        String query="select colorCode " +
+        String query="select  " +MetaData.TableTimeBox.colorCode+" "+
                 " "+" from "+ MetaData.TableTimeBox.timeBox+" " +
                 " "+" where "+ MetaData.TableTimeBox.id+" = "+this.timeBoxId;
         SQLiteDatabase db=database.getReadableDatabase();
@@ -354,7 +404,7 @@ public class Goal implements Serializable{
 
     public long getIdIfExists(String stringGoalId){
         long id= Prefs.getInstance(context).getStretchGoalId();
-        String query="select  "+TableGoal.id +" "+
+        String query="select  "+TableGoal.id +" ,"+TableGoal.stringId+" "+
                 " "+" from "+ TableGoal.goal+" " +
                 " "+" where "+ TableGoal.stringId+" = '"+stringGoalId+"'";
         SQLiteDatabase db=database.getReadableDatabase();
