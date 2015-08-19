@@ -154,4 +154,13 @@ public class Prefs  {
         editor.clear();
         editor.commit();
     }
+
+    public int getColorCodePosition() {
+        return systemPrefs.getInt(Constants.COLORCODE_POSITION, 0);
+    }
+
+    public void setColorCodePosition(int position){
+        editor.putInt(Constants.COLORCODE_POSITION, position);
+        editor.commit();
+    }
 }

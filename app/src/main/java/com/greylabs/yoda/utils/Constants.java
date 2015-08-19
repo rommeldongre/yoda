@@ -108,6 +108,7 @@ public class Constants {
     public static final String ACCOUNT_DEFAULT_EMAIL_ID ="Default Acc Email Id" ;
     public static final String ACCOUNT_DEFAULT_ACC_TYPE ="Default Acc Type" ;
     public static final String USER_PREFS ="user_prefs" ;
+    public static final String COLORCODE_POSITION ="COLORCODE_POSITION" ;
     public static final int COLORCODE_UNPLANNED_TIMEBOX = -3931905;
     public static final int COLORCODE_TIMEBOX_1 = -39424; //orange
     public static final int COLORCODE_TIMEBOX_2 = -3931905; //purple
