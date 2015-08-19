@@ -274,7 +274,7 @@ public class PendingStep implements Serializable {
     }
 
 
-    public List<PendingStep> getAll(PendingStepStatus status,long goalId) {
+    public List<PendingStep> getAll(PendingStepStatus status,boolean deleted,long goalId) {
         ArrayList<PendingStep> pendingSteps = null;
         SQLiteDatabase db = database.getReadableDatabase();
         String query = "select * " +
@@ -283,7 +283,8 @@ public class PendingStep implements Serializable {
                 " " + " and ("+TablePendingStep.type+"!="+PendingStepType.SERIES_STEP.ordinal()+" or " +
                 " " + " "+TablePendingStep.type+"!="+PendingStepType.SPLIT_STEP.ordinal()+" ) " +
                 " " + " and "+TablePendingStep.status+" = "+status.ordinal()+" "+
-                " " + " and "+TablePendingStep.goalId+" = "+goalId;
+                " " + " and "+TablePendingStep.goalId+" = "+goalId+" " +
+                " " + " and  "+TablePendingStep.deleted+"="+(deleted?1:0);
 
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
@@ -323,7 +324,8 @@ public class PendingStep implements Serializable {
                 " " + " from " + TablePendingStep.pendingStep + " " +
                 " " + " where "+ TablePendingStep.status+"="+status.ordinal()+" " +
                 " " + " and ("+TablePendingStep.type+"!="+PendingStepType.SERIES_STEP.ordinal()+" or " +
-                " " + " "+TablePendingStep.type+"!="+PendingStepType.SPLIT_STEP.ordinal()+" )";
+                " " + " "+TablePendingStep.type+"!="+PendingStepType.SPLIT_STEP.ordinal()+" ) " +
+                " " + " and  "+TablePendingStep.deleted+"=0";
 
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
@@ -369,7 +371,8 @@ public class PendingStep implements Serializable {
         String query = "select * " +
                 " " + " from " + TablePendingStep.pendingStep + " " +
                 " " + " where " + TablePendingStep.goalId + " = " + goalId + " " +
-                " " + " and " + TablePendingStep.type + "!=" + PendingStepType.SUB_STEP.ordinal()+" " +
+                " " + " and " + TablePendingStep.type + "!=" + PendingStepType.SUB_STEP.ordinal()+"" +
+                " " + " and  "+TablePendingStep.deleted+"=0"+
                 " " + " order by "+TablePendingStep.priority+" asc ";
 
         Cursor c = db.rawQuery(query, null);
@@ -409,8 +412,8 @@ public class PendingStep implements Serializable {
                 " " + " from " + TablePendingStep.pendingStep + " " +
                 " " + " where " + TablePendingStep.goalId + " = " + goalId + " " +
                 " " + " and " + TablePendingStep.subStepOf + "=" + pendingStepId+" " +
-                " " + " and "+TablePendingStep.type+"="+PendingStepType.SUB_STEP.ordinal();
-
+                " " + " and "+TablePendingStep.type+"="+PendingStepType.SUB_STEP.ordinal()+" " +
+                " " + " and  "+TablePendingStep.deleted+"=0";
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
             pendingSteps = new ArrayList<>();

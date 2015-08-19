@@ -33,11 +33,14 @@ import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.Prefs;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.logging.Level;
 
 /**
@@ -187,18 +190,10 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                 pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
                 pendingStep.setUpdated(task.getUpdated());
             }
+            if( !task.getStatus().equals("needsAction"))
+                pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
         }else{
             pendingStep = pendingStep.get(id);
-            if (task.getStatus().equals("needsAction"))
-                pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
-            else {
-                pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
-            }
-
-
-            if (task.getDeleted() != null) {
-                pendingStep.setDeleted(task.getDeleted());
-            }
             id=pendingStep.getIdIfExists(task.getParent());
             if(id!=0) {
                 pendingStep.setSubStepOf(id);
@@ -208,6 +203,15 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                 ps.setPendingStepType(PendingStep.PendingStepType.SERIES_STEP);
             }
             //pendingStep.save();
+        }
+        if (task.getStatus().equals("needsAction"))
+            pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+        else {
+            pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
+        }
+
+        if (task.getDeleted() != null) {
+            pendingStep.setDeleted(task.getDeleted());
         }
         //pendingStep.setUpdated(CalendarUtils.getStringToRFCTimestamp(task.getUpdated().toStringRfc3339()));
         pendingStep.setNickName(task.getTitle());
@@ -230,7 +234,7 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
         if(taskLists!=null){
             for (TaskList taskList:taskLists){
                 Goal goal=convertToGoal(taskList);
-                if(taskList.getUpdated().getValue()>=goal.getUpdated().getValue()){
+                if(compareDateTime(taskList.getUpdated(),goal.getUpdated())){
                     goal.setUpdated(taskList.getUpdated());
                     if(prefs.getStretchGoalId()!=goal.getId())
                         goal.save();
@@ -244,22 +248,19 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                     if(myTasks!=null) {
                         for (Task task : myTasks) {
                             PendingStep pendingStep = convertToPendingStep(task);
-                            if (pendingStep.getId()!=0 && pendingStep.isDeleted()) {
+                            if ( pendingStep.getId()!=0 && pendingStep.isDeleted()) {
                                 service.tasks().delete(goal.getStringId(), pendingStep.getStringId()).execute();
                                 pendingStep.delete();
-                            } else if (pendingStep.getId() != 0 && pendingStep.getPendingStepStatus() == PendingStep.PendingStepStatus.COMPLETED) {
+                            } else if (pendingStep.getId()!=0 && pendingStep.getPendingStepStatus() == PendingStep.PendingStepStatus.COMPLETED) {
                                 pendingStep.save();
                                 pendingStep.setTime(Constants.MAX_SLOT_DURATION);
                                 pendingStep.cancelAlarm();
                                 service.tasks().update(goal.getStringId(), pendingStep.getStringId(), task).execute();
                             } else {
-                                //SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
-                                if (task.getUpdated().getValue() >= pendingStep.getUpdated().getValue()) {
-                                    if(task.getDeleted()==Boolean.FALSE || !task.getStatus().equals("completed")) {
-                                        pendingStep.setGoalId(goal.getId());
-                                        pendingStep.setGoalStringId(goal.getStringId());
-                                        pendingStep.save();//insert or update
-                                    }
+                                if (compareDateTime(task.getUpdated(),pendingStep.getUpdated())) {
+                                    pendingStep.setGoalId(goal.getId());
+                                    pendingStep.setGoalStringId(goal.getStringId());
+                                    pendingStep.save();//insert or update
                                 }
                             }
                             Logger.log("TAG", "Task : " + task.toString() + "  Pending Step: " + pendingStep.toString());
@@ -291,7 +292,7 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                     }else {
                         if(!g.getStringId().equals("@default")){
                             TaskList  result = service.tasklists().get(g.getStringId()).execute();
-                            if(result.getUpdated().getValue()<g.getUpdated().getValue()) {
+                            if(compareDateTime(g.getUpdated(),result.getUpdated())) {
                                 result = service.tasklists().update(g.getStringId(), taskList).execute();
                                 g.setUpdated(result.getUpdated());
                                 g.save();
@@ -302,9 +303,9 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
 
                 //do following for each step in this goal
                 PendingStep pendingStep = new PendingStep(context);
-                List<PendingStep> pendingSteps = pendingStep.getAll(PendingStep.PendingStepStatus.TODO, g.getId());
+                List<PendingStep> pendingSteps = pendingStep.getAll(PendingStep.PendingStepStatus.TODO, true, g.getId());
                 if(pendingSteps!=null) {
-                    List<PendingStep> completed=pendingStep.getAll(PendingStep.PendingStepStatus.COMPLETED,g.getId());
+                    List<PendingStep> completed=pendingStep.getAll(PendingStep.PendingStepStatus.COMPLETED, true, g.getId());
                     if(completed!=null)
                         pendingSteps.addAll(completed);
 
@@ -327,7 +328,7 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                                         ps.delete();
                                     }else {
                                         Task result= service.tasks().get(ps.getGoalStringId(), ps.getStringId()).execute();
-                                        if(result.getUpdated().getValue()<ps.getUpdated().getValue()) {
+                                        if(compareDateTime(ps.getUpdated(),result.getUpdated())) {
                                             result= service.tasks().update(ps.getGoalStringId(), ps.getStringId(), task).execute();
                                             ps.setUpdated(result.getUpdated());
                                             ps.save();
@@ -355,7 +356,7 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                                                 substep.delete();
                                             }else {
                                                 Task result= service.tasks().get(substep.getGoalStringId(), substep.getStringId()).execute();
-                                                if(result.getUpdated().getValue()<substep.getUpdated().getValue()) {
+                                                if(compareDateTime(substep.getUpdated(),result.getUpdated())) {
                                                     result= service.tasks().update(substep.getGoalStringId(), substep.getStringId(), task).execute();
                                                     substep.setUpdated(result.getUpdated());
                                                     substep.save();
@@ -369,7 +370,8 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                                 task=(Task)buildPendingStep(ps);
                                 task.setTitle(ps.getNickName());
                                 task.setNotes("This step is added by Yoda");
-                                task.setDue(new DateTime(ps.getStepDate()));
+                                if(ps.getStepDate()!=null)
+                                    task.setDue(new DateTime(ps.getStepDate()));
                                 if (ps.getStringId() == null || ps.getStringId().equals("")) {
                                     Task result = service.tasks().insert(g.getStringId(), task).execute();
                                     ps.setStringId(result.getId());
@@ -382,7 +384,7 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                                         ps.delete();
                                     }else {
                                         Task result= service.tasks().get(ps.getGoalStringId(), ps.getStringId()).execute();
-                                        if(result.getUpdated().getValue()<ps.getUpdated().getValue()) {
+                                        if(compareDateTime(ps.getUpdated(), result.getUpdated())) {
                                             result= service.tasks().update(ps.getGoalStringId(), ps.getStringId(), task).execute();
                                             ps.setUpdated(result.getUpdated());
                                             ps.save();
@@ -398,5 +400,32 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
 
     }
 
+    private boolean compareDateTime(DateTime dateTime1,DateTime dateTime2){
+        TimeZone timeZone= TimeZone.getDefault();
+        Calendar calendar= Calendar.getInstance();
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        Date d1=null;
+        Date d2=null;
+        boolean res=false;
+        try {
+            calendar.setTime(sdf.parse(dateTime1.toString()));
+            calendar.add(Calendar.MILLISECOND, timeZone.getRawOffset());
+            calendar.getTime();
+            d1=calendar.getTime();
+            d2=sdf.parse(dateTime2.toString());
+            if(d1.compareTo(d2)>=0)
+                res=true;
+            else
+                res=false;
+        } catch (ParseException e) {
+            res=true;
+            e.printStackTrace();
+        } catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            return res;
+        }
+
+    }
 
 }

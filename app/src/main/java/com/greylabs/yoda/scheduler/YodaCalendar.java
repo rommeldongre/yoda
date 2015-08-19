@@ -454,7 +454,7 @@ public class YodaCalendar {
         int count=0;
         Calendar calendar=Calendar.getInstance();
         Goal goal=new Goal(context).get(goalId);
-        List<PendingStep> pendingSteps= new PendingStep(context).getAll(PendingStep.PendingStepStatus.TODO,goalId);
+        List<PendingStep> pendingSteps= new PendingStep(context).getAll(PendingStep.PendingStepStatus.TODO,false,goalId);
         if(pendingSteps!=null) {
              slots=slot.getAll(timeBox.getId());
             Iterator<Slot> it;

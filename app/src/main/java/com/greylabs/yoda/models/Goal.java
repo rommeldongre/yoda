@@ -369,7 +369,8 @@ public class Goal implements Serializable{
                 " "+" from "+TablePendingStep.pendingStep+" " +
                 " "+" where "+TablePendingStep.goalId+" = "+this.id+" " +
                 " "+" and "+TablePendingStep.type+"!="+ PendingStep.PendingStepType.SUB_STEP.ordinal()+" " +
-                " "+" and "+TablePendingStep.status+" = "+PendingStep.PendingStepStatus.TODO.ordinal();
+                " "+" and "+TablePendingStep.status+" = "+PendingStep.PendingStepStatus.TODO.ordinal()+" " +
+                " "+" and "+TablePendingStep.deleted+"=0";
         SQLiteDatabase db=database.getReadableDatabase();
         Cursor c=db.rawQuery(query,null);
         c.moveToFirst();
