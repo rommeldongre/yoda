@@ -30,6 +30,7 @@ import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Logger;
+import com.greylabs.yoda.utils.Prefs;
 import com.greylabs.yoda.utils.colorpicker.LineColorPicker;
 
 import java.util.Set;
@@ -37,6 +38,9 @@ import java.util.TreeSet;
 
 public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnCheckedChangeListener,CompoundButton.OnCheckedChangeListener {
 
+    int red, blue, green, yellow, orange, brown, teal, purple, black;
+
+    Prefs prefs;
     private String caller;
     private Toolbar toolbar;
     private LineColorPicker colorPicker;
@@ -79,7 +83,20 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
     }
 
     private void initUI(){
+
+        red = getResources().getColor(R.color.colorcode_red);
+        blue = getResources().getColor(R.color.colorcode_blue);
+        green = getResources().getColor(R.color.colorcode_green);
+        yellow = getResources().getColor(R.color.colorcode_yellow);
+        orange = getResources().getColor(R.color.colorcode_orange);
+        brown = getResources().getColor(R.color.colorcode_brown);
+        teal = getResources().getColor(R.color.colorcode_teal);
+        purple = getResources().getColor(R.color.colorcode_purple);
+        black = getResources().getColor(R.color.colorcode_black);
+
         caller = getIntent().getStringExtra(Constants.CALLER);
+        prefs = Prefs.getInstance(this);
+
         toolbar = (Toolbar) findViewById(R.id.toolBarActCreateTimeBox);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -165,8 +182,8 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
                     currentTimeBox.getTimeBoxOn().setSubValues(timeBoxOnSubValueSet);
                     currentTimeBox.setTillType(timeBoxTill);
 
-                    initEditUI();
                     //initialize all the views here from the old values of the timebox
+                    initEditUI();
                 }else if(intent.getStringExtra(Constants.OPERATION).equals(Constants.OPERATION_ADD)){
                     currentTimeBox = new TimeBox(this);
                 }
@@ -181,21 +198,13 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
 //        RandomColor randomColor = new RandomColor();
 //        int[] color = randomColor.randomColor(9);
 
-        int[] colors = {getResources().getColor(R.color.colorcode_red),
-                getResources().getColor(R.color.colorcode_blue),
-                getResources().getColor(R.color.colorcode_green),
-                getResources().getColor(R.color.colorcode_yellow),
-                getResources().getColor(R.color.colorcode_orange),
-                getResources().getColor(R.color.colorcode_brown),
-                getResources().getColor(R.color.colorcode_teal),
-                getResources().getColor(R.color.colorcode_purple),
-                getResources().getColor(R.color.colorcode_black)
-        };
+        //set old color
+        int[] colors = { red, blue, green, yellow, orange, brown, teal, purple, black};
         // set color palette
 //        colorPicker.setColors(new int[] {Color.RED,Color.GREEN,Color.BLUE,Color.YELLOW});
         colorPicker.setColors(colors);
         // set selected color [optional]
-        colorPicker.setSelectedColorPosition(5);//SelectedColor(Color.RED);
+        colorPicker.setSelectedColorPosition(prefs.getColorCodePosition());//SelectedColor(Color.RED);
         // set on change listener
 //        colorPicker.setOnColorChangedListener(new OnColorChangedListener() {
 //            @Override
@@ -525,44 +534,8 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
     }
     private void initEditUI(){
         if(currentTimeBox!=null){
-            //set old color
-            int red = getResources().getColor(R.color.colorcode_red);
-            int blue = getResources().getColor(R.color.colorcode_blue);
-            int green = getResources().getColor(R.color.colorcode_green);
-            int yellow = getResources().getColor(R.color.colorcode_yellow);
-            int orange = getResources().getColor(R.color.colorcode_orange);
-            int brown = getResources().getColor(R.color.colorcode_brown);
-            int teal = getResources().getColor(R.color.colorcode_teal);
-            int purple = getResources().getColor(R.color.colorcode_purple);
-            int black = getResources().getColor(R.color.colorcode_black);
-            Integer i = Integer.valueOf(currentTimeBox.getColorCode());
-            if (i.equals(red)) {
-                colorPicker.setSelectedColorPosition(0);
-
-            } else if (i.equals(blue)) {
-                colorPicker.setSelectedColorPosition(1);
-
-            } else if (i.equals(green)) {
-                colorPicker.setSelectedColorPosition(2);
-
-            } else if (i.equals(yellow)) {
-                colorPicker.setSelectedColorPosition(3);
-
-            } else if (i.equals(orange)) {
-                colorPicker.setSelectedColorPosition(4);
-
-            } else if (i.equals(brown)) {
-                colorPicker.setSelectedColorPosition(5);
-
-            } else if (i.equals(teal)) {
-                colorPicker.setSelectedColorPosition(6);
-
-            } else if (i.equals(purple)) {
-                colorPicker.setSelectedColorPosition(7);
-
-            } else if (i.equals(black)) {
-                colorPicker.setSelectedColorPosition(8);
-            }
+            // set color
+            colorPicker.setSelectedColorPosition(getSelectedColorPosition(Integer.valueOf(currentTimeBox.getColorCode())));
 
             //set when
             for(TimeBoxWhen when:currentTimeBox.getTimeBoxWhen().getWhenValues()) {
@@ -707,6 +680,16 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
            currentTimeBox.setTillType(timeBoxTill);
            currentTimeBox.setColorCode(String.valueOf(colorPicker.getColor()));
            isValid=true;
+
+           // save color picker position in prefs
+           int nextPosition = getSelectedColorPosition(Integer.valueOf(currentTimeBox.getColorCode()));
+           if(nextPosition<8){
+               nextPosition++;
+           } else{
+               nextPosition = 0;
+           }
+           prefs.setColorCodePosition(nextPosition);
+
        }else if(timeBoxWhenSet.isEmpty()){
            Logger.showMsg(this,getString(R.string.msgActCreateTimeBoxSelectWhenTime));
        }else if(timeBoxOn==null || timeBoxOnSubValueSet.isEmpty()){
@@ -721,6 +704,30 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
             return currentTimeBox;
         else
             return null;
+    }
+
+    private int getSelectedColorPosition(Integer color) {
+        if (color.equals(red)) {
+            return 0;
+        } else if (color.equals(blue)) {
+            return 1;
+        } else if (color.equals(green)) {
+            return 2;
+        } else if (color.equals(yellow)) {
+            return 3;
+        } else if (color.equals(orange)) {
+            return 4;
+        } else if (color.equals(brown)) {
+            return 5;
+        } else if (color.equals(teal)) {
+            return 6;
+        } else if (color.equals(purple)) {
+            return 7;
+        } else if (color.equals(black)) {
+            return 8;
+        }else {
+            return 0;
+        }
     }
 
     private void invalidateOnValueSelections(){

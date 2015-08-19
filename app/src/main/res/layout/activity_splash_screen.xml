@@ -39,9 +39,9 @@
 
             <ImageView
                 android:id="@+id/ivActSplashScreen"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/ic_launcher_yoda" />
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:background="@drawable/ic_launcher_large" />
         </LinearLayout>
 
         <TextView
@@ -50,7 +50,6 @@
             android:text="@string/label_loading_act_splash_screen"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
             android:gravity="center_horizontal"
-            android:layout_marginTop="10dp"
             android:layout_below="@id/llActSplashScreen" />
     </RelativeLayout>
 </RelativeLayout>

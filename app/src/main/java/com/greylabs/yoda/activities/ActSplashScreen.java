@@ -56,6 +56,7 @@ public class ActSplashScreen extends Activity{
 //        int logoWidth = Math.round(dpWidth);
 //        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(logoWidth, logoWidth);
 //        iv.setLayoutParams(layoutParams);
+
         prefs = Prefs.getInstance(this);
 //        StartAnimations();
         iv.postDelayed(new Runnable() {

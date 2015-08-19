@@ -85,6 +85,7 @@
         <activity
             android:name=".activities.ActNowFilter"
             android:screenOrientation="portrait"
+            android:noHistory="true"
             android:theme="@style/MyDialogueTheme" />
         <activity
             android:name=".activities.ActSettingChangeWallpaper"

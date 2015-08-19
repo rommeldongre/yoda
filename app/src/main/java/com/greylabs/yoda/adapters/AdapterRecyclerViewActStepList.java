@@ -58,6 +58,7 @@ public class AdapterRecyclerViewActStepList extends RecyclerView.Adapter<Adapter
             holder.tvETAOfStep.setText(CalendarUtils.getFormattedDateWithSlot(stepsArrayList.get(position).getStepDate()));
         if(stepsArrayList.get(position).getPendingStepStatus().equals(PendingStep.PendingStepStatus.COMPLETED)){
             holder.checkBox.setChecked(true);
+            holder.checkBox.setBackgroundColor(Integer.valueOf(stepsArrayList.get(position).getColorCode()));
 //            holder.checkBox.setEnabled(false);
         }
         if(isEditOperation){

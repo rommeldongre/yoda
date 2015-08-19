@@ -153,6 +153,9 @@
     <string name="label_loading_act_splash_screen">Loading...</string>
     <string name="label_comapny_info1">YodA - You can DO Anything, v2</string>
     <string name="label_comapny_info2">© Grey Labs, LLP. All Rights Reserved.</string>
+    <string name="edtExcuseDialogueExcuse">Enter your excuse</string>
+    <string name="btnLogDialogueExcuse">Log</string>
+    <string name="titleDialogueExcuse">Log Excuse</string>
 
     <string-array name="arrayStepTypeActAddNewStep">
         <item>Single Step</item>
