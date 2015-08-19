@@ -171,7 +171,7 @@ public class CalendarUtils {
             return 4;
         return -1;
     }
-    public static Set<TimeBoxWhen> getPossibleWhenTypesOfDay(){
+    public static Set<TimeBoxWhen> getTodaysPassedSlots(){
         Calendar cal=Calendar.getInstance();
         Set<TimeBoxWhen> whens=new TreeSet<>();
         whens.add(TimeBoxWhen.EARLY_MORNING);whens.add(TimeBoxWhen.MORNING);
@@ -181,9 +181,8 @@ public class CalendarUtils {
         int currentHour=cal.get(Calendar.HOUR_OF_DAY);
         while (itWhens.hasNext()){
             TimeBoxWhen when=itWhens.next();
-            if(!(when.getStartTime()>currentHour && currentHour<when.getEndTime()))
+            if(when.getStartTime()>currentHour)
                 itWhens.remove();
-
         }
         return whens;
     }

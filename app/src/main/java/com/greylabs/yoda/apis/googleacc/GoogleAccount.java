@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.gesture.GestureOverlayView;
-import android.os.AsyncTask;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -16,7 +14,6 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.util.DateTime;
-import com.google.api.services.tasks.Tasks;
 import com.google.api.services.tasks.TasksScopes;
 import com.google.api.services.tasks.model.Task;
 import com.google.api.services.tasks.model.TaskList;
@@ -35,7 +32,6 @@ import com.greylabs.yoda.utils.Prefs;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -104,7 +100,7 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         Prefs.getInstance(context).setDefaultAccountEmailId(users.get(position));
-        Logger.log("You selected", users.get(position));
+        Logger.log(TAG, users.get(position));
     }
 
     @Override
@@ -194,16 +190,19 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                 pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
         }else{
             pendingStep = pendingStep.get(id);
-            id=pendingStep.getIdIfExists(task.getParent());
-            if(id!=0) {
-                pendingStep.setSubStepOf(id);
-                pendingStep.setPendingStepType(PendingStep.PendingStepType.SUB_STEP);
-                //and its parents type set to Series Step
-                PendingStep ps=pendingStep.get(id);
-                ps.setPendingStepType(PendingStep.PendingStepType.SERIES_STEP);
-            }
-            //pendingStep.save();
+
         }
+        id=pendingStep.getIdIfExists(task.getParent());
+        if(id!=0) {
+            pendingStep.setSubStepOf(id);
+            pendingStep.setPendingStepType(PendingStep.PendingStepType.SUB_STEP);
+            //and its parents type set to Series Step
+            PendingStep ps=pendingStep.get(id);
+            ps.setPendingStepType(PendingStep.PendingStepType.SERIES_STEP);
+            pendingStep.setGoalId(ps.getGoalId());
+            ps.save();
+        }
+
         if (task.getStatus().equals("needsAction"))
             pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         else {
@@ -240,9 +239,9 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                         goal.save();
                 }
                 yodaCalendar.setTimeBox(timeBox.get(goal.getTimeBoxId()));
-                Logger.log("TAG", "Task List: " + taskList.toString() + "  Goal: " + goal.toString());
-                com.google.api.services.tasks.model.Tasks tasks=service.tasks().list(taskList.getId()).setShowDeleted(true).setShowCompleted(true).execute();
-                //com.google.api.services.tasks.model.Tasks tasks=service.tasks().list(taskList.getId()).execute();
+                Logger.log(TAG, "Task List: " + taskList.toString() + "  Goal: " + goal.toString());
+                //com.google.api.services.tasks.model.Tasks tasks=service.tasks().list(taskList.getId()).setShowDeleted(true).setShowCompleted(true).execute();
+                com.google.api.services.tasks.model.Tasks tasks=service.tasks().list(taskList.getId()).execute();
                 if(tasks!=null) {
                     List<Task> myTasks=tasks.getItems();
                     if(myTasks!=null) {
@@ -263,7 +262,7 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                                     pendingStep.save();//insert or update
                                 }
                             }
-                            Logger.log("TAG", "Task : " + task.toString() + "  Pending Step: " + pendingStep.toString());
+                            Logger.log(TAG, "Task : " + task.toString() + "  Pending Step: " + pendingStep.toString());
                         }
                     }
                 }
@@ -273,6 +272,7 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
     }
 
     public void doExport() throws IOException {
+        Logger.log(TAG, "Exporting Goals and Pending steps.wait...");
         //goals
         Goal goal=new Goal(context);
         List<Goal> goals=goal.getAll();
@@ -280,6 +280,7 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
             for (Goal g : goals) {
                 //export goals data
                 TaskList taskList =(TaskList)buildGoal(g);
+                Logger.log(TAG, "TaskList : " + taskList + "  Goal: "+g);
                 if (g.getStringId() == null || g.getStringId().equals("")) {
                     //insert to google task list
                     TaskList result = service.tasklists().insert(taskList).execute();
@@ -303,14 +304,15 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
 
                 //do following for each step in this goal
                 PendingStep pendingStep = new PendingStep(context);
-                List<PendingStep> pendingSteps = pendingStep.getAll(PendingStep.PendingStepStatus.TODO, true, g.getId());
+                List<PendingStep> pendingSteps = pendingStep.getAll(PendingStep.PendingStepStatus.TODO,g.getId());
                 if(pendingSteps!=null) {
-                    List<PendingStep> completed=pendingStep.getAll(PendingStep.PendingStepStatus.COMPLETED, true, g.getId());
+                    List<PendingStep> completed=pendingStep.getAll(PendingStep.PendingStepStatus.COMPLETED, g.getId());
                     if(completed!=null)
                         pendingSteps.addAll(completed);
 
                     for (PendingStep ps : pendingSteps) {
                         Task task =(Task) buildPendingStep(ps);
+                        Logger.log(TAG, "Task : " + task.toString() + "  Pending Step: " + ps.toString());
                         switch (ps.getPendingStepType()) {
                             case SPLIT_STEP:
                             case SERIES_STEP:
@@ -385,8 +387,15 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                                     }else {
                                         Task result= service.tasks().get(ps.getGoalStringId(), ps.getStringId()).execute();
                                         if(compareDateTime(ps.getUpdated(), result.getUpdated())) {
+                                            ps=convertToPendingStep(result);
                                             result= service.tasks().update(ps.getGoalStringId(), ps.getStringId(), task).execute();
                                             ps.setUpdated(result.getUpdated());
+                                            Logger.log(TAG, "Updated --Task : " + task.toString() + "  Pending Step: " + pendingStep.toString());
+                                            ps.save();
+                                        }else{
+                                            ps=convertToPendingStep(result);
+                                            ps.setUpdated(result.getUpdated());
+                                            Logger.log(TAG, "Updated --Task : " + task.toString() + "  Pending Step: " + pendingStep.toString());
                                             ps.save();
                                         }
                                     }
@@ -412,7 +421,7 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
             calendar.add(Calendar.MILLISECOND, timeZone.getRawOffset());
             calendar.getTime();
             d1=calendar.getTime();
-            d2=sdf.parse(dateTime2.toString());
+            d2=sdf.parse(CalendarUtils.getStringToRFCTimestamp(dateTime2.toString()).toString());
             if(d1.compareTo(d2)>=0)
                 res=true;
             else

@@ -454,9 +454,9 @@ public class YodaCalendar {
         int count=0;
         Calendar calendar=Calendar.getInstance();
         Goal goal=new Goal(context).get(goalId);
-        List<PendingStep> pendingSteps= new PendingStep(context).getAll(PendingStep.PendingStepStatus.TODO,false,goalId);
+        List<PendingStep> pendingSteps= new PendingStep(context).getAll(PendingStep.PendingStepStatus.TODO,goalId);
         if(pendingSteps!=null) {
-             slots=slot.getAll(timeBox.getId());
+            slots=slot.getAll(timeBox.getId());
             Iterator<Slot> it;
             for (PendingStep pendingStep : pendingSteps) {
                 //Collections.sort(slots, new SortByDate());
@@ -590,36 +590,32 @@ public class YodaCalendar {
         String  sqliteDate=CalendarUtils.getSqLiteDateFormat(cal);
         Date date=CalendarUtils.parseDate(sqliteDate);
 
-       if (slots!=null) {
-           Slot slot;
-           Iterator<Slot> itSlots = slots.iterator();
-           while (itSlots.hasNext()) {
-               slot = itSlots.next();
-               if (date.compareTo(slot.getScheduleDate()) == 0) {
-                   itSlots.remove();
-               } else {
-                   break;
-               }
-           }
-       }
+//       if (slots!=null) {
+//           Slot slot;
+//           Iterator<Slot> itSlots = slots.iterator();
+//           while (itSlots.hasNext()) {
+//               slot = itSlots.next();
+//               if (date.compareTo(slot.getScheduleDate()) == 0) {
+//                   itSlots.remove();
+//               } else {
+//                   break;
+//               }
+//           }
+//       }
 
-//        Set<TimeBoxWhen> whens=CalendarUtils.getPossibleWhenTypesOfDay();
-//        if(slots!=null) {
-//            for (TimeBoxWhen when : whens) {
-//                Slot slot = null;
-//                Iterator<Slot> itSlots = slots.iterator();
-//
-//                while (itSlots.hasNext()) {
-//                    slot = itSlots.next();
-//                    if (date.compareTo(slot.getScheduleDate()) == 0 && (when != slot.getWhen())) {
-//                        itSlots.remove();
-//                        break;
-//                    }
-//                }
-//                if (date.compareTo(slot.getScheduleDate()) != 0)
-//                    break;
-//
-//            }
-//        }
+        Set<TimeBoxWhen> whens=CalendarUtils.getTodaysPassedSlots();
+        if(slots!=null && whens!=null) {
+            for (TimeBoxWhen when : whens) {
+                Slot slot = null;
+                Iterator<Slot> itSlots = slots.iterator();
+                while (itSlots.hasNext()) {
+                    slot = itSlots.next();
+                    if (date.compareTo(slot.getScheduleDate()) == 0 && (when == slot.getWhen())) {
+                        itSlots.remove();
+                        break;
+                    }
+                }
+            }
+        }
     }
 }
