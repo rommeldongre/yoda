@@ -557,6 +557,19 @@ public class PendingStep implements Serializable {
         int numOfRowAffected = db.delete(TablePendingStep.pendingStep, TablePendingStep.subStepOf + "=" + id, null);
         return numOfRowAffected;
     }
+
+    public void markSubSteps(boolean deleted) {
+        SQLiteDatabase db = database.getReadableDatabase();
+        String query = "update  " + TablePendingStep.pendingStep + " " +
+                " " + "set " + TablePendingStep.deleted + "=" + (deleted ? 1 : 0) + " " +
+                " " + " where " + TablePendingStep.goalId + " = " + this.goalId + " " +
+                " " + " and " + TablePendingStep.subStepOf + "=" + this.id + " " +
+                " " + " and " + TablePendingStep.type + "=" + PendingStepType.SUB_STEP.ordinal();
+
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+        c.close();
+    }
     /**********************************************************************************************/
     //Utility Methods
     /********************************************************************************************/
@@ -707,7 +720,7 @@ public class PendingStep implements Serializable {
             pendingStepNew.setUpdated(new DateTime(new Date()));
             pendingStepNew.setDeleted(this.isDeleted());
             pendingStepNew.setGoalStringId(this.getGoalStringId());
-            pendingStepNew.setStringId(this.getStringId());
+            pendingStepNew.setStringId("");
             rowId+=pendingStepNew.saveSubStep(pendingStepNew);
         }
         return rowId;

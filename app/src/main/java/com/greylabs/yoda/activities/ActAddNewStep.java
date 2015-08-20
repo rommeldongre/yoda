@@ -310,9 +310,13 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
                 stepArrayList.get(i).updateSubSteps();
             }
             PendingStep ps =currentStep;
+            ps.markSubSteps(true);
             switch (ps.getPendingStepType()){
                 case SPLIT_STEP:
-                    ps.deleteSubSteps();
+                    ps.setDeleted(true);
+                    ps.save();
+                    ps.setId(0);
+                    ps.save();
                     if(ps.getTime()>Constants.MAX_SLOT_DURATION){
                         float numberOfSteps=(float)ps.getTime()/Constants.MAX_SLOT_DURATION;
                         Float f=new Float(numberOfSteps);
@@ -320,10 +324,14 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
                         if(numberOfSteps-f.intValue()>0.0f)
                             ps.createSubSteps(f.intValue()+1,f.intValue()+1,currentStep.getTime()%Constants.MAX_SLOT_DURATION);
                     }
+
                     break;
                 case SERIES_STEP:
-                    ps.deleteSubSteps();
-                    ps.createSubSteps(1, currentStep.getStepCount(),currentStep.getTime());
+                    ps.setDeleted(true);
+                    ps.save();
+                    ps.setId(0);
+                    ps.save();
+                    ps.createSubSteps(1, currentStep.getStepCount(), currentStep.getTime());
                     break;
             }
 

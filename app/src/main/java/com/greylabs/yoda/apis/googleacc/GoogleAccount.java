@@ -36,7 +36,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 import java.util.logging.Level;
 
@@ -55,7 +57,7 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
     GoogleAccountCredential credential;
     com.google.api.services.tasks.Tasks service;
     private Prefs prefs;
-
+    private Map<String,String> positions;
     public GoogleAccount(Context context){
         super(context);
         prefs=Prefs.getInstance(context);
@@ -70,6 +72,7 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
         credential.setSelectedAccountName(prefs.getDefaultAccountEmailId());
         service = new com.google.api.services.tasks.Tasks.Builder(httpTransport, jsonFactory, credential)
                 .setApplicationName("Yoda").build();
+        positions=new HashMap<>();
         try {
             sync();
         } catch (IOException e) {
@@ -254,6 +257,7 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                     List<Task> myTasks=tasks.getItems();
                     if(myTasks!=null) {
                         for (Task task : myTasks) {
+                            positions.put(task.getId(),task.getPosition());
                             PendingStep pendingStep = convertToPendingStep(task);
                             if ( pendingStep.getId()!=0 && pendingStep.isDeleted()) {
                                 service.tasks().delete(goal.getStringId(), pendingStep.getStringId()).execute();
@@ -317,19 +321,19 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                     List<PendingStep> completed=pendingStep.getAll(PendingStep.PendingStepStatus.COMPLETED, g.getId());
                     if(completed!=null)
                         pendingSteps.addAll(completed);
-                    List<PendingStep> substeps=new ArrayList<>();
-
-                    for(PendingStep ps: pendingSteps){
-                        switch (ps.getPendingStepType()){
-                            case SERIES_STEP:
-                            case SPLIT_STEP:
-                                List<PendingStep> temp=ps.getAllSubSteps(ps.getId(),ps.getGoalId());
-                                if(temp!=null){
-                                    substeps.addAll(temp);
-                                }
-                        }
-                    }
-                    pendingSteps.addAll(substeps);
+//                    List<PendingStep> substeps=new ArrayList<>();
+//
+//                    for(PendingStep ps: pendingSteps){
+//                        switch (ps.getPendingStepType()){
+//                            case SERIES_STEP:
+//                            case SPLIT_STEP:
+//                                List<PendingStep> temp=ps.getAllSubSteps(ps.getId(),ps.getGoalId());
+//                                if(temp!=null){
+//                                    substeps.addAll(temp);
+//                                }
+//                        }
+//                    }
+//                    pendingSteps.addAll(substeps);
                     for(PendingStep ps:pendingSteps){
                         Task task=(Task)buildPendingStep(ps);
                         task.setTitle(ps.getNickName());
@@ -337,11 +341,15 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                         if(ps.getStepDate()!=null)
                             task.setDue(new DateTime(ps.getStepDate()));
                         if (ps.getStringId() == null || ps.getStringId().equals("")) {
-                            Task result = service.tasks().insert(g.getStringId(), task).execute();
+                            Task result = service.tasks().insert(g.getStringId(), task). execute();
+                            positions.put(result.getId(), result.getPosition());
                             ps.setStringId(result.getId());
                             ps.setUpdated(result.getUpdated());
                             ps.setGoalStringId(g.getStringId());
                             ps.save();
+                            if(ps.getPendingStepType()== PendingStep.PendingStepType.SUB_STEP){
+                                result = service.tasks().move(g.getStringId(),ps.getStringId()).setParent(task.getParent()).execute();
+                            }
                         } else {
                             if(ps.isDeleted()){
                                 service.tasks().delete(ps.getGoalStringId(), ps.getStringId()).execute();

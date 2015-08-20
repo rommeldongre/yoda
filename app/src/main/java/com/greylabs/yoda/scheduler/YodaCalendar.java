@@ -497,8 +497,8 @@ public class YodaCalendar {
                                     it.remove();
                                     break;
                                 }
-                                sessionCount++;
                             }
+                            sessionCount++;
                         }
                         if(substep!=null) {
                             pendingStep.setStepDate(substep.getStepDate());
