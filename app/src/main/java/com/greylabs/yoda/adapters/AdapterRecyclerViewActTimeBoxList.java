@@ -8,11 +8,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.greylabs.yoda.R;
-import com.greylabs.yoda.interfaces.OnClickOfRecyclerViewActGoalList;
 import com.greylabs.yoda.interfaces.OnClickOfRecyclerViewActTimeboxList;
 import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.utils.Constants;
@@ -48,8 +46,10 @@ public class AdapterRecyclerViewActTimeBoxList extends RecyclerView.Adapter<Adap
         holder.tvTimeBoxName.setText(timeBoxArrayList.get(position).getNickName());
         if(timeBoxArrayList.get(position).isActive()){
             holder.tvTimeBoxName.setTypeface(null, Typeface.ITALIC);
+            holder.tvAttachedGoalName.setText(timeBoxArrayList.get(position).getGoalName());
         }else{
             holder.tvTimeBoxName.setTypeface(null, Typeface.BOLD);
+            holder.tvAttachedGoalName.setText("");
         }
         if(timeBoxArrayList.get(position).getNickName().equals(Constants.NICKNAME_UNPLANNED_TIMEBOX))
             holder.btnDeleteTimeBox.setVisibility(View.GONE);
@@ -81,7 +81,7 @@ public class AdapterRecyclerViewActTimeBoxList extends RecyclerView.Adapter<Adap
         Context contxt;
 
         CircleView circleView;
-        TextView tvTimeBoxName;
+        TextView tvTimeBoxName, tvAttachedGoalName;
         Button btnDeleteTimeBox;//btnEditTimeBox,
         CardView cardView;
 
@@ -94,7 +94,8 @@ public class AdapterRecyclerViewActTimeBoxList extends RecyclerView.Adapter<Adap
 
 //            btnEditTimeBox = (Button) itemView.findViewById(R.id.btnEditTimeBoxRecyclerItemActTimeBoxList);
             circleView = (CircleView) itemView.findViewById(R.id.btnBulletRecyclerItemActTimeBoxList);
-            tvTimeBoxName = (TextView)itemView.findViewById(R.id.tvGoalNameRecyclerItemActTimeBoxList);
+            tvTimeBoxName = (TextView)itemView.findViewById(R.id.tvTBNameRecyclerItemActTimeBoxList);
+            tvAttachedGoalName = (TextView)itemView.findViewById(R.id.tvGoalNameRecyclerItemActTimeBoxList);
             btnDeleteTimeBox = (Button) itemView.findViewById(R.id.btnDeleteTimeBoxRecyclerItemActTimeBoxList);
             cardView = (CardView) itemView.findViewById(R.id.cardViewActTimeBoxList);
 

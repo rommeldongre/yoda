@@ -93,6 +93,9 @@
         <activity
             android:name=".activities.ActSettingDefaultDuration"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activities.ActAutoSync"
+            android:screenOrientation="portrait" />
 
 
         <!-- Receivers and Services-->

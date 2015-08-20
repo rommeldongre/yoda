@@ -15,6 +15,7 @@ import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.CalendarUtils;
+import com.greylabs.yoda.views.TouchCheckBox;
 
 import java.util.List;
 import java.util.Map;
@@ -63,20 +64,21 @@ public class AdapterExpandableList extends BaseExpandableListAdapter {
                 .findViewById(R.id.lblListItem);
         TextView tvETAOfStep = (TextView) convertView
                 .findViewById(R.id.tvETAOfStepListItemActFilters);
-        final CheckBox cbCompleted = (CheckBox) convertView
+        final TouchCheckBox cbCompleted = (TouchCheckBox) convertView
                 .findViewById(R.id.cbListItemActFilters);
 
         txtListChild.setText(pendingStep.getNickName());
         tvETAOfStep.setText(CalendarUtils.getFormattedDateWithoutSlot(pendingStep.getStepDate()));
+        cbCompleted.setCircleColor(Integer.valueOf(pendingStep.getColorCode()));
 
         if(pendingStep.getPendingStepStatus().equals(PendingStep.PendingStepStatus.COMPLETED)){
             cbCompleted.setChecked(true);
 //            cbCompleted.setEnabled(false);
         }
 
-        cbCompleted.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        cbCompleted.setOnCheckedChangeListener(new TouchCheckBox.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            public void onCheckedChanged(View buttonView, boolean isChecked) {
                 if(isChecked){
                     pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
                     pendingStep.cancelAlarm();

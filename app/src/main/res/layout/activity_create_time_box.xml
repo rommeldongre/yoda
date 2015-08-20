@@ -166,7 +166,6 @@
                                 android:text="@string/rb_daily_act_create_time_box"
                                 android:checked="false"
                                 android:layout_weight="1"
-                                android:textSize="13sp"
                                 style="@style/RadioButtonStyle" />
 
                             <RadioButton
@@ -176,7 +175,6 @@
                                 android:text="@string/rb_weekly_act_create_time_box"
                                 android:checked="false"
                                 android:layout_weight="1"
-                                android:textSize="13sp"
                                 style="@style/RadioButtonStyle" />
 
                             <RadioButton
@@ -186,7 +184,6 @@
                                 android:text="@string/rb_monthly_act_create_time_box"
                                 android:checked="false"
                                 android:layout_weight="1"
-                                android:textSize="13sp"
                                 style="@style/RadioButtonStyle" />
 
                             <RadioButton
@@ -196,7 +193,6 @@
                                 android:text="@string/rb_quarterly_act_create_time_box"
                                 android:checked="false"
                                 android:layout_weight="1"
-                                android:textSize="13sp"
                                 style="@style/RadioButtonStyle" />
 
                             <RadioButton
@@ -206,7 +202,6 @@
                                 android:text="@string/rb_yearly_act_create_time_box"
                                 android:checked="false"
                                 android:layout_weight="1"
-                                android:textSize="13sp"
                                 style="@style/RadioButtonStyle" />
                         </RadioGroup>
                     </HorizontalScrollView>
