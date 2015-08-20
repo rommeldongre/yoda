@@ -1,15 +1,10 @@
 package com.greylabs.yoda.activities;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -21,19 +16,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.greylabs.yoda.R;
-import com.greylabs.yoda.apis.TasksSample;
 import com.greylabs.yoda.apis.googleacc.GoogleAccount;
-import com.greylabs.yoda.apis.googleacc.GoogleSync;
 import com.greylabs.yoda.enums.AccountType;
-import com.greylabs.yoda.models.Day;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.Slot;
-import com.greylabs.yoda.scheduler.BootCompleteService;
-import com.greylabs.yoda.scheduler.YodaCalendar;
-import com.greylabs.yoda.threads.ImportTaskAsyncThread;
 import com.greylabs.yoda.utils.Constants;
-import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.Prefs;
 import com.greylabs.yoda.views.GoalView;
 import com.greylabs.yoda.views.MyArcProgress;
@@ -42,7 +30,6 @@ import com.greylabs.yoda.views.MyFloatingActionsMenu;
 
 import net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +41,7 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
     RelativeLayout layoutToBeHidden, layoutWallpaper, layoutSettingsBackground, layoutOverlapping;
     MyArcProgress arcTotalProgress;
     MyFloatingActionsMenu btnSettings;
-    MyFloatingActionButton btnAddGoal, btnMyGoals, btnMyTimeBoxes, btnDefaultDuration, btnAutosyncWithGoogle,
+    MyFloatingActionButton btnAddGoal, btnMyGoals, btnMyTimeBoxes, btnDefaultDuration, btnAutoSyncWithGoogle,
             btnExportToGoogleCalender, btnImportGoogleTasks, btnChangeWallpaper, btnFilters, btnAddStep;
     Prefs prefs;
 
@@ -90,7 +77,7 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
         btnMyGoals = (MyFloatingActionButton) findViewById(R.id.btnMyGoalsActHome);
         btnMyTimeBoxes = (MyFloatingActionButton) findViewById(R.id.btnMyTimeBoxesActHome);
         btnDefaultDuration = (MyFloatingActionButton) findViewById(R.id.btnDefaultDurationActHome);
-        btnAutosyncWithGoogle = (MyFloatingActionButton) findViewById(R.id.btnAutosyncWithGoogleActHome);
+        btnAutoSyncWithGoogle = (MyFloatingActionButton) findViewById(R.id.btnAutosyncWithGoogleActHome);
         btnExportToGoogleCalender = (MyFloatingActionButton) findViewById(R.id.btnExportToGoogleCalActHome);
         btnImportGoogleTasks = (MyFloatingActionButton) findViewById(R.id.btnImportGoogleTasksActHome);
         btnChangeWallpaper = (MyFloatingActionButton) findViewById(R.id.btnChangeWallpaperActHome);
@@ -108,14 +95,12 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
         btnMyGoals.setOnClickListener(this);
         btnMyTimeBoxes.setOnClickListener(this);
         btnDefaultDuration.setOnClickListener(this);
-        btnAutosyncWithGoogle.setOnClickListener(this);
+        btnAutoSyncWithGoogle.setOnClickListener(this);
         btnExportToGoogleCalender.setOnClickListener(this);
         btnImportGoogleTasks.setOnClickListener(this);
         btnChangeWallpaper.setOnClickListener(this);
         populateNowInfo();
         setStyleToArcTotalProgress();
-
-        Logger.log("----------- scrollview height : ", ""+scrollView.getHeight());
     }
 
     @Override
@@ -209,7 +194,7 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
         RelativeLayout relativeLayout = new RelativeLayout(this);
         relativeLayout.setGravity(Gravity.CENTER_VERTICAL);
         relativeLayout.addView(btnAddGoal);
-        LinearLayout linearLayout1 = new LinearLayout(this);
+        final LinearLayout linearLayout1 = new LinearLayout(this);
         linearLayout1.setOrientation(LinearLayout.VERTICAL);
         linearLayout1.addView(tvAddNewGoal);
         linearLayout1.addView(relativeLayout);
@@ -292,6 +277,7 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
                 break;
 
             case R.id.btnExportToGoogleCalActHome :
+                startActivity(new Intent(this, ActAutoSync.class));
                 btnSettings.collapse();
                 break;
 

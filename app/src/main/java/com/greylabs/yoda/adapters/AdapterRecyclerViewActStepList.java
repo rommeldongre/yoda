@@ -16,6 +16,7 @@ import com.greylabs.yoda.interfaces.onClickOfRecyclerViewActStepList;
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.utils.CalendarUtils;
 import com.greylabs.yoda.utils.Constants;
+import com.greylabs.yoda.views.TouchCheckBox;
 
 import java.util.ArrayList;
 
@@ -47,18 +48,17 @@ public class AdapterRecyclerViewActStepList extends RecyclerView.Adapter<Adapter
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         String noOfSteps="";
+        holder.checkBox.setCircleColor(Integer.valueOf(stepsArrayList.get(position).getColorCode()));
         if(stepsArrayList.get(position).getPendingStepType().equals(PendingStep.PendingStepType.SERIES_STEP)){
             noOfSteps = String.valueOf(stepsArrayList.get(position).getStepCount());
             holder.tvStepName.setText(stepsArrayList.get(position).getNickName()+" - "+noOfSteps+" session");
         }else {
             holder.tvStepName.setText(stepsArrayList.get(position).getNickName());
         }
-
         if(stepsArrayList.get(position).getStepDate()!=null)
             holder.tvETAOfStep.setText(CalendarUtils.getFormattedDateWithSlot(stepsArrayList.get(position).getStepDate()));
         if(stepsArrayList.get(position).getPendingStepStatus().equals(PendingStep.PendingStepStatus.COMPLETED)){
             holder.checkBox.setChecked(true);
-            holder.checkBox.setBackgroundColor(Integer.valueOf(stepsArrayList.get(position).getColorCode()));
 //            holder.checkBox.setEnabled(false);
         }
         if(isEditOperation){
@@ -91,12 +91,12 @@ public class AdapterRecyclerViewActStepList extends RecyclerView.Adapter<Adapter
         return 0;
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, TouchCheckBox.OnCheckedChangeListener {
         int Holderid;
         onClickOfRecyclerViewActStepList myOnClickRecyclerView;
         Context contxt;
 
-        CheckBox checkBox;
+        TouchCheckBox checkBox;
         TextView tvStepName, tvETAOfStep;
         Button btnDeleteStep, btnHandle;//btnEditStep,
         CardView cardView;
@@ -107,7 +107,7 @@ public class AdapterRecyclerViewActStepList extends RecyclerView.Adapter<Adapter
             itemView.setClickable(true);
             itemView.setOnClickListener(this);
 
-            checkBox = (CheckBox) itemView.findViewById(R.id.cbRecyclerItemActStepList);
+            checkBox = (TouchCheckBox) itemView.findViewById(R.id.cbRecyclerItemActStepList);
             tvStepName = (TextView)itemView.findViewById(R.id.tvStepNameRecyclerItemActStepList);
             tvETAOfStep = (TextView)itemView.findViewById(R.id.tvETAOfStepRecyclerItemActStepList);
             btnDeleteStep = (Button) itemView.findViewById(R.id.btnDeleteStepRecyclerItemActStepList);
@@ -144,8 +144,24 @@ public class AdapterRecyclerViewActStepList extends RecyclerView.Adapter<Adapter
             }
         }
 
+//        @Override
+//        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//            try {
+//                myOnClickRecyclerView = (onClickOfRecyclerViewActStepList) contxt;
+//            } catch (ClassCastException e) {
+//                throw new ClassCastException(contxt.toString()
+//                        + " must implement OnHeadlineSelectedListener");
+//            }
+//            if(isChecked){
+//                myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_MARK_STEP_DONE);
+////                buttonView.setEnabled(false);
+//            }else {
+//                myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_MARK_STEP_UNDONE);
+//            }
+//        }
+
         @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        public void onCheckedChanged(View buttonView, boolean isChecked) {
             try {
                 myOnClickRecyclerView = (onClickOfRecyclerViewActStepList) contxt;
             } catch (ClassCastException e) {
