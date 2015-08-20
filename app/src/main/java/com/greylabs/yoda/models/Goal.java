@@ -368,7 +368,8 @@ public class Goal implements Serializable{
         String query="select count(*) as stepCount" +
                 " "+" from "+TablePendingStep.pendingStep+" " +
                 " "+" where "+TablePendingStep.goalId+" = "+this.id+" " +
-                " "+" and "+TablePendingStep.type+"!="+ PendingStep.PendingStepType.SUB_STEP.ordinal()+" " +
+                " "+" and ("+TablePendingStep.type+"="+ PendingStep.PendingStepType.SUB_STEP.ordinal()+" " +
+                " "+" or "+TablePendingStep.type+"="+ PendingStep.PendingStepType.SINGLE_STEP.ordinal()+") " +
                 " "+" and "+TablePendingStep.status+" = "+PendingStep.PendingStepStatus.TODO.ordinal()+" " +
                 " "+" and "+TablePendingStep.deleted+"=0";
         SQLiteDatabase db=database.getReadableDatabase();
