@@ -17,6 +17,7 @@ import com.github.lzyzsd.circleprogress.Utils;
 import com.greylabs.yoda.R;
 
 public class MyArcProgress extends View {
+    float padding;
     private Paint paint;
     protected Paint textPaint;
     private RectF rectF;
@@ -298,7 +299,7 @@ public class MyArcProgress extends View {
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 //        this.rectF.set(this.strokeWidth / 2.0F, this.strokeWidth / 2.0F, (float)MeasureSpec.getSize(widthMeasureSpec) - this.strokeWidth / 2.0F, (float)MeasureSpec.getSize(heightMeasureSpec) - this.strokeWidth / 2.0F);
-        float padding = strokeWidth/2;
+        padding = strokeWidth/2;
         this.rectF.set((this.strokeWidth / 2.0F)+padding ,( this.strokeWidth / 2.0F)+padding, ((float)MeasureSpec.getSize(widthMeasureSpec) - this.strokeWidth / 2.0F)-padding, ((float)MeasureSpec.getSize(heightMeasureSpec) - this.strokeWidth / 2.0F)-padding);
         float radius = (float)this.getWidth() / 2.0F;
         float angle = (360.0F - this.arcAngle) / 2.0F;
@@ -315,6 +316,9 @@ public class MyArcProgress extends View {
         Paint paintBackgroundCircle = new Paint();
         paintBackgroundCircle.setColor(this.backgroundCircleColor);
         canvas.drawCircle((float) this.getWidth() / 2.0F, (float) this.getHeight() / 2.0F, (float) this.getHeight() / 2.0F, paintBackgroundCircle);
+
+        this.rectF.left = this.rectF.left+padding;
+        this.rectF.right = this.rectF.right - padding;
 
         // divider line
         Paint paintLine = new Paint();

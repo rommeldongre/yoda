@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -17,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.apis.TasksSample;
@@ -31,6 +33,7 @@ import com.greylabs.yoda.scheduler.BootCompleteService;
 import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.threads.ImportTaskAsyncThread;
 import com.greylabs.yoda.utils.Constants;
+import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.Prefs;
 import com.greylabs.yoda.views.GoalView;
 import com.greylabs.yoda.views.MyArcProgress;
@@ -111,6 +114,8 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
         btnChangeWallpaper.setOnClickListener(this);
         populateNowInfo();
         setStyleToArcTotalProgress();
+
+        Logger.log("----------- scrollview height : ", ""+scrollView.getHeight());
     }
 
     @Override
@@ -187,6 +192,12 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
             GoalView goalView = new GoalView(this, goalList.get(i));
             linearLayout.addView(goalView);
         }
+        TextView tvAddNewGoal = new TextView(this);
+        tvAddNewGoal.setText(getString(R.string.tvAddNewGoalActHome));
+        tvAddNewGoal.setTextColor(getResources().getColor(R.color.white));
+        tvAddNewGoal.setGravity(Gravity.CENTER);
+        tvAddNewGoal.setSingleLine(true);
+
         // init btnAddGoal
         btnAddGoal = new MyFloatingActionButton(this);
         btnAddGoal.setId(R.id.addNewGoalActHome);
@@ -194,8 +205,15 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
         btnAddGoal.setColorNormal(getResources().getColor(R.color.transperent_total_arc_background));
         btnAddGoal.setColorPressed(getResources().getColor(R.color.transperent_more));
         btnAddGoal.setOnClickListener(this);
-        linearLayout.addView(btnAddGoal);
 
+        RelativeLayout relativeLayout = new RelativeLayout(this);
+        relativeLayout.setGravity(Gravity.CENTER_VERTICAL);
+        relativeLayout.addView(btnAddGoal);
+        LinearLayout linearLayout1 = new LinearLayout(this);
+        linearLayout1.setOrientation(LinearLayout.VERTICAL);
+        linearLayout1.addView(tvAddNewGoal);
+        linearLayout1.addView(relativeLayout);
+        linearLayout.addView(linearLayout1);
         scrollView.addView(linearLayout);
     }
 

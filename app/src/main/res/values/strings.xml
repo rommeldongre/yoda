@@ -156,6 +156,7 @@
     <string name="edtExcuseDialogueExcuse">Enter your excuse</string>
     <string name="btnLogDialogueExcuse">Log</string>
     <string name="titleDialogueExcuse">Log Excuse</string>
+    <string name="tvAddNewGoalActHome">New Goal</string>
 
     <string-array name="arrayStepTypeActAddNewStep">
         <item>Single Step</item>

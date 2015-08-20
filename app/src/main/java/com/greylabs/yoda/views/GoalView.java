@@ -10,13 +10,14 @@ import android.widget.TextView;
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.activities.ActGoalDetails;
 import com.greylabs.yoda.models.Goal;
+import com.greylabs.yoda.utils.CalendarUtils;
 import com.greylabs.yoda.utils.Constants;
 
 public class GoalView extends LinearLayout implements View.OnClickListener {
 
     private Context context;
     MyDonutProgress donutProgress;
-    TextView tvGoalName;
+    TextView tvGoalName, tvETGoal;
     Goal currentGoal;
 
 
@@ -49,7 +50,9 @@ public class GoalView extends LinearLayout implements View.OnClickListener {
 
         inflate(getContext(), R.layout.view_goal, this);
         this.donutProgress = (MyDonutProgress) findViewById(R.id.donutProgressViewGoal);
+        this.tvETGoal = (TextView)findViewById(R.id.tvETViewGoal);
         this.tvGoalName = (TextView)findViewById(R.id.tvViewGoal);
+        tvETGoal.setText(CalendarUtils.getOnlyFormattedDate(this.currentGoal.getDueDate()));
         tvGoalName.setText(this.currentGoal.getNickName());
         setDonutProgressValues();
 
