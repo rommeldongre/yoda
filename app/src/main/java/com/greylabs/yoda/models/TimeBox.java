@@ -265,4 +265,18 @@ public class TimeBox implements Serializable{
 
     }
 
+    public String getGoalName(){
+        SQLiteDatabase db=database.getReadableDatabase();
+        String query="select  " +MetaData.TableGoal.nickName+" "+
+                " "+" from "+ MetaData.TableGoal.goal+"" +
+                " "+" where "+ MetaData.TableGoal.timeBoxId+" = "+this.id;
+        Cursor  c=db.rawQuery(query,null);
+        String nickName="";
+        if(c.moveToFirst()){
+            nickName=c.getString(c.getColumnIndex(MetaData.TableGoal.nickName));
+        }
+        return nickName;
+
+    }
+
 }

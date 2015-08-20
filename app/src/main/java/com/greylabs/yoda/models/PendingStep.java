@@ -596,8 +596,8 @@ public class PendingStep implements Serializable {
 
         String query = "select * "+
                 " " + " from " + TablePendingStep.pendingStep +
-                " " + " where ("  + TablePendingStep.type + "!=" + PendingStepType.SPLIT_STEP.ordinal()+" " +
-                " " + " or "+TablePendingStep.type+"!="+ PendingStepType.SERIES_STEP.ordinal()+" ) " +
+                " " + " where ("  + TablePendingStep.type + "=" + PendingStepType.SUB_STEP.ordinal()+" " +
+                " " + " or "+TablePendingStep.type+"="+ PendingStepType.SINGLE_STEP.ordinal()+" ) " +
                 " "+ "  and "+TablePendingStep.status+" = "+PendingStepStatus.TODO.ordinal()+" "+
                 " "+filterCriteria+" " +
                 " "+" order by "+TablePendingStep.priority+" asc ,"+TablePendingStep.nickName+" asc ";

@@ -32,6 +32,7 @@ import com.greylabs.yoda.utils.Prefs;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -139,6 +140,10 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                 break;
             case COMPLETED:task.setStatus("completed");
         }
+        if(pendingStep.getPendingStepType()== PendingStep.PendingStepType.SUB_STEP){
+            PendingStep ps=new PendingStep(context).get(pendingStep.getSubStepOf());
+            task.setParent(ps.getStringId());
+        }
         task.setTitle(pendingStep.getNickName());
         return task;
     }
@@ -192,16 +197,19 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
             pendingStep = pendingStep.get(id);
 
         }
+        //check for parent
         id=pendingStep.getIdIfExists(task.getParent());
+        pendingStep.setSubStepOf(id);
         if(id!=0) {
-            pendingStep.setSubStepOf(id);
             pendingStep.setPendingStepType(PendingStep.PendingStepType.SUB_STEP);
             //and its parents type set to Series Step
-            PendingStep ps=pendingStep.get(id);
-            ps.setPendingStepType(PendingStep.PendingStepType.SERIES_STEP);
+            PendingStep ps = new PendingStep(context).get(id);
+            if (ps.getPendingStepType() == PendingStep.PendingStepType.SINGLE_STEP)
+                ps.setPendingStepType(PendingStep.PendingStepType.SERIES_STEP);
             pendingStep.setGoalId(ps.getGoalId());
             ps.save();
         }
+
 
         if (task.getStatus().equals("needsAction"))
             pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
@@ -309,100 +317,148 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                     List<PendingStep> completed=pendingStep.getAll(PendingStep.PendingStepStatus.COMPLETED, g.getId());
                     if(completed!=null)
                         pendingSteps.addAll(completed);
+                    List<PendingStep> substeps=new ArrayList<>();
 
-                    for (PendingStep ps : pendingSteps) {
-                        Task task =(Task) buildPendingStep(ps);
-                        Logger.log(TAG, "Task : " + task.toString() + "  Pending Step: " + ps.toString());
-                        switch (ps.getPendingStepType()) {
-                            case SPLIT_STEP:
+                    for(PendingStep ps: pendingSteps){
+                        switch (ps.getPendingStepType()){
                             case SERIES_STEP:
-                                task.setTitle(ps.getNickName());
-                                task.setNotes("This step is added by Yoda");
-                                if (ps.getStringId() == null || ps.getStringId().equals("")) {
-                                    Task result = service.tasks().insert(g.getStringId(), task).execute();
-                                    ps.setStringId(result.getId());
-                                    ps.setUpdated(result.getUpdated());
-                                    ps.setGoalStringId(g.getStringId());
-                                    ps.save();
-                                } else {
-                                    if(ps.isDeleted()){
-                                        service.tasks().delete(ps.getGoalStringId(), ps.getStringId()).execute();
-                                        ps.delete();
-                                    }else {
-                                        Task result= service.tasks().get(ps.getGoalStringId(), ps.getStringId()).execute();
-                                        if(compareDateTime(ps.getUpdated(),result.getUpdated())) {
-                                            result= service.tasks().update(ps.getGoalStringId(), ps.getStringId(), task).execute();
-                                            ps.setUpdated(result.getUpdated());
-                                            ps.save();
-                                        }
-                                    }
+                            case SPLIT_STEP:
+                                List<PendingStep> temp=ps.getAllSubSteps(ps.getId(),ps.getGoalId());
+                                if(temp!=null){
+                                    substeps.addAll(temp);
                                 }
-
-                                List<PendingStep> subSteps = pendingStep.getAllSubSteps(pendingStep.getId(), pendingStep.getGoalId());
-                                if(subSteps!=null){
-                                    for (PendingStep substep : subSteps) {
-                                        task=(Task)buildPendingStep(substep);
-                                        task.setTitle(substep.getNickName());
-                                        task.setNotes("This step is added by Yoda");
-                                        task.setDue(new DateTime(substep.getStepDate()));
-                                        task.setParent(ps.getStringId());
-                                        if (substep.getStringId() == null || substep.getStringId().equals("")) {
-                                            Task result = service.tasks().insert(g.getStringId(), task).execute();
-                                            substep.setStringId(result.getId());
-                                            substep.setUpdated(result.getUpdated());
-                                            substep.setGoalStringId(g.getStringId());
-                                            substep.save();
-                                        } else {
-                                            if(substep.isDeleted()){
-                                                service.tasks().delete(substep.getGoalStringId(), substep.getStringId()).execute();
-                                                substep.delete();
-                                            }else {
-                                                Task result= service.tasks().get(substep.getGoalStringId(), substep.getStringId()).execute();
-                                                if(compareDateTime(substep.getUpdated(),result.getUpdated())) {
-                                                    result= service.tasks().update(substep.getGoalStringId(), substep.getStringId(), task).execute();
-                                                    substep.setUpdated(result.getUpdated());
-                                                    substep.save();
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                                break;
-                            case SINGLE_STEP:
-                                task=(Task)buildPendingStep(ps);
-                                task.setTitle(ps.getNickName());
-                                task.setNotes("This step is added by Yoda");
-                                if(ps.getStepDate()!=null)
-                                    task.setDue(new DateTime(ps.getStepDate()));
-                                if (ps.getStringId() == null || ps.getStringId().equals("")) {
-                                    Task result = service.tasks().insert(g.getStringId(), task).execute();
-                                    ps.setStringId(result.getId());
-                                    ps.setUpdated(result.getUpdated());
-                                    ps.setGoalStringId(g.getStringId());
-                                    ps.save();
-                                } else {
-                                    if(ps.isDeleted()){
-                                        service.tasks().delete(ps.getGoalStringId(), ps.getStringId()).execute();
-                                        ps.delete();
-                                    }else {
-                                        Task result= service.tasks().get(ps.getGoalStringId(), ps.getStringId()).execute();
-                                        if(compareDateTime(ps.getUpdated(), result.getUpdated())) {
-                                            ps=convertToPendingStep(result);
-                                            result= service.tasks().update(ps.getGoalStringId(), ps.getStringId(), task).execute();
-                                            ps.setUpdated(result.getUpdated());
-                                            Logger.log(TAG, "Updated --Task : " + task.toString() + "  Pending Step: " + pendingStep.toString());
-                                            ps.save();
-                                        }else{
-                                            ps=convertToPendingStep(result);
-                                            ps.setUpdated(result.getUpdated());
-                                            Logger.log(TAG, "Updated --Task : " + task.toString() + "  Pending Step: " + pendingStep.toString());
-                                            ps.save();
-                                        }
-                                    }
-                                }
-                                break;
                         }
                     }
+                    pendingSteps.addAll(substeps);
+                    for(PendingStep ps:pendingSteps){
+                        Task task=(Task)buildPendingStep(ps);
+                        task.setTitle(ps.getNickName());
+                        task.setNotes("This step is added by Yoda");
+                        if(ps.getStepDate()!=null)
+                            task.setDue(new DateTime(ps.getStepDate()));
+                        if (ps.getStringId() == null || ps.getStringId().equals("")) {
+                            Task result = service.tasks().insert(g.getStringId(), task).execute();
+                            ps.setStringId(result.getId());
+                            ps.setUpdated(result.getUpdated());
+                            ps.setGoalStringId(g.getStringId());
+                            ps.save();
+                        } else {
+                            if(ps.isDeleted()){
+                                service.tasks().delete(ps.getGoalStringId(), ps.getStringId()).execute();
+                                ps.delete();
+                            }else {
+                                Task result= service.tasks().get(ps.getGoalStringId(), ps.getStringId()).execute();
+                                if(compareDateTime(ps.getUpdated(), result.getUpdated())) {
+                                    ps=convertToPendingStep(result);
+                                    result= service.tasks().update(ps.getGoalStringId(), ps.getStringId(), task).execute();
+                                    ps.setUpdated(result.getUpdated());
+                                    Logger.log(TAG, "Updated --Task : " + task.toString() + "  Pending Step: " + pendingStep.toString());
+                                    ps.save();
+                                }else{
+                                    ps=convertToPendingStep(result);
+                                    ps.setUpdated(result.getUpdated());
+                                    Logger.log(TAG, "Updated --Task : " + task.toString() + "  Pending Step: " + pendingStep.toString());
+                                    ps.save();
+                                }
+                            }
+                        }
+                    }
+
+
+
+//                    for (PendingStep ps : pendingSteps) {
+//                        Task task =(Task) buildPendingStep(ps);
+//                        Logger.log(TAG, "Task : " + task.toString() + "  Pending Step: " + ps.toString());
+//                        switch (ps.getPendingStepType()) {
+//                            case SPLIT_STEP:
+//                            case SERIES_STEP:
+//                                task.setTitle(ps.getNickName());
+//                                task.setNotes("This step is added by Yoda");
+//                                if (ps.getStringId() == null || ps.getStringId().equals("")) {
+//                                    Task result = service.tasks().insert(g.getStringId(), task).execute();
+//                                    ps.setStringId(result.getId());
+//                                    ps.setUpdated(result.getUpdated());
+//                                    ps.setGoalStringId(g.getStringId());
+//                                    ps.save();
+//                                } else {
+//                                    if(ps.isDeleted()){
+//                                        service.tasks().delete(ps.getGoalStringId(), ps.getStringId()).execute();
+//                                        ps.delete();
+//                                    }else {
+//                                        Task result= service.tasks().get(ps.getGoalStringId(), ps.getStringId()).execute();
+//                                        if(compareDateTime(ps.getUpdated(),result.getUpdated())) {
+//                                            result= service.tasks().update(ps.getGoalStringId(), ps.getStringId(), task).execute();
+//                                            ps.setUpdated(result.getUpdated());
+//                                            ps.save();
+//                                        }
+//                                    }
+//                                }
+//
+//                                List<PendingStep> subSteps = pendingStep.getAllSubSteps(pendingStep.getId(), pendingStep.getGoalId());
+//                                if(subSteps!=null){
+//                                    for (PendingStep substep : subSteps) {
+//                                        task=(Task)buildPendingStep(substep);
+//                                        task.setTitle(substep.getNickName());
+//                                        task.setNotes("This step is added by Yoda");
+//                                        task.setDue(new DateTime(substep.getStepDate()));
+//                                        task.setParent(ps.getStringId());
+//                                        if (substep.getStringId() == null || substep.getStringId().equals("")) {
+//                                            Task result = service.tasks().insert(g.getStringId(), task).execute();
+//                                            substep.setStringId(result.getId());
+//                                            substep.setUpdated(result.getUpdated());
+//                                            substep.setGoalStringId(g.getStringId());
+//                                            substep.save();
+//                                        } else {
+//                                            if(substep.isDeleted()){
+//                                                service.tasks().delete(substep.getGoalStringId(), substep.getStringId()).execute();
+//                                                substep.delete();
+//                                            }else {
+//                                                Task result= service.tasks().get(substep.getGoalStringId(), substep.getStringId()).execute();
+//                                                if(compareDateTime(substep.getUpdated(),result.getUpdated())) {
+//                                                    result= service.tasks().update(substep.getGoalStringId(), substep.getStringId(), task).execute();
+//                                                    substep.setUpdated(result.getUpdated());
+//                                                    substep.save();
+//                                                }
+//                                            }
+//                                        }
+//                                    }
+//                                }
+//                                break;
+//                            case SINGLE_STEP:
+//                                task=(Task)buildPendingStep(ps);
+//                                task.setTitle(ps.getNickName());
+//                                task.setNotes("This step is added by Yoda");
+//                                if(ps.getStepDate()!=null)
+//                                    task.setDue(new DateTime(ps.getStepDate()));
+//                                if (ps.getStringId() == null || ps.getStringId().equals("")) {
+//                                    Task result = service.tasks().insert(g.getStringId(), task).execute();
+//                                    ps.setStringId(result.getId());
+//                                    ps.setUpdated(result.getUpdated());
+//                                    ps.setGoalStringId(g.getStringId());
+//                                    ps.save();
+//                                } else {
+//                                    if(ps.isDeleted()){
+//                                        service.tasks().delete(ps.getGoalStringId(), ps.getStringId()).execute();
+//                                        ps.delete();
+//                                    }else {
+//                                        Task result= service.tasks().get(ps.getGoalStringId(), ps.getStringId()).execute();
+//                                        if(compareDateTime(ps.getUpdated(), result.getUpdated())) {
+//                                            ps=convertToPendingStep(result);
+//                                            result= service.tasks().update(ps.getGoalStringId(), ps.getStringId(), task).execute();
+//                                            ps.setUpdated(result.getUpdated());
+//                                            Logger.log(TAG, "Updated --Task : " + task.toString() + "  Pending Step: " + pendingStep.toString());
+//                                            ps.save();
+//                                        }else{
+//                                            ps=convertToPendingStep(result);
+//                                            ps.setUpdated(result.getUpdated());
+//                                            Logger.log(TAG, "Updated --Task : " + task.toString() + "  Pending Step: " + pendingStep.toString());
+//                                            ps.save();
+//                                        }
+//                                    }
+//                                }
+//                                break;
+//                        }
+//                    }
                 }
             }
         }

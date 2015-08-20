@@ -461,15 +461,16 @@ public class YodaCalendar {
             for (PendingStep pendingStep : pendingSteps) {
                 //Collections.sort(slots, new SortByDate());
                 removeTodaysPassedSlots();
-
                 switch (pendingStep.getPendingStepType()){
                     case SPLIT_STEP:
                     case SERIES_STEP:
                         Iterator<PendingStep> substeps = pendingStep.
                                 getAllSubSteps(PendingStep.PendingStepStatus.TODO,pendingStep.getId(), pendingStep.getGoalId()).iterator();
                         it = slots.iterator();
+                        int sessionCount=0;
+                        PendingStep substep=null;
                         while (substeps.hasNext()) {
-                            PendingStep substep=substeps.next();
+                            substep=substeps.next();
                             while (it.hasNext()) {
                                 Slot slot = it.next();
                                 slot.setTime(Constants.MAX_SLOT_DURATION);
@@ -496,8 +497,12 @@ public class YodaCalendar {
                                     it.remove();
                                     break;
                                 }
+                                sessionCount++;
                             }
+                        }
+                        if(substep!=null) {
                             pendingStep.setStepDate(substep.getStepDate());
+                            pendingStep.setStepCount(sessionCount);
                             pendingStep.save();
                         }
                         goal.save();
