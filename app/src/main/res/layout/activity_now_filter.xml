@@ -85,95 +85,135 @@
                 </LinearLayout>
             </RelativeLayout>
 
-            <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@color/button_material_light" />
-            
             <LinearLayout
-                android:id="@+id/llDidActNowFilter"
+                android:id="@+id/llButtonsActNowFilter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginLeft="10dp" >
-            
-                <Button
-                    android:id="@+id/btnDidActNowFilter"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/ic_btn_step_completed" />
+                android:orientation="vertical" >
 
-                <TextView
-                    android:id="@+id/tvCompletedActNowFilter"
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/button_material_light" />
+
+                <LinearLayout
+                    android:id="@+id/llDidActNowFilter"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:gravity="center_vertical"
-                    android:text="@string/tvCompletedActNowFilter" />
-                
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="10dp" >
+
+                    <Button
+                        android:id="@+id/btnDidActNowFilter"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/ic_btn_step_completed" />
+
+                    <TextView
+                        android:id="@+id/tvCompletedActNowFilter"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/tvCompletedActNowFilter" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/button_material_light" />
+
+                <LinearLayout
+                    android:id="@+id/llDoingItActNowFilter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="10dp" >
+
+                    <Button
+                        android:id="@+id/btnDoingItActNowFilter"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/ic_btn_step_doing_it" />
+
+                    <TextView
+                        android:id="@+id/tvDoingItActNowFilter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/tvDoingItActNowFilter" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/button_material_light" />
+
+                <LinearLayout
+                    android:id="@+id/llMissedActNowFilter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginBottom="10dp" >
+
+                    <Button
+                        android:id="@+id/btnMissedActNowFilter"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:background="@drawable/ic_btn_step_missed"
+                        />
+
+                    <TextView
+                        android:id="@+id/tvMissedActNowFilter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:gravity="center_vertical"
+                        android:text="@string/tvMissedActNowFilter" />
+
+                </LinearLayout>
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:background="@color/button_material_light" />
-
             <LinearLayout
-                android:id="@+id/llDoingItActNowFilter"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginLeft="10dp" >
+                android:id="@+id/llLogExcuseActNowFilter"
+                android:orientation="vertical" android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/button_material_light" />
+
+                <EditText
+                    android:id="@+id/edtExcuseActNowFilter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="4"
+                    android:hint="@string/edtExcuseDialogueExcuse"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                    android:layout_marginTop="8dip" />
 
                 <Button
-                    android:id="@+id/btnDoingItActNowFilter"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/ic_btn_step_doing_it" />
-
-                <TextView
-                    android:id="@+id/tvDoingItActNowFilter"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/btnLogExcuseActNowFilter"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:gravity="center_vertical"
-                    android:text="@string/tvDoingItActNowFilter" />
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:background="@color/button_material_light" />
-
-            <LinearLayout
-                android:id="@+id/llMissedActNowFilter"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginLeft="10dp"
-                android:layout_marginBottom="10dp" >
-
-                <Button
-                    android:id="@+id/btnMissedActNowFilter"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/ic_btn_step_missed"
-                    />
-
-                <TextView
-                    android:id="@+id/tvMissedActNowFilter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:gravity="center_vertical"
-                    android:text="@string/tvMissedActNowFilter" />
+                    android:text="@string/btnLogDialogueExcuse"
+                    android:background="@color/ColorPrimary"
+                    android:textColor="@color/white"
+                    android:layout_marginTop="8dip" />
 
             </LinearLayout>
         </LinearLayout>

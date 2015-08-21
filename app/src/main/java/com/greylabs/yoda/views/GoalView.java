@@ -2,6 +2,7 @@ package com.greylabs.yoda.views;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.activities.ActGoalDetails;
+import com.greylabs.yoda.activities.ActGoalDetailsOld;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.utils.CalendarUtils;
 import com.greylabs.yoda.utils.Constants;
@@ -19,7 +21,6 @@ public class GoalView extends LinearLayout implements View.OnClickListener {
     MyDonutProgress donutProgress;
     TextView tvGoalName, tvETGoal;
     Goal currentGoal;
-
 
     public GoalView(Context context) {
         super(context);
@@ -94,8 +95,13 @@ public class GoalView extends LinearLayout implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        Intent intent = new Intent(context, ActGoalDetails.class);
-        intent.putExtra(Constants.GOAL_OBJECT, currentGoal);
-        context.startActivity(intent);
+//        Intent intent = new Intent(context, ActGoalDetailsOld.class);
+//        intent.putExtra(Constants.GOAL_OBJECT, currentGoal);
+//        context.startActivity(intent);
+
+        ActGoalDetails.navigate((AppCompatActivity) context, v.findViewById(R.id.toolBarActGoalDetailsNew), currentGoal);
+//        Intent intent = new Intent(context, ActGoalDetails.class);
+//        intent.putExtra(Constants.GOAL_OBJECT, currentGoal);
+//        context.startActivity(intent);
     }
 }

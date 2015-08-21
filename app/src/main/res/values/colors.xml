@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="white">#FFFF</color>
+    <color name="yellow">#FFEB3B</color>
     <color name="transparent">#00000000</color>
     <color name="transperent_total_arc_background">#33000000</color>
     <color name="transperent_white">#33ffffff</color>
@@ -23,6 +24,7 @@
 
     <color name="ColorPrimary">#4CAF50</color>
     <color name="ColorPrimaryDark">#388E3C</color>
+    <color name="AccentColor">#FFA500</color>
     <color name="transperent_less">#55000000</color>
     <color name="transperent_more">#22000000</color>
     <color name="settings_background_act_home">#55ffffff</color>

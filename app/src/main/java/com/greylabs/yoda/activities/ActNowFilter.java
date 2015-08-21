@@ -1,9 +1,13 @@
 package com.greylabs.yoda.activities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.view.View;
@@ -23,10 +27,11 @@ import com.greylabs.yoda.utils.Prefs;
 public class ActNowFilter extends Activity implements View.OnClickListener {
 
     TextView tvGoalName, tvStepName, tvTime;
-    LinearLayout llDidIt, llDoingIt, llMissedIt;
+    EditText edtExcuse;
+    LinearLayout llDidIt, llDoingIt, llMissedIt, llButtons, llExcuseLog;
     CardView cvEmptyView, cvNotEmptyView;
 //    Toolbar toolbar;
-    Button btnCloseEmptyView ;//,btnCloseNotEmptyView;
+    Button btnLogExcuse, btnCloseEmptyView ;//,btnCloseNotEmptyView;
     private PendingStep pendingStep;
     private Goal goal;
     String caller;
@@ -46,17 +51,22 @@ public class ActNowFilter extends Activity implements View.OnClickListener {
 
 //        btnCloseNotEmptyView = (Button) findViewById(R.id.btnCloseNotEmptyViewActNowFilter);
         btnCloseEmptyView = (Button) findViewById(R.id.btnCloseEmptyViewActNowFilter);
+        btnLogExcuse = (Button) findViewById(R.id.btnLogExcuseActNowFilter);
         tvGoalName = (TextView) findViewById(R.id.tvGoalNameActNowFilter);
         tvStepName = (TextView) findViewById(R.id.tvStepNameActNowFilter);
         tvTime = (TextView) findViewById(R.id.tvTimeActNowFilter);
+        edtExcuse = (EditText) findViewById(R.id.edtExcuseActNowFilter);
+        llButtons = (LinearLayout) findViewById(R.id.llButtonsActNowFilter);
         llDidIt = (LinearLayout) findViewById(R.id.llDidActNowFilter);
         llDoingIt = (LinearLayout) findViewById(R.id.llDoingItActNowFilter);
         llMissedIt = (LinearLayout) findViewById(R.id.llMissedActNowFilter);
+        llExcuseLog = (LinearLayout) findViewById(R.id.llLogExcuseActNowFilter);
         cvNotEmptyView = (CardView) findViewById(R.id.cvNotEmptyViewActNowFilter);
         cvEmptyView = (CardView) findViewById(R.id.cvEmptyViewActNowFilter);
 
 //        btnCloseNotEmptyView.setOnClickListener(this);
         btnCloseEmptyView.setOnClickListener(this);
+        btnLogExcuse.setOnClickListener(this);
         llDidIt.setOnClickListener(this);
         llDoingIt.setOnClickListener(this);
         llMissedIt.setOnClickListener(this);
@@ -76,7 +86,7 @@ public class ActNowFilter extends Activity implements View.OnClickListener {
            // pendingStep = new PendingStep(this);
             pendingStep=(PendingStep)getIntent().getSerializableExtra(Constants.KEY_PENDING_STEP_OBJECT);
             pendingStep.initDatabase(this);
-//            checkForEmptyViewVisibility();
+            checkForEmptyViewVisibility();
         }
 
         if(pendingStep!=null){
@@ -132,23 +142,41 @@ public class ActNowFilter extends Activity implements View.OnClickListener {
                 break;
 
             case R.id.llMissedActNowFilter :
-                Logger.showMsg(this, "Missed it");
+//                Logger.showMsg(this, "Missed it");
                 if(pendingStep!=null){
-//                    pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.MISSED);
-//                    pendingStep.setSkipCount(pendingStep.getSkipCount() + 1);
-//                    pendingStep.save();
+                    pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.MISSED);
+                    pendingStep.setSkipCount(pendingStep.getSkipCount() + 1);
+                    pendingStep.save();
                 }
 //                finish();
-                showLogExcuseDialogue();
+//                showLogExcuseDialogue();
+                showLogExcuseLayout();
                 break;
+
 //            case R.id.btnCloseNotEmptyViewActNowFilter:
 //                this.finish();
 //                break;
+
+            case R.id.btnLogExcuseActNowFilter :
+                edtExcuse.getText();
+                // put this text into the pendingStep
+//                if(pendingStep!=null){
+//                    pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.MISSED);
+//                    pendingStep.setSkipCount(pendingStep.getSkipCount() + 1);
+//                    pendingStep.save();
+//                }
+                finish();
+                break;
 
             case R.id.btnCloseEmptyViewActNowFilter:
                 finish();
                 break;
         }
+    }
+
+    private void showLogExcuseLayout() {
+        llButtons.setVisibility(View.GONE);
+        llExcuseLog.setVisibility(View.VISIBLE);
     }
 
     private void showLogExcuseDialogue() {
