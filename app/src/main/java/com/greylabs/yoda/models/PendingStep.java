@@ -7,6 +7,7 @@ import android.provider.ContactsContract;
 
 import com.google.api.client.util.DateTime;
 import com.greylabs.yoda.database.Database;
+import com.greylabs.yoda.database.MetaData;
 import com.greylabs.yoda.database.MetaData.TablePendingStep;
 import com.greylabs.yoda.database.MetaData.TableSlot;
 import com.greylabs.yoda.scheduler.AlarmScheduler;
@@ -237,11 +238,13 @@ public class PendingStep implements Serializable {
         return this;
     }
 
-    public List<PendingStep> getAll() {
+    public List<PendingStep> getAll(PendingStepStatus status,PendingStepDeleted deleted) {
         ArrayList<PendingStep> pendingSteps = null;
         SQLiteDatabase db = database.getReadableDatabase();
         String query = "select * " +
-                " " + " from " + TablePendingStep.pendingStep + " ";
+                " " + " from " + TablePendingStep.pendingStep + " " +
+                " " + " where "+TablePendingStep.status+"="+status.ordinal()+" " +
+                " " + " and "+deleted.getCriteria() ;
 
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
@@ -274,7 +277,7 @@ public class PendingStep implements Serializable {
     }
 
 
-    public List<PendingStep> getAll(PendingStepStatus status,long goalId) {
+    public List<PendingStep> getAll(PendingStepStatus status,PendingStepDeleted deleted,long goalId) {
         ArrayList<PendingStep> pendingSteps = null;
         SQLiteDatabase db = database.getReadableDatabase();
         String query = "select * " +
@@ -283,7 +286,8 @@ public class PendingStep implements Serializable {
                 " " + " and ("+TablePendingStep.type+"!="+PendingStepType.SERIES_STEP.ordinal()+" or " +
                 " " + " "+TablePendingStep.type+"!="+PendingStepType.SPLIT_STEP.ordinal()+" ) " +
                 " " + " and "+TablePendingStep.status+" = "+status.ordinal()+" "+
-                " " + " and "+TablePendingStep.goalId+" = "+goalId+" " ;
+                " " + " and "+TablePendingStep.goalId+" = "+goalId+" " +
+                " " + " and "+deleted.getCriteria() ;
 
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
@@ -441,7 +445,7 @@ public class PendingStep implements Serializable {
     }
 
 
-    public List<PendingStep> getAllSubSteps(PendingStepStatus status ,long pendingStepId, long goalId) {
+    public List<PendingStep> getAllSubSteps(PendingStepStatus status ,PendingStepDeleted deleted,long pendingStepId, long goalId) {
         ArrayList<PendingStep> pendingSteps = null;
         SQLiteDatabase db = database.getReadableDatabase();
         String query = "select * " +
@@ -449,7 +453,8 @@ public class PendingStep implements Serializable {
                 " " + " where " + TablePendingStep.goalId + " = " + goalId + " " +
                 " " + " and " + TablePendingStep.subStepOf + "=" + pendingStepId+" " +
                 " " + " and " + TablePendingStep.status + "=" + status.ordinal()+" " +
-                " " + " and "+TablePendingStep.type+"="+PendingStepType.SUB_STEP.ordinal();
+                " " + " and "+TablePendingStep.type+"="+PendingStepType.SUB_STEP.ordinal()+" " +
+                " " + " and "+deleted.getCriteria();
 
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
@@ -496,7 +501,8 @@ public class PendingStep implements Serializable {
         values.put(TablePendingStep.status, this.pendingStepStatus.ordinal());
         values.put(TablePendingStep.goalId, this.goalId);
         values.put(TablePendingStep.goalStringId,this.goalStringId);
-        values.put(TablePendingStep.updated,CalendarUtils.getRFCTimestampToString(new DateTime(new Date())));
+        if(this.getUpdated()!=null)
+            values.put(TablePendingStep.updated,CalendarUtils.getRFCTimestampToString(this.getUpdated()));
         values.put(TablePendingStep.deleted,(this.deleted)?1:0);
         if(this.getStepDate()!=null) {
             Calendar cal = Calendar.getInstance();
@@ -736,13 +742,16 @@ public class PendingStep implements Serializable {
                 subStep.setPendingStepType(PendingStepType.SUB_STEP);
                 subStep.setStepCount(1);
                 subStep.setSkipCount(0);
-                subStep.setPendingStepStatus(PendingStepStatus.TODO);
+                subStep.setPendingStepStatus(this.getPendingStepStatus());
                 subStep.setGoalId(subStep.getGoalId());
                 subStep.setTime(subStep.time);
                 subStep.setSubStepOf(this.getId());
                 subStep.setGoalStringId(this.getGoalStringId());
                 subStep.setStringId(this.getStringId());
                 rowId += subStep.save();
+                if(this.getPendingStepStatus()==PendingStepStatus.COMPLETED){
+                    subStep.cancelAlarm();
+                }
             }
         }
         return rowId;
@@ -832,6 +841,25 @@ public class PendingStep implements Serializable {
         return id>0;
     }
 
+    public void freeSlot(){
+        String query=" update "+TableSlot.slot+" " +
+                " set "+TableSlot.time+" = "+Constants.MAX_SLOT_DURATION+" " +
+                " where "+TableSlot.id+" = "+this.slotId;
+        SQLiteDatabase db=database.getWritableDatabase();
+        Cursor c=db.rawQuery(query,null);
+        c.moveToFirst();
+        c.close();
+    }
+
+    public void freeSlots(){
+        List<PendingStep> subSteps=getAllSubSteps(this.getId(),this.getGoalId());
+        for(PendingStep subStep:subSteps){
+            subStep.freeSlot();
+            subStep.setSlotId(0);
+            subStep.save();
+        }
+    }
+
     /**********************************************************************************************/
     // Enum Constants
 
@@ -869,6 +897,20 @@ public class PendingStep implements Serializable {
                     return COMPLETED;
             }
             return TODO;
+        }
+    }
+
+    public enum PendingStepDeleted{
+        SHOW_DELETED("("+TablePendingStep.deleted+"= 1 )"),
+        SHOW_NOT_DELETED("("+TablePendingStep.deleted+"= 0 )"),
+        SHOW_BOTH("("+TablePendingStep.deleted+"= 1"+" or "+TablePendingStep.deleted+"= 0 )");
+        String criteria;
+        PendingStepDeleted(String criteria){
+            this.criteria=criteria;
+        }
+
+        public String getCriteria(){
+            return criteria;
         }
     }
 }

@@ -142,10 +142,16 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
         stepArrayList.clear();
         PendingStep pendingStep = new PendingStep(this);
         currentGoal = goalList.get(goalSpinner.getSelectedItemPosition());
-        if (currentGoal != null && pendingStep.getAll(currentGoal.getId()) != null)
-            if(pendingStep.getAll(PendingStep.PendingStepStatus.TODO,currentGoal.getId())!=null)
-                stepArrayList.addAll(pendingStep.getAll(PendingStep.PendingStepStatus.TODO,currentGoal.getId()));
-    }
+//        if (currentGoal != null && pendingStep.getAll(currentGoal.getId()) != null)
+//            if(pendingStep.getAll(PendingStep.PendingStepStatus.TODO, PendingStep.PendingStepDeleted.SHOW_NOT_DELETED,currentGoal.getId())!=null)
+//                stepArrayList.addAll(pendingStep.getAll(PendingStep.PendingStepStatus.TODO,currentGoal.getId()));
+
+        List<PendingStep> temp=pendingStep.getAll(PendingStep.PendingStepStatus.TODO,
+                PendingStep.PendingStepDeleted.SHOW_NOT_DELETED,currentGoal.getId());
+        if(currentGoal!=null && temp!=null){
+            stepArrayList.addAll(temp);
+        }
+ }
 
     private void getGoalListAndPopulate() {
         // check context and populate spinner else show only one currentGoal
@@ -267,6 +273,13 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
 
     private void saveStep() {
         if (edtStepName.getText() != null && edtStepName.getText().length() > 0) {
+            if(currentStep.getId()!=0){
+                //change updated date only if nickname is different than previous
+                if(currentStep.getNickName().equals(edtStepName.getText().toString()))
+                    currentStep.setUpdated(new DateTime(new Date()));
+            }else{
+                currentStep.setUpdated(new DateTime(new Date()));
+            }
             currentStep.setNickName(edtStepName.getText().toString());
             currentStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
 
@@ -310,13 +323,10 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
                 stepArrayList.get(i).updateSubSteps();
             }
             PendingStep ps =currentStep;
-            ps.markSubSteps(true);
             switch (ps.getPendingStepType()){
                 case SPLIT_STEP:
-                    ps.setDeleted(true);
-                    ps.save();
-                    ps.setId(0);
-                    ps.save();
+                    ps.markSubSteps(true);
+                    ps.freeSlots();
                     if(ps.getTime()>Constants.MAX_SLOT_DURATION){
                         float numberOfSteps=(float)ps.getTime()/Constants.MAX_SLOT_DURATION;
                         Float f=new Float(numberOfSteps);
@@ -324,21 +334,32 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
                         if(numberOfSteps-f.intValue()>0.0f)
                             ps.createSubSteps(f.intValue()+1,f.intValue()+1,currentStep.getTime()%Constants.MAX_SLOT_DURATION);
                     }
-
+                    ps.save();
                     break;
                 case SERIES_STEP:
-                    ps.setDeleted(true);
-                    ps.save();
-                    ps.setId(0);
-                    ps.save();
+                    ps.markSubSteps(true);
+                    ps.freeSlots();
                     ps.createSubSteps(1, currentStep.getStepCount(), currentStep.getTime());
+                    ps.save();
                     break;
             }
 
             //assume default priority is bottom most irrespective of settings
             boolean isScheduled = yodaCalendar.scheduleStep(currentStep);
             if (!isScheduled) {
-                currentStep.delete();
+                switch (currentStep.getPendingStepType()){
+                    case SINGLE_STEP:
+                        currentStep.setDeleted(true);
+                        currentStep.freeSlot();
+                        currentStep.delete();
+                        break;
+                    case SPLIT_STEP:
+                    case SERIES_STEP:
+                        currentStep.markSubSteps(true);
+                        currentStep.freeSlots();
+                        currentStep.deleteAllPendingSteps();
+                        currentStep.delete();
+                }
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(getString(R.string.msgYodaSays));
                 builder.setMessage(getString(R.string.msgCannotSaveStepActAddNewStep));
@@ -364,7 +385,7 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
                 alertStepAdded.show();
             }
         } else {
-        Logger.showMsg(this, getResources().getString(R.string.msgEnterStepNameActAddNewStep));
+            Logger.showMsg(this, getResources().getString(R.string.msgEnterStepNameActAddNewStep));
         }
 }
 

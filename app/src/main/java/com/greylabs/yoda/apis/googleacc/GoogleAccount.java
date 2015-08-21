@@ -20,6 +20,7 @@ import com.google.api.services.tasks.model.TaskList;
 import com.google.api.services.tasks.model.TaskLists;
 import com.greylabs.yoda.apis.Sync;
 import com.greylabs.yoda.apis.TaskAccount;
+import com.greylabs.yoda.database.MetaData;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.TimeBox;
@@ -47,7 +48,7 @@ import java.util.logging.Level;
  */
 public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.OnClickListener {
 
-    public static final String ACCOUNT_TYPE="com.google";
+    public static final String ACCOUNT_TYPE = "com.google";
     private static final Level LOGGING_LEVEL = Level.OFF;
     private static final String PREF_ACCOUNT_NAME = "accountName";
     static final String TAG = "GoogleAccount";
@@ -57,22 +58,22 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
     GoogleAccountCredential credential;
     com.google.api.services.tasks.Tasks service;
     private Prefs prefs;
-    private Map<String,String> positions;
-    public GoogleAccount(Context context){
+
+    public GoogleAccount(Context context) {
         super(context);
-        prefs=Prefs.getInstance(context);
+        prefs = Prefs.getInstance(context);
     }
 
-    public List<String> getUsers(){
+    public List<String> getUsers() {
         return users;
     }
+
     @Override
-    public  void authenticate() {
+    public void authenticate() {
         credential = GoogleAccountCredential.usingOAuth2(context, Collections.singleton(TasksScopes.TASKS));
         credential.setSelectedAccountName(prefs.getDefaultAccountEmailId());
         service = new com.google.api.services.tasks.Tasks.Builder(httpTransport, jsonFactory, credential)
                 .setApplicationName("Yoda").build();
-        positions=new HashMap<>();
         try {
             sync();
         } catch (IOException e) {
@@ -82,17 +83,19 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
 
 
     @Override
-    public Object getService(){
+    public Object getService() {
         return service;
     }
 
     void showGooglePlayServicesAvailabilityErrorDialog(final int connectionStatusCode) {
-        Dialog dialog =GooglePlayServicesUtil.getErrorDialog(connectionStatusCode, (Activity) context,
+        Dialog dialog = GooglePlayServicesUtil.getErrorDialog(connectionStatusCode, (Activity) context,
                 REQUEST_GOOGLE_PLAY_SERVICES);
         dialog.show();
     }
 
-    /** Check that Google Play services APK is installed and up to date. */
+    /**
+     * Check that Google Play services APK is installed and up to date.
+     */
     private boolean checkGooglePlayServicesAvailable() {
         final int connectionStatusCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(context);
         if (GooglePlayServicesUtil.isUserRecoverableError(connectionStatusCode)) {
@@ -101,6 +104,7 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
         }
         return true;
     }
+
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         Prefs.getInstance(context).setDefaultAccountEmailId(users.get(position));
@@ -115,8 +119,8 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
 
     @Override
     public Object buildGoal(Goal goal) {
-        TaskList taskList=new TaskList();
-        if(!(goal.getStringId()==null || goal.getStringId().equals("")))
+        TaskList taskList = new TaskList();
+        if (!(goal.getStringId() == null || goal.getStringId().equals("")))
             taskList.setId(goal.getStringId());
         //taskList.setUpdated(DateTime.parseRfc3339(CalendarUtils.getRFCTimestampToString(goal.getUpdated())));
         taskList.setKind("tasks#taskList");
@@ -126,25 +130,26 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
 
     @Override
     public Object buildPendingStep(PendingStep pendingStep) {
-        Task task=new Task();
-        if(!(pendingStep.getStringId()==null || pendingStep.getStringId().equals("")))
+        Task task = new Task();
+        if (!(pendingStep.getStringId() == null || pendingStep.getStringId().equals("")))
             task.setId(pendingStep.getStringId());
 
         task.setKind("tasks#task");
-        if(!(pendingStep.getStringId()==null || pendingStep.getStringId().equals("")))
+        if (!(pendingStep.getStringId() == null || pendingStep.getStringId().equals("")))
             task.setId(pendingStep.getStringId());
         //task.setUpdated(DateTime.parseRfc3339(CalendarUtils.getRFCTimestampToString(pendingStep.getUpdated())));
         task.setDeleted(pendingStep.isDeleted());
-        switch (pendingStep.getPendingStepStatus()){
+        switch (pendingStep.getPendingStepStatus()) {
             case DOING:
             case MISSED:
             case TODO:
                 task.setStatus("needsAction");
                 break;
-            case COMPLETED:task.setStatus("completed");
+            case COMPLETED:
+                task.setStatus("completed");
         }
-        if(pendingStep.getPendingStepType()== PendingStep.PendingStepType.SUB_STEP){
-            PendingStep ps=new PendingStep(context).get(pendingStep.getSubStepOf());
+        if (pendingStep.getPendingStepType() == PendingStep.PendingStepType.SUB_STEP) {
+            PendingStep ps = new PendingStep(context).get(pendingStep.getSubStepOf());
             task.setParent(ps.getStringId());
         }
         task.setTitle(pendingStep.getNickName());
@@ -153,22 +158,22 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
 
     @Override
     public Goal convertToGoal(Object taskListObject) {
-        if(! (taskListObject instanceof TaskList))
-            throw  new IllegalArgumentException("Invalid object passed to this method");
-        TaskList taskList=(TaskList)taskListObject;
-        Goal goal=new Goal(context);
-        Prefs prefs=Prefs.getInstance(context);
-        long id=goal.getIdIfExists(taskList.getId());
-        if(id==prefs.getStretchGoalId()){
+        if (!(taskListObject instanceof TaskList))
+            throw new IllegalArgumentException("Invalid object passed to this method");
+        TaskList taskList = (TaskList) taskListObject;
+        Goal goal = new Goal(context);
+        Prefs prefs = Prefs.getInstance(context);
+        long id = goal.getIdIfExists(taskList.getId());
+        if (id == prefs.getStretchGoalId()) {
             //new tasklist, need to add goal
-            goal=goal.get(prefs.getStretchGoalId());
+            goal = goal.get(prefs.getStretchGoalId());
             goal.setId(prefs.getStretchGoalId());
             goal.setTimeBoxId(prefs.getUnplannedTimeBoxId());
             goal.setUpdated(taskList.getUpdated());
             goal.setStringId("@default");
-            if(!taskList.getId().equals("@default"))
+            if (!taskList.getId().equals("@default"))
                 goal.setStringId(taskList.getId());
-        }else{
+        } else {
             //update tasklist,need to update goal
             goal = goal.get(id);
             goal.setNickName(taskList.getTitle());
@@ -179,14 +184,14 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
 
     @Override
     public PendingStep convertToPendingStep(Object taskObject) {
-        if(! (taskObject instanceof Task))
-            throw  new IllegalArgumentException("Invalid object passed to this method");
-        Task task=(Task)taskObject;
-        PendingStep pendingStep=new PendingStep(context);
-        long id=pendingStep.getIdIfExists(task.getId());
-        if(id==0 ){
+        if (!(taskObject instanceof Task))
+            throw new IllegalArgumentException("Invalid object passed to this method");
+        Task task = (Task) taskObject;
+        PendingStep pendingStep = new PendingStep(context);
+        long id = pendingStep.getIdIfExists(task.getId());
+        if (id == 0) {
             //new step ,need to insert
-            if( task.getStatus().equals("needsAction")|| (task.getDeleted()==Boolean.FALSE)) {
+            if (task.getStatus().equals("needsAction") || (task.getDeleted() == Boolean.FALSE)) {
                 pendingStep.setId(0);
                 pendingStep.setTime(Constants.MAX_SLOT_DURATION);
                 pendingStep.setStringId(task.getId());
@@ -194,16 +199,15 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                 pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
                 pendingStep.setUpdated(task.getUpdated());
             }
-            if( !task.getStatus().equals("needsAction"))
+            if (!task.getStatus().equals("needsAction"))
                 pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
-        }else{
+        } else {
             pendingStep = pendingStep.get(id);
-
         }
         //check for parent
-        id=pendingStep.getIdIfExists(task.getParent());
+        id = pendingStep.getIdIfExists(task.getParent());
         pendingStep.setSubStepOf(id);
-        if(id!=0) {
+        if (id != 0) {
             pendingStep.setPendingStepType(PendingStep.PendingStepType.SUB_STEP);
             //and its parents type set to Series Step
             PendingStep ps = new PendingStep(context).get(id);
@@ -212,18 +216,6 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
             pendingStep.setGoalId(ps.getGoalId());
             ps.save();
         }
-
-
-        if (task.getStatus().equals("needsAction"))
-            pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
-        else {
-            pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
-        }
-
-        if (task.getDeleted() != null) {
-            pendingStep.setDeleted(task.getDeleted());
-        }
-        //pendingStep.setUpdated(CalendarUtils.getStringToRFCTimestamp(task.getUpdated().toStringRfc3339()));
         pendingStep.setNickName(task.getTitle());
         return pendingStep;
     }
@@ -236,42 +228,79 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
 
     public void doImport() throws IOException {
         //import all tasks
-        YodaCalendar yodaCalendar=new YodaCalendar(context);
-        TimeBox timeBox=new TimeBox(context);
-
-        TaskLists result=service.tasklists().list().execute();
-        List<TaskList> taskLists=result.getItems();
-        if(taskLists!=null){
-            for (TaskList taskList:taskLists){
-                Goal goal=convertToGoal(taskList);
-                if(compareDateTime(taskList.getUpdated(),goal.getUpdated())){
+        YodaCalendar yodaCalendar = new YodaCalendar(context);
+        TimeBox timeBox = new TimeBox(context);
+        TaskLists result = service.tasklists().list().execute();
+        List<TaskList> taskLists = result.getItems();
+        Goal goal=new Goal(context);
+        List<String> serverStringGoalIds=new ArrayList<>();
+        if (taskLists != null) {
+            for (TaskList taskList : taskLists) {
+                serverStringGoalIds.add(taskList.getId());
+                goal = convertToGoal(taskList);
+                if (compareDateTime(taskList.getUpdated(), goal.getUpdated())) {
+                    //means server has latest data
                     goal.setUpdated(taskList.getUpdated());
-                    if(prefs.getStretchGoalId()!=goal.getId())
+                    if (prefs.getStretchGoalId() != goal.getId())
                         goal.save();
+                }else{
+                    //means app has latest data
+                    if(goal.isDeleted()){
+                        service.tasklists().delete(taskList.getId()).execute();
+                        goal.deletePendingSteps();
+                        goal.delete();
+                        continue;
+                    }else if (prefs.getStretchGoalId() != goal.getId()) {
+                        taskList.setTitle(goal.getNickName());
+                        service.tasklists().update(taskList.getId(), taskList).execute();
+                    }
                 }
                 yodaCalendar.setTimeBox(timeBox.get(goal.getTimeBoxId()));
                 Logger.log(TAG, "Task List: " + taskList.toString() + "  Goal: " + goal.toString());
-                //com.google.api.services.tasks.model.Tasks tasks=service.tasks().list(taskList.getId()).setShowDeleted(true).setShowCompleted(true).execute();
-                com.google.api.services.tasks.model.Tasks tasks=service.tasks().list(taskList.getId()).execute();
-                if(tasks!=null) {
-                    List<Task> myTasks=tasks.getItems();
-                    if(myTasks!=null) {
+                com.google.api.services.tasks.model.Tasks tasks = service.tasks().list(taskList.getId()).execute();
+                if (tasks != null) {
+                    List<Task> myTasks = tasks.getItems();
+                    if (myTasks != null) {
                         for (Task task : myTasks) {
-                            positions.put(task.getId(),task.getPosition());
                             PendingStep pendingStep = convertToPendingStep(task);
-                            if ( pendingStep.getId()!=0 && pendingStep.isDeleted()) {
-                                service.tasks().delete(goal.getStringId(), pendingStep.getStringId()).execute();
-                                pendingStep.delete();
-                            } else if (pendingStep.getId()!=0 && pendingStep.getPendingStepStatus() == PendingStep.PendingStepStatus.COMPLETED) {
+                            if(pendingStep.getId()==0){
+                                //means that this new step , insert it to our database
+                                pendingStep.setStringId(task.getId());
+                                pendingStep.setGoalStringId(taskList.getId());
                                 pendingStep.save();
-                                pendingStep.setTime(Constants.MAX_SLOT_DURATION);
-                                pendingStep.cancelAlarm();
-                                service.tasks().update(goal.getStringId(), pendingStep.getStringId(), task).execute();
-                            } else {
-                                if (compareDateTime(task.getUpdated(),pendingStep.getUpdated())) {
-                                    pendingStep.setGoalId(goal.getId());
-                                    pendingStep.setGoalStringId(goal.getStringId());
-                                    pendingStep.save();//insert or update
+                            }else
+                            {
+                                if (compareDateTime(task.getUpdated(), pendingStep.getUpdated())) {
+                                    //means server has latest data
+                                    if (task.getStatus().equals("needsAction")) {
+                                        pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+                                        pendingStep.setTime(Constants.MAX_SLOT_DURATION);
+                                    }
+                                    else {
+                                        pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
+                                        pendingStep.cancelAlarm();
+                                    }
+                                    if (task.getDeleted() != null) {
+                                        pendingStep.setDeleted(task.getDeleted());
+                                    }
+                                    if (pendingStep.isDeleted()) {
+                                        pendingStep.delete();
+                                    } else {
+                                        pendingStep.setGoalId(goal.getId());
+                                        pendingStep.setGoalStringId(goal.getStringId());
+                                        pendingStep.save();//insert or update
+                                    }
+                                } else {//means app has latest data
+                                    if (pendingStep.isDeleted()) {
+                                        service.tasks().delete(goal.getStringId(), pendingStep.getStringId()).execute();
+                                        pendingStep.delete();
+                                    } else {
+                                        if (pendingStep.getPendingStepStatus() == PendingStep.PendingStepStatus.COMPLETED) {
+                                            task.setStatus("completed");
+                                        }
+                                        task.setTitle(pendingStep.getNickName());
+                                        service.tasks().update(goal.getStringId(), pendingStep.getStringId(), task).execute();
+                                    }
                                 }
                             }
                             Logger.log(TAG, "Task : " + task.toString() + "  Pending Step: " + pendingStep.toString());
@@ -280,199 +309,136 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                 }
                 yodaCalendar.rescheduleSteps(goal.getId());
             }
+            List<String> appStringGoalIds=goal.getDistinctGoalStringIds();
+            appStringGoalIds.removeAll(serverStringGoalIds);
+            for(String stringGoalId:appStringGoalIds){
+                goal.deleteAllSteps(stringGoalId);
+                goal.deleteGoal(stringGoalId);
+            }
         }
     }
-
     public void doExport() throws IOException {
         Logger.log(TAG, "Exporting Goals and Pending steps.wait...");
-        //goals
-        Goal goal=new Goal(context);
-        List<Goal> goals=goal.getAll();
-        if(goals!=null) {
+        exportGoals();
+    }
+
+    private void exportGoals() throws IOException {
+        Goal goal = new Goal(context);
+        List<Goal> goals = goal.getAll();
+        if (goals != null) {
             for (Goal g : goals) {
                 //export goals data
-                TaskList taskList =(TaskList)buildGoal(g);
-                Logger.log(TAG, "TaskList : " + taskList + "  Goal: "+g);
+                TaskList taskList = (TaskList) buildGoal(g);
+                Logger.log(TAG, "TaskList : " + taskList + "  Goal: " + g);
+                //for new goals
                 if (g.getStringId() == null || g.getStringId().equals("")) {
-                    //insert to google task list
+                    //for new goals simply insert
                     TaskList result = service.tasklists().insert(taskList).execute();
                     g.setStringId(result.getId());
                     g.setUpdated(result.getUpdated());
                     g.save();
                 } else {
-                    if(g.isDeleted()){
-                        service.tasklists().delete(goal.getStringId()).execute();
-                    }else {
-                        if(!g.getStringId().equals("@default")){
-                            TaskList  result = service.tasklists().get(g.getStringId()).execute();
-                            if(compareDateTime(g.getUpdated(),result.getUpdated())) {
-                                result = service.tasklists().update(g.getStringId(), taskList).execute();
+                    //for old goals that are present at server side,
+                    if (!g.getStringId().equals("@default")) {
+                        TaskList result = service.tasklists().get(g.getStringId()).execute();
+                        if (!compareDateTime(g.getUpdated(), result.getUpdated())) {
+                            //means server has latest data
+                            if (result.getId() == null) {
+                                //means that goal is deleted
+                                goal.deleteAllSteps(g.getStringId());
+                                goal.deleteGoal(g.getStringId());
+                            } else {
+                                g.setNickName(result.getTitle());
                                 g.setUpdated(result.getUpdated());
                                 g.save();
                             }
-                        }
-                    }
-                }
-
-                //do following for each step in this goal
-                PendingStep pendingStep = new PendingStep(context);
-                List<PendingStep> pendingSteps = pendingStep.getAll(PendingStep.PendingStepStatus.TODO,g.getId());
-                if(pendingSteps!=null) {
-                    List<PendingStep> completed=pendingStep.getAll(PendingStep.PendingStepStatus.COMPLETED, g.getId());
-                    if(completed!=null)
-                        pendingSteps.addAll(completed);
-//                    List<PendingStep> substeps=new ArrayList<>();
-//
-//                    for(PendingStep ps: pendingSteps){
-//                        switch (ps.getPendingStepType()){
-//                            case SERIES_STEP:
-//                            case SPLIT_STEP:
-//                                List<PendingStep> temp=ps.getAllSubSteps(ps.getId(),ps.getGoalId());
-//                                if(temp!=null){
-//                                    substeps.addAll(temp);
-//                                }
-//                        }
-//                    }
-//                    pendingSteps.addAll(substeps);
-                    for(PendingStep ps:pendingSteps){
-                        Task task=(Task)buildPendingStep(ps);
-                        task.setTitle(ps.getNickName());
-                        task.setNotes("This step is added by Yoda");
-                        if(ps.getStepDate()!=null)
-                            task.setDue(new DateTime(ps.getStepDate()));
-                        if (ps.getStringId() == null || ps.getStringId().equals("")) {
-                            Task result = service.tasks().insert(g.getStringId(), task). execute();
-                            positions.put(result.getId(), result.getPosition());
-                            ps.setStringId(result.getId());
-                            ps.setUpdated(result.getUpdated());
-                            ps.setGoalStringId(g.getStringId());
-                            ps.save();
-                            if(ps.getPendingStepType()== PendingStep.PendingStepType.SUB_STEP){
-                                result = service.tasks().move(g.getStringId(),ps.getStringId()).setParent(task.getParent()).execute();
-                            }
                         } else {
-                            if(ps.isDeleted()){
-                                service.tasks().delete(ps.getGoalStringId(), ps.getStringId()).execute();
-                                ps.delete();
-                            }else {
-                                Task result= service.tasks().get(ps.getGoalStringId(), ps.getStringId()).execute();
-                                if(compareDateTime(ps.getUpdated(), result.getUpdated())) {
-                                    ps=convertToPendingStep(result);
-                                    result= service.tasks().update(ps.getGoalStringId(), ps.getStringId(), task).execute();
-                                    ps.setUpdated(result.getUpdated());
-                                    Logger.log(TAG, "Updated --Task : " + task.toString() + "  Pending Step: " + pendingStep.toString());
-                                    ps.save();
-                                }else{
-                                    ps=convertToPendingStep(result);
-                                    ps.setUpdated(result.getUpdated());
-                                    Logger.log(TAG, "Updated --Task : " + task.toString() + "  Pending Step: " + pendingStep.toString());
-                                    ps.save();
+                            //means app has latest data
+                            if (!g.getStringId().equals("@default")) {
+                                if (g.isDeleted())
+                                    service.tasklists().delete(g.getStringId()).execute();
+                                else {
+                                    result = service.tasklists().update(g.getStringId(), taskList).execute();
+                                    g.setUpdated(result.getUpdated());
+                                    g.save();
                                 }
                             }
                         }
+
                     }
+                }
+                exportPendingSteps(g);
+            }
+        }
+    }
 
+    private void exportPendingSteps(Goal goal) throws IOException {
+        PendingStep pendingStep = new PendingStep(context);
+        List<PendingStep> pendingSteps = pendingStep.getAll(PendingStep.PendingStepStatus.TODO,
+                PendingStep.PendingStepDeleted.SHOW_BOTH, goal.getId());
+        if (pendingSteps != null) {
+            List<PendingStep> completed = pendingStep.getAll(PendingStep.PendingStepStatus.COMPLETED,
+                    PendingStep.PendingStepDeleted.SHOW_BOTH, goal.getId());
+            if (completed != null)
+                pendingSteps.addAll(completed);
 
-
-//                    for (PendingStep ps : pendingSteps) {
-//                        Task task =(Task) buildPendingStep(ps);
-//                        Logger.log(TAG, "Task : " + task.toString() + "  Pending Step: " + ps.toString());
-//                        switch (ps.getPendingStepType()) {
-//                            case SPLIT_STEP:
-//                            case SERIES_STEP:
-//                                task.setTitle(ps.getNickName());
-//                                task.setNotes("This step is added by Yoda");
-//                                if (ps.getStringId() == null || ps.getStringId().equals("")) {
-//                                    Task result = service.tasks().insert(g.getStringId(), task).execute();
-//                                    ps.setStringId(result.getId());
-//                                    ps.setUpdated(result.getUpdated());
-//                                    ps.setGoalStringId(g.getStringId());
-//                                    ps.save();
-//                                } else {
-//                                    if(ps.isDeleted()){
-//                                        service.tasks().delete(ps.getGoalStringId(), ps.getStringId()).execute();
-//                                        ps.delete();
-//                                    }else {
-//                                        Task result= service.tasks().get(ps.getGoalStringId(), ps.getStringId()).execute();
-//                                        if(compareDateTime(ps.getUpdated(),result.getUpdated())) {
-//                                            result= service.tasks().update(ps.getGoalStringId(), ps.getStringId(), task).execute();
-//                                            ps.setUpdated(result.getUpdated());
-//                                            ps.save();
-//                                        }
-//                                    }
-//                                }
-//
-//                                List<PendingStep> subSteps = pendingStep.getAllSubSteps(pendingStep.getId(), pendingStep.getGoalId());
-//                                if(subSteps!=null){
-//                                    for (PendingStep substep : subSteps) {
-//                                        task=(Task)buildPendingStep(substep);
-//                                        task.setTitle(substep.getNickName());
-//                                        task.setNotes("This step is added by Yoda");
-//                                        task.setDue(new DateTime(substep.getStepDate()));
-//                                        task.setParent(ps.getStringId());
-//                                        if (substep.getStringId() == null || substep.getStringId().equals("")) {
-//                                            Task result = service.tasks().insert(g.getStringId(), task).execute();
-//                                            substep.setStringId(result.getId());
-//                                            substep.setUpdated(result.getUpdated());
-//                                            substep.setGoalStringId(g.getStringId());
-//                                            substep.save();
-//                                        } else {
-//                                            if(substep.isDeleted()){
-//                                                service.tasks().delete(substep.getGoalStringId(), substep.getStringId()).execute();
-//                                                substep.delete();
-//                                            }else {
-//                                                Task result= service.tasks().get(substep.getGoalStringId(), substep.getStringId()).execute();
-//                                                if(compareDateTime(substep.getUpdated(),result.getUpdated())) {
-//                                                    result= service.tasks().update(substep.getGoalStringId(), substep.getStringId(), task).execute();
-//                                                    substep.setUpdated(result.getUpdated());
-//                                                    substep.save();
-//                                                }
-//                                            }
-//                                        }
-//                                    }
-//                                }
-//                                break;
-//                            case SINGLE_STEP:
-//                                task=(Task)buildPendingStep(ps);
-//                                task.setTitle(ps.getNickName());
-//                                task.setNotes("This step is added by Yoda");
-//                                if(ps.getStepDate()!=null)
-//                                    task.setDue(new DateTime(ps.getStepDate()));
-//                                if (ps.getStringId() == null || ps.getStringId().equals("")) {
-//                                    Task result = service.tasks().insert(g.getStringId(), task).execute();
-//                                    ps.setStringId(result.getId());
-//                                    ps.setUpdated(result.getUpdated());
-//                                    ps.setGoalStringId(g.getStringId());
-//                                    ps.save();
-//                                } else {
-//                                    if(ps.isDeleted()){
-//                                        service.tasks().delete(ps.getGoalStringId(), ps.getStringId()).execute();
-//                                        ps.delete();
-//                                    }else {
-//                                        Task result= service.tasks().get(ps.getGoalStringId(), ps.getStringId()).execute();
-//                                        if(compareDateTime(ps.getUpdated(), result.getUpdated())) {
-//                                            ps=convertToPendingStep(result);
-//                                            result= service.tasks().update(ps.getGoalStringId(), ps.getStringId(), task).execute();
-//                                            ps.setUpdated(result.getUpdated());
-//                                            Logger.log(TAG, "Updated --Task : " + task.toString() + "  Pending Step: " + pendingStep.toString());
-//                                            ps.save();
-//                                        }else{
-//                                            ps=convertToPendingStep(result);
-//                                            ps.setUpdated(result.getUpdated());
-//                                            Logger.log(TAG, "Updated --Task : " + task.toString() + "  Pending Step: " + pendingStep.toString());
-//                                            ps.save();
-//                                        }
-//                                    }
-//                                }
-//                                break;
-//                        }
-//                    }
+            for (PendingStep ps : pendingSteps) {
+                Task task = (Task) buildPendingStep(ps);
+                task.setTitle(ps.getNickName());
+                task.setNotes("This step is added by Yoda");
+                if (ps.getStepDate() != null)
+                    task.setDue(new DateTime(ps.getStepDate()));
+                Task result = service.tasks().get(ps.getGoalStringId(), ps.getStringId()).execute();
+                if (ps.getStringId() == null || ps.getStringId().equals("")) {
+                    //new steps simply insert
+                    result = service.tasks().insert(goal.getStringId(), task).execute();
+                    ps.setStringId(result.getId());
+                    ps.setUpdated(result.getUpdated());
+                    ps.setGoalStringId(goal.getStringId());
+                    ps.save();
+                    if (ps.getPendingStepType() == PendingStep.PendingStepType.SUB_STEP) {
+                        service.tasks().move(goal.getStringId(), ps.getStringId()).setParent(task.getParent()).execute();
+                        Logger.log(TAG, "Move Task to Parent : " + task.toString() + "  Pending Step: " + pendingStep.toString());
+                    }
+                    Logger.log(TAG, "Insert Task : " + task.toString() + "  Pending Step: " + pendingStep.toString());
+                } else {
+                    //old steps,update needed
+                    if (compareDateTime(ps.getUpdated(), result.getUpdated())) {
+                        //means app that app has latest data
+                        //temporary code
+                        if(result.getDeleted()==Boolean.TRUE)
+                            ps.setDeleted(true);
+                        if(result.getStatus().equals("completed"))
+                            ps.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
+                       //end
+                        if (ps.isDeleted()) {
+                            ps.delete();
+                            service.tasks().delete(ps.getGoalStringId(), ps.getStringId()).execute();
+                        }else {
+                            if (ps.getPendingStepStatus() == PendingStep.PendingStepStatus.COMPLETED)
+                                task.setStatus("completed");
+                            task.setTitle(ps.getNickName());
+                            result = service.tasks().update(ps.getGoalStringId(), ps.getStringId(), task).execute();
+                            ps.setUpdated(result.getUpdated());
+                            Logger.log(TAG, "Updated Task : " + task.toString() + "  Pending Step: " + pendingStep.toString());
+                            ps.save();
+                        }
+                    } else {
+                        //means that server has latest data
+                        task = result;
+                        if (task.getDeleted() == Boolean.TRUE) {
+                            ps.delete();
+                        } else {
+                            if (task.getStatus().equals("completed"))
+                                ps.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
+                            ps.setNickName(task.getTitle());
+                            ps.save();
+                        }
+                    }
                 }
             }
         }
-
     }
-
     private boolean compareDateTime(DateTime dateTime1,DateTime dateTime2){
         TimeZone timeZone= TimeZone.getDefault();
         Calendar calendar= Calendar.getInstance();

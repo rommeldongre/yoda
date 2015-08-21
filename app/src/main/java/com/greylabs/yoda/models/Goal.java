@@ -311,6 +311,23 @@ public class Goal implements Serializable{
         return numOfRowAffected;
     }
 
+    public int deletePendingSteps(){
+        SQLiteDatabase db=database.getWritableDatabase();
+        int numOfRowAffected=db.delete(TablePendingStep.pendingStep,TablePendingStep.goalId+"="+this.id,null);
+        return numOfRowAffected;
+    }
+
+    public int  deleteAllSteps(String stringGoalId){
+        SQLiteDatabase db=database.getWritableDatabase();
+        int numOfRowAffected=db.delete(TablePendingStep.pendingStep,TablePendingStep.goalStringId+"='"+stringGoalId+"'",null);
+        return numOfRowAffected;
+    }
+    public int deleteGoal(String stringGoalId){
+        SQLiteDatabase db=database.getWritableDatabase();
+        int numOfRowAffected=db.delete(TableGoal.goal,TableGoal.stringId+"='"+stringGoalId+"'",null);
+        return numOfRowAffected;
+    }
+
     /**
      * This method computes the completion of goal in terms of the percent
      * @return percentage of goal completion
@@ -415,5 +432,20 @@ public class Goal implements Serializable{
             id=c.getLong(c.getColumnIndex(TableGoal.id));
         }
         return id;
+    }
+
+    public List<String> getDistinctGoalStringIds(){
+        String query =" select  distinct("+TablePendingStep.goalStringId+") as stringIds " +
+                     "  from "+TablePendingStep.pendingStep;
+        SQLiteDatabase db=database.getWritableDatabase();
+        Cursor c = db.rawQuery(query, null);
+        List<String> stringGoals=null;
+        if(c.moveToFirst()){
+            stringGoals=new ArrayList<>();
+            do{
+                stringGoals.add(c.getString(c.getColumnIndex("stringIds")));
+            }while (c.moveToNext());
+        }
+        return stringGoals;
     }
 }
