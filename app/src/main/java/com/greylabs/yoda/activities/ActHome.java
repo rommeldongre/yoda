@@ -38,7 +38,8 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
 
     HorizontalScrollView scrollView;
     LinearLayout linearLayout ;
-    RelativeLayout layoutToBeHidden, layoutWallpaper, layoutSettingsBackground, layoutOverlapping;
+    RelativeLayout layoutToBeHidden, layoutWallpaper,
+            layoutSettingsBackground, layoutOverlapping, llEmptyView;
     MyArcProgress arcTotalProgress;
     MyFloatingActionsMenu btnSettings;
     MyFloatingActionButton btnAddGoal, btnMyGoals, btnMyTimeBoxes, btnDefaultDuration, btnAutoSyncWithGoogle,
@@ -67,6 +68,7 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
         layoutSettingsBackground = (RelativeLayout) findViewById(R.id.layoutSettingsBackgroundActHome);
         layoutWallpaper = (RelativeLayout) findViewById(R.id.layoutWallpaperActHome);
         layoutOverlapping = (RelativeLayout) findViewById(R.id.layoutOverlappingActHome);
+        llEmptyView = (RelativeLayout) findViewById(R.id.emptyViewActHome);
 
         scrollView = (HorizontalScrollView) findViewById(R.id.scrollViewActHome);
         arcTotalProgress = (MyArcProgress) findViewById(R.id.arcTotalProgressActHome);
@@ -121,18 +123,27 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
                     break;
                 }
             }
-            if(nowPendingStep!=null){
+            if(nowPendingStep!=null && nowPendingStep.getNickName()!=null){
                 arcTotalProgress.setStepName(nowPendingStep.getNickName());
                 nowGoal=nowGoal.get(nowPendingStep.getGoalId());
                 arcTotalProgress.setGoalName(nowGoal.getNickName());
+            }else {
+                showEmptyView();
             }
+
         }else{
-            Prefs prefs=Prefs.getInstance(this);
-            nowGoal=nowGoal.get(prefs.getStretchGoalId());
-            arcTotalProgress.setGoalName(Constants.NICKNAME_STRETCH_GOAL);
-            arcTotalProgress.setStepName(" No Step");
+//            Prefs prefs=Prefs.getInstance(this);
+//            nowGoal=nowGoal.get(prefs.getStretchGoalId());
+//            arcTotalProgress.setGoalName(Constants.NICKNAME_STRETCH_GOAL);
+//            arcTotalProgress.setStepName(" No Step");
+            showEmptyView();
         }
         setStyleToArcTotalProgress();
+    }
+
+    private void showEmptyView() {
+        arcTotalProgress.setVisibility(View.GONE);
+        llEmptyView.setVisibility(View.VISIBLE);
     }
 
     private void setStyleToArcTotalProgress() {

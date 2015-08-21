@@ -1,17 +1,15 @@
 package com.greylabs.yoda.activities;
 
-import android.app.Activity;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
 import com.greylabs.yoda.R;
-import com.greylabs.yoda.utils.Logger;
-import com.greylabs.yoda.views.TouchCheckBox;
 
-public class ActAutoSync extends Activity implements TouchCheckBox.OnCheckedChangeListener {
+public class ActAutoSync extends AppCompatActivity {
 
-    TouchCheckBox checkBox;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,19 +19,26 @@ public class ActAutoSync extends Activity implements TouchCheckBox.OnCheckedChan
     }
 
     private void initialize() {
-        checkBox = (TouchCheckBox) findViewById(R.id.cbActAutoSync);
+        toolbar = (Toolbar) findViewById(R.id.toolBarActAutoSync);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle(getResources().getString(R.string.titleActAutoSync));
 
-        checkBox.setOnCheckedChangeListener(this);
-        checkBox.setCircleColor(Color.CYAN);
-        checkBox.setBackgroundColor(Color.GRAY);
     }
 
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu_act_add_new_step, menu);
+//        return true;
+//    }
+
     @Override
-    public void onCheckedChanged(View buttonView, boolean isChecked) {
-        if(isChecked){
-            Logger.showMsg(this, "checked");
-        }else {
-            Logger.showMsg(this, "unchecked");
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
         }
+        return super.onOptionsItemSelected(item);
     }
 }

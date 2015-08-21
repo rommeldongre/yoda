@@ -161,8 +161,8 @@
 
             <LinearLayout
                 android:id="@+id/llActSplashScreen"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_above="@id/BottomLayoutActHome"
                 android:layout_below="@id/scrollViewActHome"
                 android:layout_margin="10dp">
@@ -171,6 +171,34 @@
                     android:id="@+id/arcTotalProgressActHome"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
+
+                <RelativeLayout
+                    android:id="@+id/emptyViewActHome"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:id="@+id/ivEmptyViewActHome"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:background="@drawable/ic_launcher_yoda"
+                        android:layout_centerInParent="true" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/ivEmptyViewActHome"
+                        android:gravity="center"
+                        android:minLines="2"
+                        android:maxLines="2"
+                        android:text="@string/tvEmptyViewLine1ActHome"
+                        android:textColor="@color/white"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
+                </RelativeLayout>
+
                 <!--ring was used as its background previously, check if its still used -->
             </LinearLayout>
 
