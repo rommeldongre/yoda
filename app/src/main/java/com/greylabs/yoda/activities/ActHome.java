@@ -1,16 +1,19 @@
 package com.greylabs.yoda.activities;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.HorizontalScrollView;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,6 +24,7 @@ import com.greylabs.yoda.enums.AccountType;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.Slot;
+import com.greylabs.yoda.utils.BitmapUtility;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Prefs;
 import com.greylabs.yoda.views.GoalView;
@@ -34,12 +38,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ActHome extends Activity implements View.OnClickListener, FloatingActionsMenu.OnFloatingActionsMenuUpdateListener, MyFloatingActionsMenu.OnFloatingActionsMenuUpdateListener {
+public class ActHome extends AppCompatActivity implements View.OnClickListener, FloatingActionsMenu.OnFloatingActionsMenuUpdateListener, MyFloatingActionsMenu.OnFloatingActionsMenuUpdateListener {
 
     HorizontalScrollView scrollView;
     LinearLayout linearLayout ;
     RelativeLayout layoutToBeHidden, layoutWallpaper,
             layoutSettingsBackground, layoutOverlapping, llEmptyView;
+    ImageView ivWallpaper;
     MyArcProgress arcTotalProgress;
     MyFloatingActionsMenu btnSettings;
     MyFloatingActionButton btnAddGoal, btnMyGoals, btnMyTimeBoxes, btnDefaultDuration, btnAutoSyncWithGoogle,
@@ -70,6 +75,7 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
         layoutOverlapping = (RelativeLayout) findViewById(R.id.layoutOverlappingActHome);
         llEmptyView = (RelativeLayout) findViewById(R.id.emptyViewActHome);
 
+        ivWallpaper = (ImageView) findViewById(R.id.ivWallpaperActHome);
         scrollView = (HorizontalScrollView) findViewById(R.id.scrollViewActHome);
         arcTotalProgress = (MyArcProgress) findViewById(R.id.arcTotalProgressActHome);
         btnAddStep = (MyFloatingActionButton) findViewById(R.id.btnAddStepActHome);
@@ -85,8 +91,12 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
         btnChangeWallpaper = (MyFloatingActionButton) findViewById(R.id.btnChangeWallpaperActHome);
 
         //set wallpaper here
-        prefs = Prefs.getInstance(this);
-        layoutWallpaper.setBackgroundResource(prefs.getWallpaperResourceId());
+                prefs = Prefs.getInstance(this);
+//        layoutWallpaper.setBackgroundResource(prefs.getWallpaperResourceId());
+//        layoutWallpaper.setBackground(new BitmapDrawable(BitmapUtility.decodeSampledBitmapFromResource(getResources(),prefs.getWallpaperResourceId(),ivWallpaper.getWidth(),ivWallpaper.getHeight())));
+//        ivWallpaper.setImageBitmap(BitmapUtility.decodeSampledBitmapFromResource(getResources(),prefs.getWallpaperResourceId(),100,200));
+        Drawable dr = new BitmapDrawable(BitmapUtility.decodeSampledBitmapFromResource(getResources(),prefs.getWallpaperResourceId(),100,200));
+        layoutWallpaper.setBackgroundDrawable(dr);
 
         getGoalsFromLocalAndPopulate();
         arcTotalProgress.setOnClickListener(this);
@@ -288,7 +298,7 @@ public class ActHome extends Activity implements View.OnClickListener, FloatingA
                 break;
 
             case R.id.btnExportToGoogleCalActHome :
-                startActivity(new Intent(this, ActAutoSync.class));
+                startActivity(new Intent(this, ActGoalDetails.class));
                 btnSettings.collapse();
                 break;
 

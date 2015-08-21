@@ -180,7 +180,7 @@ public class ActGoalList  extends ActionBarActivity implements OnClickOfRecycler
             switch (operation){
                 case Constants.OPERATION_EDIT :
                     if(!goalArrayList.get(Position).getNickName().equals(Constants.NICKNAME_STRETCH_GOAL)){
-//                        Intent intent = new Intent(ActGoalList.this, ActGoalDetails.class);
+//                        Intent intent = new Intent(ActGoalList.this, ActGoalDetailsOld.class);
 //                        intent.putExtra(Constants.GOAL_OBJECT, goalArrayList.get(Position));
 //                        intent.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, true);
 //                        startActivity(intent);
