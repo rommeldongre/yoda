@@ -159,6 +159,7 @@
     <string name="tvAddNewGoalActHome">New Goal</string>
     <string name="titleActAutoSync">Auto Sync</string>
     <string name="tvEmptyViewLine1ActHome">Time you have for fun.\nBut steps there are none.</string>
+    <string name="actionDeleteActGoalDetails">Delete</string>
 
     <string-array name="arrayStepTypeActAddNewStep">
         <item>Single Step</item>

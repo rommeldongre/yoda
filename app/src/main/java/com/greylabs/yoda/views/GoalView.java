@@ -99,9 +99,9 @@ public class GoalView extends LinearLayout implements View.OnClickListener {
 //        intent.putExtra(Constants.GOAL_OBJECT, currentGoal);
 //        context.startActivity(intent);
 
-        ActGoalDetails.navigate((AppCompatActivity) context, v.findViewById(R.id.toolBarActGoalDetailsNew), currentGoal);
-//        Intent intent = new Intent(context, ActGoalDetails.class);
-//        intent.putExtra(Constants.GOAL_OBJECT, currentGoal);
-//        context.startActivity(intent);
+//        ActGoalDetails.navigate((AppCompatActivity) context, v.findViewById(R.id.toolBarActGoalDetailsNew), currentGoal);
+        Intent intent = new Intent(context, ActGoalDetails.class);
+        intent.putExtra(Constants.GOAL_OBJECT, currentGoal);
+        context.startActivity(intent);
     }
 }
