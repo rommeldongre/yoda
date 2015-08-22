@@ -707,6 +707,20 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
     }
 
     private int getSelectedColorPosition(Integer color) {
+//        int i=color;
+//        switch (i){
+//            case R.color.colorcode_red :return 0;
+//            case R.color.colorcode_blue :return 1;
+//            case R.color.colorcode_green :return 2;
+//            case R.color.colorcode_yellow :return 3;
+//            case R.color.colorcode_orange :return 4;
+//            case R.color.colorcode_brown :return 5;
+//            case R.color.colorcode_teal :return 6;
+//            case R.color.colorcode_purple :return 7;
+//            case R.color.colorcode_black :return 8;
+//            default :return 0;
+//        }
+        //---------------------------------------------------
         if (color.equals(red)) {
             return 0;
         } else if (color.equals(blue)) {
@@ -835,5 +849,4 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
         }
         return  summary;
     }
-
 }
