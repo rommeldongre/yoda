@@ -137,6 +137,15 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
         pendingStepsArrayList.clear();
         stepArrayList.clear();
         PendingStep pendingStep = new PendingStep(this);
+        List<PendingStep> temp=pendingStep.getAll(currentGoal.getId());
+        if(temp!=null) {
+            stepArrayList.addAll(pendingStep.getAll(currentGoal.getId()));
+            for (int i = 0; i < stepArrayList.size(); i++) {
+                if (!stepArrayList.get(i).getPendingStepStatus().equals(PendingStep.PendingStepStatus.COMPLETED))
+                    pendingStepsArrayList.add(stepArrayList.get(i));
+            }
+        }
+        //--old
 //        if(currentGoal != null && pendingStep.getAll(currentGoal.getId()) != null)
 //            stepArrayList.addAll(pendingStep.getAll(currentGoal.getId()));
 //        //get all pending steps
@@ -144,16 +153,17 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
 //            if(!stepArrayList.get(i).getPendingStepStatus().equals(PendingStep.PendingStepStatus.COMPLETED))
 //                pendingStepsArrayList.add(stepArrayList.get(i));
 //        }
-        List<PendingStep> temp=pendingStep.getAll(PendingStep.PendingStepStatus.TODO,
-                PendingStep.PendingStepDeleted.SHOW_NOT_DELETED,currentGoal.getId());
-        if(currentGoal!=null && temp!=null){
-            stepArrayList.addAll(temp);
-            temp=pendingStep.getAll(PendingStep.PendingStepStatus.COMPLETED,
-                    PendingStep.PendingStepDeleted.SHOW_NOT_DELETED,currentGoal.getId());
-            if(temp!=null){
-                stepArrayList.addAll(temp);
-            }
-        }
+//        List<PendingStep> temp=pendingStep.getAll(PendingStep.PendingStepStatus.TODO,
+//                PendingStep.PendingStepDeleted.SHOW_NOT_DELETED,currentGoal.getId());
+//        if(currentGoal!=null && temp!=null){
+//            pendingStepsArrayList.addAll(temp);
+//        }
+//        temp=pendingStep.getAll(PendingStep.PendingStepStatus.COMPLETED,
+//                PendingStep.PendingStepDeleted.SHOW_NOT_DELETED,currentGoal.getId());
+//        if(temp!=null){
+//            stepArrayList.addAll(temp);
+//            stepArrayList.addAll(pendingStepsArrayList);
+//        }
         checkForEmptyViewVisibility(stepArrayList, getString(R.string.tvEmptyViewActStepList));
     }
 
@@ -348,18 +358,31 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
             case Constants.OPERATION_MARK_STEP_DONE :
                 if(isShowingPendingSteps){
                     pendingStepsArrayList.get(Position).setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
-                    pendingStepsArrayList.get(Position).save();
-                    pendingStepsArrayList.get(Position).updateSubSteps();
-                    pendingStepsArrayList.get(Position).cancelAlarm();
-                    pendingStepsArrayList.remove(Position);
+                    pendingStepsArrayList.get(Position).setUpdated(new DateTime(new Date()));
                     pendingStepsArrayList.get(Position).freeSlot();
+                    pendingStepsArrayList.get(Position).setSlotId(0);
+                    pendingStepsArrayList.get(Position).save();
+                    pendingStepsArrayList.get(Position).cancelAlarm();
+                    if(pendingStepsArrayList.get(Position).getPendingStepType()== PendingStep.PendingStepType.SPLIT_STEP||
+                            pendingStepsArrayList.get(Position).getPendingStepType()== PendingStep.PendingStepType.SERIES_STEP) {
+                        pendingStepsArrayList.get(Position).updateSubSteps();
+                        pendingStepsArrayList.get(Position).freeSlots();
+                    }
+                    pendingStepsArrayList.remove(Position);
                     mAdapter.notifyDataSetChanged();
                     checkForEmptyViewVisibility(pendingStepsArrayList, getString(R.string.tvEmptyViewPendingStepsActStepList));
                 }else {
                     stepArrayList.get(Position).setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
+                    stepArrayList.get(Position).setUpdated(new DateTime(new Date()));
+                    stepArrayList.get(Position).freeSlot();
+                    stepArrayList.get(Position).setSlotId(0);
                     stepArrayList.get(Position).save();
-                    pendingStepsArrayList.get(Position).updateSubSteps();
                     stepArrayList.get(Position).cancelAlarm();
+                    if(stepArrayList.get(Position).getPendingStepType()== PendingStep.PendingStepType.SPLIT_STEP||
+                            stepArrayList.get(Position).getPendingStepType()== PendingStep.PendingStepType.SERIES_STEP) {
+                        stepArrayList.get(Position).updateSubSteps();
+                        stepArrayList.get(Position).freeSlots();
+                    }
                     for(int i=0;i<pendingStepsArrayList.size();i++){
                         if(stepArrayList.get(Position).getId()==pendingStepsArrayList.get(i).getId())
                             pendingStepsArrayList.remove(i);
@@ -369,8 +392,12 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
 
             case Constants.OPERATION_MARK_STEP_UNDONE :
                 stepArrayList.get(Position).setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
-                stepArrayList.get(Position).updateSubSteps();
+                stepArrayList.get(Position).setUpdated(new DateTime(new Date()));
                 stepArrayList.get(Position).save();
+                if(stepArrayList.get(Position).getPendingStepType()== PendingStep.PendingStepType.SPLIT_STEP||
+                        stepArrayList.get(Position).getPendingStepType()== PendingStep.PendingStepType.SERIES_STEP) {
+                    stepArrayList.get(Position).updateSubSteps();
+                }
                 TimeBox currentTimeBox = new TimeBox(this).get(currentGoal.getTimeBoxId());
                 YodaCalendar yodaCalendar = new YodaCalendar(this, currentTimeBox);
                 yodaCalendar.rescheduleSteps(currentGoal.getId());

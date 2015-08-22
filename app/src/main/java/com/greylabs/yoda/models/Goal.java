@@ -247,7 +247,8 @@ public class Goal implements Serializable{
         ArrayList<Goal> goals=null;
         SQLiteDatabase db=database.getReadableDatabase();
         String query="select * " +
-                " "+" from "+ TableGoal.goal+" ";
+                " "+" from "+ TableGoal.goal+"" +
+                " "+" where "+TableGoal.deleted+"=0";
         Cursor c=db.rawQuery(query,null);
         if(c.moveToFirst()){
             goals=new ArrayList<>();
@@ -305,6 +306,15 @@ public class Goal implements Serializable{
         return rowId;
     }
 
+    public void setPendingStepGoalStringId(String goalId){
+        String query="update "+TablePendingStep.pendingStep+" " +
+                " set "+TablePendingStep.goalStringId+" = '"+goalId+"' " +
+                " where "+TablePendingStep.goalId+"="+this.getId();
+        SQLiteDatabase db=database.getWritableDatabase();
+        Cursor c=db.rawQuery(query,null);
+        c.moveToFirst();
+        c.close();
+    }
     public int delete(){
         SQLiteDatabase db=database.getWritableDatabase();
         int numOfRowAffected=db.delete(TableGoal.goal,TableGoal.id+"="+id,null);

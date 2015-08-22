@@ -325,6 +325,7 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
             PendingStep ps =currentStep;
             switch (ps.getPendingStepType()){
                 case SPLIT_STEP:
+                    ps.save();
                     ps.markSubSteps(true);
                     ps.freeSlots();
                     if(ps.getTime()>Constants.MAX_SLOT_DURATION){
@@ -334,13 +335,12 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
                         if(numberOfSteps-f.intValue()>0.0f)
                             ps.createSubSteps(f.intValue()+1,f.intValue()+1,currentStep.getTime()%Constants.MAX_SLOT_DURATION);
                     }
-                    ps.save();
                     break;
                 case SERIES_STEP:
+                    ps.save();
                     ps.markSubSteps(true);
                     ps.freeSlots();
                     ps.createSubSteps(1, currentStep.getStepCount(), currentStep.getTime());
-                    ps.save();
                     break;
             }
 

@@ -257,7 +257,7 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                 }
                 yodaCalendar.setTimeBox(timeBox.get(goal.getTimeBoxId()));
                 Logger.log(TAG, "Task List: " + taskList.toString() + "  Goal: " + goal.toString());
-                com.google.api.services.tasks.model.Tasks tasks = service.tasks().list(taskList.getId()).execute();
+                com.google.api.services.tasks.model.Tasks tasks = service.tasks().list(taskList.getId()).setShowCompleted(false).setShowCompleted(false).execute();
                 if (tasks != null) {
                     List<Task> myTasks = tasks.getItems();
                     if (myTasks != null) {
@@ -274,16 +274,20 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                                     //means server has latest data
                                     if (task.getStatus().equals("needsAction")) {
                                         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
-                                        pendingStep.setTime(Constants.MAX_SLOT_DURATION);
+                                        //pendingStep.setTime(Constants.MAX_SLOT_DURATION);
                                     }
                                     else {
                                         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
                                         pendingStep.cancelAlarm();
+                                        pendingStep.freeSlot();
+                                        pendingStep.setSlotId(0);
                                     }
                                     if (task.getDeleted() != null) {
                                         pendingStep.setDeleted(task.getDeleted());
                                     }
                                     if (pendingStep.isDeleted()) {
+                                        pendingStep.cancelAlarm();
+                                        pendingStep.freeSlot();
                                         pendingStep.delete();
                                     } else {
                                         pendingStep.setGoalId(goal.getId());
@@ -293,13 +297,19 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                                 } else {//means app has latest data
                                     if (pendingStep.isDeleted()) {
                                         service.tasks().delete(goal.getStringId(), pendingStep.getStringId()).execute();
+                                        pendingStep.cancelAlarm();;
+                                        pendingStep.freeSlot();
                                         pendingStep.delete();
+
                                     } else {
                                         if (pendingStep.getPendingStepStatus() == PendingStep.PendingStepStatus.COMPLETED) {
                                             task.setStatus("completed");
+                                            pendingStep.cancelAlarm();
+                                            pendingStep.setSlotId(0);
                                         }
                                         task.setTitle(pendingStep.getNickName());
                                         service.tasks().update(goal.getStringId(), pendingStep.getStringId(), task).execute();
+                                        pendingStep.save();
                                     }
                                 }
                             }
@@ -310,10 +320,14 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                 yodaCalendar.rescheduleSteps(goal.getId());
             }
             List<String> appStringGoalIds=goal.getDistinctGoalStringIds();
-            appStringGoalIds.removeAll(serverStringGoalIds);
-            for(String stringGoalId:appStringGoalIds){
-                goal.deleteAllSteps(stringGoalId);
-                goal.deleteGoal(stringGoalId);
+            if(appStringGoalIds!=null && serverStringGoalIds!=null) {
+                appStringGoalIds.removeAll(serverStringGoalIds);
+                appStringGoalIds.remove("");
+                appStringGoalIds.remove("@default");
+                for (String stringGoalId : appStringGoalIds) {
+                    goal.deleteAllSteps(stringGoalId);
+                    goal.deleteGoal(stringGoalId);
+                }
             }
         }
     }
@@ -337,6 +351,8 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                     g.setStringId(result.getId());
                     g.setUpdated(result.getUpdated());
                     g.save();
+                    //if there are already some steps set there goal string ids
+                    g.setPendingStepGoalStringId(g.getStringId());
                 } else {
                     //for old goals that are present at server side,
                     if (!g.getStringId().equals("@default")) {
@@ -412,11 +428,16 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                             ps.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
                        //end
                         if (ps.isDeleted()) {
-                            ps.delete();
                             service.tasks().delete(ps.getGoalStringId(), ps.getStringId()).execute();
+                            ps.delete();
+                            ps.cancelAlarm();
+                            ps.freeSlot();
                         }else {
-                            if (ps.getPendingStepStatus() == PendingStep.PendingStepStatus.COMPLETED)
+                            if (ps.getPendingStepStatus() == PendingStep.PendingStepStatus.COMPLETED) {
                                 task.setStatus("completed");
+                                ps.cancelAlarm();
+                                ps.freeSlot();
+                            }
                             task.setTitle(ps.getNickName());
                             result = service.tasks().update(ps.getGoalStringId(), ps.getStringId(), task).execute();
                             ps.setUpdated(result.getUpdated());
@@ -427,10 +448,14 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                         //means that server has latest data
                         task = result;
                         if (task.getDeleted() == Boolean.TRUE) {
+                            ps.cancelAlarm();
                             ps.delete();
                         } else {
-                            if (task.getStatus().equals("completed"))
+                            if (task.getStatus().equals("completed")) {
                                 ps.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
+                                ps.setSlotId(0);
+                                ps.cancelAlarm();
+                            }
                             ps.setNickName(task.getTitle());
                             ps.save();
                         }

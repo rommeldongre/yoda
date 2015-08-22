@@ -363,7 +363,6 @@ public class PendingStep implements Serializable {
     /**
      * This method return list of PendingStep of given goal and that are not substeps of some other
      * steps
-     *
      * @param goalId
      * @return List of Pending Steps
      */
@@ -373,7 +372,8 @@ public class PendingStep implements Serializable {
         String query = "select * " +
                 " " + " from " + TablePendingStep.pendingStep + " " +
                 " " + " where " + TablePendingStep.goalId + " = " + goalId + " " +
-                " " + " and " + TablePendingStep.type + "!=" + PendingStepType.SUB_STEP.ordinal()+"" +
+                " " + " and " + TablePendingStep.type + "!=" + PendingStepType.SUB_STEP.ordinal()+" " +
+                " " + " and "+TablePendingStep.deleted+"=0"+
                 " " + " order by "+TablePendingStep.priority+" asc ";
 
         Cursor c = db.rawQuery(query, null);
@@ -853,10 +853,12 @@ public class PendingStep implements Serializable {
 
     public void freeSlots(){
         List<PendingStep> subSteps=getAllSubSteps(this.getId(),this.getGoalId());
-        for(PendingStep subStep:subSteps){
-            subStep.freeSlot();
-            subStep.setSlotId(0);
-            subStep.save();
+        if(subSteps!=null) {
+            for (PendingStep subStep : subSteps) {
+                subStep.freeSlot();
+                subStep.setSlotId(0);
+                subStep.save();
+            }
         }
     }
 

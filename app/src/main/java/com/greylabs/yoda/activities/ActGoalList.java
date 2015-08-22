@@ -263,38 +263,38 @@ public class ActGoalList  extends ActionBarActivity implements OnClickOfRecycler
 
     }
 
-    private void performActionDeleteGoalNo(int position){
-    //delete goal here and all the steps related to it
+    private void performActionDeleteGoalNo(int position) {
+        //delete goal here and all the steps related to it
         Goal goal = goalArrayList.get(position);
-        PendingStep ps=new PendingStep(ActGoalList.this);
+        PendingStep ps = new PendingStep(ActGoalList.this);
         ps.setGoalId(goal.getId());
-        List<PendingStep> pendingSteps=ps.getAll(goal.getId());
-        for (PendingStep pendingStep:pendingSteps){
-            switch (pendingStep.getPendingStepType()){
-                case SUB_STEP:
-                case SERIES_STEP:
-                    List<PendingStep> subSteps=pendingStep.getAllSubSteps(pendingStep.getId(),goal.getId());
-                    for(PendingStep subStep:subSteps){
-                        subStep.cancelAlarm();
-                        subStep.delete();
-                    }
-
-                    break;
-                case SINGLE_STEP:
-                    pendingStep.cancelAlarm();
-                    pendingStep.delete();
-                    break;
+        List<PendingStep> pendingSteps = ps.getAll(goal.getId());
+        if (pendingSteps != null){
+            for (PendingStep pendingStep : pendingSteps) {
+                switch (pendingStep.getPendingStepType()) {
+                    case SUB_STEP:
+                    case SERIES_STEP:
+                        List<PendingStep> subSteps = pendingStep.getAllSubSteps(pendingStep.getId(), goal.getId());
+                        for (PendingStep subStep : subSteps) {
+                            subStep.cancelAlarm();
+                            subStep.setDeleted(true);
+                        }
+                        break;
+                    case SINGLE_STEP:
+                        pendingStep.cancelAlarm();
+                        pendingStep.setDeleted(true);
+                        break;
+                }
             }
         }
         //ps.deleteAllPendingSteps();
-        int numberOfRowsAffected = goal.delete();
-        if (numberOfRowsAffected == 1) {
-            getGoalArrayFromLocal();
-            mAdapter.notifyDataSetChanged();
-            yodaCalendar = new YodaCalendar(ActGoalList.this);
-            yodaCalendar.detachTimeBox(goal.getTimeBoxId());
-            Logger.showMsg(ActGoalList.this, Constants.MSG_GOAL_DELETED);
-        }
+        goal.setDeleted(true);
+        getGoalArrayFromLocal();
+        mAdapter.notifyDataSetChanged();
+        yodaCalendar = new YodaCalendar(ActGoalList.this);
+        yodaCalendar.detachTimeBox(goal.getTimeBoxId());
+        Logger.showMsg(ActGoalList.this, Constants.MSG_GOAL_DELETED);
+
     }
 
 }

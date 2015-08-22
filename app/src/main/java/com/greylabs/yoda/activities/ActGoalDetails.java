@@ -246,23 +246,21 @@ public class ActGoalDetails extends AppCompatActivity {
                     List<PendingStep> subSteps=pendingStep.getAllSubSteps(pendingStep.getId(),goal.getId());
                     for(PendingStep subStep:subSteps){
                         subStep.cancelAlarm();
-                        subStep.delete();
+                        subStep.setDeleted(true);
                     }
                     break;
                 case SINGLE_STEP:
                     pendingStep.cancelAlarm();
-                    pendingStep.delete();
+                    pendingStep.setDeleted(true);
                     break;
             }
         }
         //ps.deleteAllPendingSteps();
-        int numberOfRowsAffected = goal.delete();
-        if (numberOfRowsAffected == 1) {
-            yodaCalendar = new YodaCalendar(this);
-            yodaCalendar.detachTimeBox(goal.getTimeBoxId());
-            Logger.showMsg(this, Constants.MSG_GOAL_DELETED);
-            this.finish();
-        }
+        goal.setDeleted(true);
+        yodaCalendar = new YodaCalendar(this);
+        yodaCalendar.detachTimeBox(goal.getTimeBoxId());
+        Logger.showMsg(this, Constants.MSG_GOAL_DELETED);
+        this.finish();
     }
 
     @Override
