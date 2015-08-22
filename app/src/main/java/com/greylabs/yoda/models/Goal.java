@@ -243,12 +243,12 @@ public class Goal implements Serializable{
         return this;
     }
 
-    public List<Goal> getAll(){
+    public List<Goal> getAll(GoalDeleted deleted){
         ArrayList<Goal> goals=null;
         SQLiteDatabase db=database.getReadableDatabase();
         String query="select * " +
                 " "+" from "+ TableGoal.goal+"" +
-                " "+" where "+TableGoal.deleted+"=0";
+                " "+" where "+deleted.getCriteria();
         Cursor c=db.rawQuery(query,null);
         if(c.moveToFirst()){
             goals=new ArrayList<>();
@@ -457,5 +457,19 @@ public class Goal implements Serializable{
             }while (c.moveToNext());
         }
         return stringGoals;
+    }
+
+    public enum GoalDeleted{
+        SHOW_DELETED("("+TableGoal.deleted+"= 1 )"),
+        SHOW_NOT_DELETED("("+TableGoal.deleted+"= 0 )"),
+        SHOW_BOTH("("+TableGoal.deleted+"= 1"+" or "+TablePendingStep.deleted+"= 0 )");
+        String criteria;
+        GoalDeleted(String criteria){
+            this.criteria=criteria;
+        }
+
+        public String getCriteria(){
+            return criteria;
+        }
     }
 }

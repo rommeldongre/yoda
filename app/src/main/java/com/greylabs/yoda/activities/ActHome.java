@@ -184,10 +184,11 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
     }
 
     private void getGoalsFromLocalAndPopulate() {
-        if(new Goal(this).getAll() != null){
+        List<Goal> temp=new Goal(this).getAll(Goal.GoalDeleted.SHOW_NOT_DELETED);
+        if(temp!=null){
             if(goalList != null)
                 goalList.clear();
-            goalList.addAll(new Goal(this).getAll());
+            goalList.addAll(temp);
         }
 
         linearLayout = new LinearLayout(this);

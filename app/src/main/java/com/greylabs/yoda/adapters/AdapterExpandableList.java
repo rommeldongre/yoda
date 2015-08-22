@@ -82,11 +82,21 @@ public class AdapterExpandableList extends BaseExpandableListAdapter {
                 if(isChecked){
                     pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
                     pendingStep.cancelAlarm();
+                    pendingStep.freeSlot();
                     pendingStep.save();
+                    if(pendingStep.getPendingStepType()== PendingStep.PendingStepType.SPLIT_STEP ||
+                            pendingStep.getPendingStepType()== PendingStep.PendingStepType.SERIES_STEP){
+                        pendingStep.updateSubSteps();
+                        pendingStep.freeSlots();
+                    }
 //                    cbCompleted.setEnabled(false);
                 }else {
                     pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
                     pendingStep.save();
+                    if(pendingStep.getPendingStepType()== PendingStep.PendingStepType.SPLIT_STEP ||
+                            pendingStep.getPendingStepType()== PendingStep.PendingStepType.SERIES_STEP){
+                        pendingStep.updateSubSteps();
+                    }
                     Goal currentGoal = goalList.get(groupPosition);
                     TimeBox currentTimeBox = new TimeBox(context).get(currentGoal.getTimeBoxId());
                     YodaCalendar yodaCalendar = new YodaCalendar(context, currentTimeBox);

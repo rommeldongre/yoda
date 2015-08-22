@@ -779,6 +779,16 @@ public class PendingStep implements Serializable {
         c.close();
     }
 
+    public void updateStringGoalId(long oldGoalId,String newStringGoalId){
+        String query="update "+TablePendingStep.pendingStep+" " +
+                " "+" set "+TablePendingStep.goalStringId+" = '"+newStringGoalId+"' " +
+                " "+" where "+TablePendingStep.goalId+" = "+oldGoalId;
+        SQLiteDatabase db=database.getWritableDatabase();
+        Cursor c=db.rawQuery(query, null);
+        c.moveToFirst();
+        c.close();
+    }
+
     public  String getColorCode(){
         Goal goal=new Goal(context).get(this.getGoalId());
         return goal.getColorCode();
@@ -856,6 +866,7 @@ public class PendingStep implements Serializable {
         if(subSteps!=null) {
             for (PendingStep subStep : subSteps) {
                 subStep.freeSlot();
+                subStep.cancelAlarm();
                 subStep.setSlotId(0);
                 subStep.save();
             }

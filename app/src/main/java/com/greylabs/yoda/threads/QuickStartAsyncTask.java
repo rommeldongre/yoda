@@ -8,6 +8,7 @@ import android.os.Message;
 
 import com.greylabs.yoda.database.QuickStart;
 import com.greylabs.yoda.models.Goal;
+import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.Slot;
 import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.scheduler.YodaCalendar;
@@ -45,7 +46,7 @@ public class QuickStartAsyncTask extends AsyncTask<String, String, String> {
         slot.setDefaultGoalDetails();
         //schedule all steps
         YodaCalendar yodaCalendar=new YodaCalendar(context);
-        List<Goal> goals=new Goal(context).getAll();
+        List<Goal> goals=new Goal(context).getAll(Goal.GoalDeleted.SHOW_NOT_DELETED);
         TimeBox timeBox=new TimeBox(context);
         Goal stretchGoal=new Goal(context);
         stretchGoal.setId(Prefs.getInstance(context).getStretchGoalId());

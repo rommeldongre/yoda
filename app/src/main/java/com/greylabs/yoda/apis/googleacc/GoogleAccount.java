@@ -267,6 +267,7 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                                 //means that this new step , insert it to our database
                                 pendingStep.setStringId(task.getId());
                                 pendingStep.setGoalStringId(taskList.getId());
+                                pendingStep.setGoalId(goal.getId());
                                 pendingStep.save();
                             }else
                             {
@@ -338,7 +339,7 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
 
     private void exportGoals() throws IOException {
         Goal goal = new Goal(context);
-        List<Goal> goals = goal.getAll();
+        List<Goal> goals = goal.getAll(Goal.GoalDeleted.SHOW_BOTH);
         if (goals != null) {
             for (Goal g : goals) {
                 //export goals data
@@ -361,8 +362,8 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                             //means server has latest data
                             if (result.getId() == null) {
                                 //means that goal is deleted
-                                goal.deleteAllSteps(g.getStringId());
-                                goal.deleteGoal(g.getStringId());
+                                g.deleteAllSteps(g.getStringId());
+                                g.deleteGoal(g.getStringId());
                             } else {
                                 g.setNickName(result.getTitle());
                                 g.setUpdated(result.getUpdated());
@@ -371,8 +372,11 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                         } else {
                             //means app has latest data
                             if (!g.getStringId().equals("@default")) {
-                                if (g.isDeleted())
+                                if (g.isDeleted()) {
                                     service.tasklists().delete(g.getStringId()).execute();
+                                    g.deletePendingSteps();
+                                    g.delete();
+                                }
                                 else {
                                     result = service.tasklists().update(g.getStringId(), taskList).execute();
                                     g.setUpdated(result.getUpdated());

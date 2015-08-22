@@ -6,7 +6,6 @@ import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.scheduler.AlarmScheduler;
 
-import java.io.File;
 import java.util.List;
 
 import static com.greylabs.yoda.database.MetaData.*;
@@ -49,7 +48,7 @@ public class ResetYoda {
     }
 
     private  static void clearAlarms(Context context){
-        List<Goal> goals=new Goal(context).getAll();
+        List<Goal> goals=new Goal(context).getAll(Goal.GoalDeleted.SHOW_NOT_DELETED);
         PendingStep pendingStep=new PendingStep(context);
         AlarmScheduler alarmScheduler=new AlarmScheduler(context);
         for(Goal goal:goals){

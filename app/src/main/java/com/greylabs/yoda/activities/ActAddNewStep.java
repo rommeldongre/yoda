@@ -240,8 +240,9 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
             goalList.clear();
         }
         currentGoal = new Goal(this);
-        if(currentGoal.getAll()!=null)
-            goalList.addAll(currentGoal.getAll());
+        List<Goal> temp=currentGoal.getAll(Goal.GoalDeleted.SHOW_NOT_DELETED);
+        if(temp!=null)
+            goalList.addAll(temp);
 //        if (goalList != null) {
 //            for (int i = 0; i < goalList.size(); i++) {
 //                goalNamesList.add(goalList.get(i).getNickName());
