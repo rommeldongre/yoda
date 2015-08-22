@@ -27,6 +27,7 @@ import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.SearchView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.api.client.util.DateTime;
 import com.greylabs.yoda.R;
@@ -46,7 +47,8 @@ import java.util.List;
 
 public class ActAddNewGoal extends ActionBarActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
-    EditText edtObjective, edtKeyResult, edtNickName, edtGoalReason, edtGoalReward, edtGoalBuddy;//edtTime,
+    EditText edtObjective, edtKeyResult, edtNickName, edtGoalReason, edtGoalReward;//, edtGoalBuddy;//edtTime,
+    TextView edtGoalBuddy;
     SearchView svGoalBuddy;
     Button btnShowAdvanced, btnHideAdvanced;
     CardView cardViewAdvanced;
@@ -86,7 +88,8 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
         cardViewAdvanced = (CardView) findViewById(R.id.cardViewAdvancedActAddNewGoal);
         edtGoalReason = (EditText) findViewById(R.id.edtGoalReasonActAddNewGoal);
         edtGoalReward = (EditText) findViewById(R.id.edtGoalRewardActAddNewGoal);
-        edtGoalBuddy = (EditText) findViewById(R.id.edtGoalBuddyActAddNewGoal);
+//        edtGoalBuddy = (EditText) findViewById(R.id.edtGoalBuddyActAddNewGoal);
+        edtGoalBuddy = (TextView) findViewById(R.id.edtGoalBuddyActAddNewGoal);
         svGoalBuddy = (SearchView) findViewById(R.id.svGoalBuddyActAddNewGoal);
         btnShowAdvanced = (Button) findViewById(R.id.btnShowAdvancedActAddNewGoal);
         btnHideAdvanced = (Button) findViewById(R.id.btnHideAdvancedActAddNewGoal);
@@ -218,64 +221,67 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
 
     private void saveGoal() {
         if(timeSpinner.getSelectedItemPosition()>0){
-
-            if(yodaCalendar==null){
-                yodaCalendar=new YodaCalendar(this,timeBoxList.get(timeSpinner.getSelectedItemPosition()));
-            }
-//            String caller=getIntent().getStringExtra(Constants.CALLER);
-            boolean isValidTimeBox=false;
-            if(caller.equals(Constants.ACT_GOAL_DETAILS)) {
-                isValidTimeBox = yodaCalendar.validateTimeBoxForUpdate(goal.getTimeBoxId());
-            }else{
-                isValidTimeBox=yodaCalendar.validateTimeBox();
-            }
-
-            if(isValidTimeBox==false){
-                AlertDialog.Builder alert=new AlertDialog.Builder(this);
-                alert.setPositiveButton("Ok", null);
-                alert.setMessage(getString(R.string.msgActAddNewGoalTimeBoxNotApplicable));
-                alert.show();
-            }else if(edtNickName.getText() != null && edtNickName.getText().length() > 0 ){
-                TimeBox timeBox=timeBoxList.get(timeSpinner.getSelectedItemPosition());
-                if(timeBox.getId()!=goal.getTimeBoxId()){               // if new timebox selected
-                    yodaCalendar.detachTimeBox(goal.getTimeBoxId());
-                    yodaCalendar.attachTimeBox(goal.getId());
-                    yodaCalendar.rescheduleSteps(goal.getId());
+            if(!edtNickName.getText().equals(Constants.NICKNAME_UNPLANNED_TIMEBOX)){
+                if(yodaCalendar==null){
+                    yodaCalendar=new YodaCalendar(this,timeBoxList.get(timeSpinner.getSelectedItemPosition()));
                 }
-                goal.initDatabase(this);
-                goal.setNickName(edtNickName.getText().toString());
-                goal.setTimeBoxId(timeBoxList.get(timeSpinner.getSelectedItemPosition()).getId());
-                goal.setObjective(edtObjective.getText().toString());
-                goal.setKeyResult(edtKeyResult.getText().toString());
-                goal.setReason(edtGoalReason.getText().toString());
-                goal.setReward(edtGoalReward.getText().toString());
-                goal.setBuddyEmail(edtGoalBuddy.getText().toString());
-                Prefs prefs=Prefs.getInstance(this);
-                goal.setAccount(prefs.getDefaultAccountEmailId());
-                goal.setAccountType(AccountType.getIntegerToEnum(prefs.getDefaultAccountType()));
-                goal.setUpdated(new DateTime(new Date()));
-                goal.save();
+//            String caller=getIntent().getStringExtra(Constants.CALLER);
+                boolean isValidTimeBox=false;
+                if(caller.equals(Constants.ACT_GOAL_DETAILS)) {
+                    isValidTimeBox = yodaCalendar.validateTimeBoxForUpdate(goal.getTimeBoxId());
+                }else{
+                    isValidTimeBox=yodaCalendar.validateTimeBox();
+                }
+
+                if(isValidTimeBox==false){
+                    AlertDialog.Builder alert=new AlertDialog.Builder(this);
+                    alert.setPositiveButton("Ok", null);
+                    alert.setMessage(getString(R.string.msgActAddNewGoalTimeBoxNotApplicable));
+                    alert.show();
+                }else if(edtNickName.getText() != null && edtNickName.getText().length() > 0 ){
+                    TimeBox timeBox=timeBoxList.get(timeSpinner.getSelectedItemPosition());
+                    if(timeBox.getId()!=goal.getTimeBoxId()){               // if new timebox selected
+                        yodaCalendar.detachTimeBox(goal.getTimeBoxId());
+                        yodaCalendar.attachTimeBox(goal.getId());
+                        yodaCalendar.rescheduleSteps(goal.getId());
+                    }
+                    goal.initDatabase(this);
+                    goal.setNickName(edtNickName.getText().toString());
+                    goal.setTimeBoxId(timeBoxList.get(timeSpinner.getSelectedItemPosition()).getId());
+                    goal.setObjective(edtObjective.getText().toString());
+                    goal.setKeyResult(edtKeyResult.getText().toString());
+                    goal.setReason(edtGoalReason.getText().toString());
+                    goal.setReward(edtGoalReward.getText().toString());
+                    goal.setBuddyEmail(edtGoalBuddy.getText().toString());
+                    Prefs prefs=Prefs.getInstance(this);
+                    goal.setAccount(prefs.getDefaultAccountEmailId());
+                    goal.setAccountType(AccountType.getIntegerToEnum(prefs.getDefaultAccountType()));
+                    goal.setUpdated(new DateTime(new Date()));
+                    goal.save();
 
 //                AsyncTaskAttachTimeBox asyncTaskAttachTimeBox=new AsyncTaskAttachTimeBox(this,new MyHandler(),yodaCalendar,"Please Wait,Attaching TimeBox",goal.getId());
 //                asyncTaskAttachTimeBox.execute(yodaCalendar);
 
-                isSaved = true;
-                Logger.showMsg(this, getResources().getString(R.string.msgGoalSavedActAddNewGoal));
-                switch (caller){
-                    case Constants.ACT_ADD_NEW_STEP :
-                        Intent secIntent = new Intent();
-                        secIntent.putExtra(Constants.GOAL_CREATED, true);
-                        setResult(Constants.RESULTCODE_OF_ACT_ADD_GOAL, secIntent);
-                        break;
+                    isSaved = true;
+                    Logger.showMsg(this, getResources().getString(R.string.msgGoalSavedActAddNewGoal));
+                    switch (caller){
+                        case Constants.ACT_ADD_NEW_STEP :
+                            Intent secIntent = new Intent();
+                            secIntent.putExtra(Constants.GOAL_CREATED, true);
+                            setResult(Constants.RESULTCODE_OF_ACT_ADD_GOAL, secIntent);
+                            break;
 
-                    case Constants.ACT_GOAL_DETAILS :
-                        Intent thirdIntent = new Intent();
-                        thirdIntent.putExtra(Constants.GOAL_UPDATED, true);
-                        setResult(Constants.RESULTCODE_OF_ACT_ADD_GOAL, thirdIntent);
+                        case Constants.ACT_GOAL_DETAILS :
+                            Intent thirdIntent = new Intent();
+                            thirdIntent.putExtra(Constants.GOAL_UPDATED, true);
+                            setResult(Constants.RESULTCODE_OF_ACT_ADD_GOAL, thirdIntent);
+                    }
+                    this.finish();
+                }else {
+                    Logger.showMsg(this, getResources().getString(R.string.msgEnterGoalNickNameActAddNewGoal));
                 }
-                this.finish();
             }else {
-                Logger.showMsg(this, getResources().getString(R.string.msgEnterGoalNickNameActAddNewGoal));
+                Logger.showMsg(this, getResources().getString(R.string.msgSelectTimeBoxActAddNewGoal));
             }
         }else {
             Logger.showMsg(this, getResources().getString(R.string.msgSelectTimeBoxActAddNewGoal));
@@ -337,16 +343,29 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
     protected void onNewIntent(Intent intent) {
         if (ContactsContract.Intents.SEARCH_SUGGESTION_CLICKED.equals(intent.getAction())) {
             //handles suggestion clicked query
-            String displayName = getDisplayNameForContact(intent);
-            edtGoalBuddy.setText(displayName);
+            String emailId = getEmailOfClickedContact(intent);
+            if(emailId!=null){
+                collapseSearchView();
+                edtGoalBuddy.setText(emailId);
+            }else {
+                collapseSearchView();
+                Logger.showMsg(this, getString(R.string.msgNoEmailIdAttached));
+            }
         } else if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             // handles a search query
             String query = intent.getStringExtra(SearchManager.QUERY);
             edtGoalBuddy.setText(query);
+            collapseSearchView();
         }
     }
 
-    private String getDisplayNameForContact(Intent intent) {
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    private void collapseSearchView() {
+        svGoalBuddy.setIconified(true);
+        svGoalBuddy.setIconified(true);
+    }
+
+    private String getEmailOfClickedContact(Intent intent) {
         String emailIdOfContact = null;
 //        int emailType = ContactsContract.CommonDataKinds.Email.TYPE_WORK;
 //        String contactName = null;

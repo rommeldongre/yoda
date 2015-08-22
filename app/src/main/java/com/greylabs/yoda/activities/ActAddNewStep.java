@@ -487,12 +487,21 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
 
         switch (seekBar.getId()) {
             case R.id.seekbarSingleStepTimeActAddNewStep:
+                if(progress<1){
+                    sbTimeSingleStep.setProgress(1);
+                }
                 break;
 
             case R.id.seekbarStepsInSeriesActAddNewStep:
+                if(stepTypeSpinner.getSelectedItemPosition()==1 && progress<2){
+                    sbNoOfSteps.setProgress(2);
+                }
                 break;
 
             case R.id.seekbarTimeForEachStepActAddNewStep:
+                if(progress<1){
+                    sbTimeSeriesStep.setProgress(1);
+                }
                 break;
         }
     }

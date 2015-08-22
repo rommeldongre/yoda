@@ -3,6 +3,7 @@ package com.greylabs.yoda.activities;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +17,8 @@ import android.support.v7.widget.Toolbar;
 import android.transition.Slide;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.greylabs.yoda.R;
@@ -24,26 +27,30 @@ import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.BitmapUtility;
+import com.greylabs.yoda.utils.CalendarUtils;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.Prefs;
 import com.greylabs.yoda.views.CircleView;
-import com.greylabs.yoda.views.MyDonutProgress;
 
 import java.util.List;
+import java.util.Random;
 
-public class ActGoalDetails extends AppCompatActivity {
+public class ActGoalDetails extends AppCompatActivity implements View.OnClickListener {
 
     private CollapsingToolbarLayout collapsingToolbarLayout;
-    private String goalTitle;
     private YodaCalendar yodaCalendar;
     private Toolbar toolbar;
-    private MyDonutProgress donutProgress;
+    private FloatingActionButton fabStepList;
+//    private MyDonutProgress donutProgress;
+    private ProgressBar progressBar;
     private Goal currentGoal;
     private TimeBox currentTimeBox;
     private CircleView btnBullet;
-    private TextView tvNickName, tvTime, tvObjective, tvKeyResult, tvReason, tvReward, tvBuddy;
+    private TextView tvEta, tvNickName, tvTime, tvObjective, tvKeyResult, tvReason, tvReward, tvBuddy;
     private final String EXTRA_TITLE = "com.antonioleiva.materializeyourapp.extraTitle";
+    int primaryColor;
+    int primaryDarkColor;
 
 //    public static void navigate(Context context, View transitionImage, Goal currentGoal) {
 //        String EXTRA_TITLE = "com.antonioleiva.materializeyourapp.extraTitle";
@@ -74,46 +81,29 @@ public class ActGoalDetails extends AppCompatActivity {
         }
     }
 
-    private void applyPalette(Palette palette) {
-        int primaryDark = getResources().getColor(R.color.ColorPrimaryDark);
-        int primary = getResources().getColor(R.color.ColorPrimary);
-        collapsingToolbarLayout.setContentScrimColor(palette.getMutedColor(primary));
-        collapsingToolbarLayout.setStatusBarScrimColor(palette.getDarkMutedColor(primaryDark));
-        updateBackground((FloatingActionButton) findViewById(R.id.btnFabActGoalDetails), palette);
-        supportStartPostponedEnterTransition();
-    }
-
-    private void updateBackground(FloatingActionButton fab, Palette palette) {
-        int lightVibrantColor = palette.getLightVibrantColor(getResources().getColor(android.R.color.white));
-        fab.setRippleColor(lightVibrantColor);
-//        int vibrantColor = palette.getVibrantColor(getResources().getColor(R.color.ColorPrimary));
-//        fab.setBackgroundTintList(ColorStateList.valueOf(vibrantColor));
-    }
-
     private void initialize() {
         currentGoal  = (Goal)getIntent().getSerializableExtra(Constants.GOAL_OBJECT);
         currentGoal.initDatabase(this);
-        goalTitle = currentGoal.getNickName();
 
-        ViewCompat.setTransitionName(findViewById(R.id.appBar), goalTitle);//currentGoal.getNickName().toString()
+        ViewCompat.setTransitionName(findViewById(R.id.appBar), currentGoal.getNickName());
         supportPostponeEnterTransition();
+
+//        Window window = getWindow();
+//        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+//        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+//        window.setStatusBarColor(getResources().getColor(R.color.example_color));
 
         toolbar = (Toolbar) findViewById(R.id.toolBarActGoalDetailsNew);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(goalTitle);                       //currentGoal.getNickName().toString()
+        getSupportActionBar().setTitle(currentGoal.getNickName());
 
         collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbarLayout.setTitle(goalTitle);                    //currentGoal.getNickName().toString()
+//        collapsingToolbarLayout.setTitle(goalTitle);                    //currentGoal.getNickName().toString()
         collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.white));
 
-        Bitmap bitmap = BitmapUtility.decodeSampledBitmapFromResource(getResources(), Prefs.getInstance(this).getWallpaperResourceId(),100,100);
-        Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
-            public void onGenerated(Palette palette) {
-                applyPalette(palette);
-            }
-        });
-
+        tvEta = (TextView) findViewById(R.id.tvEtaActGoalDetailsNew);
+        fabStepList = (FloatingActionButton) findViewById(R.id.btnFabActGoalDetails);
         tvNickName = (TextView) findViewById(R.id.tvNickNameActGoalDetailsNew);
         btnBullet = (CircleView) findViewById(R.id.btnBulletActGoalDetailsNew);
         tvTime = (TextView) findViewById(R.id.tvTimeActGoalDetailsNew);
@@ -122,22 +112,34 @@ public class ActGoalDetails extends AppCompatActivity {
         tvReason = (TextView) findViewById(R.id.tvGoalReasonActGoalDetailsNew);
         tvReward = (TextView) findViewById(R.id.tvGoalRewardActGoalDetailsNew);
         tvBuddy = (TextView) findViewById(R.id.tvGoalBuddyActGoalDetailsNew);
-        donutProgress = (MyDonutProgress) findViewById(R.id.donutProgressActGoalDetails);
+        progressBar = (ProgressBar) findViewById(R.id.pbActGoalDetailsNew);
+//        donutProgress = (MyDonutProgress) findViewById(R.id.donutProgressActGoalDetails);
 
+        fabStepList.setOnClickListener(this);
         populateUI();
     }
 
     private void populateUI() {
 
-        donutProgress.setProgress((int)currentGoal.getGoalProgress());
-        donutProgress.setTextColor(getResources().getColor(R.color.white));
-        donutProgress.setTextSize(25);
-        donutProgress.setSuffixText(String.valueOf(currentGoal.getRemainingStepCount()));
-        donutProgress.setFinishedStrokeWidth(7);
-        donutProgress.setUnfinishedStrokeWidth(7);
-        donutProgress.setFinishedStrokeColor(getResources().getColor(R.color.white));
-        donutProgress.setUnfinishedStrokeColor(getResources().getColor(R.color.gray));
+//        donutProgress.setProgress((int)currentGoal.getGoalProgress());
+//        donutProgress.setTextColor(getResources().getColor(R.color.white));
+//        donutProgress.setTextSize(25);
+//        donutProgress.setSuffixText(String.valueOf(currentGoal.getRemainingStepCount()));
+//        donutProgress.setFinishedStrokeWidth(7);
+//        donutProgress.setUnfinishedStrokeWidth(7);
+//        donutProgress.setFinishedStrokeColor(getResources().getColor(R.color.white));
+//        donutProgress.setUnfinishedStrokeColor(getResources().getColor(R.color.gray));
 
+        Bitmap bitmap = BitmapUtility.decodeSampledBitmapFromResource(getResources(), Prefs.getInstance(this).getWallpaperResourceId(), 100, 100);
+        Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
+            public void onGenerated(Palette palette) {
+                applyPalette(palette);
+            }
+        });
+
+        collapsingToolbarLayout.setTitle(currentGoal.getNickName().toString());
+        tvEta.setText(CalendarUtils.getOnlyFormattedDate(this.currentGoal.getDueDate()));
+        progressBar.setProgress((int)currentGoal.getGoalProgress());
         tvNickName.setText(currentGoal.getNickName());
         btnBullet.setFillColor(Integer.parseInt(currentGoal.getColorCode()));
         btnBullet.setShowTitle(false);
@@ -148,6 +150,22 @@ public class ActGoalDetails extends AppCompatActivity {
         tvReason.setText(currentGoal.getReason());
         tvReward.setText(currentGoal.getReward());
         tvBuddy.setText(currentGoal.getBuddyEmail());
+    }
+
+    private void applyPalette(Palette palette) {
+        primaryDarkColor = getResources().getColor(R.color.ColorPrimaryDark);
+        primaryColor = getResources().getColor(R.color.ColorPrimary);
+        collapsingToolbarLayout.setContentScrimColor(palette.getMutedColor(primaryColor));
+        collapsingToolbarLayout.setStatusBarScrimColor(palette.getDarkMutedColor(primaryDarkColor));
+        updateBackground((FloatingActionButton) findViewById(R.id.btnFabActGoalDetails), palette);
+        supportStartPostponedEnterTransition();
+    }
+
+    private void updateBackground(FloatingActionButton fab, Palette palette) {
+        int lightVibrantColor = palette.getLightVibrantColor(getResources().getColor(android.R.color.white));
+        fab.setRippleColor(lightVibrantColor);
+//        int vibrantColor = palette.getVibrantColor(primaryColor);
+//        fab.setBackgroundTintList(ColorStateList.valueOf(vibrantColor));
     }
 
     @Override
@@ -274,4 +292,16 @@ public class ActGoalDetails extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btnFabActGoalDetails :
+                Intent i = new Intent(this, ActStepList.class);
+                i.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, true);
+                i.putExtra(Constants.GOAL_OBJECT, currentGoal);
+                i.putExtra(Constants.CALLER, Constants.ACT_GOAL_LIST);
+                startActivity(i);
+                break;
+        }
+    }
 }

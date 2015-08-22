@@ -12,14 +12,12 @@
         android:id="@+id/scrollViewAvtAddNewGoal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/toolBarActAddNewGoal"
-        >
+        android:layout_below="@id/toolBarActAddNewGoal" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical" >
 
             <android.support.v7.widget.CardView
                 xmlns:android="http://schemas.android.com/apk/res/android"
@@ -31,23 +29,20 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    >
+                    android:orientation="vertical" >
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:layout_margin="10dip"
-                        >
+                        android:layout_margin="10dip" >
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                             android:textStyle="bold"
-                            android:text="@string/tvNickNameActAddNewGoal"
-                            />
+                            android:text="@string/tvNickNameActAddNewGoal" />
 
                         <EditText
                             android:id="@+id/edtNickNameActAddNewGoal"
@@ -59,8 +54,7 @@
                             android:textAppearance="@style/TextAppearance.AppCompat.Small"
                             android:background="@color/transparent"
                             android:layout_marginTop="8dip"
-                            android:singleLine="true"
-                            />
+                            android:singleLine="true" />
 
                         <View
                             android:layout_width="match_parent"
@@ -74,16 +68,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:layout_margin="10dip"
-                        >
+                        android:layout_margin="10dip" >
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                             android:textStyle="bold"
-                            android:text="@string/tvTimeActAddNewGoal"
-                            />
+                            android:text="@string/tvTimeActAddNewGoal" />
 
                         <Spinner
                             android:id="@+id/spinnerTimeActAddNewGoal"
@@ -119,8 +111,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:layout_margin="10dip"
-                        >
+                        android:layout_margin="10dip" >
                         <Button
                             android:id="@+id/btnShowAdvancedActAddNewGoal"
                             android:layout_width="wrap_content"
@@ -128,8 +119,7 @@
                             android:background="@color/transparent"
                             android:text="@string/btnAdvancedActAddNewGoal"
                             android:textStyle="bold"
-                            android:textColor="@color/ColorPrimary"
-                            />
+                            android:textColor="@color/ColorPrimary" />
                     </LinearLayout>
                 </LinearLayout>
             </android.support.v7.widget.CardView>
@@ -145,15 +135,13 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    >
+                    android:orientation="vertical" >
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:layout_margin="10dip"
-                        >
+                        android:layout_margin="10dip" >
                         <Button
                             android:id="@+id/btnHideAdvancedActAddNewGoal"
                             android:layout_width="wrap_content"
@@ -161,24 +149,21 @@
                             android:background="@color/transparent"
                             android:text="@string/btnHideAdvancedActAddNewGoal"
                             android:textStyle="bold"
-                            android:textColor="@color/ColorPrimary"
-                            />
+                            android:textColor="@color/ColorPrimary" />
                     </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:layout_margin="10dip"
-                        >
+                        android:layout_margin="10dip" >
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                             android:textStyle="bold"
-                            android:text="@string/tvObjectiveActAddNewGoal"
-                            />
+                            android:text="@string/tvObjectiveActAddNewGoal" />
 
                         <EditText
                             android:id="@+id/edtObjectiveActAddNewGoal"
@@ -189,8 +174,7 @@
                             android:hint="@string/edtObjectiveHintActAddNewGoal"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small"
                             android:background="@color/transparent"
-                            android:layout_marginTop="8dip"
-                            />
+                            android:layout_marginTop="8dip" />
 
                         <View
                             android:layout_width="match_parent"
@@ -204,16 +188,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:layout_margin="10dip"
-                        >
+                        android:layout_margin="10dip" >
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                             android:textStyle="bold"
-                            android:text="@string/tvKeyResultActAddNewGoal"
-                            />
+                            android:text="@string/tvKeyResultActAddNewGoal" />
 
                         <EditText
                             android:id="@+id/edtKeyResultActAddNewGoal"
@@ -224,8 +206,7 @@
                             android:hint="@string/edtKeyResultHintActAddNewGoal"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small"
                             android:background="@color/transparent"
-                            android:layout_marginTop="8dip"
-                            />
+                            android:layout_marginTop="8dip" />
 
                         <View
                             android:layout_width="match_parent"
@@ -239,16 +220,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:layout_margin="10dip"
-                        >
+                        android:layout_margin="10dip" >
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                             android:textStyle="bold"
-                            android:text="@string/tvGoalReasonActAddNewGoal"
-                            />
+                            android:text="@string/tvGoalReasonActAddNewGoal" />
 
                         <EditText
                             android:id="@+id/edtGoalReasonActAddNewGoal"
@@ -259,8 +238,7 @@
                             android:hint="@string/edtGoalReasonHintActAddNewGoal"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small"
                             android:background="@color/transparent"
-                            android:layout_marginTop="8dip"
-                            />
+                            android:layout_marginTop="8dip" />
 
                         <View
                             android:layout_width="match_parent"
@@ -274,16 +252,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:layout_margin="10dip"
-                        >
+                        android:layout_margin="10dip" >
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                             android:textStyle="bold"
-                            android:text="@string/tvGoalRewardActAddNewGoal"
-                            />
+                            android:text="@string/tvGoalRewardActAddNewGoal" />
 
                         <EditText
                             android:id="@+id/edtGoalRewardActAddNewGoal"
@@ -294,8 +270,7 @@
                             android:hint="@string/edtGoalRewardHintActAddNewGoal"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small"
                             android:background="@color/transparent"
-                            android:layout_marginTop="8dip"
-                            />
+                            android:layout_marginTop="8dip" />
 
                         <View
                             android:layout_width="match_parent"
@@ -309,42 +284,37 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:layout_margin="10dip"
-                        >
+                        android:layout_margin="10dip" >
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                             android:textStyle="bold"
-                            android:text="@string/tvGoalBuddyActAddNewGoal"
-                            />
+                            android:text="@string/tvGoalBuddyActAddNewGoal" />
 
                         <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-                            <EditText
-                                android:id="@+id/edtGoalBuddyActAddNewGoal"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="20dip"
-                                android:maxLines="4"
-                                android:hint="@string/edtGoalBuddyHintActAddNewGoal"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                                android:background="@color/transparent"
-                                android:layout_marginTop="8dip"
-                                android:inputType="textWebEmailAddress"
-                                android:singleLine="true" />
+                            android:layout_height="wrap_content" >
                             <SearchView
                                 android:id="@+id/svGoalBuddyActAddNewGoal"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="20dip"
+                                android:layout_alignParentLeft="true"
                                 android:layout_marginTop="8dip"
                                 android:inputType="textWebEmailAddress"
                                 android:layout_centerHorizontal="true"
                                 android:iconifiedByDefault="true" >
                             </SearchView>
+                            <TextView
+                                android:id="@+id/edtGoalBuddyActAddNewGoal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="40dip"
+                                android:hint="@string/edtGoalBuddyHintActAddNewGoal"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                                android:layout_marginTop="8dip"
+                                android:maxLines="2"/>
                         </RelativeLayout>
 
                         <View
@@ -358,6 +328,19 @@
             </android.support.v7.widget.CardView>
         </LinearLayout>
     </ScrollView>
+
+    <!--<EditText-->
+        <!--android:id="@+id/edtGoalBuddyActAddNewGoal"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginLeft="20dip"-->
+        <!--android:maxLines="4"-->
+        <!--android:hint="@string/edtGoalBuddyHintActAddNewGoal"-->
+        <!--android:textAppearance="@style/TextAppearance.AppCompat.Small"-->
+        <!--android:background="@color/transparent"-->
+        <!--android:layout_marginTop="8dip"-->
+        <!--android:inputType="textWebEmailAddress"-->
+        <!--android:singleLine="true" />-->
 
     <!--<com.greylabs.yoda.views.MyFloatingActionButton-->
         <!--android:id="@+id/btnAddFirstStepActAddNewGoal"-->
