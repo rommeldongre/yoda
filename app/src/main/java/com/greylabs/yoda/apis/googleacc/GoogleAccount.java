@@ -257,7 +257,9 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                 }
                 yodaCalendar.setTimeBox(timeBox.get(goal.getTimeBoxId()));
                 Logger.log(TAG, "Task List: " + taskList.toString() + "  Goal: " + goal.toString());
-                com.google.api.services.tasks.model.Tasks tasks = service.tasks().list(taskList.getId()).setShowCompleted(false).setShowCompleted(false).execute();
+                com.google.api.services.tasks.model.Tasks tasks=null;
+                if(!goal.isDeleted())
+                    tasks = service.tasks().list(taskList.getId()).setShowCompleted(false).setShowCompleted(false).execute();
                 if (tasks != null) {
                     List<Task> myTasks = tasks.getItems();
                     if (myTasks != null) {
@@ -318,7 +320,8 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                         }
                     }
                 }
-                yodaCalendar.rescheduleSteps(goal.getId());
+                if(!goal.isDeleted())
+                    yodaCalendar.rescheduleSteps(goal.getId());
             }
             List<String> appStringGoalIds=goal.getDistinctGoalStringIds();
             if(appStringGoalIds!=null && serverStringGoalIds!=null) {

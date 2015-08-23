@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.google.api.client.util.DateTime;
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.adapters.AdapterRecyclerViewActGoalList;
 import com.greylabs.yoda.adapters.DragSortRecycler;
@@ -26,6 +27,7 @@ import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.Prefs;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ActGoalList  extends ActionBarActivity implements OnClickOfRecyclerViewActGoalList {
@@ -96,7 +98,7 @@ public class ActGoalList  extends ActionBarActivity implements OnClickOfRecycler
     private void getGoalArrayFromLocal() {
         goalArrayList.clear();
         Goal goal = new Goal(this);
-        List<Goal> temp=goal.getAll(Goal.GoalDeleted.SHOW_BOTH);
+        List<Goal> temp=goal.getAll(Goal.GoalDeleted.SHOW_NOT_DELETED);
         if(temp!=null)
             goalArrayList.addAll(temp);
         checkForEmptyViewVisibility();
@@ -279,10 +281,10 @@ public class ActGoalList  extends ActionBarActivity implements OnClickOfRecycler
                         }
                     }
                     ps.cancelAlarm();
+                    ps.freeSlot();
                     ps.setStringId("");
                     ps.setGoalStringId(stretchGoal.getStringId());
                     ps.setGoalId(stretchGoal.getId());
-                    ps.freeSlot();
                     ps.save();
                     break;
                 case SINGLE_STEP:
@@ -294,12 +296,15 @@ public class ActGoalList  extends ActionBarActivity implements OnClickOfRecycler
                     ps.save();
             }
         }
+        long oldTimeBoxId=goal.getTimeBoxId();
         goal.setDeleted(true);
+        goal.setTimeBoxId(0);//No TimeBox
+        goal.setUpdated(new DateTime(new Date()));
         goal.save();
         getGoalArrayFromLocal();
         mAdapter.notifyDataSetChanged();
         yodaCalendar = new YodaCalendar(ActGoalList.this);
-        yodaCalendar.detachTimeBox(goal.getTimeBoxId());
+        yodaCalendar.detachTimeBox(oldTimeBoxId);
         //move steps to Stretch Goal
         TimeBox timeBox = new TimeBox(ActGoalList.this).get(prefs.getUnplannedTimeBoxId());
         yodaCalendar.setTimeBox(timeBox);
@@ -337,6 +342,8 @@ public class ActGoalList  extends ActionBarActivity implements OnClickOfRecycler
         }
         //ps.deleteAllPendingSteps();
         goal.setDeleted(true);
+        goal.setUpdated(new DateTime(new Date()));
+        goal.setTimeBoxId(0);
         goal.save();
         getGoalArrayFromLocal();
         mAdapter.notifyDataSetChanged();

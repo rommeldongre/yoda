@@ -21,6 +21,7 @@ import com.greylabs.yoda.enums.AccountType;
 import com.greylabs.yoda.threads.ImportTaskAsyncThread;
 import com.greylabs.yoda.threads.NewStepAsyncTask;
 import com.greylabs.yoda.threads.QuickStartAsyncTask;
+import com.greylabs.yoda.utils.ConnectionUtils;
 import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.Prefs;
 
@@ -68,21 +69,26 @@ public class ActQuickStart extends Activity implements View.OnClickListener {
 
             case R.id.rlImportTaskActQuickStart :
                 //new ImportTaskAsyncThread(this,new MyHandler()).execute();
-                final GoogleAccount googleAccount=new GoogleAccount(this);
-                googleAccount.chooseAccountDialog(GoogleAccount.ACCOUNT_TYPE, "Choose Account", new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                if(ConnectionUtils.isNetworkAvailable(this)) {
+                    final GoogleAccount googleAccount = new GoogleAccount(this);
+                    googleAccount.chooseAccountDialog(GoogleAccount.ACCOUNT_TYPE, "Choose Account", new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
-                        prefs.setDefaultAccountEmailId(googleAccount.getUsers().get(position));
-                        prefs.setDefaultAccountType(AccountType.GOOGLE.ordinal());
-                        googleAccount.dismissChooseAccountDialog();
-                    }
-                }, new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialogInterface) {
-                        new ImportTaskAsyncThread(ActQuickStart.this, new MyHandler()).execute();
-                    }
-                });
+                            prefs.setDefaultAccountEmailId(googleAccount.getUsers().get(position));
+                            prefs.setDefaultAccountType(AccountType.GOOGLE.ordinal());
+                            googleAccount.dismissChooseAccountDialog();
+                        }
+                    }, new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialogInterface) {
+                            new ImportTaskAsyncThread(ActQuickStart.this, new MyHandler()).execute();
+                        }
+                    });
+                }else{
+                    ConnectionUtils.showNetworkNotAvailableDialog(this,"Check your Internet Connection and try again. You can" +
+                            "You can choose Quick Start or New Step");
+                }
                 break;
         }
     }

@@ -16,10 +16,10 @@ public class ConnectionUtils {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
-    public static void showNetworkNotAvailableDialog(Context context){
+    public static void showNetworkNotAvailableDialog(Context context,String message){
         AlertDialog.Builder builder=new AlertDialog.Builder(context);
         builder.setTitle("Alert");
-        builder.setMessage("Check your Internet Connection and try again");
+        builder.setMessage(message);
         builder.setPositiveButton("Ok",null);
         builder.create().show();
     }

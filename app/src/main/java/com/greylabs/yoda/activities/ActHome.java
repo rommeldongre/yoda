@@ -25,6 +25,7 @@ import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.Slot;
 import com.greylabs.yoda.utils.BitmapUtility;
+import com.greylabs.yoda.utils.ConnectionUtils;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Prefs;
 import com.greylabs.yoda.views.GoalView;
@@ -270,31 +271,34 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
 
             case R.id.btnAutosyncWithGoogleActHome :
                 //startActivity(new Intent(this, TasksSample.class));
-                final GoogleAccount googleAccount=new GoogleAccount(this);
-                googleAccount.chooseAccountDialog(GoogleAccount.ACCOUNT_TYPE, "Choose Account", new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                if(ConnectionUtils.isNetworkAvailable(this)) {
+                    final GoogleAccount googleAccount = new GoogleAccount(this);
+                    googleAccount.chooseAccountDialog(GoogleAccount.ACCOUNT_TYPE, "Choose Account", new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
 
-                        prefs.setDefaultAccountEmailId(googleAccount.getUsers().get(position));
-                        prefs.setDefaultAccountType(AccountType.GOOGLE.ordinal());
-                        googleAccount.dismissChooseAccountDialog();
-                    }
-                }, new DialogInterface.OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialogInterface) {
-                        AsyncTask asyncTask = new AsyncTask() {
-                            @Override
-                            protected Object doInBackground(Object[] objects) {
-                                GoogleAccount googleAccount = new GoogleAccount(ActHome.this);
-                                googleAccount.authenticate();
+                            prefs.setDefaultAccountEmailId(googleAccount.getUsers().get(position));
+                            prefs.setDefaultAccountType(AccountType.GOOGLE.ordinal());
+                            googleAccount.dismissChooseAccountDialog();
+                        }
+                    }, new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialogInterface) {
+                            AsyncTask asyncTask = new AsyncTask() {
+                                @Override
+                                protected Object doInBackground(Object[] objects) {
+                                    GoogleAccount googleAccount = new GoogleAccount(ActHome.this);
+                                    googleAccount.authenticate();
 
-                                return null;
-                            }
-                        };
-                        asyncTask.execute();
-                    }
-                });
-
+                                    return null;
+                                }
+                            };
+                            asyncTask.execute();
+                        }
+                    });
+                }else{
+                    ConnectionUtils.showNetworkNotAvailableDialog(this,"Check your Internet Connection and try again.");
+                }
                 btnSettings.collapse();
                 break;
 
