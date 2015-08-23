@@ -17,6 +17,7 @@ import com.google.api.client.util.DateTime;
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.adapters.DragSortRecycler;
 import com.greylabs.yoda.adapters.AdapterRecyclerViewActStepList;
+import com.greylabs.yoda.apis.googleacc.GoogleSync;
 import com.greylabs.yoda.enums.StepFilterType;
 import com.greylabs.yoda.interfaces.onClickOfRecyclerViewActStepList;
 import com.greylabs.yoda.models.Goal;
@@ -348,6 +349,9 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
                         stepArrayList.remove(Position);
                         mAdapter.notifyDataSetChanged();
                         checkForEmptyViewVisibility(stepArrayList, getString(R.string.tvEmptyViewActStepList));
+                        //sync code
+                        GoogleSync.getInstance(ActStepList.this).sync();
+                        //sync code
                     }
                 });
                 alertLogout.setNegativeButton("Cancel", null);
@@ -388,6 +392,9 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
                             pendingStepsArrayList.remove(i);
                     }
                 }
+                //sync code
+                GoogleSync.getInstance(this).sync();
+                //sync code
                 break;
 
             case Constants.OPERATION_MARK_STEP_UNDONE :
@@ -403,6 +410,9 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
                 yodaCalendar.rescheduleSteps(currentGoal.getId());
                 getStepArrayFromLocal();
                 mAdapter.notifyDataSetChanged();
+                //sync code
+                GoogleSync.getInstance(this).sync();
+                //sync code
                 break;
         }
     }

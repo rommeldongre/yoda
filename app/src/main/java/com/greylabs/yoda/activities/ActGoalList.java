@@ -17,6 +17,7 @@ import com.google.api.client.util.DateTime;
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.adapters.AdapterRecyclerViewActGoalList;
 import com.greylabs.yoda.adapters.DragSortRecycler;
+import com.greylabs.yoda.apis.googleacc.GoogleSync;
 import com.greylabs.yoda.interfaces.OnClickOfRecyclerViewActGoalList;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
@@ -310,6 +311,9 @@ public class ActGoalList  extends ActionBarActivity implements OnClickOfRecycler
         yodaCalendar.setTimeBox(timeBox);
         yodaCalendar.rescheduleSteps(prefs.getStretchGoalId());
         Logger.showMsg(ActGoalList.this, Constants.MSG_GOAL_DELETED);
+        //sync code
+        GoogleSync.getInstance(this).sync();
+        //sync code
     }
 
     private void performActionDeleteGoalNo(int position) {
@@ -350,6 +354,9 @@ public class ActGoalList  extends ActionBarActivity implements OnClickOfRecycler
         yodaCalendar = new YodaCalendar(ActGoalList.this);
         yodaCalendar.detachTimeBox(goal.getTimeBoxId());
         Logger.showMsg(ActGoalList.this, Constants.MSG_GOAL_DELETED);
+        //sync code
+        GoogleSync.getInstance(this).sync();
+        //sync code
 
     }
 

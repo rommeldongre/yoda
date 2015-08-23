@@ -29,6 +29,7 @@ import android.widget.Spinner;
 import com.google.api.client.util.DateTime;
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.adapters.AdapterGoalSpinner;
+import com.greylabs.yoda.apis.googleacc.GoogleSync;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.TimeBox;
@@ -372,6 +373,9 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
                     yodaCalendar.rescheduleSteps(goalList.get(goalSpinner.getSelectedItemPosition()).getId());
                 }
                 currentStep = currentStep.get(currentStep.getId());
+                //sync code
+                GoogleSync.getInstance(this).sync();
+                //sync code
                 AlertDialog.Builder alertStepAdded = new AlertDialog.Builder(this);
                 alertStepAdded.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override

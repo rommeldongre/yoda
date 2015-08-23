@@ -1,15 +1,23 @@
 package com.greylabs.yoda.apis.googleacc;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
+import android.view.View;
+import android.widget.AdapterView;
 
 import com.google.api.services.tasks.model.Task;
 import com.google.api.services.tasks.model.TaskList;
 import com.google.api.services.tasks.model.TaskLists;
 import com.greylabs.yoda.apis.Sync;
+import com.greylabs.yoda.asynctask.AysncTaskWithProgressBar;
+import com.greylabs.yoda.enums.AccountType;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.scheduler.YodaCalendar;
+import com.greylabs.yoda.threads.ImportTaskAsyncThread;
+import com.greylabs.yoda.utils.ConnectionUtils;
 import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.Prefs;
 
@@ -18,68 +26,43 @@ import java.util.List;
 /**
  * Created by Jaybhay Vijay on 8/12/2015.
  */
-public class GoogleSync implements Sync{
+public class GoogleSync {
 
-    private GoogleAccount googleAccount;
+    private static GoogleAccount googleAccount;
+    private static GoogleSync googleSync;
     private Context context;
     private com.google.api.services.tasks.Tasks service;
 
-    public GoogleSync(Context context) {
+
+    private GoogleSync(Context context) {
         this.context = context;
-        googleAccount=new GoogleAccount(context);
-        this.service=(com.google.api.services.tasks.Tasks)googleAccount.getService();
+        googleAccount = new GoogleAccount(context);
     }
 
-//    public void importToStretchGoal() throws IOException {
-//        //import all tasks
-//        YodaCalendar yodaCalendar=new YodaCalendar(context);
-//        Prefs prefs=Prefs.getInstance(context);
-//        TimeBox timeBox=new TimeBox(context);
-//        yodaCalendar.setTimeBox(timeBox.get(prefs.getUnplannedTimeBoxId()));
-//        TaskLists result=googleAccount.getService().tasklists().list().execute();
-//        List<TaskList> taskLists=result.getItems();
-//        if(taskLists!=null){
-//            for (TaskList taskList:taskLists){
-//                Tasks tasks=googleAccount.getService().tasks().list(taskList.getId()).execute();
-//                if(tasks!=null) {
-//                    for (Task task : tasks.getItems()) {
-//                        PendingStep pendingStep = googleAccount.convertToPendingStep(task);
-//                        pendingStep.setGoalId(prefs.getStretchGoalId());
-//                        pendingStep.save();
-//                    }
-//                }
-//            }
-//        }
-//        yodaCalendar.rescheduleSteps(prefs.getStretchGoalId());
-//    }
+    public static GoogleSync getInstance(Context context) {
+        if (googleSync == null)
+            googleSync = new GoogleSync(context);
+        return googleSync;
+    }
 
-    @Override
-    public void sync() throws IOException {
-        //import all tasks
-        YodaCalendar yodaCalendar=new YodaCalendar(context);
+    public void sync() {
+
         Prefs prefs=Prefs.getInstance(context);
-        TimeBox timeBox=new TimeBox(context);
-
-        TaskLists result=service.tasklists().list().execute();
-        List<TaskList> taskLists=result.getItems();
-        if(taskLists!=null){
-            for (TaskList taskList:taskLists){
-                Goal goal=googleAccount.convertToGoal(taskList);
-                yodaCalendar.setTimeBox(timeBox.get(goal.getTimeBoxId()));
-                Logger.log("TAG","Task List: "+ taskList.toString()+"  Goal: "+goal.toString());
-                com.google.api.services.tasks.model.Tasks tasks=service.tasks().list(taskList.getId()).execute();
-                if(tasks!=null) {
-                    for (Task task : tasks.getItems()) {
-                        PendingStep pendingStep = googleAccount.convertToPendingStep(task);
-                        pendingStep.setGoalId(goal.getId());
-                        pendingStep.setGoalStringId(goal.getStringId());
-                        pendingStep.save();
-                        Logger.log("TAG", "Task : " + taskList.toString() + "  Pending Step: " + goal.toString());
-                    }
+        if (prefs.getDefaultAccountEmailId()!=null && ConnectionUtils.isNetworkAvailable(context)) {
+            AsyncTask asyncTask = new AsyncTask() {
+                @Override
+                protected Object doInBackground(Object[] objects) {
+                    googleAccount.authenticate();
+                    return null;
                 }
-                yodaCalendar.rescheduleSteps(goal.getId());
-            }
+            };
+            asyncTask.execute();
         }
+//        } else {
+//            ConnectionUtils.showNetworkNotAvailableDialog(context, "Internet Connection is not available . Last saved" +
+//                    "Goals and Steps will be synchronised when you are online");
+//        }
     }
-
 }
+
+

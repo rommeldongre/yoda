@@ -32,6 +32,7 @@ import android.widget.TextView;
 import com.google.api.client.util.DateTime;
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.adapters.AdapterTimeBoxSpinner;
+import com.greylabs.yoda.apis.googleacc.GoogleSync;
 import com.greylabs.yoda.asynctask.AysncTaskWithProgressBar;
 import com.greylabs.yoda.enums.AccountType;
 import com.greylabs.yoda.models.Goal;
@@ -258,6 +259,9 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
                     goal.setAccountType(AccountType.getIntegerToEnum(prefs.getDefaultAccountType()));
                     goal.setUpdated(new DateTime(new Date()));
                     goal.save();
+                    //sync code
+                    GoogleSync.getInstance(this).sync();
+                    //sync code
 
 //                AsyncTaskAttachTimeBox asyncTaskAttachTimeBox=new AsyncTaskAttachTimeBox(this,new MyHandler(),yodaCalendar,"Please Wait,Attaching TimeBox",goal.getId());
 //                asyncTaskAttachTimeBox.execute(yodaCalendar);

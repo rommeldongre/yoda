@@ -118,4 +118,5 @@ public class Constants {
     public static final int COLORCODE_TIMEBOX_6 = -13041920; //green
     public static final int COLORCODE_TIMEBOX_7 = -16736513; //sky blue
     public static final int COLORCODE_TIMEBOX_8 = -65391; //pink
+    public static final String ACCOUNT_AUTO_SYNC ="Auto Sync" ;
 }
