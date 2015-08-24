@@ -34,7 +34,7 @@ public abstract class TaskAccount implements AdapterView.OnItemClickListener{
     public abstract Object buildPendingStep(PendingStep pendingStep);
     public abstract Goal convertToGoal(Object taskListObject);
     public abstract PendingStep convertToPendingStep(Object taskObject);
-    protected Account[] getAccounts(Context context,String accountType) {
+    public Account[] getAccounts(Context context,String accountType) {
         AccountManager accountManager = AccountManager.get(context);
         return accountManager.getAccountsByType(accountType);
     }
