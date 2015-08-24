@@ -27,6 +27,7 @@ import com.greylabs.yoda.enums.WeekDay;
 import com.greylabs.yoda.enums.Year;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
+import com.greylabs.yoda.models.Slot;
 import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.Constants;
@@ -289,13 +290,23 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
                             //validate timebox for update
                             YodaCalendar yodaCalendar=new YodaCalendar(this,timeBox);
                             if(yodaCalendar.validateTimeBoxForUpdate(timeBox.getId())){
-                                timeBox.save();
                                 PendingStep pendingStep=new PendingStep(this);
-                                yodaCalendar.detachTimeBox(timeBox.getId());
-                                pendingStep.freeAllSlots(goalId);
-                                yodaCalendar.attachTimeBox(goalId);
-                                yodaCalendar.rescheduleSteps(goalId);
-                                isSaved=true;
+                                Slot slot=new Slot(this);
+                                if (pendingStep.getAllStepTimeSum(new Goal(this).getGoalId(currentTimeBox.getId())) < slot.getPossibleSlotCount(currentTimeBox)*Constants.MAX_SLOT_DURATION)
+                                {
+                                    timeBox.save();
+                                    yodaCalendar.detachTimeBox(timeBox.getId());
+                                    pendingStep.freeAllSlots(goalId);
+                                    yodaCalendar.attachTimeBox(goalId);
+                                    yodaCalendar.rescheduleSteps(goalId);
+                                    isSaved=true;
+                                }
+                                else{
+                                    AlertDialog.Builder alert=new AlertDialog.Builder(this);
+                                    alert.setPositiveButton("Ok", null);
+                                    alert.setMessage(getString(R.string.msgCannotSaveGoalWithSelectedTimeBox));
+                                    alert.show();
+                                }
                             }else{
                                 isSaved=false;
                                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -304,9 +315,8 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
                                 builder.setPositiveButton(getString(R.string.btnOk), null);
                                 builder.show();
                             }
-                        }else{
-                            timeBox.save();
-                            isSaved=true;
+                            if(isSaved)
+                                timeBox.save();
                         }
                     }
                     if(isSaved) {
@@ -402,137 +412,137 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
     @Override
     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
         invalidateTillSelections();
-      switch (compoundButton.getId()){
-          case R.id.cbActCreateTimeBoxEarlyMorning:
-              if(b) timeBoxWhenSet.add(TimeBoxWhen.EARLY_MORNING);
-              else  timeBoxWhenSet.remove(TimeBoxWhen.EARLY_MORNING);
-              break;
-          case R.id.cbActCreateTimeBoxMorning:
-              if(b) timeBoxWhenSet.add(TimeBoxWhen.MORNING);
-              else  timeBoxWhenSet.remove(TimeBoxWhen.MORNING);
-              break;
-          case R.id.cbActCreateTimeBoxAfternoon:
-              if(b) timeBoxWhenSet.add(TimeBoxWhen.AFTERNOON);
-              else  timeBoxWhenSet.remove(TimeBoxWhen.AFTERNOON);
-              break;
-          case R.id.cbActCreateTimeBoxEvening:
-              if(b) timeBoxWhenSet.add(TimeBoxWhen.EVENING);
-              else  timeBoxWhenSet.remove(TimeBoxWhen.EVENING);
-              break;
-          case R.id.cbActCreateTimeBoxNight:
-              if(b) timeBoxWhenSet.add(TimeBoxWhen.NIGHT);
-              else  timeBoxWhenSet.remove(TimeBoxWhen.NIGHT);
-              break;
-          case R.id.cbActCreateTimeBoxLateNight:
-              if(b) timeBoxWhenSet.add(TimeBoxWhen.LATE_NIGHT);
-              else  timeBoxWhenSet.remove(TimeBoxWhen.LATE_NIGHT);
-              break;
-          case R.id.cbActCreateTimeBoxOnWeeklyMon:
-              if(b) timeBoxOnSubValueSet.add(WeekDay.MONDAY);
-              else  timeBoxOnSubValueSet.remove(WeekDay.MONDAY);
-              break;
-          case R.id.cbActCreateTimeBoxOnWeeklyTue:
-              if(b) timeBoxOnSubValueSet.add(WeekDay.TUESDAY);
-              else  timeBoxOnSubValueSet.remove(WeekDay.TUESDAY);
-              break;
-          case R.id.cbActCreateTimeBoxOnWeeklyWed:
-              if(b) timeBoxOnSubValueSet.add(WeekDay.WEDNESDAY);
-              else  timeBoxOnSubValueSet.remove(WeekDay.WEDNESDAY);
-              break;
-          case R.id.cbActCreateTimeBoxOnWeeklyThu:
-              if(b) timeBoxOnSubValueSet.add(WeekDay.THURSDAY);
-              else  timeBoxOnSubValueSet.remove(WeekDay.THURSDAY);
-              break;
-          case R.id.cbActCreateTimeBoxOnWeeklyFri:
-              if(b) timeBoxOnSubValueSet.add(WeekDay.FRIDAY);
-              else  timeBoxOnSubValueSet.remove(WeekDay.FRIDAY);
-              break;
-          case R.id.cbActCreateTimeBoxOnWeeklySat:
-              if(b) timeBoxOnSubValueSet.add(WeekDay.SATURDAY);
-              else  timeBoxOnSubValueSet.remove(WeekDay.SATURDAY);
-              break;
-          case R.id.cbActCreateTimeBoxOnWeeklySun:
-              if(b) timeBoxOnSubValueSet.add(WeekDay.SUNDAY);
-              else  timeBoxOnSubValueSet.remove(WeekDay.SUNDAY);
-              break;
-          case R.id.cbActCreateTimeBoxOnMonthly1Week:
-              if(b) timeBoxOnSubValueSet.add(Month.WEEK1);
-              else  timeBoxOnSubValueSet.remove(Month.WEEK1);
-              break;
-          case R.id.cbActCreateTimeBoxOnMonthly2Week:
-              if(b) timeBoxOnSubValueSet.add(Month.WEEK2);
-              else  timeBoxOnSubValueSet.remove(Month.WEEK2);
-              break;
-          case R.id.cbActCreateTimeBoxOnMonthly3Week:
-              if(b) timeBoxOnSubValueSet.add(Month.WEEK3);
-              else  timeBoxOnSubValueSet.remove(Month.WEEK3);
-              break;
-          case R.id.cbActCreateTimeBoxOnMonthly4Week:
-              if(b) timeBoxOnSubValueSet.add(Month.WEEK4);
-              else  timeBoxOnSubValueSet.remove(Month.WEEK4);
-              break;
-          case R.id.cbActCreateTimeBoxOnQuarterly1Month:
-              if(b) timeBoxOnSubValueSet.add(Quarter.MONTH1);
-              else  timeBoxOnSubValueSet.remove(Quarter.MONTH1);
-              break;
-          case R.id.cbActCreateTimeBoxOnQuarterly2Month:
-              if(b) timeBoxOnSubValueSet.add(Quarter.MONTH2);
-              else  timeBoxOnSubValueSet.remove(Quarter.MONTH2);
-              break;
-          case R.id.cbActCreateTimeBoxOnQuarterly3Month:
-              if(b) timeBoxOnSubValueSet.add(Quarter.MONTH3);
-              else  timeBoxOnSubValueSet.remove(Quarter.MONTH3);
-              break;
-          case R.id.cbActCreateTimeBoxOnYearlyJan:
-              if(b) timeBoxOnSubValueSet.add(Year.JANUARY);
-              else  timeBoxOnSubValueSet.remove(Year.JANUARY);
-              break;
-          case R.id.cbActCreateTimeBoxOnYearlyFeb:
-              if(b) timeBoxOnSubValueSet.add(Year.FEBRUARY);
-              else  timeBoxOnSubValueSet.remove(Year.FEBRUARY);
-              break;
-          case R.id.cbActCreateTimeBoxOnYearlyMar:
-              if(b) timeBoxOnSubValueSet.add(Year.MARCH);
-              else  timeBoxOnSubValueSet.remove(Year.MARCH);
-              break;
-          case R.id.cbActCreateTimeBoxOnYearlyApr:
-              if(b) timeBoxOnSubValueSet.add(Year.APRIL);
-              else  timeBoxOnSubValueSet.remove(Year.APRIL);
-              break;
-          case R.id.cbActCreateTimeBoxOnYearlyMay:
-              if(b) timeBoxOnSubValueSet.add(Year.MAY);
-              else  timeBoxOnSubValueSet.remove(Year.MAY);
-              break;
-          case R.id.cbActCreateTimeBoxOnYearlyJun:
-              if(b) timeBoxOnSubValueSet.add(Year.JUNE);
-              else  timeBoxOnSubValueSet.remove(Year.JUNE);
-              break;
-          case R.id.cbActCreateTimeBoxOnYearlyJul:
-              if(b) timeBoxOnSubValueSet.add(Year.JULY);
-              else  timeBoxOnSubValueSet.remove(Year.JULY);
-              break;
-          case R.id.cbActCreateTimeBoxOnYearlyAug:
-              if(b) timeBoxOnSubValueSet.add(Year.AUGUST);
-              else  timeBoxOnSubValueSet.remove(Year.AUGUST);
-              break;
-          case R.id.cbActCreateTimeBoxOnYearlySep:
-              if(b) timeBoxOnSubValueSet.add(Year.SEPTEMBER);
-              else  timeBoxOnSubValueSet.remove(Year.SEPTEMBER);
-              break;
-          case R.id.cbActCreateTimeBoxOnYearlyOct:
-              if(b) timeBoxOnSubValueSet.add(Year.OCTOBER);
-              else  timeBoxOnSubValueSet.remove(Year.OCTOBER);
-              break;
-          case R.id.cbActCreateTimeBoxOnYearlyNov:
-              if(b) timeBoxOnSubValueSet.add(Year.NOVEMBER);
-              else  timeBoxOnSubValueSet.remove(Year.NOVEMBER);
-              break;
-          case R.id.cbActCreateTimeBoxOnYearlyDec:
-              if(b) timeBoxOnSubValueSet.add(Year.DECEMBER);
-              else  timeBoxOnSubValueSet.remove(Year.DECEMBER);
-              break;
+        switch (compoundButton.getId()){
+            case R.id.cbActCreateTimeBoxEarlyMorning:
+                if(b) timeBoxWhenSet.add(TimeBoxWhen.EARLY_MORNING);
+                else  timeBoxWhenSet.remove(TimeBoxWhen.EARLY_MORNING);
+                break;
+            case R.id.cbActCreateTimeBoxMorning:
+                if(b) timeBoxWhenSet.add(TimeBoxWhen.MORNING);
+                else  timeBoxWhenSet.remove(TimeBoxWhen.MORNING);
+                break;
+            case R.id.cbActCreateTimeBoxAfternoon:
+                if(b) timeBoxWhenSet.add(TimeBoxWhen.AFTERNOON);
+                else  timeBoxWhenSet.remove(TimeBoxWhen.AFTERNOON);
+                break;
+            case R.id.cbActCreateTimeBoxEvening:
+                if(b) timeBoxWhenSet.add(TimeBoxWhen.EVENING);
+                else  timeBoxWhenSet.remove(TimeBoxWhen.EVENING);
+                break;
+            case R.id.cbActCreateTimeBoxNight:
+                if(b) timeBoxWhenSet.add(TimeBoxWhen.NIGHT);
+                else  timeBoxWhenSet.remove(TimeBoxWhen.NIGHT);
+                break;
+            case R.id.cbActCreateTimeBoxLateNight:
+                if(b) timeBoxWhenSet.add(TimeBoxWhen.LATE_NIGHT);
+                else  timeBoxWhenSet.remove(TimeBoxWhen.LATE_NIGHT);
+                break;
+            case R.id.cbActCreateTimeBoxOnWeeklyMon:
+                if(b) timeBoxOnSubValueSet.add(WeekDay.MONDAY);
+                else  timeBoxOnSubValueSet.remove(WeekDay.MONDAY);
+                break;
+            case R.id.cbActCreateTimeBoxOnWeeklyTue:
+                if(b) timeBoxOnSubValueSet.add(WeekDay.TUESDAY);
+                else  timeBoxOnSubValueSet.remove(WeekDay.TUESDAY);
+                break;
+            case R.id.cbActCreateTimeBoxOnWeeklyWed:
+                if(b) timeBoxOnSubValueSet.add(WeekDay.WEDNESDAY);
+                else  timeBoxOnSubValueSet.remove(WeekDay.WEDNESDAY);
+                break;
+            case R.id.cbActCreateTimeBoxOnWeeklyThu:
+                if(b) timeBoxOnSubValueSet.add(WeekDay.THURSDAY);
+                else  timeBoxOnSubValueSet.remove(WeekDay.THURSDAY);
+                break;
+            case R.id.cbActCreateTimeBoxOnWeeklyFri:
+                if(b) timeBoxOnSubValueSet.add(WeekDay.FRIDAY);
+                else  timeBoxOnSubValueSet.remove(WeekDay.FRIDAY);
+                break;
+            case R.id.cbActCreateTimeBoxOnWeeklySat:
+                if(b) timeBoxOnSubValueSet.add(WeekDay.SATURDAY);
+                else  timeBoxOnSubValueSet.remove(WeekDay.SATURDAY);
+                break;
+            case R.id.cbActCreateTimeBoxOnWeeklySun:
+                if(b) timeBoxOnSubValueSet.add(WeekDay.SUNDAY);
+                else  timeBoxOnSubValueSet.remove(WeekDay.SUNDAY);
+                break;
+            case R.id.cbActCreateTimeBoxOnMonthly1Week:
+                if(b) timeBoxOnSubValueSet.add(Month.WEEK1);
+                else  timeBoxOnSubValueSet.remove(Month.WEEK1);
+                break;
+            case R.id.cbActCreateTimeBoxOnMonthly2Week:
+                if(b) timeBoxOnSubValueSet.add(Month.WEEK2);
+                else  timeBoxOnSubValueSet.remove(Month.WEEK2);
+                break;
+            case R.id.cbActCreateTimeBoxOnMonthly3Week:
+                if(b) timeBoxOnSubValueSet.add(Month.WEEK3);
+                else  timeBoxOnSubValueSet.remove(Month.WEEK3);
+                break;
+            case R.id.cbActCreateTimeBoxOnMonthly4Week:
+                if(b) timeBoxOnSubValueSet.add(Month.WEEK4);
+                else  timeBoxOnSubValueSet.remove(Month.WEEK4);
+                break;
+            case R.id.cbActCreateTimeBoxOnQuarterly1Month:
+                if(b) timeBoxOnSubValueSet.add(Quarter.MONTH1);
+                else  timeBoxOnSubValueSet.remove(Quarter.MONTH1);
+                break;
+            case R.id.cbActCreateTimeBoxOnQuarterly2Month:
+                if(b) timeBoxOnSubValueSet.add(Quarter.MONTH2);
+                else  timeBoxOnSubValueSet.remove(Quarter.MONTH2);
+                break;
+            case R.id.cbActCreateTimeBoxOnQuarterly3Month:
+                if(b) timeBoxOnSubValueSet.add(Quarter.MONTH3);
+                else  timeBoxOnSubValueSet.remove(Quarter.MONTH3);
+                break;
+            case R.id.cbActCreateTimeBoxOnYearlyJan:
+                if(b) timeBoxOnSubValueSet.add(Year.JANUARY);
+                else  timeBoxOnSubValueSet.remove(Year.JANUARY);
+                break;
+            case R.id.cbActCreateTimeBoxOnYearlyFeb:
+                if(b) timeBoxOnSubValueSet.add(Year.FEBRUARY);
+                else  timeBoxOnSubValueSet.remove(Year.FEBRUARY);
+                break;
+            case R.id.cbActCreateTimeBoxOnYearlyMar:
+                if(b) timeBoxOnSubValueSet.add(Year.MARCH);
+                else  timeBoxOnSubValueSet.remove(Year.MARCH);
+                break;
+            case R.id.cbActCreateTimeBoxOnYearlyApr:
+                if(b) timeBoxOnSubValueSet.add(Year.APRIL);
+                else  timeBoxOnSubValueSet.remove(Year.APRIL);
+                break;
+            case R.id.cbActCreateTimeBoxOnYearlyMay:
+                if(b) timeBoxOnSubValueSet.add(Year.MAY);
+                else  timeBoxOnSubValueSet.remove(Year.MAY);
+                break;
+            case R.id.cbActCreateTimeBoxOnYearlyJun:
+                if(b) timeBoxOnSubValueSet.add(Year.JUNE);
+                else  timeBoxOnSubValueSet.remove(Year.JUNE);
+                break;
+            case R.id.cbActCreateTimeBoxOnYearlyJul:
+                if(b) timeBoxOnSubValueSet.add(Year.JULY);
+                else  timeBoxOnSubValueSet.remove(Year.JULY);
+                break;
+            case R.id.cbActCreateTimeBoxOnYearlyAug:
+                if(b) timeBoxOnSubValueSet.add(Year.AUGUST);
+                else  timeBoxOnSubValueSet.remove(Year.AUGUST);
+                break;
+            case R.id.cbActCreateTimeBoxOnYearlySep:
+                if(b) timeBoxOnSubValueSet.add(Year.SEPTEMBER);
+                else  timeBoxOnSubValueSet.remove(Year.SEPTEMBER);
+                break;
+            case R.id.cbActCreateTimeBoxOnYearlyOct:
+                if(b) timeBoxOnSubValueSet.add(Year.OCTOBER);
+                else  timeBoxOnSubValueSet.remove(Year.OCTOBER);
+                break;
+            case R.id.cbActCreateTimeBoxOnYearlyNov:
+                if(b) timeBoxOnSubValueSet.add(Year.NOVEMBER);
+                else  timeBoxOnSubValueSet.remove(Year.NOVEMBER);
+                break;
+            case R.id.cbActCreateTimeBoxOnYearlyDec:
+                if(b) timeBoxOnSubValueSet.add(Year.DECEMBER);
+                else  timeBoxOnSubValueSet.remove(Year.DECEMBER);
+                break;
 
-      }
+        }
         edtSummary.setText(createSummaryString());
     }
     private void initEditUI(){
@@ -673,35 +683,35 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
     }
     private TimeBox createTimeBoxObjectFromUI(){
         boolean isValid=false;
-       if(!timeBoxWhenSet.isEmpty() && !timeBoxOnSubValueSet.isEmpty() && timeBoxTill!=null && timeBoxOn!=null){
-           com.greylabs.yoda.models.TimeBoxWhen timeBoxWhen=new com.greylabs.yoda.models.TimeBoxWhen(this);
-           com.greylabs.yoda.models.TimeBoxOn timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(this,this.timeBoxOn);
-           timeBoxWhen.setWhenValues(timeBoxWhenSet);
-           timeBoxOn.setSubValues(timeBoxOnSubValueSet);
-           currentTimeBox.setTimeBoxWhen(timeBoxWhen);
-           currentTimeBox.setTimeBoxOn(timeBoxOn);
-           currentTimeBox.setTillType(timeBoxTill);
-           currentTimeBox.setColorCode(String.valueOf(colorPicker.getColor()));
-           isValid=true;
+        if(!timeBoxWhenSet.isEmpty() && !timeBoxOnSubValueSet.isEmpty() && timeBoxTill!=null && timeBoxOn!=null){
+            com.greylabs.yoda.models.TimeBoxWhen timeBoxWhen=new com.greylabs.yoda.models.TimeBoxWhen(this);
+            com.greylabs.yoda.models.TimeBoxOn timeBoxOn=new com.greylabs.yoda.models.TimeBoxOn(this,this.timeBoxOn);
+            timeBoxWhen.setWhenValues(timeBoxWhenSet);
+            timeBoxOn.setSubValues(timeBoxOnSubValueSet);
+            currentTimeBox.setTimeBoxWhen(timeBoxWhen);
+            currentTimeBox.setTimeBoxOn(timeBoxOn);
+            currentTimeBox.setTillType(timeBoxTill);
+            currentTimeBox.setColorCode(String.valueOf(colorPicker.getColor()));
+            isValid=true;
 
-           // save color picker position in prefs
-           int nextPosition = getSelectedColorPosition(Integer.valueOf(currentTimeBox.getColorCode()));
-           if(nextPosition<8){
-               nextPosition++;
-           } else{
-               nextPosition = 0;
-           }
-           prefs.setColorCodePosition(nextPosition);
+            // save color picker position in prefs
+            int nextPosition = getSelectedColorPosition(Integer.valueOf(currentTimeBox.getColorCode()));
+            if(nextPosition<8){
+                nextPosition++;
+            } else{
+                nextPosition = 0;
+            }
+            prefs.setColorCodePosition(nextPosition);
 
-       }else if(timeBoxWhenSet.isEmpty()){
-           Logger.showMsg(this,getString(R.string.msgActCreateTimeBoxSelectWhenTime));
-       }else if(timeBoxOn==null || timeBoxOnSubValueSet.isEmpty()){
-           Logger.showMsg(this,getString(R.string.msgActCreateTimeBoxSelectOnTime));
-       }else if(timeBoxTill==null){
-           Logger.showMsg(this,getString(R.string.msgActCreateTimeBoxSelectTillTime));
-       }
+        }else if(timeBoxWhenSet.isEmpty()){
+            Logger.showMsg(this,getString(R.string.msgActCreateTimeBoxSelectWhenTime));
+        }else if(timeBoxOn==null || timeBoxOnSubValueSet.isEmpty()){
+            Logger.showMsg(this,getString(R.string.msgActCreateTimeBoxSelectOnTime));
+        }else if(timeBoxTill==null){
+            Logger.showMsg(this,getString(R.string.msgActCreateTimeBoxSelectTillTime));
+        }
         if(currentTimeBox!=null && edtSummary.getText()!=null && !edtSummary.getText().equals("")){
-           currentTimeBox.setNickName(edtSummary.getText().toString());
+            currentTimeBox.setNickName(edtSummary.getText().toString());
         }
         if(isValid)
             return currentTimeBox;
@@ -780,7 +790,7 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
         cbOnYearlyDec.setChecked(false);
     }
     private void invalidateTillSelections(){
-      rgTill.clearCheck();
+        rgTill.clearCheck();
         timeBoxTill=null;
     }
     private String createSummaryString(){

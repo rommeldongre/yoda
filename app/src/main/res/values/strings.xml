@@ -172,6 +172,7 @@
     <string name="btnImportNowFromGtasksActSettingsGoogle">Import Now</string>
     <string name="btnSyncNowWithGoogleActSettingsGoogle">Sync Now</string>
     <string name="btnGoogleSettingsActHome">Google Settings</string>
+    <string name="msgCannotSaveGoalWithSelectedTimeBox">Cannot  save Goal with selected TimeBox because all present Steps in this Goal will not fit into selected TimeBox.Try large duration TimeBoxes.</string>
 
     <string-array name="arrayStepTypeActAddNewStep">
         <item>Single Step</item>

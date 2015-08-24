@@ -39,6 +39,7 @@ import com.greylabs.yoda.asynctask.AysncTaskWithProgressBar;
 import com.greylabs.yoda.enums.AccountType;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
+import com.greylabs.yoda.models.Slot;
 import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.Constants;
@@ -48,6 +49,7 @@ import com.greylabs.yoda.utils.Prefs;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.ServiceLoader;
 
 public class ActAddNewGoal extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
@@ -58,10 +60,10 @@ public class ActAddNewGoal extends AppCompatActivity implements View.OnClickList
     CardView cardViewAdvanced;
     ScrollView scrollView;
     Toolbar toolbar;
-//    MyFloatingActionButton btnAddFirstStep;
+    //    MyFloatingActionButton btnAddFirstStep;
     Spinner timeSpinner;
     AdapterTimeBoxSpinner adapterTimeBoxSpinner;
-//    ArrayAdapter<String> spinnerArrayAdapter;
+    //    ArrayAdapter<String> spinnerArrayAdapter;
     List<TimeBox> timeBoxList = new ArrayList<>();
     ArrayList<String> timeBoxNames = new ArrayList<>();
     Goal goal;
@@ -252,6 +254,7 @@ public class ActAddNewGoal extends AppCompatActivity implements View.OnClickList
                 }
 
                 if(isValidTimeBox==false){
+                    isSaved=false;
                     AlertDialog.Builder alert=new AlertDialog.Builder(this);
                     alert.setPositiveButton("Ok", null);
                     alert.setMessage(getString(R.string.msgActAddNewGoalTimeBoxNotApplicable));
@@ -259,47 +262,55 @@ public class ActAddNewGoal extends AppCompatActivity implements View.OnClickList
                 }else if(edtNickName.getText() != null && edtNickName.getText().length() > 0 ){
                     TimeBox timeBox=timeBoxList.get(timeSpinner.getSelectedItemPosition());
                     if(timeBox.getId()!=goal.getTimeBoxId()){               // if new timebox selected
-                        yodaCalendar.detachTimeBox(goal.getTimeBoxId());
                         PendingStep pendingStep=new PendingStep(this);
-                        pendingStep.freeAllSlots(goal.getId());
-                        yodaCalendar.attachTimeBox(goal.getId());
-                        yodaCalendar.rescheduleSteps(goal.getId());
+                        Slot slot=new Slot(this);
+                        if(pendingStep.getAllStepTimeSum(goal.getId())<slot.getPossibleSlotCount(timeBox)*Constants.MAX_SLOT_DURATION) {
+                            yodaCalendar.detachTimeBox(goal.getTimeBoxId());
+                            pendingStep.freeAllSlots(goal.getId());
+                            yodaCalendar.setTimeBox(timeBox);
+                            yodaCalendar.attachTimeBox(goal.getId());
+                            yodaCalendar.rescheduleSteps(goal.getId());
+                            isSaved=true;
+                        }else {
+                            AlertDialog.Builder alert=new AlertDialog.Builder(this);
+                            alert.setPositiveButton("Ok", null);
+                            alert.setMessage(getString(R.string.msgCannotSaveGoalWithSelectedTimeBox));
+                            alert.show();
+                            isSaved=false;
+                        }
                     }
-                    goal.initDatabase(this);
-                    goal.setNickName(edtNickName.getText().toString());
-                    goal.setTimeBoxId(timeBoxList.get(timeSpinner.getSelectedItemPosition()).getId());
-                    goal.setObjective(edtObjective.getText().toString());
-                    goal.setKeyResult(edtKeyResult.getText().toString());
-                    goal.setReason(edtGoalReason.getText().toString());
-                    goal.setReward(edtGoalReward.getText().toString());
-                    goal.setBuddyEmail(edtGoalBuddy.getText().toString());
-                    Prefs prefs=Prefs.getInstance(this);
-                    goal.setAccount(prefs.getDefaultAccountEmailId());
-                    goal.setAccountType(AccountType.getIntegerToEnum(prefs.getDefaultAccountType()));
-                    goal.setUpdated(new DateTime(new Date()));
-                    goal.save();
-                    //sync code
-                    GoogleSync.getInstance(this).sync();
-                    //sync code
+                    if(isSaved) {
+                        goal.initDatabase(this);
+                        goal.setNickName(edtNickName.getText().toString());
+                        goal.setTimeBoxId(timeBoxList.get(timeSpinner.getSelectedItemPosition()).getId());
+                        goal.setObjective(edtObjective.getText().toString());
+                        goal.setKeyResult(edtKeyResult.getText().toString());
+                        goal.setReason(edtGoalReason.getText().toString());
+                        goal.setReward(edtGoalReward.getText().toString());
+                        goal.setBuddyEmail(edtGoalBuddy.getText().toString());
+                        Prefs prefs = Prefs.getInstance(this);
+                        goal.setAccount(prefs.getDefaultAccountEmailId());
+                        goal.setAccountType(AccountType.getIntegerToEnum(prefs.getDefaultAccountType()));
+                        goal.setUpdated(new DateTime(new Date()));
+                        goal.save();
+                        //sync code
+                        GoogleSync.getInstance(this).sync();
+                        //sync code
+                        Logger.showMsg(this, getResources().getString(R.string.msgGoalSavedActAddNewGoal));
+                        switch (caller) {
+                            case Constants.ACT_ADD_NEW_STEP:
+                                Intent secIntent = new Intent();
+                                secIntent.putExtra(Constants.GOAL_CREATED, true);
+                                setResult(Constants.RESULTCODE_OF_ACT_ADD_GOAL, secIntent);
+                                break;
 
-//                AsyncTaskAttachTimeBox asyncTaskAttachTimeBox=new AsyncTaskAttachTimeBox(this,new MyHandler(),yodaCalendar,"Please Wait,Attaching TimeBox",goal.getId());
-//                asyncTaskAttachTimeBox.execute(yodaCalendar);
-
-                    isSaved = true;
-                    Logger.showMsg(this, getResources().getString(R.string.msgGoalSavedActAddNewGoal));
-                    switch (caller){
-                        case Constants.ACT_ADD_NEW_STEP :
-                            Intent secIntent = new Intent();
-                            secIntent.putExtra(Constants.GOAL_CREATED, true);
-                            setResult(Constants.RESULTCODE_OF_ACT_ADD_GOAL, secIntent);
-                            break;
-
-                        case Constants.ACT_GOAL_DETAILS :
-                            Intent thirdIntent = new Intent();
-                            thirdIntent.putExtra(Constants.GOAL_UPDATED, true);
-                            setResult(Constants.RESULTCODE_OF_ACT_ADD_GOAL, thirdIntent);
+                            case Constants.ACT_GOAL_DETAILS:
+                                Intent thirdIntent = new Intent();
+                                thirdIntent.putExtra(Constants.GOAL_UPDATED, true);
+                                setResult(Constants.RESULTCODE_OF_ACT_ADD_GOAL, thirdIntent);
+                        }
+                        this.finish();
                     }
-                    this.finish();
                 }else {
                     Logger.showMsg(this, getResources().getString(R.string.msgEnterGoalNickNameActAddNewGoal));
                 }

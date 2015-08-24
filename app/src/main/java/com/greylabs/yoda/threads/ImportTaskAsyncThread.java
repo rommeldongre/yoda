@@ -39,6 +39,11 @@ public class ImportTaskAsyncThread extends AsyncTask<Void, Void, Void> {
         slot.setDefaultGoalDetails();
         GoogleAccount googleAccount=new GoogleAccount(context);
         googleAccount.authenticate();
+        try {
+            googleAccount.sync();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 

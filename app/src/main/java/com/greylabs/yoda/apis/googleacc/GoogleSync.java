@@ -49,14 +49,21 @@ public class GoogleSync {
 
         Prefs prefs=Prefs.getInstance(context);
         if (prefs.getDefaultAccountEmailId()!=null && ConnectionUtils.isNetworkAvailable(context)) {
-            AsyncTask asyncTask = new AsyncTask() {
-                @Override
-                protected Object doInBackground(Object[] objects) {
-                    googleAccount.authenticate();
-                    return null;
-                }
-            };
-            asyncTask.execute();
+            if(prefs.getAutoSyncState()) {
+                AsyncTask asyncTask = new AsyncTask() {
+                    @Override
+                    protected Object doInBackground(Object[] objects) {
+                        googleAccount.authenticate();
+                        try {
+                          googleAccount.sync();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        return null;
+                    }
+                };
+                asyncTask.execute();
+            }
         }
 //        } else {
 //            ConnectionUtils.showNetworkNotAvailableDialog(context, "Internet Connection is not available . Last saved" +

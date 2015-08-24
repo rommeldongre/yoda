@@ -882,6 +882,22 @@ public class PendingStep implements Serializable {
         c.close();
     }
 
+    public int getAllStepTimeSum(long goalId){
+        int timeSum=0;
+        String query="select sum("+TablePendingStep.time+") as timeSum "+
+                " " +" from "+TablePendingStep.pendingStep+" " +
+                " " +" where "+TablePendingStep.goalId+"="+goalId+" " +
+                " " +" and "+TablePendingStep.deleted+"=0 " +
+                " " +" and "+TablePendingStep.type+"!="+PendingStepType.SUB_STEP.ordinal()+" " +
+                " " +" and "+TablePendingStep.status+"!="+PendingStepStatus.COMPLETED.ordinal();
+        SQLiteDatabase db=database.getReadableDatabase();
+        Cursor c=db.rawQuery(query,null);
+        c.moveToFirst();
+        timeSum=c.getShort(c.getColumnIndex("timeSum"));
+        c.close();
+        return timeSum;
+    }
+
     /**********************************************************************************************/
     // Enum Constants
 

@@ -32,6 +32,7 @@ import com.greylabs.yoda.adapters.AdapterGoalSpinner;
 import com.greylabs.yoda.apis.googleacc.GoogleSync;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
+import com.greylabs.yoda.models.Slot;
 import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.CalendarUtils;
@@ -314,7 +315,8 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
 //                stepArrayList.add(Integer.parseInt(stepPrioritySpinner.getSelectedItem().toString()) - 1, currentStep);
 //            }
             TimeBox timeBox = new TimeBox(this);
-            YodaCalendar yodaCalendar = new YodaCalendar(this, timeBox.get(currentGoal.getTimeBoxId()));
+            timeBox=timeBox.get(currentGoal.getTimeBoxId());
+            YodaCalendar yodaCalendar = new YodaCalendar(this,timeBox );
             //save all the steps in the array with priorities
             for (int i = 0; i < stepArrayList.size(); i++) {
                 stepArrayList.get(i).initDatabase(this);
@@ -347,8 +349,9 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
             }
 
             //assume default priority is bottom most irrespective of settings
-            boolean isScheduled = yodaCalendar.scheduleStep(currentStep);
-            if (!isScheduled) {
+            //boolean isScheduled = yodaCalendar.scheduleStep(currentStep);
+            Slot slot=new Slot(this);
+            if (slot.getSlotCount(timeBox.getId())*Constants.MAX_SLOT_DURATION<currentStep.getAllStepTimeSum(currentGoal.getId())) {
                 switch (currentStep.getPendingStepType()){
                     case SINGLE_STEP:
                         currentStep.setDeleted(true);

@@ -28,6 +28,7 @@ import com.greylabs.yoda.enums.AccountType;
 import com.greylabs.yoda.utils.ConnectionUtils;
 import com.greylabs.yoda.utils.Prefs;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -132,7 +133,11 @@ public class ActSettingsGoogle extends AppCompatActivity implements View.OnClick
                                 protected Object doInBackground(Object[] objects) {
                                     GoogleAccount googleAccount = new GoogleAccount(ActSettingsGoogle.this);
                                     googleAccount.authenticate();
-
+                                    try {
+                                       googleAccount.sync();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
                                     return null;
                                 }
                             };

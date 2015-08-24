@@ -329,4 +329,31 @@ public class Slot {
         return id;
     }
 
+    public int getSlotCount(long timeBoxId){
+        int slotCount=0;
+        String query="select count(*) as slotCount " +
+                " " +" from "+TableSlot.slot+" " +
+                " " +" where "+TableSlot.timeBoxId+"="+timeBoxId;
+        SQLiteDatabase db=database.getReadableDatabase();
+        Cursor c=db.rawQuery(query,null);
+        c.moveToFirst();
+        slotCount=c.getShort(c.getColumnIndex("slotCount"));
+        c.close();
+        return slotCount;
+    }
+
+    public int getPossibleSlotCount(TimeBox timeBox){
+        int slotCount=0;
+        String query="select count(*) as slotCount " +
+                " "+"from "+TableDay.day+" as d  join "+TableSlot.slot+" as s " +
+                " "+" on ( d."+TableDay.id+" = "+" s."+TableSlot.dayId+" )" +
+                " "+ WhereConditionBuilder.buildWhereCondition(timeBox);
+        SQLiteDatabase db=database.getReadableDatabase();
+        Cursor c=db.rawQuery(query,null);
+        c.moveToFirst();
+        slotCount=c.getShort(c.getColumnIndex("slotCount"));
+        c.close();
+        return slotCount;
+    }
+
 }

@@ -74,11 +74,6 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
         credential.setSelectedAccountName(prefs.getDefaultAccountEmailId());
         service = new com.google.api.services.tasks.Tasks.Builder(httpTransport, jsonFactory, credential)
                 .setApplicationName("Yoda").build();
-        try {
-            sync();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 
