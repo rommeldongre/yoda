@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
     <include
         android:id="@+id/toolBarActSettingsGoogle"
-        layout="@layout/tool_bar"></include>
+        layout="@layout/tool_bar"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -39,7 +40,9 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp">
 
                     <ImageView
                         android:layout_width="30dp"
@@ -76,6 +79,8 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
                     android:paddingLeft="30dp"
                     android:paddingRight="30dp">
 
@@ -98,6 +103,8 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
                     android:paddingLeft="30dp"
                     android:paddingRight="30dp">
 
@@ -108,13 +115,15 @@
                         android:layout_centerVertical="true"
                         android:text="@string/tvSyncNowActSettingsGoogle" />
 
-                    <Button
+                    <com.greylabs.yoda.views.MyFloatingActionButton
                         android:id="@+id/btnSyncNowWithGoogleActSettingsGoogle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:text="@string/btnSyncNowWithGoogleActSettingsGoogle"/>
+                        fab:fab_size="mini"
+                        fab:fab_icon="@drawable/ic_btn_auto_sync_act_home"
+                        fab:fab_colorNormal="@color/ColorPrimary"
+                        fab:fab_colorPressed="@color/ColorPrimaryDark" />
                 </RelativeLayout>
             </LinearLayout>
 
@@ -141,15 +150,27 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
                     android:paddingLeft="30dp"
                     android:paddingRight="30dp">
 
-                    <Button
-                        android:id="@+id/btnImportNowFromGtasksActSettingsGoogle"
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:text="@string/btnImportNowFromGTasksActSettingsGoogle" />
+
+                    <com.greylabs.yoda.views.MyFloatingActionButton
+                        android:id="@+id/btnImportNowFromGTasksActSettingsGoogle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:text="@string/btnImportNowFromGtasksActSettingsGoogle"/>
+                        fab:fab_size="mini"
+                        fab:fab_icon="@drawable/ic_btn_import_tasks_act_home"
+                        fab:fab_colorNormal="@color/ColorPrimary"
+                        fab:fab_colorPressed="@color/ColorPrimaryDark" />
                 </RelativeLayout>
             </LinearLayout>
 
@@ -178,30 +199,49 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical" >
 
-                    <TextView
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/tvDefaultExportToCalendarActSettingsDefaultDuration" />
+                        android:orientation="vertical"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp">
 
-                    <SeekBar
-                        android:id="@+id/sbDefaultExportCalDurationActSettingsGoogle"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tvDefaultExportToCalendarActSettingsDefaultDuration" />
 
-                        android:max="9" />
+                        <SeekBar
+                            android:id="@+id/sbDefaultExportCalDurationActSettingsGoogle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:max="9" />
+                    </LinearLayout>
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp"
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp">
 
-                        <Button
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentLeft="true"
+                            android:layout_centerVertical="true"
+                            android:text="@string/btnExportNowToGoogleCalActSettingsGoogle"/>
+
+                        <com.greylabs.yoda.views.MyFloatingActionButton
                             android:id="@+id/btnExportNowToGoogleCalActSettingsGoogle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
-                            android:text="@string/btnExportNowToGoogleCalActSettingsGoogle"/>
+                            fab:fab_size="mini"
+                            fab:fab_icon="@drawable/ic_btn_export_tasks_act_home"
+                            fab:fab_colorNormal="@color/ColorPrimary"
+                            fab:fab_colorPressed="@color/ColorPrimaryDark" />
                     </RelativeLayout>
                 </LinearLayout>
             </LinearLayout>

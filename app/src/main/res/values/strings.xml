@@ -169,9 +169,10 @@
     <string name="tvExportToCalActSettingsGoogle">Export to Google Calendar</string>
     <string name="titleActSettingsGoogle">Google Settings</string>
     <string name="btnExportNowToGoogleCalActSettingsGoogle">Export Now</string>
-    <string name="btnImportNowFromGtasksActSettingsGoogle">Import Now</string>
+    <string name="btnImportNowFromGTasksActSettingsGoogle">Import Now</string>
     <string name="btnSyncNowWithGoogleActSettingsGoogle">Sync Now</string>
     <string name="btnGoogleSettingsActHome">Google Settings</string>
+    <string name="btnChangeWallpaperActHome">Home Screen Wallpaper</string>
 
     <string-array name="arrayStepTypeActAddNewStep">
         <item>Single Step</item>
