@@ -15,8 +15,11 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.BaseColumns;
 import android.provider.ContactsContract;
+import android.support.v4.widget.SearchViewCompat;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,7 +28,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
-import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -46,7 +48,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ActAddNewGoal extends ActionBarActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+public class ActAddNewGoal extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
     EditText edtObjective, edtKeyResult, edtNickName, edtGoalReason, edtGoalReward;//, edtGoalBuddy;//edtTime,
     TextView edtGoalBuddy;
@@ -158,6 +160,20 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchableInfo searchableInfo = searchManager.getSearchableInfo(getComponentName());
         svGoalBuddy.setSearchableInfo(searchableInfo);
+        svGoalBuddy.setOnSearchClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                edtGoalBuddy.setVisibility(View.GONE);
+            }
+        });
+        svGoalBuddy.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                edtGoalBuddy.setVisibility(View.VISIBLE);
+                return false;
+            }
+        });
     }
 
     private void getTimeBoxListAndPopulate() {

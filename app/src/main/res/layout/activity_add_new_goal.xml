@@ -296,20 +296,22 @@
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content" >
-                            <SearchView
+                            <android.support.v7.widget.SearchView
                                 android:id="@+id/svGoalBuddyActAddNewGoal"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
                                 android:layout_alignParentLeft="true"
                                 android:layout_marginTop="8dip"
                                 android:inputType="textWebEmailAddress"
                                 android:layout_centerHorizontal="true"
                                 android:iconifiedByDefault="true" >
-                            </SearchView>
+                            </android.support.v7.widget.SearchView>
                             <TextView
                                 android:id="@+id/edtGoalBuddyActAddNewGoal"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
                                 android:layout_marginLeft="40dip"
                                 android:hint="@string/edtGoalBuddyHintActAddNewGoal"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Small"

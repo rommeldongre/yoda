@@ -3,7 +3,7 @@
     <color name="white">#FFFF</color>
     <color name="yellow">#FFEB3B</color>
     <color name="transparent">#00000000</color>
-    <color name="transperent_total_arc_background">#33000000</color>
+    <color name="transparent_total_arc_background">#33000000</color>
     <color name="transperent_white">#33ffffff</color>
 
     <!--TimeBox colors-->
@@ -26,7 +26,7 @@
     <color name="ColorPrimaryDark">#388E3C</color>
     <color name="AccentColor">#FFA500</color>
     <color name="transperent_less">#55000000</color>
-    <color name="transperent_more">#22000000</color>
+    <color name="transparent_more">#22000000</color>
     <color name="settings_background_act_home">#55ffffff</color>
     <color name="overlapping_background_act_home">#BBFFFFFF</color>
     <color name="textolor_settings_buttons">#545454</color>

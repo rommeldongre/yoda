@@ -145,5 +145,9 @@
         <item name="android:textColor">@android:color/secondary_text_light</item>
     </style>
 
+    <style name="SwitchStyle">
+        <item name="colorControlActivated">@color/ColorPrimaryDark</item>
+    </style>
+
 
 </resources>
