@@ -36,6 +36,7 @@ import com.greylabs.yoda.apis.googleacc.GoogleSync;
 import com.greylabs.yoda.asynctask.AysncTaskWithProgressBar;
 import com.greylabs.yoda.enums.AccountType;
 import com.greylabs.yoda.models.Goal;
+import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.Constants;
@@ -243,6 +244,8 @@ public class ActAddNewGoal extends ActionBarActivity implements View.OnClickList
                     TimeBox timeBox=timeBoxList.get(timeSpinner.getSelectedItemPosition());
                     if(timeBox.getId()!=goal.getTimeBoxId()){               // if new timebox selected
                         yodaCalendar.detachTimeBox(goal.getTimeBoxId());
+                        PendingStep pendingStep=new PendingStep(this);
+                        pendingStep.freeAllSlots(goal.getId());
                         yodaCalendar.attachTimeBox(goal.getId());
                         yodaCalendar.rescheduleSteps(goal.getId());
                     }

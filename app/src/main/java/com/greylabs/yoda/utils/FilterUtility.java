@@ -71,7 +71,6 @@ public class FilterUtility {
                 startDate=CalendarUtils.getSqLiteDateFormat(calStart);
 
                 calEnd.set(Calendar.MONTH, CalendarUtils.getLastMonthOfQuarter(calEnd.get(Calendar.MONTH)));
-                calEnd.add(Calendar.MONTH, -1);
                 calEnd.set(Calendar.DAY_OF_MONTH, calEnd.getActualMaximum(Calendar.DAY_OF_MONTH));
                 endDate=CalendarUtils.getSqLiteDateFormat(calEnd);
                 break;

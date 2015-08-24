@@ -26,6 +26,7 @@ import com.greylabs.yoda.enums.TimeBoxWhen;
 import com.greylabs.yoda.enums.WeekDay;
 import com.greylabs.yoda.enums.Year;
 import com.greylabs.yoda.models.Goal;
+import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.Constants;
@@ -289,7 +290,9 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
                             YodaCalendar yodaCalendar=new YodaCalendar(this,timeBox);
                             if(yodaCalendar.validateTimeBoxForUpdate(timeBox.getId())){
                                 timeBox.save();
+                                PendingStep pendingStep=new PendingStep(this);
                                 yodaCalendar.detachTimeBox(timeBox.getId());
+                                pendingStep.freeAllSlots(goalId);
                                 yodaCalendar.attachTimeBox(goalId);
                                 yodaCalendar.rescheduleSteps(goalId);
                                 isSaved=true;

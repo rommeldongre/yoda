@@ -872,6 +872,15 @@ public class PendingStep implements Serializable {
             }
         }
     }
+    public void freeAllSlots(long goalId){
+        String query=" update "+TablePendingStep.pendingStep+" " +
+                " set "+TablePendingStep.slotId+" = 0"+" " +
+                " where "+TablePendingStep.goalId+" = "+this.goalId;
+        SQLiteDatabase db=database.getWritableDatabase();
+        Cursor c=db.rawQuery(query,null);
+        c.moveToFirst();
+        c.close();
+    }
 
     /**********************************************************************************************/
     // Enum Constants

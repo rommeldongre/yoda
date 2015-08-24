@@ -101,7 +101,7 @@ public class CalendarUtils {
 
     public static Date parseDate(String dateInString) {
         //SimpleDateFormat sdf=new SimpleDateFormat("EEE MMM dd HH:mm:ss Z yyyy");
-        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         try {
             if(dateInString!=null)
                 return sdf.parse(dateInString);

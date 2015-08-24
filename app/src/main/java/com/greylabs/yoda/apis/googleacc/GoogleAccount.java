@@ -407,6 +407,8 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
 
             for (PendingStep ps : pendingSteps) {
                 Task task = (Task) buildPendingStep(ps);
+                if(ps.getGoalStringId()==null || ps.getGoalStringId().equals(""))
+                    ps.setGoalStringId(goal.getStringId());
                 task.setTitle(ps.getNickName());
                 task.setNotes("This step is added by Yoda");
                 if (ps.getStepDate() != null)
