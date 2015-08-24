@@ -146,7 +146,7 @@
     </style>
 
     <style name="SwitchStyle">
-        <item name="colorControlActivated">@color/ColorPrimaryDark</item>
+        <item name="colorControlActivated">@color/ColorPrimary</item>
     </style>
 
 

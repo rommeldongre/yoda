@@ -1,6 +1,5 @@
 package com.greylabs.yoda.activities;
 
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -12,6 +11,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,20 +22,15 @@ import android.widget.RadioGroup;
 import android.widget.SeekBar;
 
 import com.greylabs.yoda.R;
-import com.greylabs.yoda.models.Goal;
-import com.greylabs.yoda.models.PendingStep;
-import com.greylabs.yoda.models.TimeBox;
-import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.Constants;
-import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.Prefs;
 import com.greylabs.yoda.utils.ResetYoda;
 
 
-public class ActSettingDefaultDuration extends ActionBarActivity implements SeekBar.OnSeekBarChangeListener, RadioGroup.OnCheckedChangeListener, View.OnClickListener {
+public class ActSettingDefaultDuration extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener, RadioGroup.OnCheckedChangeListener, View.OnClickListener {
 
     Toolbar toolbar;
-    SeekBar sbStepDuration, sbSessionDuration, sbYodaSaysNotification, sbExportToCalendar;
+    SeekBar sbStepDuration, sbSessionDuration, sbYodaSaysNotification;//, sbExportToCalendar;
     Paint thumbPaint, textPaint;
     RadioButton rbTopMost, rbBottomMost, rbDontExpire, rbExpire;
     RadioGroup rgPriorityNewStep, rgBehaviourOfExpiredSteps;
@@ -58,7 +53,7 @@ public class ActSettingDefaultDuration extends ActionBarActivity implements Seek
         sbStepDuration = (SeekBar) findViewById(R.id.sbDefaultStepDurationActSettingsDefaultDuration);
         sbSessionDuration = (SeekBar) findViewById(R.id.sbDefaultSessionDurationActSettingsDefaultDuration);
         sbYodaSaysNotification = (SeekBar) findViewById(R.id.sbDefaultYodaSaysNotificationActSettingsDefaultDuration);
-        sbExportToCalendar = (SeekBar) findViewById(R.id.sbDefaultExportToCalendarActSettingsDefaultDuration);
+//        sbExportToCalendar = (SeekBar) findViewById(R.id.sbDefaultExportToCalendarActSettingsDefaultDuration);
         rgPriorityNewStep = (RadioGroup) findViewById(R.id.rgPriorityNewStepSettingsDefaultDuration);
         rgBehaviourOfExpiredSteps = (RadioGroup) findViewById(R.id.rgBehaviourOfExpiredStepsSettingsDefaultDuration);
         rbTopMost = (RadioButton) findViewById(R.id.rbTopMostActSettingsDefaultDuration);
@@ -70,7 +65,7 @@ public class ActSettingDefaultDuration extends ActionBarActivity implements Seek
         sbStepDuration.setOnSeekBarChangeListener(this);
         sbSessionDuration.setOnSeekBarChangeListener(this);
         sbYodaSaysNotification.setOnSeekBarChangeListener(this);
-        sbExportToCalendar.setOnSeekBarChangeListener(this);
+//        sbExportToCalendar.setOnSeekBarChangeListener(this);
         btnResetYoda.setOnClickListener(this);
 
 //        rbTopMost.setOnCheckedChangeListener(this);
@@ -95,7 +90,7 @@ public class ActSettingDefaultDuration extends ActionBarActivity implements Seek
         sbStepDuration.setProgress(prefs.getDefaultStepDuration());
         sbSessionDuration.setProgress(prefs.getDefaultSessionDuration());
         sbYodaSaysNotification.setProgress(prefs.getYodaSaysNotificationDuration());
-        sbExportToCalendar.setProgress(prefs.getExportToCalendarDuration());
+//        sbExportToCalendar.setProgress(prefs.getExportToCalendarDuration());
         if(prefs.isPriorityNewStepBottomMost()){
             rbBottomMost.setChecked(true);
         }else {
@@ -129,19 +124,28 @@ public class ActSettingDefaultDuration extends ActionBarActivity implements Seek
         String valueString = String.valueOf(seekBar.getProgress());
         seekBar.setThumb(writeOnDrawable(R.drawable.ic_btn_plus_sign, valueString));
 
-//        switch (seekBar.getId()){
-//            case R.id.sbDefaultStepDurationActSettingsDefaultDuration :
-//                break;
-//
-//            case R.id.sbDefaultSessionDurationActSettingsDefaultDuration :
-//                break;
-//
-//            case R.id.sbDefaultYodaSaysNotificationActSettingsDefaultDuration :
-//                break;
-//
+        switch (seekBar.getId()){
+            case R.id.sbDefaultStepDurationActSettingsDefaultDuration :
+                if(progress<1){
+                    sbStepDuration.setProgress(1);
+                }
+                break;
+
+            case R.id.sbDefaultSessionDurationActSettingsDefaultDuration :
+                if(progress<1){
+                    sbSessionDuration.setProgress(1);
+                }
+                break;
+
+            case R.id.sbDefaultYodaSaysNotificationActSettingsDefaultDuration :
+                if(progress<1){
+                    sbYodaSaysNotification.setProgress(1);
+                }
+                break;
+
 //            case R.id.sbDefaultExportToCalendarActSettingsDefaultDuration :
 //                break;
-//        }
+        }
     }
 
     @Override
@@ -164,9 +168,9 @@ public class ActSettingDefaultDuration extends ActionBarActivity implements Seek
                 prefs.setYodaSaysNotificationDuration(seekBar.getProgress());
                 break;
 
-            case R.id.sbDefaultExportToCalendarActSettingsDefaultDuration :
-                prefs.setExportToCalendarDuration(seekBar.getProgress());
-                break;
+//            case R.id.sbDefaultExportToCalendarActSettingsDefaultDuration :
+//                prefs.setExportToCalendarDuration(seekBar.getProgress());
+//                break;
         }
     }
 

@@ -101,8 +101,7 @@
                 fab:fab_icon="@drawable/ic_btn_change_wallpaper_act_home"
                 fab:fab_colorNormal="@color/transparent_total_arc_background"
                 fab:fab_colorPressed="@color/transparent_more"
-                fab:fab_title="Change Home Screen Wallpaper"
-                />
+                fab:fab_title="@string/btnChangeWallpaperActHome" />
         </com.greylabs.yoda.views.MyFloatingActionsMenu>
 
         <RelativeLayout

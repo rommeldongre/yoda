@@ -17,7 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -27,6 +26,7 @@ import com.greylabs.yoda.apis.googleacc.GoogleAccount;
 import com.greylabs.yoda.enums.AccountType;
 import com.greylabs.yoda.utils.ConnectionUtils;
 import com.greylabs.yoda.utils.Prefs;
+import com.greylabs.yoda.views.MyFloatingActionButton;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,12 +37,13 @@ public class ActSettingsGoogle extends AppCompatActivity implements View.OnClick
     Toolbar toolbar;
     Spinner accountSpinner;
     SwitchCompat autoSyncSwitch;
-    Button btnSyncNow, btnImportNow, btnExportNow;
+    MyFloatingActionButton btnExportNow, btnSyncNow, btnImportNow;
     SeekBar sbExportToCalendar;
     Paint thumbPaint, textPaint;
     ArrayList<Account> accountArrayList = new ArrayList<>();
     ArrayAdapter<String> accountSpinnerAdapter;
     Prefs prefs;
+    boolean isAccountPresent = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,9 +72,9 @@ public class ActSettingsGoogle extends AppCompatActivity implements View.OnClick
 
         accountSpinner = (Spinner) findViewById(R.id.spinnerAccountActSettingsGoogle);
         autoSyncSwitch = (SwitchCompat) findViewById(R.id.toggleSwitchAutoSyncActSettingsGoogle);
-        btnSyncNow = (Button) findViewById(R.id.btnSyncNowWithGoogleActSettingsGoogle);
-        btnImportNow = (Button) findViewById(R.id.btnImportNowFromGtasksActSettingsGoogle);
-        btnExportNow = (Button) findViewById(R.id.btnExportNowToGoogleCalActSettingsGoogle);
+        btnSyncNow = (MyFloatingActionButton) findViewById(R.id.btnSyncNowWithGoogleActSettingsGoogle);
+        btnImportNow = (MyFloatingActionButton) findViewById(R.id.btnImportNowFromGTasksActSettingsGoogle);
+        btnExportNow = (MyFloatingActionButton) findViewById(R.id.btnExportNowToGoogleCalActSettingsGoogle);
         sbExportToCalendar = (SeekBar) findViewById(R.id.sbDefaultExportCalDurationActSettingsGoogle);
 
         sbExportToCalendar.setProgress(prefs.getExportToCalendarDuration());
@@ -92,13 +93,31 @@ public class ActSettingsGoogle extends AppCompatActivity implements View.OnClick
     private void getUserAccounts() {
         GoogleAccount googleAccount = new GoogleAccount(this);
         Account[] accounts = googleAccount.getAccounts(this, GoogleAccount.ACCOUNT_TYPE);
-        accountArrayList = new ArrayList<Account>(Arrays.asList(accounts));
-        ArrayList emailIdsArrayList = new ArrayList();
-        for(Account account : accountArrayList){
-            emailIdsArrayList.add(account.name);
+        ArrayList<String> emailIdsArrayList = new ArrayList<>();
+        if(accounts != null){
+            accountArrayList = new ArrayList<Account>(Arrays.asList(accounts));
+            emailIdsArrayList = new ArrayList();
+            for(Account account : accountArrayList){
+                emailIdsArrayList.add(account.name);
+            }
+            isAccountPresent = true;
+        }else {
+            emailIdsArrayList.add("Please add an Account first");
+            disableAllViews();
         }
         accountSpinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,emailIdsArrayList);
         accountSpinner.setAdapter(accountSpinnerAdapter);
+        if(accounts != null){
+            // set selected spinner item fom prefs
+        }
+    }
+
+    private void disableAllViews() {
+        btnSyncNow.setEnabled(false);
+        btnImportNow.setEnabled(false);
+        btnExportNow.setEnabled(false);
+        autoSyncSwitch.setEnabled(false);
+        sbExportToCalendar.setEnabled(false);
     }
 
     @Override
@@ -149,7 +168,7 @@ public class ActSettingsGoogle extends AppCompatActivity implements View.OnClick
                 }
                 break;
 
-            case R.id.btnImportNowFromGtasksActSettingsGoogle :
+            case R.id.btnImportNowFromGTasksActSettingsGoogle:
                 break;
 
             case R.id.btnExportNowToGoogleCalActSettingsGoogle :
@@ -161,6 +180,9 @@ public class ActSettingsGoogle extends AppCompatActivity implements View.OnClick
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         String valueString = String.valueOf(seekBar.getProgress());
         sbExportToCalendar.setThumb(writeOnDrawable(R.drawable.ic_btn_plus_sign, valueString));
+        if(progress<1){
+            sbExportToCalendar.setProgress(1);
+        }
     }
     public BitmapDrawable writeOnDrawable(int drawableId, String text){
 

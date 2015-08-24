@@ -169,10 +169,11 @@
     <string name="tvExportToCalActSettingsGoogle">Export to Google Calendar</string>
     <string name="titleActSettingsGoogle">Google Settings</string>
     <string name="btnExportNowToGoogleCalActSettingsGoogle">Export Now</string>
-    <string name="btnImportNowFromGtasksActSettingsGoogle">Import Now</string>
+    <string name="btnImportNowFromGTasksActSettingsGoogle">Import Now</string>
     <string name="btnSyncNowWithGoogleActSettingsGoogle">Sync Now</string>
     <string name="btnGoogleSettingsActHome">Google Settings</string>
     <string name="msgCannotSaveGoalWithSelectedTimeBox">Cannot  save Goal with selected TimeBox because all present Steps in this Goal will not fit into selected TimeBox.Try large duration TimeBoxes.</string>
+    <string name="btnChangeWallpaperActHome">Home Screen Wallpaper</string>
 
     <string-array name="arrayStepTypeActAddNewStep">
         <item>Single Step</item>
