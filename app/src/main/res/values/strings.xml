@@ -161,6 +161,17 @@
     <string name="titleActAutoSync">Auto Sync</string>
     <string name="tvEmptyViewLine1ActHome">Time you have for fun.\nBut steps there are none.</string>
     <string name="actionDeleteActGoalDetails">Delete</string>
+    <string name="tvGoogleAccountActSettingsGoogle">Google Account</string>
+    <string name="tvAutoSyncGoogleActSettingsGoogle">Autosync with Google</string>
+    <string name="tvAutoSyncActSettingsGoogle">Autosync</string>
+    <string name="tvSyncNowActSettingsGoogle">Sync Now</string>
+    <string name="tvImportFromGTasksActSettingsGoogle">Import from Google Tasks</string>
+    <string name="tvExportToCalActSettingsGoogle">Export to Google Calendar</string>
+    <string name="titleActSettingsGoogle">Google Settings</string>
+    <string name="btnExportNowToGoogleCalActSettingsGoogle">Export Now</string>
+    <string name="btnImportNowFromGtasksActSettingsGoogle">Import Now</string>
+    <string name="btnSyncNowWithGoogleActSettingsGoogle">Sync Now</string>
+    <string name="btnGoogleSettingsActHome">Google Settings</string>
 
     <string-array name="arrayStepTypeActAddNewStep">
         <item>Single Step</item>

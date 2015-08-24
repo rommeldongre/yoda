@@ -164,7 +164,7 @@ public class Prefs  {
         editor.commit();
     }
     public boolean getAutoSyncState() {
-        return systemPrefs.getBoolean(Constants.COLORCODE_POSITION, false);
+        return systemPrefs.getBoolean(Constants.ACCOUNT_AUTO_SYNC, false);
     }
 
     public void setAutoSyncState(boolean state){

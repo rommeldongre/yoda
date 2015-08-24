@@ -48,8 +48,8 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
     ImageView ivWallpaper;
     MyArcProgress arcTotalProgress;
     MyFloatingActionsMenu btnSettings;
-    MyFloatingActionButton btnAddGoal, btnMyGoals, btnMyTimeBoxes, btnDefaultDuration, btnAutoSyncWithGoogle,
-            btnExportToGoogleCalender, btnImportGoogleTasks, btnChangeWallpaper, btnFilters, btnAddStep;
+    MyFloatingActionButton btnAddGoal, btnMyGoals, btnMyTimeBoxes, btnDefaultDuration, btnGoogleSettings,
+            btnChangeWallpaper, btnFilters, btnAddStep; //btnExportToGoogleCalender, btnImportGoogleTasks
     Prefs prefs;
 
     ArrayList<Goal> goalList = new ArrayList<>();
@@ -86,10 +86,10 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
         btnMyGoals = (MyFloatingActionButton) findViewById(R.id.btnMyGoalsActHome);
         btnMyTimeBoxes = (MyFloatingActionButton) findViewById(R.id.btnMyTimeBoxesActHome);
         btnDefaultDuration = (MyFloatingActionButton) findViewById(R.id.btnDefaultDurationActHome);
-        btnAutoSyncWithGoogle = (MyFloatingActionButton) findViewById(R.id.btnAutosyncWithGoogleActHome);
-        btnExportToGoogleCalender = (MyFloatingActionButton) findViewById(R.id.btnExportToGoogleCalActHome);
-        btnImportGoogleTasks = (MyFloatingActionButton) findViewById(R.id.btnImportGoogleTasksActHome);
+        btnGoogleSettings = (MyFloatingActionButton) findViewById(R.id.btnGoogleSettingsActHome);
         btnChangeWallpaper = (MyFloatingActionButton) findViewById(R.id.btnChangeWallpaperActHome);
+//        btnExportToGoogleCalender = (MyFloatingActionButton) findViewById(R.id.btnExportToGoogleCalActHome);
+//        btnImportGoogleTasks = (MyFloatingActionButton) findViewById(R.id.btnImportGoogleTasksActHome);
 
         //set wallpaper here
                 prefs = Prefs.getInstance(this);
@@ -108,10 +108,10 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
         btnMyGoals.setOnClickListener(this);
         btnMyTimeBoxes.setOnClickListener(this);
         btnDefaultDuration.setOnClickListener(this);
-        btnAutoSyncWithGoogle.setOnClickListener(this);
-        btnExportToGoogleCalender.setOnClickListener(this);
-        btnImportGoogleTasks.setOnClickListener(this);
+        btnGoogleSettings.setOnClickListener(this);
         btnChangeWallpaper.setOnClickListener(this);
+//        btnExportToGoogleCalender.setOnClickListener(this);
+//        btnImportGoogleTasks.setOnClickListener(this);
         populateNowInfo();
         setStyleToArcTotalProgress();
     }
@@ -162,7 +162,7 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
         arcTotalProgress.setStrokeWidth(30);
         arcTotalProgress.setFinishedStrokeColor(getResources().getColor(R.color.luminous_green));
         arcTotalProgress.setUnfinishedStrokeColor(getResources().getColor(R.color.gray_unfinished_progress));
-        arcTotalProgress.setBackgroundCircleColor(getResources().getColor(R.color.transperent_total_arc_background));
+        arcTotalProgress.setBackgroundCircleColor(getResources().getColor(R.color.transparent_total_arc_background));
         arcTotalProgress.setDividerColor(getResources().getColor(R.color.white));
 //        arcTotalProgress.setArcAngle(330);
 
@@ -210,8 +210,8 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
         btnAddGoal = new MyFloatingActionButton(this);
         btnAddGoal.setId(R.id.addNewGoalActHome);
         btnAddGoal.setIcon(R.drawable.ic_btn_plus_sign);
-        btnAddGoal.setColorNormal(getResources().getColor(R.color.transperent_total_arc_background));
-        btnAddGoal.setColorPressed(getResources().getColor(R.color.transperent_more));
+        btnAddGoal.setColorNormal(getResources().getColor(R.color.transparent_total_arc_background));
+        btnAddGoal.setColorPressed(getResources().getColor(R.color.transparent_more));
         btnAddGoal.setOnClickListener(this);
 
         RelativeLayout relativeLayout = new RelativeLayout(this);
@@ -269,47 +269,19 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
                 btnSettings.collapse();
                 break;
 
-            case R.id.btnAutosyncWithGoogleActHome :
-                //startActivity(new Intent(this, TasksSample.class));
-                if(ConnectionUtils.isNetworkAvailable(this)) {
-                    final GoogleAccount googleAccount = new GoogleAccount(this);
-                    googleAccount.chooseAccountDialog(GoogleAccount.ACCOUNT_TYPE, "Choose Account", new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-
-                            prefs.setDefaultAccountEmailId(googleAccount.getUsers().get(position));
-                            prefs.setDefaultAccountType(AccountType.GOOGLE.ordinal());
-                            googleAccount.dismissChooseAccountDialog();
-                        }
-                    }, new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialogInterface) {
-                            AsyncTask asyncTask = new AsyncTask() {
-                                @Override
-                                protected Object doInBackground(Object[] objects) {
-                                    GoogleAccount googleAccount = new GoogleAccount(ActHome.this);
-                                    googleAccount.authenticate();
-
-                                    return null;
-                                }
-                            };
-                            asyncTask.execute();
-                        }
-                    });
-                }else{
-                    ConnectionUtils.showNetworkNotAvailableDialog(this,"Check your Internet Connection and try again.");
-                }
+            case R.id.btnGoogleSettingsActHome:
+                startActivity(new Intent(this, ActSettingsGoogle.class));
                 btnSettings.collapse();
                 break;
 
-            case R.id.btnExportToGoogleCalActHome :
-                startActivity(new Intent(this, ActGoalDetails.class));
-                btnSettings.collapse();
-                break;
-
-            case R.id.btnImportGoogleTasksActHome :
-                btnSettings.collapse();
-                break;
+//            case R.id.btnExportToGoogleCalActHome :
+//                startActivity(new Intent(this, ActSettingsGoogle.class));
+//                btnSettings.collapse();
+//                break;
+//
+//            case R.id.btnImportGoogleTasksActHome :
+//                btnSettings.collapse();
+//                break;
 
             case R.id.btnChangeWallpaperActHome :
                 startActivityForResult(new Intent(this, ActSettingChangeWallpaper.class), 1);

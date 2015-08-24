@@ -67,16 +67,14 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                         android:textStyle="bold"
-                        android:text="@string/tvDefaultSessionDurationActSettingsDefaultDuration"
-                        />
+                        android:text="@string/tvDefaultSessionDurationActSettingsDefaultDuration" />
                     <SeekBar
                         android:id="@+id/sbDefaultSessionDurationActSettingsDefaultDuration"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dip"
                         android:layout_marginTop="8dip"
-                        android:max="9"
-                        />
+                        android:max="9" />
 
                     <View
                         android:layout_width="match_parent"
