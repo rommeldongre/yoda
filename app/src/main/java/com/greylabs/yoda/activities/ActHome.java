@@ -1,17 +1,14 @@
 package com.greylabs.yoda.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -19,13 +16,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.greylabs.yoda.R;
-import com.greylabs.yoda.apis.googleacc.GoogleAccount;
-import com.greylabs.yoda.enums.AccountType;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.Slot;
 import com.greylabs.yoda.utils.BitmapUtility;
-import com.greylabs.yoda.utils.ConnectionUtils;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Prefs;
 import com.greylabs.yoda.views.GoalView;

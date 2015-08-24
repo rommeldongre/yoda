@@ -1,7 +1,6 @@
 package com.greylabs.yoda.activities;
 
 import android.accounts.Account;
-import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -25,6 +24,7 @@ import com.greylabs.yoda.R;
 import com.greylabs.yoda.apis.googleacc.GoogleAccount;
 import com.greylabs.yoda.enums.AccountType;
 import com.greylabs.yoda.utils.ConnectionUtils;
+import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Prefs;
 import com.greylabs.yoda.views.MyFloatingActionButton;
 
@@ -32,7 +32,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class ActSettingsGoogle extends AppCompatActivity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener, CompoundButton.OnCheckedChangeListener {
+public class ActSettingsGoogle extends AppCompatActivity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener, CompoundButton.OnCheckedChangeListener, AdapterView.OnItemSelectedListener {
 
     Toolbar toolbar;
     Spinner accountSpinner;
@@ -42,6 +42,7 @@ public class ActSettingsGoogle extends AppCompatActivity implements View.OnClick
     Paint thumbPaint, textPaint;
     ArrayList<Account> accountArrayList = new ArrayList<>();
     ArrayAdapter<String> accountSpinnerAdapter;
+    Account currentAccount;
     Prefs prefs;
     boolean isAccountPresent = false;
 
@@ -86,6 +87,7 @@ public class ActSettingsGoogle extends AppCompatActivity implements View.OnClick
         btnImportNow.setOnClickListener(this);
         btnExportNow.setOnClickListener(this);
         autoSyncSwitch.setOnCheckedChangeListener(this);
+        accountSpinner.setOnItemSelectedListener(this);
 
         getUserAccounts();
     }
@@ -107,8 +109,16 @@ public class ActSettingsGoogle extends AppCompatActivity implements View.OnClick
         }
         accountSpinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,emailIdsArrayList);
         accountSpinner.setAdapter(accountSpinnerAdapter);
-        if(accounts != null){
-            // set selected spinner item fom prefs
+        if(isAccountPresent && prefs.getDefaultAccountEmailId()!=null){
+            // set selected spinner item from prefs
+            int oldSelectedAccountIndex;
+            for(int i=0; i<accountArrayList.size();i++) {
+                if (accountArrayList.get(i).name.equals(prefs.getDefaultAccountEmailId())) {
+                    oldSelectedAccountIndex = i;
+                    accountSpinner.setSelection(oldSelectedAccountIndex);
+                }
+            }
+            currentAccount = accountArrayList.get(accountSpinner.getSelectedItemPosition());
         }
     }
 
@@ -131,48 +141,36 @@ public class ActSettingsGoogle extends AppCompatActivity implements View.OnClick
     }
 
     @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.btnSyncNowWithGoogleActSettingsGoogle :
-                if(ConnectionUtils.isNetworkAvailable(this)) {
-                    final GoogleAccount googleAccount = new GoogleAccount(this);
-                    googleAccount.chooseAccountDialog(GoogleAccount.ACCOUNT_TYPE, "Choose Account", new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+    public void onClick(final View v) {
+        if(ConnectionUtils.isNetworkAvailable(this)) {
+            AsyncTask asyncTask = new AsyncTask() {
+                @Override
+                protected Object doInBackground(Object[] objects) {
+                    GoogleAccount googleAccount = new GoogleAccount(ActSettingsGoogle.this);
+                    googleAccount.authenticate();
+                    try {
+                        switch (v.getId()){
+                            case R.id.btnSyncNowWithGoogleActSettingsGoogle :
+                                googleAccount.sync();
+                                break;
 
-                            prefs.setDefaultAccountEmailId(googleAccount.getUsers().get(position));
-                            prefs.setDefaultAccountType(AccountType.GOOGLE.ordinal());
-                            googleAccount.dismissChooseAccountDialog();
+                            case R.id.btnImportNowFromGTasksActSettingsGoogle:
+                                googleAccount.doImport();
+                                break;
+
+                            case R.id.btnExportNowToGoogleCalActSettingsGoogle :
+                                googleAccount.doExport();
+                                break;
                         }
-                    }, new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialogInterface) {
-                            AsyncTask asyncTask = new AsyncTask() {
-                                @Override
-                                protected Object doInBackground(Object[] objects) {
-                                    GoogleAccount googleAccount = new GoogleAccount(ActSettingsGoogle.this);
-                                    googleAccount.authenticate();
-                                    try {
-                                       googleAccount.sync();
-                                    } catch (IOException e) {
-                                        e.printStackTrace();
-                                    }
-                                    return null;
-                                }
-                            };
-                            asyncTask.execute();
-                        }
-                    });
-                }else{
-                    ConnectionUtils.showNetworkNotAvailableDialog(this,"Check your Internet Connection and try again.");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
                 }
-                break;
-
-            case R.id.btnImportNowFromGTasksActSettingsGoogle:
-                break;
-
-            case R.id.btnExportNowToGoogleCalActSettingsGoogle :
-                break;
+            };
+            asyncTask.execute();
+        }else{
+            ConnectionUtils.showNetworkNotAvailableDialog(this, Constants.MSG_NO_CONNECTION);
         }
     }
 
@@ -206,5 +204,19 @@ public class ActSettingsGoogle extends AppCompatActivity implements View.OnClick
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         prefs.setAutoSyncState(isChecked);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        if(isAccountPresent){
+            prefs.setDefaultAccountEmailId(accountArrayList.get(accountSpinner.getSelectedItemPosition()).name);
+            prefs.setDefaultAccountType(AccountType.GOOGLE.ordinal());
+            currentAccount = accountArrayList.get(accountSpinner.getSelectedItemPosition());
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }
