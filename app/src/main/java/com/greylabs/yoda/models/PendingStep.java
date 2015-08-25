@@ -287,7 +287,8 @@ public class PendingStep implements Serializable {
                 " " + " "+TablePendingStep.type+"!="+PendingStepType.SPLIT_STEP.ordinal()+" ) " +
                 " " + " and "+TablePendingStep.status+" = "+status.ordinal()+" "+
                 " " + " and "+TablePendingStep.goalId+" = "+goalId+" " +
-                " " + " and "+deleted.getCriteria() ;
+                " " + " and "+deleted.getCriteria()+" " +
+                " " + " order by "+TablePendingStep.priority+" desc , "+TablePendingStep.nickName+" asc ";
 
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
@@ -619,7 +620,7 @@ public class PendingStep implements Serializable {
                 " " + " or "+TablePendingStep.type+"="+ PendingStepType.SINGLE_STEP.ordinal()+" ) " +
                 " "+ "  and "+TablePendingStep.status+" = "+PendingStepStatus.TODO.ordinal()+" "+
                 " "+filterCriteria+" " +
-                " "+" order by "+TablePendingStep.priority+" asc ,"+TablePendingStep.nickName+" asc ";
+                " "+" order by "+TablePendingStep.priority+" desc ,"+TablePendingStep.nickName+" asc ";
 
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
@@ -875,7 +876,7 @@ public class PendingStep implements Serializable {
     public void freeAllSlots(long goalId){
         String query=" update "+TablePendingStep.pendingStep+" " +
                 " set "+TablePendingStep.slotId+" = 0"+" " +
-                " where "+TablePendingStep.goalId+" = "+this.goalId;
+                " where "+TablePendingStep.goalId+" = "+goalId;
         SQLiteDatabase db=database.getWritableDatabase();
         Cursor c=db.rawQuery(query,null);
         c.moveToFirst();
@@ -888,7 +889,8 @@ public class PendingStep implements Serializable {
                 " " +" from "+TablePendingStep.pendingStep+" " +
                 " " +" where "+TablePendingStep.goalId+"="+goalId+" " +
                 " " +" and "+TablePendingStep.deleted+"=0 " +
-                " " +" and "+TablePendingStep.type+"!="+PendingStepType.SUB_STEP.ordinal()+" " +
+                " " +" and ("+TablePendingStep.type+"="+PendingStepType.SUB_STEP.ordinal()+" " +
+                " " +" or "+TablePendingStep.type+"="+PendingStepType.SINGLE_STEP.ordinal()+" )" +
                 " " +" and "+TablePendingStep.status+"!="+PendingStepStatus.COMPLETED.ordinal();
         SQLiteDatabase db=database.getReadableDatabase();
         Cursor c=db.rawQuery(query,null);

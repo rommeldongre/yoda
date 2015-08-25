@@ -76,6 +76,7 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
     private Set<SubValue> timeBoxOnSubValueSet;
     private TimeBoxTill timeBoxTill;
     private TimeBoxOn timeBoxOn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -183,7 +184,6 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
                     currentTimeBox.getTimeBoxOn().setOnType(timeBoxOn);
                     currentTimeBox.getTimeBoxOn().setSubValues(timeBoxOnSubValueSet);
                     currentTimeBox.setTillType(timeBoxTill);
-
                     //initialize all the views here from the old values of the timebox
                     initEditUI();
                 }else if(intent.getStringExtra(Constants.OPERATION).equals(Constants.OPERATION_ADD)){
@@ -292,11 +292,12 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
                             if(yodaCalendar.validateTimeBoxForUpdate(timeBox.getId())){
                                 PendingStep pendingStep=new PendingStep(this);
                                 Slot slot=new Slot(this);
-                                if (pendingStep.getAllStepTimeSum(new Goal(this).getGoalId(currentTimeBox.getId())) < slot.getPossibleSlotCount(currentTimeBox)*Constants.MAX_SLOT_DURATION)
+                                if (pendingStep.getAllStepTimeSum(new Goal(this).getGoalId(timeBox.getId())) < slot.getPossibleSlotCount(timeBox)*Constants.MAX_SLOT_DURATION)
                                 {
                                     timeBox.save();
                                     yodaCalendar.detachTimeBox(timeBox.getId());
                                     pendingStep.freeAllSlots(goalId);
+                                    yodaCalendar.setTimeBox(timeBox);
                                     yodaCalendar.attachTimeBox(goalId);
                                     yodaCalendar.rescheduleSteps(goalId);
                                     isSaved=true;

@@ -163,11 +163,11 @@ public class CalendarUtils {
             return -1;
         if(day>=1 && day<=7)
             return 1;
-        else if(day>=8 && day<=15)
+        else if(day>=8 && day<=14)
             return 2;
-        else if(day>=16 && day<=22)
+        else if(day>=15 && day<=21)
             return 3;
-        else if(day>=23 && day<=28)
+        else if(day>=22 && day<=28)
             return 4;
         return -1;
     }
