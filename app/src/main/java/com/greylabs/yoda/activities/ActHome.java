@@ -312,6 +312,7 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
         super.onResume();
         scrollView.removeAllViews();
         getGoalsFromLocalAndPopulate();
+        populateNowInfo();
     }
 
     @Override

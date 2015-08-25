@@ -9,11 +9,11 @@ public enum TimeBoxWhen {
     // Enum Constants
     /**********************************************************************************************/
     EARLY_MORNING("Early Morning",6, 9,0),
-    MORNING("Morning",9, 12,1),
-    AFTERNOON("Afternoon",12, 15,2),
-    EVENING("Evening" ,15, 18,3),
-    NIGHT("Night",18, 21,4),
-    LATE_NIGHT("Late Night",21, 24,5);
+    MORNING("Morning",9, 11,1),
+    AFTERNOON("Afternoon",12, 14,2),
+    EVENING("Evening" ,15, 17,3),
+    NIGHT("Night",18, 20,4),
+    LATE_NIGHT("Late Night",21, 23,5);
 
     /**********************************************************************************************/
     // Enum properties
@@ -82,14 +82,16 @@ public enum TimeBoxWhen {
         Set<TimeBoxWhen> whens=new TreeSet<>();
         whens.add(EARLY_MORNING);whens.add(MORNING);whens.add(AFTERNOON);
         whens.add(EVENING);whens.add(NIGHT);whens.add(LATE_NIGHT);
+        TimeBoxWhen timeBoxWhen = TimeBoxWhen.EARLY_MORNING;
         for(TimeBoxWhen when:whens){
             calStart.set(Calendar.HOUR_OF_DAY,when.getStartTime());
             calEnd.set(Calendar.HOUR_OF_DAY,when.getEndTime());
             calEnd.add(Calendar.MINUTE, -1);
             if(calendar.getTime().compareTo(calStart.getTime())>0 && calendar.getTime().compareTo(calEnd.getTime())<0)
-                return when;
+                timeBoxWhen = when;
+//                return when;
         }
-        return EARLY_MORNING;
+        return timeBoxWhen;
     }
     public static  TimeBoxWhen getIntegerToEnumType(int id){
         TimeBoxWhen timeBoxWhen=null;

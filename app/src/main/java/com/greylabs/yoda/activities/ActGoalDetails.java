@@ -304,7 +304,7 @@ public class ActGoalDetails extends AppCompatActivity implements View.OnClickLis
         Logger.showMsg(this, Constants.MSG_GOAL_DELETED);
         //sync code
         GoogleSync.getInstance(this).sync();
-        //sync code
+        this.finish();
     }
 
 
@@ -347,8 +347,7 @@ public class ActGoalDetails extends AppCompatActivity implements View.OnClickLis
         Logger.showMsg(this, Constants.MSG_GOAL_DELETED);
         //sync code
         GoogleSync.getInstance(this).sync();
-        //sync code
-
+        this.finish();
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
