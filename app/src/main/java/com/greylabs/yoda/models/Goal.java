@@ -352,7 +352,8 @@ public class Goal implements Serializable{
                 " "+" where ("+TablePendingStep.type+"= "+ PendingStep.PendingStepType.SINGLE_STEP.ordinal()+" or " +
                 " "+TablePendingStep.type+"= "+ PendingStep.PendingStepType.SUB_STEP.ordinal()+" ) and (" +
                 " " +TablePendingStep.status+" = "+PendingStep.PendingStepStatus.COMPLETED.ordinal()+" )" +
-                " "+" and "+ TablePendingStep.goalId+" = "+this.id;
+                " "+" and "+ TablePendingStep.goalId+" = "+this.id+" " +
+                " "+" and "+TablePendingStep.deleted+"=0";
         Cursor c=db.rawQuery(sumOfTimeComplete,null);
         if(c.moveToFirst()){
             do{

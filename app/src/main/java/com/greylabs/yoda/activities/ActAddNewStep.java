@@ -55,7 +55,7 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
     LinearLayout singleStepPanel, seriesPanel;
     ScrollView scrollView;
     AdapterGoalSpinner adapterGoalSpinner;
-//    ArrayAdapter<String> spinnerArrayAdapter;
+    //    ArrayAdapter<String> spinnerArrayAdapter;
     List<Goal> goalList = new ArrayList<>();
     ArrayList<String> goalNamesList = new ArrayList<>();
     Goal currentGoal;
@@ -64,6 +64,7 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
     Paint thumbPaint, textPaint;
     ArrayList<PendingStep> stepArrayList = new ArrayList<>();
     Prefs prefs;
+    private boolean isScheduled;
     int newPosition = 0;
     String caller;
     Intent intent;
@@ -153,7 +154,7 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
         if(currentGoal!=null && temp!=null){
             stepArrayList.addAll(temp);
         }
- }
+    }
 
     private void getGoalListAndPopulate() {
         // check context and populate spinner else show only one currentGoal
@@ -317,60 +318,64 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
             TimeBox timeBox = new TimeBox(this);
             timeBox=timeBox.get(currentGoal.getTimeBoxId());
             YodaCalendar yodaCalendar = new YodaCalendar(this,timeBox );
-            //save all the steps in the array with priorities
-            for (int i = 0; i < stepArrayList.size(); i++) {
-                stepArrayList.get(i).initDatabase(this);
-                stepArrayList.get(i).setPriority(i + 1);
-                stepArrayList.get(i).setUpdated(new DateTime(new Date()));
-                stepArrayList.get(i).save();
-
-                stepArrayList.get(i).updateSubSteps();
-            }
-            PendingStep ps =currentStep;
-            switch (ps.getPendingStepType()){
-                case SPLIT_STEP:
-                    ps.save();
-                    ps.markSubSteps(true);
-                    ps.freeSlots();
-                    if(ps.getTime()>Constants.MAX_SLOT_DURATION){
-                        float numberOfSteps=(float)ps.getTime()/Constants.MAX_SLOT_DURATION;
-                        Float f=new Float(numberOfSteps);
-                        ps.createSubSteps(1, f.intValue(), Constants.MAX_SLOT_DURATION);
-                        if(numberOfSteps-f.intValue()>0.0f)
-                            ps.createSubSteps(f.intValue()+1,f.intValue()+1,currentStep.getTime()%Constants.MAX_SLOT_DURATION);
-                    }
-                    break;
-                case SERIES_STEP:
-                    ps.save();
-                    ps.markSubSteps(true);
-                    ps.freeSlots();
-                    ps.createSubSteps(1, currentStep.getStepCount(), currentStep.getTime());
-                    break;
-            }
-
             //assume default priority is bottom most irrespective of settings
             //boolean isScheduled = yodaCalendar.scheduleStep(currentStep);
             Slot slot=new Slot(this);
-            if (slot.getSlotCount(timeBox.getId())*Constants.MAX_SLOT_DURATION<currentStep.getAllStepTimeSum(currentGoal.getId())) {
-                switch (currentStep.getPendingStepType()){
-                    case SINGLE_STEP:
-                        currentStep.setDeleted(true);
-                        currentStep.freeSlot();
-                        currentStep.delete();
-                        break;
-                    case SPLIT_STEP:
-                    case SERIES_STEP:
-                        currentStep.markSubSteps(true);
-                        currentStep.freeSlots();
-                        currentStep.deleteAllPendingSteps();
-                        currentStep.delete();
-                }
+            int stepTime=0;
+            if(currentStep.getId()==0){
+                stepTime=currentStep.getStepCount()*currentStep.getTime();
+            }
+            if (slot.getSlotCount(timeBox.getId())*Constants.MAX_SLOT_DURATION<
+                    (currentStep.getAllStepTimeSum(currentGoal.getId())+stepTime)) {
+                isScheduled=false;
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(getString(R.string.msgYodaSays));
                 builder.setMessage(getString(R.string.msgCannotSaveStepActAddNewStep));
                 builder.setPositiveButton(getString(R.string.btnOk), null);
                 builder.show();
             } else {
+                //save all the steps in the array with priorities
+                for (int i = 0; i < stepArrayList.size(); i++) {
+                    stepArrayList.get(i).initDatabase(this);
+                    stepArrayList.get(i).setPriority(i + 1);
+                    stepArrayList.get(i).setUpdated(new DateTime(new Date()));
+                    stepArrayList.get(i).save();
+
+                    stepArrayList.get(i).updateSubSteps();
+                }
+                currentStep.initDatabase(this);
+                PendingStep ps =currentStep;
+                switch (ps.getPendingStepType()){
+                    case SPLIT_STEP:
+                        if(ps.getStringId()!=null || ps.getStringId().equals("")){
+                            ps.freeSlots();//and cancel alarms
+                            ps.deleteSubSteps();
+                        }else{
+                            ps.save();
+                            ps.markSubSteps(true);
+                            ps.freeSlots();
+                        }
+                        if(ps.getTime()>Constants.MAX_SLOT_DURATION){
+                            float numberOfSteps=(float)ps.getTime()/Constants.MAX_SLOT_DURATION;
+                            Float f=new Float(numberOfSteps);
+                            ps.createSubSteps(1, f.intValue(), Constants.MAX_SLOT_DURATION);
+                            if(numberOfSteps-f.intValue()>0.0f)
+                                ps.createSubSteps(f.intValue()+1,f.intValue()+1,currentStep.getTime()%Constants.MAX_SLOT_DURATION);
+                        }
+                        break;
+                    case SERIES_STEP:
+                        if(ps.getStringId()!=null || ps.getStringId().equals("")){
+                            ps.freeSlots();//and cancel alarms
+                            ps.deleteSubSteps();
+                        }else {
+                            ps.save();
+                            ps.markSubSteps(true);
+                            ps.freeSlots();
+                        }
+                        ps.createSubSteps(1, currentStep.getStepCount(), currentStep.getTime());
+                        break;
+                }
+
                 //if user sets priority to Manual or TopMost ,then need to rearrange steps
                 if (!stepPrioritySpinner.getSelectedItem().toString().equals(Constants.TEXT_PRIORITY_SPINNER_BOTTOM_MOST)) {
                     yodaCalendar.rescheduleSteps(goalList.get(goalSpinner.getSelectedItemPosition()).getId());
@@ -386,6 +391,7 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
                         ActAddNewStep.this.finish();
                     }
                 });
+                isScheduled=true;
                 alertStepAdded.setMessage("Step " + currentStep.getNickName() + " added towards Goal " +
                         currentGoal.getNickName() + " with Done date of " +
                         CalendarUtils.getOnlyFormattedDate(currentStep.getStepDate()));
@@ -395,7 +401,8 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
         } else {
             Logger.showMsg(this, getResources().getString(R.string.msgEnterStepNameActAddNewStep));
         }
-}
+    }
+
 
     @Override
     public void onClick(View v) {

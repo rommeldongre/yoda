@@ -164,6 +164,7 @@ public class PendingStep implements Serializable {
 
 
     public void initDatabase(Context context) {
+        this.context=context;
         this.database = Database.getInstance(context);
     }
 
@@ -288,7 +289,7 @@ public class PendingStep implements Serializable {
                 " " + " and "+TablePendingStep.status+" = "+status.ordinal()+" "+
                 " " + " and "+TablePendingStep.goalId+" = "+goalId+" " +
                 " " + " and "+deleted.getCriteria()+" " +
-                " " + " order by "+TablePendingStep.priority+" desc , "+TablePendingStep.nickName+" asc ";
+                " " + " order by "+TablePendingStep.priority+" asc , "+TablePendingStep.nickName+" asc ";
 
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
@@ -618,9 +619,10 @@ public class PendingStep implements Serializable {
                 " " + " from " + TablePendingStep.pendingStep +
                 " " + " where ("  + TablePendingStep.type + "=" + PendingStepType.SUB_STEP.ordinal()+" " +
                 " " + " or "+TablePendingStep.type+"="+ PendingStepType.SINGLE_STEP.ordinal()+" ) " +
-                " "+ "  and "+TablePendingStep.status+" = "+PendingStepStatus.TODO.ordinal()+" "+
+                " " + "  and "+TablePendingStep.status+" = "+PendingStepStatus.TODO.ordinal()+" " +
+                " " + "  and "+TablePendingStep.deleted+"=0 "+
                 " "+filterCriteria+" " +
-                " "+" order by "+TablePendingStep.priority+" desc ,"+TablePendingStep.nickName+" asc ";
+                " "+" order by "+TablePendingStep.priority+" asc ,"+TablePendingStep.nickName+" asc ";
 
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
@@ -801,6 +803,20 @@ public class PendingStep implements Serializable {
         alarmScheduler.setStepId(this.getId());
         alarmScheduler.cancel();
     }
+
+    public void cancelSubstepAlarms(){
+        List<PendingStep> subSteps=this.getAllSubSteps(this.getId(),this.getGoalId());
+        if(subSteps!=null) {
+            if (alarmScheduler == null)
+                alarmScheduler = new AlarmScheduler(context);
+           for (PendingStep substep:subSteps) {
+               alarmScheduler.setStepId(substep.getId());
+               alarmScheduler.cancel();
+           }
+        }
+    }
+
+
 
     public List<Integer> getStepIds(long goalId){
         List<Integer> stepIds=null;

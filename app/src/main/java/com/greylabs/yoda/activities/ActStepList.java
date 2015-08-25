@@ -349,6 +349,10 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
                         stepArrayList.remove(Position);
                         mAdapter.notifyDataSetChanged();
                         checkForEmptyViewVisibility(stepArrayList, getString(R.string.tvEmptyViewActStepList));
+                        //reschedule needed here
+                        TimeBox currentTimeBox = new TimeBox(ActStepList.this).get(currentGoal.getTimeBoxId());
+                        YodaCalendar yodaCalendar = new YodaCalendar(ActStepList.this, currentTimeBox);
+                        yodaCalendar.rescheduleSteps(currentGoal.getId());
                         //sync code
                         GoogleSync.getInstance(ActStepList.this).sync();
                         //sync code
