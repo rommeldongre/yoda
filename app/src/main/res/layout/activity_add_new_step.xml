@@ -299,16 +299,14 @@
                             android:layout_height="wrap_content"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                             android:textStyle="bold"
-                            android:text="@string/tvTimeForEachStepActAddNewStep"
-                            />
+                            android:text="@string/tvTimeForEachStepActAddNewStep" />
                         <SeekBar
                             android:id="@+id/seekbarTimeForEachStepActAddNewStep"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dip"
                             android:layout_marginTop="8dip"
-                            android:max="9"
-                            />
+                            android:max="3" />
 
                         <View
                             android:layout_width="match_parent"

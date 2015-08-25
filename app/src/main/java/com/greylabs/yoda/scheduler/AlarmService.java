@@ -4,10 +4,10 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import android.widget.Toast;
 
 import com.greylabs.yoda.activities.ActNowFilter;
 import com.greylabs.yoda.utils.Constants;
+import com.greylabs.yoda.utils.Dialogues;
 import com.greylabs.yoda.utils.Logger;
 
 /**
@@ -38,11 +38,14 @@ public class AlarmService extends Service {
         if(intent!=null)
              alarmScheduler=(AlarmScheduler)intent.getSerializableExtra(Constants.ALARM_SCHEDULER);
         if(alarmScheduler!=null) {
-            Intent actNowFilter = new Intent(this, ActNowFilter.class);
-            actNowFilter.putExtra(Constants.CALLER, Constants.ALARM_SERVICE);
-            actNowFilter.putExtra(Constants.ALARM_SCHEDULER, alarmScheduler);
-            actNowFilter.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(actNowFilter);
+
+            Dialogues.showNowNotificationDialogue(this, Constants.ALARM_SERVICE, alarmScheduler);
+
+//            Intent actNowFilter = new Intent(this, ActNowFilter.class);
+//            actNowFilter.putExtra(Constants.CALLER, Constants.ALARM_SERVICE);
+//            actNowFilter.putExtra(Constants.ALARM_SCHEDULER, alarmScheduler);
+//            actNowFilter.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            startActivity(actNowFilter);
         }
         return START_STICKY;
     }

@@ -278,6 +278,8 @@ public class ActAddNewGoal extends AppCompatActivity implements View.OnClickList
                             alert.show();
                             isSaved=false;
                         }
+                    }else {
+                        isSaved=true;
                     }
                     if(isSaved) {
                         goal.initDatabase(this);
