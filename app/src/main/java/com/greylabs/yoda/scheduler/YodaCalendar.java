@@ -379,6 +379,7 @@ public class YodaCalendar {
         //Collections.sort(slots, new SortByDate());
         if(slots==null | slots.size()==0)
             return false;
+        Goal goal=new Goal(context).get(pendingStep.getGoalId());
         removeTodaysPassedSlots();
         switch (pendingStep.getPendingStepType()){
             case SPLIT_STEP:
@@ -401,9 +402,10 @@ public class YodaCalendar {
                             calendar.add(Calendar.HOUR_OF_DAY, slot.getWhen().getStartTime());
                             updateStep(ps, slot);
                             ps.setStepDate(calendar.getTime());
-                            calendar.add(Calendar.HOUR_OF_DAY, ps.getTime());
                             slot.save();
                             ps.save();
+                            goal.setDueDate(ps.getStepDate());
+                            goal.save();
                             AlarmScheduler alarmScheduler = new AlarmScheduler(context);
                             alarmScheduler.setStepId(ps.getId());
                             alarmScheduler.setSubStepId(ps.getSubStepOf());
@@ -439,8 +441,9 @@ public class YodaCalendar {
                         calendar.add(Calendar.HOUR_OF_DAY, slot.getWhen().getStartTime());
                         updateStep(pendingStep, slot);
                         pendingStep.setStepDate(calendar.getTime());
-                        calendar.add(Calendar.HOUR_OF_DAY, pendingStep.getTime());
                         pendingStep.save();
+                        goal.setDueDate(pendingStep.getStepDate());
+                        goal.save();
                         AlarmScheduler alarmScheduler = new AlarmScheduler(context);
                         alarmScheduler.setStepId(pendingStep.getId());
                         alarmScheduler.setSubStepId(pendingStep.getId());
@@ -510,10 +513,10 @@ public class YodaCalendar {
                                     calendar.add(Calendar.HOUR_OF_DAY, slot.getWhen().getStartTime());
                                     updateStep(substep, slot);
                                     substep.setStepDate(calendar.getTime());
-                                    calendar.add(Calendar.HOUR_OF_DAY,substep.getTime());
                                     slot.save();
                                     substep.save();
                                     goal.setDueDate(substep.getStepDate());
+                                    goal.save();
                                     AlarmScheduler alarmScheduler = new AlarmScheduler(context);
                                     alarmScheduler.setStepId(substep.getId());
                                     alarmScheduler.setSubStepId(pendingStep.getSubStepOf());
@@ -536,7 +539,6 @@ public class YodaCalendar {
                             pendingStep.setStepCount(sessionCount);
                             pendingStep.save();
                         }
-                        goal.save();
                         break;
                     case SINGLE_STEP:
                         it = slots.iterator();
@@ -551,10 +553,10 @@ public class YodaCalendar {
                                 calendar.set(Calendar.HOUR_OF_DAY, slot.getWhen().getStartTime());
                                 updateStep(pendingStep, slot);
                                 pendingStep.setStepDate(calendar.getTime());
-                                calendar.add(Calendar.HOUR_OF_DAY, pendingStep.getTime());
                                 slot.save();
                                 pendingStep.save();
                                 goal.setDueDate(pendingStep.getStepDate());
+                                goal.save();
                                 AlarmScheduler alarmScheduler = new AlarmScheduler(context);
                                 alarmScheduler.setStepId(pendingStep.getId());
                                 alarmScheduler.setSubStepId(pendingStep.getId());
@@ -568,7 +570,6 @@ public class YodaCalendar {
                                 it.remove();
                                 break;
                             }
-                            goal.save();
                         }
                         break;
                 }

@@ -185,7 +185,7 @@ public class Goal implements Serializable{
     public Goal(Context context){
         this.database=Database.getInstance(context);
         this.context=context;
-        dueDate=new Timestamp(new Date().getTime());
+        dueDate=new Date();
     }
 
     /**********************************************************************************************/
