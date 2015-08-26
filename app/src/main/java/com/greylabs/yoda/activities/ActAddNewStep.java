@@ -11,7 +11,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -296,7 +295,7 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                     currentStep.setPendingStepType(PendingStep.PendingStepType.SPLIT_STEP);
                     currentStep.setStepCount(sbTimeSingleStep.getProgress() / 3);
                     if(sbTimeSingleStep.getProgress()%3>=1)
-                        currentStep.setStepCount(currentStep.getStepCount()+1);
+                        currentStep.setStepCount(currentStep.getStepCount() + 1);
                 } else {
                     currentStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
                     currentStep.setStepCount(1);
@@ -333,12 +332,12 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                 stepCount=currentStep.getStepCount();
             }
 
-            //slot.getSlotCount(timeBox.getId())*Constants.MAX_SLOT_DURATION<=
+            //slot.getTotalSlotCount(timeBox.getId())*Constants.MAX_SLOT_DURATION<=
             //(currentStep.getAllStepTimeSum(currentGoal.getId())+stepTime)
             int substeps=0;
 
 
-            if (slot.getSlotCount(timeBox.getId())<(currentStep.getAllStepCount(currentGoal.getId())+stepCount)) {
+            if (slot.getTotalSlotCount(timeBox.getId())<(currentStep.getAllStepCount(currentGoal.getId())+stepCount)) {
                 isScheduled=false;
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(getString(R.string.msgYodaSays));

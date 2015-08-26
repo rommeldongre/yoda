@@ -331,7 +331,7 @@ public class Slot {
         return id;
     }
 
-    public int getSlotCount(long timeBoxId){
+    public int getTotalSlotCount(long timeBoxId){
         int slotCount=0;
         String query="select count(*) as slotCount " +
                 " " +" from "+TableSlot.slot+" " +
@@ -343,6 +343,21 @@ public class Slot {
         c.close();
         return slotCount;
     }
+
+    public int getAvailableSlotCount(long timeBoxId){
+        int slotCount=0;
+        String query="select count(*) as slotCount " +
+                " " +" from "+TableSlot.slot+" as s  join " +TablePendingStep.pendingStep+" as p " +
+                " " +" on ( s."+TableSlot.id+" = p."+TablePendingStep.slotId+" ) "+
+                " " +" where "+TableSlot.timeBoxId+"="+timeBoxId;
+        SQLiteDatabase db=database.getReadableDatabase();
+        Cursor c=db.rawQuery(query,null);
+        c.moveToFirst();
+        slotCount=c.getShort(c.getColumnIndex("slotCount"));
+        c.close();
+        return slotCount;
+    }
+
 
     public int getPossibleSlotCount(TimeBox timeBox){
         int slotCount=0;
