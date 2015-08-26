@@ -18,17 +18,19 @@
             <LinearLayout
                 android:id="@+id/tvNotEmptyNowNotification"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="50dp" >
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:background="@color/ColorPrimary">
 
                 <TextView
                     android:id="@+id/tvGoalNameNowNotification"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="50dp"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                    android:textColor="@color/gray"
+                    android:textColor="@color/white"
                     android:maxLines="1"
                     android:text="Goal Name" />
 
@@ -37,8 +39,9 @@
                     android:id="@+id/tvStepNameNowNotification"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="50dp"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                    android:textColor="@color/gray"
+                    android:textColor="@color/white"
                     android:maxLines="1"
                     android:text="Step Name" />
 
@@ -83,7 +86,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
                     android:background="@color/button_material_light" />
 
                 <LinearLayout
@@ -105,6 +107,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
                         android:gravity="center_vertical"
+                        android:textColor="@color/gray"
                         android:text="@string/tvCompletedActNowFilter" />
 
                 </LinearLayout>
@@ -135,6 +138,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
                         android:gravity="center_vertical"
+                        android:textColor="@color/gray"
                         android:text="@string/tvDoingItActNowFilter" />
 
                 </LinearLayout>
@@ -167,6 +171,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
                         android:gravity="center_vertical"
+                        android:textColor="@color/gray"
                         android:text="@string/tvMissedActNowFilter" />
 
                 </LinearLayout>
@@ -182,7 +187,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginBottom="10dp"
-                    android:layout_marginTop="10dp"
                     android:background="@color/button_material_light" />
 
                 <EditText
@@ -190,6 +194,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:maxLines="4"
+                    android:textColor="@color/gray"
+                    android:textColorHint="@color/gray"
                     android:hint="@string/edtExcuseDialogueExcuse"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:layout_marginTop="8dip" />

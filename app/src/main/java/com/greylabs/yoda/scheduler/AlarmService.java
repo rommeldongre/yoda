@@ -39,7 +39,8 @@ public class AlarmService extends Service {
              alarmScheduler=(AlarmScheduler)intent.getSerializableExtra(Constants.ALARM_SCHEDULER);
         if(alarmScheduler!=null) {
 
-            Dialogues.showNowNotificationDialogue(this, Constants.ALARM_SERVICE, alarmScheduler);
+            Dialogues dialogues = new Dialogues(this);
+            dialogues.showNowNotificationDialogue(Constants.ALARM_SERVICE, alarmScheduler, null);
 
 //            Intent actNowFilter = new Intent(this, ActNowFilter.class);
 //            actNowFilter.putExtra(Constants.CALLER, Constants.ALARM_SERVICE);

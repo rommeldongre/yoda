@@ -181,23 +181,23 @@ public class ActNowFilter extends Activity implements View.OnClickListener {
 
     private void showLogExcuseDialogue() {
         // custom dialog
-        final Dialog dialog = new Dialog(this);
-        dialog.setCancelable(false);
-        dialog.setContentView(R.layout.dailogue_log_excuse);
-        dialog.setTitle(getString(R.string.titleDialogueExcuse));
-
-        // set the custom dialog components - text, image and button
-        EditText edtExcuse = (EditText) dialog.findViewById(R.id.edtExcuseDialogueExcuse);
-        Button dialogButton = (Button) dialog.findViewById(R.id.btnLogDialogueExcuse);
-        // if button is clicked, close the custom dialog
-        dialogButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // set excuse to the pending step here
-                dialog.dismiss();
-                finish();
-            }
-        });
-        dialog.show();
+//        final Dialog dialog = new Dialog(this);
+//        dialog.setCancelable(false);
+//        dialog.setContentView(R.layout.dailogue_log_excuse);
+//        dialog.setTitle(getString(R.string.titleDialogueExcuse));
+//
+//        // set the custom dialog components - text, image and button
+//        EditText edtExcuse = (EditText) dialog.findViewById(R.id.edtExcuseDialogueExcuse);
+//        Button dialogButton = (Button) dialog.findViewById(R.id.btnLogDialogueExcuse);
+//        // if button is clicked, close the custom dialog
+//        dialogButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // set excuse to the pending step here
+//                dialog.dismiss();
+//                finish();
+//            }
+//        });
+//        dialog.show();
     }
 }
