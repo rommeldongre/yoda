@@ -651,7 +651,9 @@ public class PendingStep implements Serializable {
         SQLiteDatabase db = database.getReadableDatabase();
         String query = "select * "+
                 " " + " from " + TablePendingStep.pendingStep +" " +
-                " " + " where "+TablePendingStep.slotId+" = "+slotId;
+                " " + " where "+TablePendingStep.slotId+" = "+slotId+" " +
+                " " + " and ( "+TablePendingStep.status+"="+PendingStepStatus.DOING+" or " +
+                " " + " "+TablePendingStep.status+"="+PendingStepStatus.TODO+" )";
 
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
