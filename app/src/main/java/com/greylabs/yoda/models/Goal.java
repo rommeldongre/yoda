@@ -249,7 +249,8 @@ public class Goal implements Serializable{
         SQLiteDatabase db=database.getReadableDatabase();
         String query="select * " +
                 " "+" from "+ TableGoal.goal+"" +
-                " "+" where "+deleted.getCriteria();
+                " "+" where "+deleted.getCriteria()+" " +
+                " "+" order by "+TableGoal.order+" asc";
         Cursor c=db.rawQuery(query,null);
         if(c.moveToFirst()){
             goals=new ArrayList<>();
