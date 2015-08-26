@@ -241,9 +241,9 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                 }else{
                     //means app has latest data
                     if(goal.isDeleted()){
-                        service.tasklists().delete(taskList.getId()).execute();
                         goal.deletePendingSteps();
                         goal.delete();
+                        service.tasklists().delete(taskList.getId()).execute();
                         continue;
                     }else if (prefs.getStretchGoalId() != goal.getId()) {
                         taskList.setTitle(goal.getNickName());
@@ -294,11 +294,11 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                                     }
                                 } else {//means app has latest data
                                     if (pendingStep.isDeleted()) {
-                                        service.tasks().delete(goal.getStringId(), pendingStep.getStringId()).execute();
+//                                        service.tasks().delete(goal.getStringId(), pendingStep.getStringId()).execute();
                                         pendingStep.cancelAlarm();;
                                         pendingStep.freeSlot();
                                         pendingStep.delete();
-
+                                        service.tasks().delete(goal.getStringId(), pendingStep.getStringId()).execute();
                                     } else {
                                         if (pendingStep.getPendingStepStatus() == PendingStep.PendingStepStatus.COMPLETED) {
                                             task.setStatus("completed");
@@ -371,9 +371,10 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                             //means app has latest data
                             if (!g.getStringId().equals("@default")) {
                                 if (g.isDeleted()) {
-                                    service.tasklists().delete(g.getStringId()).execute();
+//                                    service.tasklists().delete(g.getStringId()).execute();
                                     g.deletePendingSteps();
                                     g.delete();
+                                    service.tasklists().delete(g.getStringId()).execute();
                                 }
                                 else {
                                     result = service.tasklists().update(g.getStringId(), taskList).execute();
@@ -432,10 +433,11 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                             ps.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
                        //end
                         if (ps.isDeleted()) {
-                            service.tasks().delete(ps.getGoalStringId(), ps.getStringId()).execute();
+//                            service.tasks().delete(ps.getGoalStringId(), ps.getStringId()).execute();
                             ps.delete();
                             ps.cancelAlarm();
                             ps.freeSlot();
+                            service.tasks().delete(ps.getGoalStringId(), ps.getStringId()).execute();
                         }else {
                             if (ps.getPendingStepStatus() == PendingStep.PendingStepStatus.COMPLETED) {
                                 task.setStatus("completed");
