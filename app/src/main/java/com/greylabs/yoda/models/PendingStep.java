@@ -281,11 +281,20 @@ public class PendingStep implements Serializable {
     public List<PendingStep> getAll(PendingStepStatus status,PendingStepDeleted deleted,long goalId) {
         ArrayList<PendingStep> pendingSteps = null;
         SQLiteDatabase db = database.getReadableDatabase();
+//        String query = "select * " +
+//                " " + " from " + TablePendingStep.pendingStep + " " +
+//                " " + " where "+ TablePendingStep.status+"="+status.ordinal()+" " +
+//                " " + " and ("+TablePendingStep.type+"="+PendingStepType.SINGLE_STEP.ordinal()+" or " +
+//                " " + " "+TablePendingStep.type+"!="+PendingStepType.SPLIT_STEP.ordinal()+" ) " +
+//                " " + " and "+TablePendingStep.status+" = "+status.ordinal()+" "+
+//                " " + " and "+TablePendingStep.goalId+" = "+goalId+" " +
+//                " " + " and "+deleted.getCriteria()+" " +
+//                " " + " order by "+TablePendingStep.priority+" asc , "+TablePendingStep.nickName+" asc ";
+
         String query = "select * " +
                 " " + " from " + TablePendingStep.pendingStep + " " +
                 " " + " where "+ TablePendingStep.status+"="+status.ordinal()+" " +
-                " " + " and ("+TablePendingStep.type+"!="+PendingStepType.SERIES_STEP.ordinal()+" or " +
-                " " + " "+TablePendingStep.type+"!="+PendingStepType.SPLIT_STEP.ordinal()+" ) " +
+                " " + " and "+TablePendingStep.type+"!="+PendingStepType.SUB_STEP.ordinal()+"" +
                 " " + " and "+TablePendingStep.status+" = "+status.ordinal()+" "+
                 " " + " and "+TablePendingStep.goalId+" = "+goalId+" " +
                 " " + " and "+deleted.getCriteria()+" " +
@@ -594,27 +603,10 @@ public class PendingStep implements Serializable {
          }
         return id;
     }
+
     public List<PendingStep> getAll(String filterCriteria){
         ArrayList<PendingStep> pendingSteps = null;
         SQLiteDatabase db = database.getReadableDatabase();
-//        String cols=" s."+TablePendingStep.id+" as stepId , "+" p."+TablePendingStep.stringId+" as stepStringId , "+
-//                TablePendingStep.nickName+", " +
-//                TablePendingStep.goalStringId+", " +
-//                TablePendingStep.stepDate+", " +
-//                TablePendingStep.priority+", "+TablePendingStep.time+", " +
-//                TablePendingStep.type+", "+TablePendingStep.stepCount+","+
-//                TablePendingStep.status+","+TablePendingStep.skipCount+", p."+
-//                TablePendingStep.goalId+" as stepGoalId , "+TablePendingStep.slotId+","+
-//                TablePendingStep.subStepOf+","+TableSlot.scheduleDate;
-//        String query = "select "+ cols +
-//                " " + " from " + TablePendingStep.pendingStep + " as p  join " + TableSlot.slot+" as s " +
-//                " " + " on ( p." +TablePendingStep.slotId+" = s."+TableSlot.id+" ) "+
-//                " " + " where ("  + TablePendingStep.type + "!=" + PendingStepType.SPLIT_STEP.ordinal()+" " +
-//                         " " + " or "+TablePendingStep.type+"!="+ PendingStepType.SERIES_STEP.ordinal()+" ) " +
-//                " "+ "  and "+TablePendingStep.status+" = "+PendingStepStatus.TODO.ordinal()+" "+
-//                " "+filterCriteria+" " +
-//                " "+" order by "+TablePendingStep.priority+" asc ,"+TablePendingStep.nickName+" asc ";
-
         String query = "select * "+
                 " " + " from " + TablePendingStep.pendingStep +
                 " " + " where ("  + TablePendingStep.type + "=" + PendingStepType.SUB_STEP.ordinal()+" " +
@@ -622,7 +614,7 @@ public class PendingStep implements Serializable {
                 " " + "  and "+TablePendingStep.status+" = "+PendingStepStatus.TODO.ordinal()+" " +
                 " " + "  and "+TablePendingStep.deleted+"=0 "+
                 " "+filterCriteria+" " +
-                " "+" order by "+TablePendingStep.priority+" asc ,"+TablePendingStep.nickName+" asc ";
+                " "+" order by "+TablePendingStep.priority+" asc";
 
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
@@ -899,9 +891,9 @@ public class PendingStep implements Serializable {
         c.close();
     }
 
-    public int getAllStepTimeSum(long goalId){
+    public int getAllStepCount(long goalId){//substeps and single step count
         int timeSum=0;
-        String query="select sum("+TablePendingStep.time+") as timeSum "+
+        String query="select count(*) as stepCount "+
                 " " +" from "+TablePendingStep.pendingStep+" " +
                 " " +" where "+TablePendingStep.goalId+"="+goalId+" " +
                 " " +" and "+TablePendingStep.deleted+"=0 " +
@@ -911,7 +903,7 @@ public class PendingStep implements Serializable {
         SQLiteDatabase db=database.getReadableDatabase();
         Cursor c=db.rawQuery(query,null);
         c.moveToFirst();
-        timeSum=c.getShort(c.getColumnIndex("timeSum"));
+        timeSum=c.getShort(c.getColumnIndex("stepCount"));
         c.close();
         return timeSum;
     }

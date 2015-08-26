@@ -13,6 +13,7 @@ import com.greylabs.yoda.database.MetaData.TableDay;
 import com.greylabs.yoda.enums.*;
 import com.greylabs.yoda.enums.TimeBoxWhen;
 import com.greylabs.yoda.utils.CalendarUtils;
+import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Prefs;
 import com.greylabs.yoda.utils.WhereConditionBuilder;
 
@@ -177,6 +178,7 @@ public class Slot {
                 slot.setGoalId(c.getInt(c.getColumnIndex(TableSlot.goalId)));
                 slot.setTimeBoxId(c.getInt(c.getColumnIndex(TableSlot.timeBoxId)));
                 slot.setDayId(c.getInt(c.getColumnIndex(TableSlot.dayId)));
+                //slot.setTimeBoxId(Constants.MAX_SLOT_DURATION);
                 slots.add(slot);
             }while(c.moveToNext());
         }

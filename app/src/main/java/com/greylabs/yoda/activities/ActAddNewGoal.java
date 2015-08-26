@@ -264,7 +264,7 @@ public class ActAddNewGoal extends AppCompatActivity implements View.OnClickList
                     if(timeBox.getId()!=goal.getTimeBoxId()){               // if new timebox selected
                         PendingStep pendingStep=new PendingStep(this);
                         Slot slot=new Slot(this);
-                        if(pendingStep.getAllStepTimeSum(goal.getId())<slot.getPossibleSlotCount(timeBox)*Constants.MAX_SLOT_DURATION) {
+                        if(pendingStep.getAllStepCount(goal.getId())<=slot.getPossibleSlotCount(timeBox)) {
                             yodaCalendar.detachTimeBox(goal.getTimeBoxId());
                             pendingStep.freeAllSlots(goal.getId());
                             yodaCalendar.setTimeBox(timeBox);

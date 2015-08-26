@@ -3,19 +3,15 @@ package com.greylabs.yoda.utils;
 import android.content.Context;
 
 import com.greylabs.yoda.database.MetaData;
-import com.greylabs.yoda.database.MetaData.TableSlot;
 import com.greylabs.yoda.enums.StepFilterType;
 import com.greylabs.yoda.enums.TimeBoxWhen;
-import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.Slot;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by Jaybhay Vijay on 7/23/2015.

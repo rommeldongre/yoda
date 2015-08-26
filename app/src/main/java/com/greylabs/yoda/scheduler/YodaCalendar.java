@@ -383,22 +383,26 @@ public class YodaCalendar {
         switch (pendingStep.getPendingStepType()){
             case SPLIT_STEP:
             case SERIES_STEP:
-                Iterator<PendingStep> pendingSteps = pendingStep.
-                        getAllSubSteps(pendingStep.getId(), pendingStep.getGoalId()).iterator();
+                List<PendingStep> pendingStepsList=pendingStep.
+                        getAllSubSteps(pendingStep.getId(), pendingStep.getGoalId());
+                Iterator<PendingStep> pendingSteps =pendingStepsList .iterator();
+                PendingStep ps = null;
+                int sessionCount=0;
                 while (pendingSteps.hasNext()) {
-                    PendingStep ps=pendingSteps.next();
+                    ps=pendingSteps.next();
                     Iterator<Slot> it = slots.iterator();
                     while (it.hasNext()) {
                         Slot slot = it.next();
                         if (ps.getTime() <=slot.getTime() && slot.getTimeBoxId()==timeBox.getId()  ) {
                             slot.setTime(slot.getTime() - ps.getTime());
                             slot.setGoalId(ps.getGoalId());
-                            slot.save();
                             ps.setSlotId(slot.getId());
                             calendar.setTime(slot.getScheduleDate());
                             calendar.add(Calendar.HOUR_OF_DAY, slot.getWhen().getStartTime());
                             updateStep(ps, slot);
                             ps.setStepDate(calendar.getTime());
+                            calendar.add(Calendar.HOUR_OF_DAY, ps.getTime());
+                            slot.save();
                             ps.save();
                             AlarmScheduler alarmScheduler = new AlarmScheduler(context);
                             alarmScheduler.setStepId(ps.getId());
@@ -413,6 +417,13 @@ public class YodaCalendar {
                             break;
                         }
                     }
+                    sessionCount++;
+                }
+                if(pendingStepsList!=null && pendingStepsList.size()>=1 && ps!=null) {
+                    pendingStep.setUpdated(ps.getUpdated());
+                    pendingStep.setStepDate(pendingStepsList.get(0).getStepDate());
+                    pendingStep.setStepCount(sessionCount);
+                    pendingStep.save();
                 }
                 break;
             case SINGLE_STEP:
@@ -428,6 +439,7 @@ public class YodaCalendar {
                         calendar.add(Calendar.HOUR_OF_DAY, slot.getWhen().getStartTime());
                         updateStep(pendingStep, slot);
                         pendingStep.setStepDate(calendar.getTime());
+                        calendar.add(Calendar.HOUR_OF_DAY, pendingStep.getTime());
                         pendingStep.save();
                         AlarmScheduler alarmScheduler = new AlarmScheduler(context);
                         alarmScheduler.setStepId(pendingStep.getId());
@@ -474,14 +486,14 @@ public class YodaCalendar {
             slots=slot.getAll(timeBox.getId());
             Iterator<Slot> it;
             for (PendingStep pendingStep : pendingSteps) {
-                //Collections.sort(slots, new SortByDate());
                 removeTodaysPassedSlots();
                 switch (pendingStep.getPendingStepType()){
                     case SPLIT_STEP:
                     case SERIES_STEP:
-                        Iterator<PendingStep> substeps = pendingStep.
+                        List<PendingStep> substepsList=pendingStep.
                                 getAllSubSteps(PendingStep.PendingStepStatus.TODO,PendingStep.PendingStepDeleted.SHOW_NOT_DELETED,pendingStep.getId(),
-                                         pendingStep.getGoalId()).iterator();
+                                        pendingStep.getGoalId());
+                        Iterator<PendingStep> substeps = substepsList.iterator();
                         it = slots.iterator();
                         int sessionCount=0;
                         PendingStep substep=null;
@@ -493,12 +505,13 @@ public class YodaCalendar {
                                 if (substep.getTime() <=slot.getTime() && slot.getTimeBoxId()==timeBox.getId()  ) {
                                     slot.setTime(slot.getTime() - substep.getTime());
                                     slot.setGoalId(substep.getGoalId());
-                                    slot.save();
                                     substep.setSlotId(slot.getId());
                                     calendar.setTime(slot.getScheduleDate());
                                     calendar.add(Calendar.HOUR_OF_DAY, slot.getWhen().getStartTime());
-                                    updateStep(substep,slot);
+                                    updateStep(substep, slot);
                                     substep.setStepDate(calendar.getTime());
+                                    calendar.add(Calendar.HOUR_OF_DAY,substep.getTime());
+                                    slot.save();
                                     substep.save();
                                     goal.setDueDate(substep.getStepDate());
                                     AlarmScheduler alarmScheduler = new AlarmScheduler(context);
@@ -517,9 +530,9 @@ public class YodaCalendar {
                             }
                             sessionCount++;
                         }
-                        if(substep!=null) {
+                        if(substepsList!=null && substepsList.size()>=1 && substep!=null) {
                             pendingStep.setUpdated(substep.getUpdated());
-                            pendingStep.setStepDate(substep.getStepDate());
+                            pendingStep.setStepDate(substepsList.get(0).getStepDate());
                             pendingStep.setStepCount(sessionCount);
                             pendingStep.save();
                         }
@@ -533,12 +546,13 @@ public class YodaCalendar {
                             if (pendingStep.getTime() <=slot.getTime() && slot.getTimeBoxId()==timeBox.getId()  ) {
                                 slot.setTime(slot.getTime() - pendingStep.getTime());
                                 slot.setGoalId(pendingStep.getGoalId());
-                                slot.save();
                                 pendingStep.setSlotId(slot.getId());
                                 calendar.setTime(slot.getScheduleDate());
                                 calendar.set(Calendar.HOUR_OF_DAY, slot.getWhen().getStartTime());
-                                updateStep(pendingStep,slot);
+                                updateStep(pendingStep, slot);
                                 pendingStep.setStepDate(calendar.getTime());
+                                calendar.add(Calendar.HOUR_OF_DAY, pendingStep.getTime());
+                                slot.save();
                                 pendingStep.save();
                                 goal.setDueDate(pendingStep.getStepDate());
                                 AlarmScheduler alarmScheduler = new AlarmScheduler(context);
@@ -554,8 +568,8 @@ public class YodaCalendar {
                                 it.remove();
                                 break;
                             }
+                            goal.save();
                         }
-                        goal.save();
                         break;
                 }
             }

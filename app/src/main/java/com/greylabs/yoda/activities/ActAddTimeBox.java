@@ -292,7 +292,7 @@ public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnChe
                             if(yodaCalendar.validateTimeBoxForUpdate(timeBox.getId())){
                                 PendingStep pendingStep=new PendingStep(this);
                                 Slot slot=new Slot(this);
-                                if (pendingStep.getAllStepTimeSum(new Goal(this).getGoalId(timeBox.getId())) < slot.getPossibleSlotCount(timeBox)*Constants.MAX_SLOT_DURATION)
+                                if (pendingStep.getAllStepCount(new Goal(this).getGoalId(timeBox.getId())) <= slot.getPossibleSlotCount(timeBox))
                                 {
                                     timeBox.save();
                                     yodaCalendar.detachTimeBox(timeBox.getId());

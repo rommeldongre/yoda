@@ -49,7 +49,9 @@ public class AdapterRecyclerViewActStepList extends RecyclerView.Adapter<Adapter
     public void onBindViewHolder(ViewHolder holder, int position) {
         String noOfSteps="";
         holder.checkBox.setCircleColor(Integer.valueOf(stepsArrayList.get(position).getColorCode()));
-        if(stepsArrayList.get(position).getPendingStepType().equals(PendingStep.PendingStepType.SERIES_STEP)){
+        if(stepsArrayList.get(position).getPendingStepType().equals(PendingStep.PendingStepType.SERIES_STEP)
+                ||stepsArrayList.get(position).getPendingStepType().equals(PendingStep.PendingStepType.SPLIT_STEP)
+                ){
             noOfSteps = String.valueOf(stepsArrayList.get(position).getStepCount());
             holder.tvStepName.setText(stepsArrayList.get(position).getNickName()+" - "+noOfSteps+" session");
         }else {

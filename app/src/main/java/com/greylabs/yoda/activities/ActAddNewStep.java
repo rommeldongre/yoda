@@ -291,6 +291,8 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
                 if (sbTimeSingleStep.getProgress() > 3) {
                     currentStep.setPendingStepType(PendingStep.PendingStepType.SPLIT_STEP);
                     currentStep.setStepCount(sbTimeSingleStep.getProgress() / 3);
+                    if(sbTimeSingleStep.getProgress()%3>=1)
+                        currentStep.setStepCount(currentStep.getStepCount()+1);
                 } else {
                     currentStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
                     currentStep.setStepCount(1);
@@ -321,12 +323,18 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
             //assume default priority is bottom most irrespective of settings
             //boolean isScheduled = yodaCalendar.scheduleStep(currentStep);
             Slot slot=new Slot(this);
-            int stepTime=0;
+            int stepCount=0;
             if(currentStep.getId()==0){
-                stepTime=currentStep.getStepCount()*currentStep.getTime();
+                //stepTime=currentStep.getStepCount()*currentStep.getTime();
+                stepCount=currentStep.getStepCount();
             }
-            if (slot.getSlotCount(timeBox.getId())*Constants.MAX_SLOT_DURATION<
-                    (currentStep.getAllStepTimeSum(currentGoal.getId())+stepTime)) {
+
+            //slot.getSlotCount(timeBox.getId())*Constants.MAX_SLOT_DURATION<=
+            //(currentStep.getAllStepTimeSum(currentGoal.getId())+stepTime)
+            int substeps=0;
+
+
+            if (slot.getSlotCount(timeBox.getId())<(currentStep.getAllStepCount(currentGoal.getId())+stepCount)) {
                 isScheduled=false;
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(getString(R.string.msgYodaSays));
@@ -375,10 +383,12 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
                         ps.createSubSteps(1, currentStep.getStepCount(), currentStep.getTime());
                         break;
                 }
-
+                currentStep.save();
                 //if user sets priority to Manual or TopMost ,then need to rearrange steps
                 if (!stepPrioritySpinner.getSelectedItem().toString().equals(Constants.TEXT_PRIORITY_SPINNER_BOTTOM_MOST)) {
                     yodaCalendar.rescheduleSteps(goalList.get(goalSpinner.getSelectedItemPosition()).getId());
+                }else{
+                    yodaCalendar.scheduleStep(currentStep);
                 }
                 currentStep = currentStep.get(currentStep.getId());
                 //sync code
