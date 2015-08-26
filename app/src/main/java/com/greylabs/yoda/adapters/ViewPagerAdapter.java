@@ -11,15 +11,15 @@ import android.widget.ImageView.ScaleType;
 public class ViewPagerAdapter extends PagerAdapter {
 
     Activity activity;
-    int [] imagesArraList;
+    int [] imagesArrayList;
 
     public ViewPagerAdapter(Activity act, int [] newImagesArrayList) {
-        imagesArraList = newImagesArrayList;
+        imagesArrayList = newImagesArrayList;
         activity = act;
     }
 
     public int getCount() {
-        return imagesArraList.length;
+        return imagesArrayList.length;
     }
 
     public int getItemPosition(Object object) {
@@ -31,9 +31,7 @@ public class ViewPagerAdapter extends PagerAdapter {
         view.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT,
                 LayoutParams.MATCH_PARENT));
         view.setScaleType(ScaleType.FIT_XY);
-//        view.setBackgroundResource(imagesArraList.get(position));
-//        view.setImageBitmap(BitmapUtility.decodeSampledBitmapFromResource(imagesArraList[position], 600, 400));
-        view.setImageResource(imagesArraList[position]);
+        view.setImageResource(imagesArrayList[position]);
         ((ViewPager) collection).addView(view, 0);
         return view;
     }

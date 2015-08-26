@@ -1,6 +1,5 @@
 package com.greylabs.yoda.adapters;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,18 +7,13 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import com.greylabs.yoda.enums.StepFilterType;
 import com.greylabs.yoda.fragments.FragFilter;
-import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.utils.Constants;
 
 public class PagerAdapterActFilters extends FragmentPagerAdapter
 {
-    //    private final FragmentManager mFragmentManager;
     private final String[] titles = { "Today", "This Week", "This Month", "This Quarter", "This Year"};
-    private Context context;
-
     public PagerAdapterActFilters(FragmentManager fm) {
         super(fm);
-//        this.mFragmentManager = fm ;
     }
 
     @Override
@@ -65,11 +59,6 @@ public class PagerAdapterActFilters extends FragmentPagerAdapter
     public int getCount() {
         return titles.length;
     }
-
-//    @Override
-//    public int getPageIconResId(int position) {
-//        return tab_icons[position];
-//    }
 
     @Override
     public CharSequence getPageTitle(int position) {

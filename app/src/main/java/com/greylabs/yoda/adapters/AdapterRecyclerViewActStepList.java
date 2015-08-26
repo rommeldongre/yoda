@@ -22,6 +22,8 @@ import java.util.ArrayList;
 
 public class AdapterRecyclerViewActStepList extends RecyclerView.Adapter<AdapterRecyclerViewActStepList.ViewHolder> {
 
+    private static final PendingStep.PendingStepType TYPE_SERIES_STEP = PendingStep.PendingStepType.SERIES_STEP;
+    private static final PendingStep.PendingStepType TYPE_SPLIT_STEP = PendingStep.PendingStepType.SPLIT_STEP;
     ArrayList<PendingStep> stepsArrayList;
     Context context;
     boolean isEditOperation = false;
@@ -49,9 +51,8 @@ public class AdapterRecyclerViewActStepList extends RecyclerView.Adapter<Adapter
     public void onBindViewHolder(ViewHolder holder, int position) {
         String noOfSteps="";
         holder.checkBox.setCircleColor(Integer.valueOf(stepsArrayList.get(position).getColorCode()));
-        if(stepsArrayList.get(position).getPendingStepType().equals(PendingStep.PendingStepType.SERIES_STEP)
-                ||stepsArrayList.get(position).getPendingStepType().equals(PendingStep.PendingStepType.SPLIT_STEP)
-                ){
+        if(stepsArrayList.get(position).getPendingStepType().equals(TYPE_SERIES_STEP)
+                ||stepsArrayList.get(position).getPendingStepType().equals(TYPE_SPLIT_STEP) ){
             noOfSteps = String.valueOf(stepsArrayList.get(position).getStepCount());
             holder.tvStepName.setText(stepsArrayList.get(position).getNickName()+" - "+noOfSteps+" session");
         }else {
@@ -61,25 +62,21 @@ public class AdapterRecyclerViewActStepList extends RecyclerView.Adapter<Adapter
             holder.tvETAOfStep.setText(CalendarUtils.getFormattedDateWithSlot(stepsArrayList.get(position).getStepDate()));
         if(stepsArrayList.get(position).getPendingStepStatus().equals(PendingStep.PendingStepStatus.COMPLETED)){
             holder.checkBox.setChecked(true);
-//            holder.checkBox.setEnabled(false);
         }
         if(isEditOperation){
             holder.btnHandle.setVisibility(View.VISIBLE);
             switch (caller){
                 case Constants.ACT_GOAL_LIST :
                     holder.btnDeleteStep.setVisibility(View.VISIBLE);
-//                    holder.btnEditStep.setVisibility(View.VISIBLE);
                     break;
 
                 case Constants.ACT_ADD_NEW_STEP :
                     holder.btnDeleteStep.setVisibility(View.GONE);
-//                    holder.btnEditStep.setVisibility(View.GONE);
                     break;
             }
         }else {
             holder.btnDeleteStep.setVisibility(View.GONE);
             holder.btnHandle.setVisibility(View.GONE);
-//            holder.btnEditStep.setVisibility(View.GONE);
         }
     }
 
@@ -100,7 +97,7 @@ public class AdapterRecyclerViewActStepList extends RecyclerView.Adapter<Adapter
 
         TouchCheckBox checkBox;
         TextView tvStepName, tvETAOfStep;
-        Button btnDeleteStep, btnHandle;//btnEditStep,
+        Button btnDeleteStep, btnHandle;
         CardView cardView;
 
         public ViewHolder(View itemView, int ViewType, Context c) {
@@ -114,13 +111,11 @@ public class AdapterRecyclerViewActStepList extends RecyclerView.Adapter<Adapter
             tvETAOfStep = (TextView)itemView.findViewById(R.id.tvETAOfStepRecyclerItemActStepList);
             btnDeleteStep = (Button) itemView.findViewById(R.id.btnDeleteStepRecyclerItemActStepList);
             btnHandle =  (Button) itemView.findViewById(R.id.btnHandleRecyclerItemActStepList);
-//            btnEditStep = (Button) itemView.findViewById(R.id.btnEditStepRecyclerItemActStepList);
             cardView = (CardView) itemView.findViewById(R.id.cardViewActStepList);
 
             checkBox.setOnCheckedChangeListener(this);
             btnDeleteStep.setOnClickListener(this);
             cardView.setOnClickListener(this);
-//            btnEditStep.setOnClickListener(this);
         }
 
         @Override
@@ -132,10 +127,6 @@ public class AdapterRecyclerViewActStepList extends RecyclerView.Adapter<Adapter
                         + " must implement OnHeadlineSelectedListener");
             }
             switch (v.getId()){
-//                case R.id.btnEditStepRecyclerItemActStepList :
-//                    myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_EDIT);
-//                    break;
-//
                 case R.id.btnDeleteStepRecyclerItemActStepList :
                     myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_DELETE);
                     break;
@@ -145,22 +136,6 @@ public class AdapterRecyclerViewActStepList extends RecyclerView.Adapter<Adapter
                     break;
             }
         }
-
-//        @Override
-//        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//            try {
-//                myOnClickRecyclerView = (onClickOfRecyclerViewActStepList) contxt;
-//            } catch (ClassCastException e) {
-//                throw new ClassCastException(contxt.toString()
-//                        + " must implement OnHeadlineSelectedListener");
-//            }
-//            if(isChecked){
-//                myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_MARK_STEP_DONE);
-////                buttonView.setEnabled(false);
-//            }else {
-//                myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_MARK_STEP_UNDONE);
-//            }
-//        }
 
         @Override
         public void onCheckedChanged(View buttonView, boolean isChecked) {
@@ -172,7 +147,6 @@ public class AdapterRecyclerViewActStepList extends RecyclerView.Adapter<Adapter
             }
             if(isChecked){
                 myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_MARK_STEP_DONE);
-//                buttonView.setEnabled(false);
             }else {
                 myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_MARK_STEP_UNDONE);
             }

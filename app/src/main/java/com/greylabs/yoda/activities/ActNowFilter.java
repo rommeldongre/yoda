@@ -1,13 +1,6 @@
 package com.greylabs.yoda.activities;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.view.View;
@@ -30,8 +23,7 @@ public class ActNowFilter extends Activity implements View.OnClickListener {
     EditText edtExcuse;
     LinearLayout llDidIt, llDoingIt, llMissedIt, llButtons, llExcuseLog;
     CardView cvEmptyView, cvNotEmptyView;
-//    Toolbar toolbar;
-    Button btnLogExcuse, btnCloseEmptyView ;//,btnCloseNotEmptyView;
+    Button btnLogExcuse, btnCloseEmptyView ;
     private PendingStep pendingStep;
     private Goal goal;
     String caller;
@@ -44,12 +36,6 @@ public class ActNowFilter extends Activity implements View.OnClickListener {
     }
 
     private void initialize() {
-//        toolbar = (Toolbar) findViewById(R.id.toolBarActNowFilter);
-//        setSupportActionBar(toolbar);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        getSupportActionBar().setTitle(getResources().getString(R.string.titleActAddNewStep));
-
-//        btnCloseNotEmptyView = (Button) findViewById(R.id.btnCloseNotEmptyViewActNowFilter);
         btnCloseEmptyView = (Button) findViewById(R.id.btnCloseEmptyViewActNowFilter);
         btnLogExcuse = (Button) findViewById(R.id.btnLogExcuseActNowFilter);
         tvGoalName = (TextView) findViewById(R.id.tvGoalNameActNowFilter);
@@ -64,7 +50,6 @@ public class ActNowFilter extends Activity implements View.OnClickListener {
         cvNotEmptyView = (CardView) findViewById(R.id.cvNotEmptyViewActNowFilter);
         cvEmptyView = (CardView) findViewById(R.id.cvEmptyViewActNowFilter);
 
-//        btnCloseNotEmptyView.setOnClickListener(this);
         btnCloseEmptyView.setOnClickListener(this);
         btnLogExcuse.setOnClickListener(this);
         llDidIt.setOnClickListener(this);
@@ -82,8 +67,6 @@ public class ActNowFilter extends Activity implements View.OnClickListener {
                 pendingStep = new PendingStep(this).get(alarmScheduler.getStepId());
             }
         }else if(caller.equals(Constants.ACT_HOME)){
-            // get the current step from local
-           // pendingStep = new PendingStep(this);
             pendingStep=(PendingStep)getIntent().getSerializableExtra(Constants.KEY_PENDING_STEP_OBJECT);
             pendingStep.initDatabase(this);
             checkForEmptyViewVisibility();
@@ -93,7 +76,6 @@ public class ActNowFilter extends Activity implements View.OnClickListener {
             goal = new Goal(this).get(pendingStep.getGoalId());
             tvGoalName.setText(goal.getNickName());
             tvStepName.setText(pendingStep.getNickName());
-            //tvTime.setText(String.valueOf(alarmScheduler.getStartTime()));
         }else{
             Prefs prefs=Prefs.getInstance(this);
             goal = new Goal(this).get(prefs.getStretchGoalId());
@@ -142,20 +124,13 @@ public class ActNowFilter extends Activity implements View.OnClickListener {
                 break;
 
             case R.id.llMissedActNowFilter :
-//                Logger.showMsg(this, "Missed it");
                 if(pendingStep!=null){
                     pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.MISSED);
                     pendingStep.setSkipCount(pendingStep.getSkipCount() + 1);
                     pendingStep.save();
                 }
-//                finish();
-//                showLogExcuseDialogue();
                 showLogExcuseLayout();
                 break;
-
-//            case R.id.btnCloseNotEmptyViewActNowFilter:
-//                this.finish();
-//                break;
 
             case R.id.btnLogExcuseActNowFilter :
                 edtExcuse.getText();
@@ -177,27 +152,5 @@ public class ActNowFilter extends Activity implements View.OnClickListener {
     private void showLogExcuseLayout() {
         llButtons.setVisibility(View.GONE);
         llExcuseLog.setVisibility(View.VISIBLE);
-    }
-
-    private void showLogExcuseDialogue() {
-        // custom dialog
-//        final Dialog dialog = new Dialog(this);
-//        dialog.setCancelable(false);
-//        dialog.setContentView(R.layout.dailogue_log_excuse);
-//        dialog.setTitle(getString(R.string.titleDialogueExcuse));
-//
-//        // set the custom dialog components - text, image and button
-//        EditText edtExcuse = (EditText) dialog.findViewById(R.id.edtExcuseDialogueExcuse);
-//        Button dialogButton = (Button) dialog.findViewById(R.id.btnLogDialogueExcuse);
-//        // if button is clicked, close the custom dialog
-//        dialogButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                // set excuse to the pending step here
-//                dialog.dismiss();
-//                finish();
-//            }
-//        });
-//        dialog.show();
     }
 }

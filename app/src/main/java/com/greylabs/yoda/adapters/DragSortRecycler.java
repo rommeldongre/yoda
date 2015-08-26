@@ -1,26 +1,6 @@
 package com.greylabs.yoda.adapters;
-/*
- * DragSortRecycler
- *
- * Added drag and drop functionality to your RecyclerView
- *
- *
- * Copyright 2014 Emile Belanger.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 
-        import android.graphics.Bitmap;
+import android.graphics.Bitmap;
         import android.graphics.Canvas;
         import android.graphics.Paint;
         import android.graphics.Rect;
@@ -31,55 +11,41 @@ package com.greylabs.yoda.adapters;
         import android.view.View;
         import android.support.annotation.Nullable;
 
-        import java.lang.reflect.Modifier;
-
 
 public class DragSortRecycler extends RecyclerView.ItemDecoration implements RecyclerView.OnItemTouchListener {
 
     final String TAG = "DragSortRecycler";
-
     final boolean DEBUG = false;
-
     private int dragHandleWidth = 0;
-
     private int selectedDragItemPos = -1;
-
     private int fingerAnchorY;
-
     private int fingerY;
-
     private int fingerOffsetInViewY;
-
     private float autoScrollWindow = 0.1f;
     private float autoScrollSpeed  = 0.5f;
-
     private BitmapDrawable floatingItem;
-    private Rect           floatingItemStatingBounds;
-    private Rect           floatingItemBounds;
+    private Rect floatingItemStatingBounds;
+    private Rect floatingItemBounds;
 
 
     private float floatingItemAlpha = 0.5f;
     private int   floatingItemBgColor = 0;
-
     private int viewHandleId = -1;
 
-
     OnItemMovedListener moveInterface;
-
     private boolean isDragging;
+
     @Nullable
     OnDragStateChangedListener dragStateChangedListener;
 
-
-
     public interface OnItemMovedListener
     {
-        public void onItemMoved(int from, int to);
+        void onItemMoved(int from, int to);
     }
 
     public interface OnDragStateChangedListener {
-        public void onDragStart();
-        public void onDragStop();
+        void onDragStart();
+        void onDragStop();
     }
 
     private void debugLog(String log)
@@ -93,45 +59,30 @@ public class DragSortRecycler extends RecyclerView.ItemDecoration implements Rec
         return scrollListener;
     }
 
-    /*
-     * Set the item move interface
-     */
     public void setOnItemMovedListener(OnItemMovedListener swif)
     {
         moveInterface = swif;
     }
-
     public void setViewHandleId(int id)
     {
         viewHandleId = id;
     }
-
     public void setLeftDragArea(int w)
     {
         dragHandleWidth = w;
     }
-
     public void setFloatingAlpha(float a)
     {
         floatingItemAlpha = a;
     }
-
     public void setFloatingBgColor(int c)
     {
         floatingItemBgColor = c;
     }
-    /*
-     Set the window at top and bottom of list, must be between 0 and 0.5
-     For example 0.1 uses the top and bottom 10% of the lists for scrolling
-     */
     public void setAutoScrollWindow(float w)
     {
         autoScrollWindow = w;
     }
-
-    /*
-    Set the autoscroll speed, default is 0.5
-     */
     public void setAutoScrollSpeed(float speed)
     {
         autoScrollSpeed = speed;
@@ -203,7 +154,6 @@ public class DragSortRecycler extends RecyclerView.ItemDecoration implements Rec
         {
             outRect.top = 0;
             outRect.bottom = 0;
-            //Make view visible incase invisible
             view.setVisibility(View.VISIBLE);
         }
     }
@@ -214,7 +164,7 @@ public class DragSortRecycler extends RecyclerView.ItemDecoration implements Rec
      * This *seems* to work, another method would be to use
      * getItemOffsets, but I think that could miss items?..
      */
-    private int getNewPostion(RecyclerView rv)
+    private int getNewPosition(RecyclerView rv)
     {
         int itemsOnScreen = rv.getLayoutManager().getChildCount();
 
@@ -222,9 +172,8 @@ public class DragSortRecycler extends RecyclerView.ItemDecoration implements Rec
 
         int above=0;
         int below = Integer.MAX_VALUE;
-        for (int n=0;n < itemsOnScreen;n++) //Scan though items on screen, however they may not
-        {                                   // be in order!
-
+        for (int n=0;n < itemsOnScreen;n++)
+        {
             View view = rv.getLayoutManager().getChildAt(n);
 
             if (view.getVisibility() != View.VISIBLE)
@@ -232,7 +181,7 @@ public class DragSortRecycler extends RecyclerView.ItemDecoration implements Rec
 
             int itemPos = rv.getChildPosition(view);
 
-            if (itemPos == selectedDragItemPos) //Don't check against itself!
+            if (itemPos == selectedDragItemPos)
                 continue;
 
             float viewMiddleY = view.getTop() + view.getHeight()/2;
@@ -351,7 +300,7 @@ public class DragSortRecycler extends RecyclerView.ItemDecoration implements Rec
         {
             if ((e.getAction() == MotionEvent.ACTION_UP) && selectedDragItemPos != -1)
             {
-                int newPos = getNewPostion(rv);
+                int newPos = getNewPosition(rv);
                 if (moveInterface != null)
                     moveInterface.onItemMoved(selectedDragItemPos, newPos);
             }

@@ -5,14 +5,10 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 
-import com.greylabs.yoda.activities.ActNowFilter;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Dialogues;
 import com.greylabs.yoda.utils.Logger;
 
-/**
- * Created by Jaybhay Vijay on 7/13/2015.
- */
 public class AlarmService extends Service {
     private static final String TAG="AlarmService";
 //    private AlarmScheduler alarmScheduler;
