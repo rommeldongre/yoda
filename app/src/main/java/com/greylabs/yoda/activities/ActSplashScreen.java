@@ -1,28 +1,23 @@
 package com.greylabs.yoda.activities;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.DisplayMetrics;
-import android.view.Display;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.threads.InitCalendarAsyncTask;
 import com.greylabs.yoda.utils.Prefs;
 
-public class ActSplashScreen extends Activity{
+public class ActSplashScreen extends AppCompatActivity {
 
     RelativeLayout rl;
     ImageView iv;

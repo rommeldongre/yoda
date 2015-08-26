@@ -1,12 +1,12 @@
 package com.greylabs.yoda.activities;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.greylabs.yoda.R;
 
 
-public class ActHomeNew extends Activity{
+public class ActHomeNew extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -113,45 +113,56 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
         setStyleToArcTotalProgress();
     }
 
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        populateNowInfo();
-    }
-
     public void populateNowInfo() {
-        if(slot==null) slot=new Slot(this);
-        if(nowPendingStep==null) nowPendingStep=new PendingStep(this);
-        if(nowGoal==null) nowGoal=new Goal(this);
-        List<PendingStep> pendingSteps=nowPendingStep.getPendingSteps(slot.getActiveSlotId());
-        if(pendingSteps!=null && pendingSteps.size()>0) {
-            for (PendingStep ps : pendingSteps) {
-                if (ps.isNowStep()) {
-                    nowPendingStep = ps;
-                    break;
-                }
-            }
-            if(nowPendingStep!=null && nowPendingStep.getNickName()!=null){
-                arcTotalProgress.setStepName(nowPendingStep.getNickName());
-                nowGoal=nowGoal.get(nowPendingStep.getGoalId());
-                arcTotalProgress.setGoalName(nowGoal.getNickName());
-            }else {
-                showEmptyView();
-            }
 
-        }else{
-//            Prefs prefs=Prefs.getInstance(this);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (slot == null) slot = new Slot(ActHome.this);
+                if (nowPendingStep == null) nowPendingStep = new PendingStep(ActHome.this);
+                if (nowGoal == null) nowGoal = new Goal(ActHome.this);
+                List<PendingStep> pendingSteps = nowPendingStep.getPendingSteps(slot.getActiveSlotId());
+                if (pendingSteps != null && pendingSteps.size() > 0) {
+                    for (PendingStep ps : pendingSteps) {
+                        if (ps.isNowStep()) {
+                            nowPendingStep = ps;
+                            break;
+                        }
+                    }
+                    if (nowPendingStep != null && nowPendingStep.getNickName() != null) {
+                        arcTotalProgress.setStepName(nowPendingStep.getNickName());
+                        nowGoal = nowGoal.get(nowPendingStep.getGoalId());
+                        arcTotalProgress.setGoalName(nowGoal.getNickName());
+                        showEmptyView(false);
+                    } else {
+                        showEmptyView(true);
+                    }
+
+                } else {
+//            Prefs prefs=Prefs.getInstance(ActHome.this);
 //            nowGoal=nowGoal.get(prefs.getStretchGoalId());
 //            arcTotalProgress.setGoalName(Constants.NICKNAME_STRETCH_GOAL);
 //            arcTotalProgress.setStepName(" No Step");
-            showEmptyView();
-        }
-        setStyleToArcTotalProgress();
+                    showEmptyView(true);
+                }
+                setStyleToArcTotalProgress();
+            }
+        });
     }
 
-    private void showEmptyView() {
-        arcTotalProgress.setVisibility(View.GONE);
-        llEmptyView.setVisibility(View.VISIBLE);
+    private void showEmptyView(final boolean b) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if(b){
+                    arcTotalProgress.setVisibility(View.GONE);
+                    llEmptyView.setVisibility(View.VISIBLE);
+                }else {
+                    arcTotalProgress.setVisibility(View.VISIBLE);
+                    llEmptyView.setVisibility(View.GONE);
+                }
+            }
+        });
     }
 
     private void setStyleToArcTotalProgress() {

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,7 +18,7 @@ import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.views.CircleView;
 
-public class ActGoalDetailsOld extends ActionBarActivity {
+public class ActGoalDetailsOld extends AppCompatActivity {
 
     Toolbar toolbar;
     Goal currentGoal;

@@ -167,7 +167,12 @@ public class Dialogues {
         @Override
         public void onDismiss(DialogInterface dialog) {
             if(caller.equals(Constants.ACT_HOME)){
-                ((ActHome) context).populateNowInfo();
+//                ((ActHome) context).runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+                        ((ActHome) context).populateNowInfo();
+//                    }
+//                });
             }
         }
     }

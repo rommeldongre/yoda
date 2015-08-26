@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -31,12 +32,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ActGoalList  extends ActionBarActivity implements OnClickOfRecyclerViewActGoalList {
+public class ActGoalList  extends AppCompatActivity implements OnClickOfRecyclerViewActGoalList {
 
     private Toolbar toolbar;
     TextView emptyViewActGoalList;
     ArrayList<Goal> goalArrayList;
-    boolean isOperationEdit = false, isPriorityChanged = false;
+    boolean isOperationEdit = false, isOrderChanged = false;
     Menu menu;
 
     RecyclerView recyclerView;
@@ -84,10 +85,10 @@ public class ActGoalList  extends ActionBarActivity implements OnClickOfRecycler
             public void onItemMoved(int from, int to) {
                 if (from != to){
                     goalArrayList.add(to, goalArrayList.remove(from));
-                    isPriorityChanged = true;
+                    isOrderChanged = true;
                     menu.findItem(R.id.actionSaveActGoalList).setVisible(true);
+                    mAdapter.notifyDataSetChanged();
                 }
-                mAdapter.notifyDataSetChanged();
             }
         });
 

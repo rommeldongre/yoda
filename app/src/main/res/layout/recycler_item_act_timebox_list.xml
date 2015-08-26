@@ -28,9 +28,10 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
-            android:layout_marginRight="10dip"
             android:layout_alignParentRight="true"
-            android:layout_margin="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
             android:background="@drawable/ic_btn_delete_gray" />
         <!--android:layout_toLeftOf="@+id/btnEditTimeBoxRecyclerItemActTimeBoxList"-->
 
@@ -72,5 +73,15 @@
                 android:singleLine="true"
                 android:textStyle="italic" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvSlotsRecyclerItemActTimeBoxList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="5dp"
+            android:layout_below="@+id/btnDeleteTimeBoxRecyclerItemActTimeBoxList" />
     </RelativeLayout>
 </android.support.v7.widget.CardView>

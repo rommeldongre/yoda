@@ -3,8 +3,8 @@ package com.greylabs.yoda.activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -15,16 +15,13 @@ import android.widget.TextView;
 
 import com.google.api.client.util.DateTime;
 import com.greylabs.yoda.R;
-import com.greylabs.yoda.adapters.DragSortRecycler;
 import com.greylabs.yoda.adapters.AdapterRecyclerViewActStepList;
+import com.greylabs.yoda.adapters.DragSortRecycler;
 import com.greylabs.yoda.apis.googleacc.GoogleSync;
-import com.greylabs.yoda.enums.StepFilterType;
 import com.greylabs.yoda.interfaces.onClickOfRecyclerViewActStepList;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
-import com.greylabs.yoda.models.Slot;
 import com.greylabs.yoda.models.TimeBox;
-import com.greylabs.yoda.scheduler.AlarmScheduler;
 import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Logger;
@@ -34,7 +31,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public class ActStepList extends ActionBarActivity implements onClickOfRecyclerViewActStepList {
+public class ActStepList extends AppCompatActivity implements onClickOfRecyclerViewActStepList {
 
     private Toolbar toolbar;
     TextView emptyViewActChangeStepPriority;
@@ -284,7 +281,7 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
         TimeBox timeBox = new TimeBox(this);
         YodaCalendar yodaCalendar = new YodaCalendar(this, timeBox.get(currentGoal.getTimeBoxId()));
         //save all the steps in the array with priorities
-//        if (isPriorityChanged) {
+//        if (isOrderChanged) {
             for (int i = 0; i < newStepArrayList.size(); i++) {
                 newStepArrayList.get(i).initDatabase(this);
                 newStepArrayList.get(i).setPriority(i + 1);

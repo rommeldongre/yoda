@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -26,7 +27,7 @@ import com.greylabs.yoda.utils.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ActTimeBoxList extends ActionBarActivity implements OnClickOfRecyclerViewActTimeboxList {
+public class ActTimeBoxList extends AppCompatActivity implements OnClickOfRecyclerViewActTimeboxList {
 
     private Toolbar toolbar;
     TextView emptyViewActTimeBoxList;

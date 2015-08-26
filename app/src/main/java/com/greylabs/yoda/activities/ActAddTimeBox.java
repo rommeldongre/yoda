@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,7 +39,7 @@ import com.greylabs.yoda.utils.colorpicker.LineColorPicker;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class ActAddTimeBox extends ActionBarActivity implements RadioGroup.OnCheckedChangeListener,CompoundButton.OnCheckedChangeListener {
+public class ActAddTimeBox extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener,CompoundButton.OnCheckedChangeListener {
 
     int red, blue, green, yellow, orange, brown, teal, purple, black;
 

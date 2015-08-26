@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.interfaces.OnClickOfRecyclerViewActTimeboxList;
+import com.greylabs.yoda.models.Slot;
 import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.views.CircleView;
@@ -22,6 +23,7 @@ public class AdapterRecyclerViewActTimeBoxList extends RecyclerView.Adapter<Adap
 
     ArrayList<TimeBox> timeBoxArrayList;
     Context context;
+    Slot slot;
     boolean isEditOperation = false;
 
     public AdapterRecyclerViewActTimeBoxList(Context passedContext, ArrayList<TimeBox> timeBoxArrayList, boolean isEditOperation)
@@ -29,6 +31,7 @@ public class AdapterRecyclerViewActTimeBoxList extends RecyclerView.Adapter<Adap
         this.context = passedContext;
         this.timeBoxArrayList = timeBoxArrayList;
         this.isEditOperation = isEditOperation;
+        this.slot = new Slot(context);
     }
 
     @Override
@@ -44,6 +47,10 @@ public class AdapterRecyclerViewActTimeBoxList extends RecyclerView.Adapter<Adap
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.tvTimeBoxName.setText(timeBoxArrayList.get(position).getNickName());
+        int totalSlots = slot.getTotalSlotCount(timeBoxArrayList.get(position).getId());
+        String slots = totalSlots - slot.getAvailableSlotCount(timeBoxArrayList.get(position).getId())+"/"+
+                totalSlots +" Slots";
+        holder.tvSlots.setText(slots);
         if(timeBoxArrayList.get(position).isActive()){
             holder.tvTimeBoxName.setTypeface(null, Typeface.ITALIC);
             holder.tvAttachedGoalName.setText(timeBoxArrayList.get(position).getGoalName());
@@ -51,8 +58,10 @@ public class AdapterRecyclerViewActTimeBoxList extends RecyclerView.Adapter<Adap
             holder.tvTimeBoxName.setTypeface(null, Typeface.BOLD);
             holder.tvAttachedGoalName.setText("");
         }
-        if(timeBoxArrayList.get(position).getNickName().equals(Constants.NICKNAME_UNPLANNED_TIMEBOX))
+        if(timeBoxArrayList.get(position).getNickName().equals(Constants.NICKNAME_UNPLANNED_TIMEBOX)){
             holder.btnDeleteTimeBox.setVisibility(View.GONE);
+            holder.tvSlots.setText("");
+        }
         holder.circleView.setShowTitle(false);
         holder.circleView.setFillColor(Integer.parseInt(timeBoxArrayList.get(position).getColorCode()));
     }
@@ -73,7 +82,7 @@ public class AdapterRecyclerViewActTimeBoxList extends RecyclerView.Adapter<Adap
         Context contxt;
 
         CircleView circleView;
-        TextView tvTimeBoxName, tvAttachedGoalName;
+        TextView tvTimeBoxName, tvAttachedGoalName, tvSlots;
         Button btnDeleteTimeBox;
         CardView cardView;
 
@@ -87,6 +96,7 @@ public class AdapterRecyclerViewActTimeBoxList extends RecyclerView.Adapter<Adap
             circleView = (CircleView) itemView.findViewById(R.id.btnBulletRecyclerItemActTimeBoxList);
             tvTimeBoxName = (TextView)itemView.findViewById(R.id.tvTBNameRecyclerItemActTimeBoxList);
             tvAttachedGoalName = (TextView)itemView.findViewById(R.id.tvGoalNameRecyclerItemActTimeBoxList);
+            tvSlots = (TextView)itemView.findViewById(R.id.tvSlotsRecyclerItemActTimeBoxList);
             btnDeleteTimeBox = (Button) itemView.findViewById(R.id.btnDeleteTimeBoxRecyclerItemActTimeBoxList);
             cardView = (CardView) itemView.findViewById(R.id.cardViewActTimeBoxList);
 

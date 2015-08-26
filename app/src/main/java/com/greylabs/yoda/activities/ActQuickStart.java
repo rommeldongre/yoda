@@ -1,12 +1,11 @@
 package com.greylabs.yoda.activities;
 
-import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -15,19 +14,14 @@ import android.widget.RelativeLayout;
 
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.apis.googleacc.GoogleAccount;
-import com.greylabs.yoda.apis.googleacc.GoogleSync;
-import com.greylabs.yoda.database.NewStep;
 import com.greylabs.yoda.enums.AccountType;
 import com.greylabs.yoda.threads.ImportTaskAsyncThread;
 import com.greylabs.yoda.threads.NewStepAsyncTask;
 import com.greylabs.yoda.threads.QuickStartAsyncTask;
 import com.greylabs.yoda.utils.ConnectionUtils;
-import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.Prefs;
 
-import java.io.IOException;
-
-public class ActQuickStart extends Activity implements View.OnClickListener {
+public class ActQuickStart extends AppCompatActivity implements View.OnClickListener {
 
 //    Button rlQuickStart, rlImport, rlNewStep;
     RelativeLayout rlQuickStart, rlImport, rlNewStep;

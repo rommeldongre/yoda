@@ -234,7 +234,7 @@ public class MetaData {
                 "create trigger if not exists  "+ triggerUpdatePendingStepOnSlotDelete+ " before delete on "+TableSlot.slot+" " +
                 "begin" +
                 "    update  "+TablePendingStep.pendingStep+" set " +TablePendingStep.slotId+" = 0 , " +
-                "     "+TablePendingStep.status+" = "+ PendingStep.PendingStepStatus.MISSED+"  "+
+                "     "+TablePendingStep.status+" = "+ PendingStep.PendingStepStatus.MISSED.ordinal()+"  "+
                 "    where "+"old."+TableSlot.id+"="+TablePendingStep.pendingStep+"."+TablePendingStep.slotId+" ;" +
                 " end;  ";
     }
