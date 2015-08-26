@@ -45,7 +45,6 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
     Goal currentGoal;
     String caller;
 
-
     RecyclerView recyclerView;
     AdapterRecyclerViewActStepList mAdapter;
     LinearLayoutManager mLayoutManager;
@@ -112,13 +111,17 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
             @Override
             public void onItemMoved(int from, int to) {
                 if (from != to){
-                    stepArrayList.add(to, stepArrayList.remove(from));
+                    if(isShowingPendingSteps){
+                        pendingStepsArrayList.add(to, pendingStepsArrayList.remove(from));
+                    }else {
+                        stepArrayList.add(to, stepArrayList.remove(from));
+                    }
                     isPriorityChanged = true;
                     menu.findItem(R.id.actionSaveActStepList).setVisible(true);
                     menu.findItem(R.id.actionAddActStepList).setVisible(false);
                     menu.findItem(R.id.actionToggleActStepList).setVisible(false);
+                    mAdapter.notifyDataSetChanged();
                 }
-                mAdapter.notifyDataSetChanged();
             }
         });
 
@@ -226,14 +229,20 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
             case R.id.actionSaveActStepList :
                 switch (caller){
                     case Constants.ACT_GOAL_LIST :
-//                        menu.findItem(R.id.actionEditActStepList).setVisible(true);
                         menu.findItem(R.id.actionSaveActStepList).setVisible(false);
                         menu.findItem(R.id.actionAddActStepList).setVisible(true);
                         menu.findItem(R.id.actionToggleActStepList).setVisible(true);
-//                        isOperationEdit = false;
-//                        mAdapter = new AdapterRecyclerViewActStepList(this, stepArrayList, isOperationEdit, caller);
-//                        recyclerView.setAdapter(mAdapter);
-                        saveStepsByNewOrder();
+                        if(isShowingPendingSteps){
+                            saveStepsByNewOrder(pendingStepsArrayList);
+                            // notify adapter
+                            getStepArrayFromLocal();
+                            mAdapter.notifyDataSetChanged();
+                        }else {
+                            saveStepsByNewOrder(stepArrayList);
+                            // notify adapter
+                            getStepArrayFromLocal();
+                            mAdapter.notifyDataSetChanged();
+                        }
                         break;
 
 //                    case Constants.ACT_ADD_NEW_STEP :
@@ -255,14 +264,12 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
 
             case R.id.actionToggleActStepList :
                 if(isShowingPendingSteps){
-//                    getSupportActionBar().setTitle(currentGoal.getNickName());
                     checkForEmptyViewVisibility(stepArrayList, getString(R.string.tvEmptyViewActStepList));
                     isShowingPendingSteps = false;
                     mAdapter = new AdapterRecyclerViewActStepList(this, stepArrayList, isOperationEdit, caller);
                     recyclerView.setAdapter(mAdapter);
                 }else {
                     isShowingPendingSteps = true;
-//                    getSupportActionBar().setTitle(getResources().getString(R.string.titlePendingStepsActStepsList));
                     mAdapter = new AdapterRecyclerViewActStepList(this, pendingStepsArrayList, isOperationEdit, caller);
                     recyclerView.setAdapter(mAdapter);
                     checkForEmptyViewVisibility(pendingStepsArrayList, getString(R.string.tvEmptyViewPendingStepsActStepList));
@@ -273,20 +280,20 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
         return super.onOptionsItemSelected(item);
     }
 
-    private void saveStepsByNewOrder() {
+    private void saveStepsByNewOrder(ArrayList<PendingStep> newStepArrayList) {
         TimeBox timeBox = new TimeBox(this);
         YodaCalendar yodaCalendar = new YodaCalendar(this, timeBox.get(currentGoal.getTimeBoxId()));
         //save all the steps in the array with priorities
-        if (isPriorityChanged) {
-            for (int i = 0; i < stepArrayList.size(); i++) {
-                stepArrayList.get(i).initDatabase(this);
-                stepArrayList.get(i).setPriority(i + 1);
-//                stepArrayList.get(i).setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
-                stepArrayList.get(i).save();
-                stepArrayList.get(i).updateSubSteps();
+//        if (isPriorityChanged) {
+            for (int i = 0; i < newStepArrayList.size(); i++) {
+                newStepArrayList.get(i).initDatabase(this);
+                newStepArrayList.get(i).setPriority(i + 1);
+//                newStepArrayList.get(i).setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+                newStepArrayList.get(i).save();
+                newStepArrayList.get(i).updateSubSteps();
             }
             yodaCalendar.rescheduleSteps(currentGoal.getId());
-        }
+//        }
     }
 
     private ArrayList<PendingStep> getStepsByNewOrder() {
@@ -312,7 +319,18 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
                 alertLogout.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        PendingStep pendingStep = stepArrayList.get(Position);
+                        PendingStep pendingStep;
+                        if(isShowingPendingSteps){
+                            pendingStep = pendingStepsArrayList.get(Position);
+                            pendingStepsArrayList.remove(Position);
+                            mAdapter.notifyDataSetChanged();
+                            checkForEmptyViewVisibility(pendingStepsArrayList, getString(R.string.tvEmptyViewPendingStepsActStepList));
+                        }else {
+                            pendingStep = stepArrayList.get(Position);
+                            stepArrayList.remove(Position);
+                            mAdapter.notifyDataSetChanged();
+                            checkForEmptyViewVisibility(stepArrayList, getString(R.string.tvEmptyViewActStepList));
+                        }
                         switch (pendingStep.getPendingStepType()) {
                             case SPLIT_STEP:
                             case SERIES_STEP:
@@ -329,30 +347,24 @@ public class ActStepList extends ActionBarActivity implements onClickOfRecyclerV
                                     }
                                 }
                                 pendingStep.setDeleted(true);
-                                //pendingStep.markSubSteps(true);
                                 pendingStep.save();
-                                saveStepsByNewOrder();
                                 break;
                             case SINGLE_STEP:
-                               // if(pendingStep.delete()==1) pendingStep.cancelAlarm();
                                 pendingStep.cancelAlarm();
                                 pendingStep.setDeleted(true);
                                 pendingStep.setUpdated(new DateTime(new Date()));
                                 pendingStep.freeSlot();
                                 pendingStep.setSlotId(0);
                                 pendingStep.save();
-                                saveStepsByNewOrder();
                                 break;
                         }
-
                         Logger.showMsg(ActStepList.this, Constants.MSG_STEP_DELETED);
-                        stepArrayList.remove(Position);
-                        mAdapter.notifyDataSetChanged();
-                        checkForEmptyViewVisibility(stepArrayList, getString(R.string.tvEmptyViewActStepList));
                         //reschedule needed here
                         TimeBox currentTimeBox = new TimeBox(ActStepList.this).get(currentGoal.getTimeBoxId());
                         YodaCalendar yodaCalendar = new YodaCalendar(ActStepList.this, currentTimeBox);
                         yodaCalendar.rescheduleSteps(currentGoal.getId());
+                        getStepArrayFromLocal();
+                        mAdapter.notifyDataSetChanged();
                         //sync code
                         GoogleSync.getInstance(ActStepList.this).sync();
                         //sync code

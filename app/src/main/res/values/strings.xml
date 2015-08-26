@@ -122,7 +122,7 @@
     <string name="titleActFilters">My Lists</string>
     <string name="msgActAddNewGoalTimeBoxNotApplicable">Selected TimeBox is overlaping with one of the active TimeBoxes. Please choose different TimeBox</string>
     <string name="tvEmptyViewFragFilter">No Steps</string>
-    <string name="msgCannotSaveStepActAddNewStep">The step cannot be scheduled in the time you have allocated for the Goal. You will have to change it’s priority if you really want to get this done.</string>
+    <string name="msgCannotSaveStepActAddNewStep">The step cannot be scheduled in the time you have allocated for the Goal. You will have to stretch the TimeBox if you really want to get this done.</string>
     <string name="msgYodaSays">YodA say\'s:</string>
     <string name="btnOk">Ok</string>
     <string name="tvCompletedActNowFilter">Did it!! - Another step closer!</string>

@@ -23,8 +23,7 @@ import java.util.Map;
 public class AdapterExpandableList extends BaseExpandableListAdapter {
 
     private Context context;
-    private List<Goal> goalList; // header titles         string
-    // child data in format of header title, child title         string string
+    private List<Goal> goalList;
     private Map<Long, List<PendingStep>> _listDataChild;
 
     public AdapterExpandableList(Context context, List<Goal> listDataHeader,
@@ -36,8 +35,6 @@ public class AdapterExpandableList extends BaseExpandableListAdapter {
 
     @Override
     public Object getChild(int groupPosition, int childPosititon) {
-//        return this._listDataChild.get(this.goalList.get(groupPosition))
-//                .get(childPosititon);
         Goal goal=this.goalList.get(groupPosition);
         return this._listDataChild.get(new Long(goal.getId()));
     }
@@ -51,13 +48,12 @@ public class AdapterExpandableList extends BaseExpandableListAdapter {
     public View getChildView(final int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
-       // final String childText = ((PendingStep) getChild(groupPosition, childPosition)).getNickName();
         List<PendingStep> ps= (List<PendingStep>) getChild(groupPosition, childPosition);
         final PendingStep pendingStep=ps.get(childPosition);
         if (convertView == null) {
-            LayoutInflater infalInflater = (LayoutInflater) this.context
+            LayoutInflater inflater = (LayoutInflater) this.context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.list_item, null);
+            convertView = inflater.inflate(R.layout.list_item, null);
         }
 
         TextView txtListChild = (TextView) convertView
@@ -73,7 +69,6 @@ public class AdapterExpandableList extends BaseExpandableListAdapter {
 
         if(pendingStep.getPendingStepStatus().equals(PendingStep.PendingStepStatus.COMPLETED)){
             cbCompleted.setChecked(true);
-//            cbCompleted.setEnabled(false);
         }
 
         cbCompleted.setOnCheckedChangeListener(new TouchCheckBox.OnCheckedChangeListener() {
@@ -89,7 +84,6 @@ public class AdapterExpandableList extends BaseExpandableListAdapter {
                         pendingStep.updateSubSteps();
                         pendingStep.freeSlots();
                     }
-//                    cbCompleted.setEnabled(false);
                 }else {
                     pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
                     pendingStep.save();
@@ -141,7 +135,6 @@ public class AdapterExpandableList extends BaseExpandableListAdapter {
 
         TextView lblListHeader = (TextView) convertView
                 .findViewById(R.id.lblListHeader);
-//        lblListHeader.setTypeface(null, Typeface.BOLD);
         lblListHeader.setText(goalNickname);
 
         return convertView;

@@ -43,30 +43,25 @@ public class AdapterRecyclerViewActGoalList extends RecyclerView.Adapter<Adapter
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-//            switch (holder.Holderid) {
         holder.tvGoalName.setText(goalArrayList.get(position).getNickName());
         holder.tvEndDateGoal.setText(CalendarUtils.getFormattedDateWithSlot(goalArrayList.get(position).getDueDate()));
         holder.btnBullet.setFillColor(Integer.parseInt(goalArrayList.get(position).getColorCode()));
         holder.btnBullet.setTitleText(String.valueOf(goalArrayList.get(position).getRemainingStepCount()));
         holder.progressBar.setProgress((int)goalArrayList.get(position).getGoalProgress());
         if(isEditOperation){
-//            holder.btnBullet.setVisibility(View.GONE);
             holder.btnHandle.setVisibility(View.VISIBLE);
             holder.btnDeleteGoal.setVisibility(View.VISIBLE);
             holder.btnEditGoal.setVisibility(View.VISIBLE);
-//            holder.progressBar.setVisibility(View.GONE);
         }else {
             holder.btnBullet.setVisibility(View.VISIBLE);
             holder.btnDeleteGoal.setVisibility(View.GONE);
             holder.btnEditGoal.setVisibility(View.GONE);
             holder.btnHandle.setVisibility(View.GONE);
-//            holder.progressBar.setVisibility(View.VISIBLE);
         }
         if(goalArrayList.get(position).getNickName().equals(Constants.NICKNAME_STRETCH_GOAL)){
             holder.btnDeleteGoal.setVisibility(View.GONE);
             holder.btnEditGoal.setVisibility(View.GONE);
         }
-//        holder.btnDeleteTimeBox.getBackground().setColorFilter(R.color.white, PorterDuff.Mode.);
     }
 
     @Override
@@ -97,8 +92,6 @@ public class AdapterRecyclerViewActGoalList extends RecyclerView.Adapter<Adapter
             itemView.setClickable(true);
             itemView.setOnClickListener(this);
 
-//            switch (ViewType){
-//                case Utilities.TYPE_INT_AUDIO_CAPTURE :
             btnBullet = (CircleView) itemView.findViewById(R.id.btnBulletRecyclerItemActGoalList);
             tvGoalName = (TextView)itemView.findViewById(R.id.tvGoalNameRecyclerItemActGoalList);
             tvEndDateGoal = (TextView)itemView.findViewById(R.id.tvEndDateOfGoalRecyclerItemActGoalList);
@@ -107,8 +100,6 @@ public class AdapterRecyclerViewActGoalList extends RecyclerView.Adapter<Adapter
             btnHandle =  (Button) itemView.findViewById(R.id.btnHandleRecyclerItemActGoalList);
             progressBar = (ProgressBar) itemView.findViewById(R.id.pbRecyclerItemActGoalList);
             cardView = (CardView) itemView.findViewById(R.id.cardViewActGoalList);
-//            Holderid = 0;
-//                    break;
 
             btnEditGoal.setOnClickListener(this);
             btnDeleteGoal.setOnClickListener(this);
