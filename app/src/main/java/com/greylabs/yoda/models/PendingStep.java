@@ -652,8 +652,8 @@ public class PendingStep implements Serializable {
         String query = "select * "+
                 " " + " from " + TablePendingStep.pendingStep +" " +
                 " " + " where "+TablePendingStep.slotId+" = "+slotId+" " +
-                " " + " and ( "+TablePendingStep.status+"="+PendingStepStatus.DOING+" or " +
-                " " + " "+TablePendingStep.status+"="+PendingStepStatus.TODO+" )";
+                " " + " and ( "+TablePendingStep.status+"="+PendingStepStatus.DOING.ordinal()+" or " +
+                " " + " "+TablePendingStep.status+"="+PendingStepStatus.TODO.ordinal()+" )";
 
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
