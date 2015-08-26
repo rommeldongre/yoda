@@ -12,6 +12,7 @@ import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -44,7 +45,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ActAddNewStep extends ActionBarActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener, SeekBar.OnSeekBarChangeListener {
+public class ActAddNewStep extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener, SeekBar.OnSeekBarChangeListener {
 
     Toolbar toolbar;
     EditText edtStepName;
@@ -130,6 +131,7 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
     private void setDefaultValues() {
         sbTimeSingleStep.setProgress(prefs.getDefaultStepDuration());
         sbTimeSingleStep.setThumb(writeOnDrawable(R.drawable.ic_btn_plus_sign, String.valueOf(prefs.getDefaultStepDuration())));
+        sbNoOfSteps.setProgress(2);
         sbTimeSeriesStep.setProgress(prefs.getDefaultStepDuration());
         sbTimeSeriesStep.setThumb(writeOnDrawable(R.drawable.ic_btn_plus_sign, String.valueOf(prefs.getDefaultStepDuration())));
         if (prefs.isPriorityNewStepBottomMost()) {
@@ -185,6 +187,7 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
                     goalChosen = oldGoalPosition;
 //                    getGoalListFromLocal();
                     currentStep = new PendingStep(this);
+
                 }else {
                     currentStep = (PendingStep) intent.getSerializableExtra(Constants.STEP_OBJECT);
                     currentStep.initDatabase(this);
@@ -266,6 +269,7 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                goalChosen=0;
                 finish();
                 break;
             case R.id.actionSaveActAddNewStep:
@@ -398,6 +402,7 @@ public class ActAddNewStep extends ActionBarActivity implements View.OnClickList
                 alertStepAdded.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        goalChosen=0;
                         ActAddNewStep.this.finish();
                     }
                 });

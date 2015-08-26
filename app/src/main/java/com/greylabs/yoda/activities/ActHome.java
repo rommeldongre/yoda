@@ -21,6 +21,7 @@ import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.Slot;
 import com.greylabs.yoda.utils.BitmapUtility;
 import com.greylabs.yoda.utils.Constants;
+import com.greylabs.yoda.utils.Dialogues;
 import com.greylabs.yoda.utils.Prefs;
 import com.greylabs.yoda.views.GoalView;
 import com.greylabs.yoda.views.MyArcProgress;
@@ -116,7 +117,7 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
         populateNowInfo();
     }
 
-    private void populateNowInfo() {
+    public void populateNowInfo() {
         if(slot==null) slot=new Slot(this);
         if(nowPendingStep==null) nowPendingStep=new PendingStep(this);
         if(nowGoal==null) nowGoal=new Goal(this);
@@ -231,10 +232,13 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
 
             case R.id.arcTotalProgressActHome :
 
-                Intent intent1 = new Intent(this, ActNowFilter.class);
-                intent1.putExtra(Constants.CALLER, Constants.ACT_HOME);
-                intent1.putExtra(Constants.KEY_PENDING_STEP_OBJECT,nowPendingStep);
-                this.startActivity(intent1);
+                Dialogues dialogues = new Dialogues(this);
+                dialogues.showNowNotificationDialogue(Constants.ACT_HOME, null, nowPendingStep);
+//
+//                Intent intent1 = new Intent(this, ActNowFilter.class);
+//                intent1.putExtra(Constants.CALLER, Constants.ACT_HOME);
+//                intent1.putExtra(Constants.KEY_PENDING_STEP_OBJECT,nowPendingStep);
+//                this.startActivity(intent1);
                 break;
 
             case R.id.btnAddStepActHome :

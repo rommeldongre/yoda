@@ -229,7 +229,8 @@ public class Goal implements Serializable{
                 this.objective=c.getString(c.getColumnIndex(TableGoal.objective));
                 this.keyResult=c.getString(c.getColumnIndex(TableGoal.keyResult));
                 this.reason=c.getString(c.getColumnIndex(TableGoal.reason));
-                this.reward=c.getString(c.getColumnIndex(TableGoal.buddyEmail));
+                this.reward=c.getString(c.getColumnIndex(TableGoal.reward));
+                this.buddyEmail=c.getString(c.getColumnIndex(TableGoal.buddyEmail));
                 this.status=(byte)c.getInt(c.getColumnIndex(TableGoal.status));
                 this.dueDate= CalendarUtils.parseDate(c.getString(c.getColumnIndex(TableGoal.dueDate)));
                 this.timeBoxId=c.getInt(c.getColumnIndex(TableGoal.timeBoxId));
@@ -260,7 +261,8 @@ public class Goal implements Serializable{
                 goal.objective=c.getString(c.getColumnIndex(TableGoal.objective));
                 goal.keyResult=c.getString(c.getColumnIndex(TableGoal.keyResult));
                 goal.reason=c.getString(c.getColumnIndex(TableGoal.reason));
-                goal.reward=c.getString(c.getColumnIndex(TableGoal.buddyEmail));
+                goal.reward=c.getString(c.getColumnIndex(TableGoal.reward));
+                goal.buddyEmail=c.getString(c.getColumnIndex(TableGoal.buddyEmail));
                 goal.status=(byte)c.getInt(c.getColumnIndex(TableGoal.status));
                 goal.dueDate=CalendarUtils.parseDate(c.getString(c.getColumnIndex(TableGoal.dueDate)));
                 goal.timeBoxId=c.getInt(c.getColumnIndex(TableGoal.timeBoxId));
