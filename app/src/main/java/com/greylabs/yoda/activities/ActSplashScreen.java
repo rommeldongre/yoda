@@ -85,8 +85,6 @@ public class ActSplashScreen extends AppCompatActivity {
         public void handleMessage(Message msg) {
             prefs.setCalendarInitialized(true);
             checkIfOptionFromActQuickStartSelected();
-//            startActivity(new Intent(ActSplashScreen.this, ActQuickStart.class));
-//            ActSplashScreen.this.finish();
         }
     }
 

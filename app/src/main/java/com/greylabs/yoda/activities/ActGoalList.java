@@ -311,7 +311,8 @@ public class ActGoalList  extends AppCompatActivity implements OnClickOfRecycler
         TimeBox timeBox = new TimeBox(ActGoalList.this).get(prefs.getUnplannedTimeBoxId());
         yodaCalendar.setTimeBox(timeBox);
         yodaCalendar.rescheduleSteps(prefs.getStretchGoalId());
-        Logger.showMsg(ActGoalList.this, Constants.MSG_GOAL_DELETED);
+//        Logger.showMsg(ActGoalList.this, Constants.MSG_GOAL_DELETED);
+        Logger.showSnack(this, toolbar, Constants.MSG_GOAL_DELETED);
         //sync code
         GoogleSync.getInstance(this).sync();
         //sync code
@@ -355,7 +356,8 @@ public class ActGoalList  extends AppCompatActivity implements OnClickOfRecycler
         mAdapter.notifyDataSetChanged();
         yodaCalendar = new YodaCalendar(ActGoalList.this);
         yodaCalendar.detachTimeBox(goalId);
-        Logger.showMsg(ActGoalList.this, Constants.MSG_GOAL_DELETED);
+//        Logger.showMsg(ActGoalList.this, Constants.MSG_GOAL_DELETED);
+        Logger.showSnack(this, toolbar, Constants.MSG_GOAL_DELETED);
         //sync code
         GoogleSync.getInstance(this).sync();
         //sync code

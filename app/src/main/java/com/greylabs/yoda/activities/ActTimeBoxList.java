@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,7 +15,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.greylabs.yoda.R;
-import com.greylabs.yoda.adapters.AdapterGoalSpinner;
 import com.greylabs.yoda.adapters.AdapterRecyclerViewActTimeBoxList;
 import com.greylabs.yoda.interfaces.OnClickOfRecyclerViewActTimeboxList;
 import com.greylabs.yoda.models.TimeBox;
@@ -174,7 +172,8 @@ public class ActTimeBoxList extends AppCompatActivity implements OnClickOfRecycl
                                 YodaCalendar yodaCalendar=new YodaCalendar(ActTimeBoxList.this);
                                 yodaCalendar.detachTimeBox(timeBoxArrayList.get(Position).getId());
                                 timeBoxArrayList.get(Position).delete();
-                                Logger.showMsg(ActTimeBoxList.this, Constants.MSG_TIMEBOX_DELETED);
+//                                Logger.showMsg(ActTimeBoxList.this, Constants.MSG_TIMEBOX_DELETED);
+                                Logger.showSnack(ActTimeBoxList.this, toolbar, Constants.MSG_TIMEBOX_DELETED);
                                 getTimeBoxArrayFromLocal();
                                 mAdapter.notifyDataSetChanged();
                             }

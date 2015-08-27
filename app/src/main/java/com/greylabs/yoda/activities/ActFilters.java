@@ -13,7 +13,6 @@ import com.greylabs.yoda.adapters.PagerAdapterActFilters;
 public class ActFilters  extends AppCompatActivity {
 
     private Toolbar toolbar;
-
     private PagerSlidingTabStrip tabStrip;
     private ViewPager viewPager;
     private PagerAdapterActFilters pagerAdapter;

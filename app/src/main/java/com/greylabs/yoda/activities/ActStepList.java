@@ -146,25 +146,6 @@ public class ActStepList extends AppCompatActivity implements onClickOfRecyclerV
                     pendingStepsArrayList.add(stepArrayList.get(i));
             }
         }
-        //--old
-//        if(currentGoal != null && pendingStep.getAll(currentGoal.getId()) != null)
-//            stepArrayList.addAll(pendingStep.getAll(currentGoal.getId()));
-//        //get all pending steps
-//        for(int i=0;i<stepArrayList.size();i++){
-//            if(!stepArrayList.get(i).getPendingStepStatus().equals(PendingStep.PendingStepStatus.COMPLETED))
-//                pendingStepsArrayList.add(stepArrayList.get(i));
-//        }
-//        List<PendingStep> temp=pendingStep.getAll(PendingStep.PendingStepStatus.TODO,
-//                PendingStep.PendingStepDeleted.SHOW_NOT_DELETED,currentGoal.getId());
-//        if(currentGoal!=null && temp!=null){
-//            pendingStepsArrayList.addAll(temp);
-//        }
-//        temp=pendingStep.getAll(PendingStep.PendingStepStatus.COMPLETED,
-//                PendingStep.PendingStepDeleted.SHOW_NOT_DELETED,currentGoal.getId());
-//        if(temp!=null){
-//            stepArrayList.addAll(temp);
-//            stepArrayList.addAll(pendingStepsArrayList);
-//        }
         checkForEmptyViewVisibility(stepArrayList, getString(R.string.tvEmptyViewActStepList));
     }
 
@@ -355,7 +336,8 @@ public class ActStepList extends AppCompatActivity implements onClickOfRecyclerV
                                 pendingStep.save();
                                 break;
                         }
-                        Logger.showMsg(ActStepList.this, Constants.MSG_STEP_DELETED);
+//                        Logger.showMsg(ActStepList.this, Constants.MSG_STEP_DELETED);
+                        Logger.showSnack(ActStepList.this, toolbar, Constants.MSG_STEP_DELETED);
                         //reschedule needed here
                         TimeBox currentTimeBox = new TimeBox(ActStepList.this).get(currentGoal.getTimeBoxId());
                         YodaCalendar yodaCalendar = new YodaCalendar(ActStepList.this, currentTimeBox);

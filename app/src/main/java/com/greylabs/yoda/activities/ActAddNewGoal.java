@@ -15,8 +15,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.BaseColumns;
 import android.provider.ContactsContract;
-import android.support.v4.widget.SearchViewCompat;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.SearchView;
@@ -49,7 +47,6 @@ import com.greylabs.yoda.utils.Prefs;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.ServiceLoader;
 
 public class ActAddNewGoal extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
@@ -298,7 +295,7 @@ public class ActAddNewGoal extends AppCompatActivity implements View.OnClickList
                         //sync code
                         GoogleSync.getInstance(this).sync();
                         //sync code
-                        Logger.showMsg(this, getResources().getString(R.string.msgGoalSavedActAddNewGoal));
+                        Logger.showMsg(this, getString(R.string.msgGoalSavedActAddNewGoal));
                         switch (caller) {
                             case Constants.ACT_ADD_NEW_STEP:
                                 Intent secIntent = new Intent();
@@ -314,13 +311,16 @@ public class ActAddNewGoal extends AppCompatActivity implements View.OnClickList
                         this.finish();
                     }
                 }else {
-                    Logger.showMsg(this, getResources().getString(R.string.msgEnterGoalNickNameActAddNewGoal));
+//                    Logger.showMsg(this, getString(R.string.msgEnterGoalNickNameActAddNewGoal));
+                    Logger.showSnack(this, toolbar, getString(R.string.msgEnterGoalNickNameActAddNewGoal));
                 }
             }else {
-                Logger.showMsg(this, getResources().getString(R.string.msgSelectTimeBoxActAddNewGoal));
+//                Logger.showMsg(this, getResources().getString(R.string.msgSelectTimeBoxActAddNewGoal));
+                Logger.showSnack(this, toolbar, getString(R.string.msgSelectTimeBoxActAddNewGoal));
             }
         }else {
-            Logger.showMsg(this, getResources().getString(R.string.msgSelectTimeBoxActAddNewGoal));
+//            Logger.showMsg(this, getString(R.string.msgSelectTimeBoxActAddNewGoal));
+            Logger.showSnack(this, toolbar, getString(R.string.msgSelectTimeBoxActAddNewGoal));
         }
     }
 
@@ -385,7 +385,8 @@ public class ActAddNewGoal extends AppCompatActivity implements View.OnClickList
                 edtGoalBuddy.setText(emailId);
             }else {
                 collapseSearchView();
-                Logger.showMsg(this, getString(R.string.msgNoEmailIdAttached));
+//                Logger.showMsg(this, getString(R.string.msgNoEmailIdAttached));
+                Logger.showSnack(this, toolbar, getString(R.string.msgNoEmailIdAttached));
             }
         } else if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             // handles a search query

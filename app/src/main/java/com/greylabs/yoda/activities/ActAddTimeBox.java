@@ -3,7 +3,6 @@ package com.greylabs.yoda.activities;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -706,11 +705,14 @@ public class ActAddTimeBox extends AppCompatActivity implements RadioGroup.OnChe
             prefs.setColorCodePosition(nextPosition);
 
         }else if(timeBoxWhenSet.isEmpty()){
-            Logger.showMsg(this,getString(R.string.msgActCreateTimeBoxSelectWhenTime));
+//            Logger.showMsg(this,getString(R.string.msgActCreateTimeBoxSelectWhenTime));
+            Logger.showSnack(this, toolbar, getString(R.string.msgActCreateTimeBoxSelectWhenTime));
         }else if(timeBoxOn==null || timeBoxOnSubValueSet.isEmpty()){
-            Logger.showMsg(this,getString(R.string.msgActCreateTimeBoxSelectOnTime));
+//            Logger.showMsg(this,getString(R.string.msgActCreateTimeBoxSelectOnTime));
+            Logger.showSnack(this, toolbar, getString(R.string.msgActCreateTimeBoxSelectOnTime));
         }else if(timeBoxTill==null){
-            Logger.showMsg(this,getString(R.string.msgActCreateTimeBoxSelectTillTime));
+//            Logger.showMsg(this,getString(R.string.msgActCreateTimeBoxSelectTillTime));
+            Logger.showSnack(this, toolbar, getString(R.string.msgActCreateTimeBoxSelectTillTime));
         }
         if(currentTimeBox!=null && edtSummary.getText()!=null && !edtSummary.getText().equals("")){
             currentTimeBox.setNickName(edtSummary.getText().toString());

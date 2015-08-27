@@ -3,7 +3,6 @@ package com.greylabs.yoda.activities;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -38,7 +37,6 @@ import com.greylabs.yoda.views.CircleView;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 public class ActGoalDetails extends AppCompatActivity implements View.OnClickListener {
 

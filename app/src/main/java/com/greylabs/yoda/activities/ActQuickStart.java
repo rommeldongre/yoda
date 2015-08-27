@@ -23,7 +23,6 @@ import com.greylabs.yoda.utils.Prefs;
 
 public class ActQuickStart extends AppCompatActivity implements View.OnClickListener {
 
-//    Button rlQuickStart, rlImport, rlNewStep;
     RelativeLayout rlQuickStart, rlImport, rlNewStep;
 
     @Override
@@ -62,7 +61,6 @@ public class ActQuickStart extends AppCompatActivity implements View.OnClickList
                 break;
 
             case R.id.rlImportTaskActQuickStart :
-                //new ImportTaskAsyncThread(this,new MyHandler()).execute();
                 if(ConnectionUtils.isNetworkAvailable(this)) {
                     final GoogleAccount googleAccount = new GoogleAccount(this);
                     googleAccount.chooseAccountDialog(GoogleAccount.ACCOUNT_TYPE, "Choose Account", new AdapterView.OnItemClickListener() {

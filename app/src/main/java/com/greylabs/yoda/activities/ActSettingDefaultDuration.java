@@ -67,12 +67,6 @@ public class ActSettingDefaultDuration extends AppCompatActivity implements Seek
         sbYodaSaysNotification.setOnSeekBarChangeListener(this);
 //        sbExportToCalendar.setOnSeekBarChangeListener(this);
         btnResetYoda.setOnClickListener(this);
-
-//        rbTopMost.setOnCheckedChangeListener(this);
-//        rbBottomMost.setOnCheckedChangeListener(this);
-//        rbDontExpire.setOnCheckedChangeListener(this);
-//        rbExpire.setOnCheckedChangeListener(this);
-
         rgPriorityNewStep.setOnCheckedChangeListener(this);
         rgBehaviourOfExpiredSteps.setOnCheckedChangeListener(this);
 
@@ -101,12 +95,6 @@ public class ActSettingDefaultDuration extends AppCompatActivity implements Seek
         }else {
             rbExpire.setChecked(true);
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu_act_add_new_step, menu);
-        return true;
     }
 
     @Override
@@ -182,28 +170,6 @@ public class ActSettingDefaultDuration extends AppCompatActivity implements Seek
         canvas.drawText(text, bm.getWidth()/2 - textPaint.measureText(text)/2, bm.getHeight()/2+7, textPaint);
         return new BitmapDrawable(bm);
     }
-
-//    @Override
-//    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//        switch (buttonView.getId()){
-//
-//            case R.id.rbTopMostActSettingsDefaultDuration :
-//                Logger.showMsg(this, "Top Most");
-//                break;
-//
-//            case R.id.rbBottomMostActSettingsDefaultDuration :
-//                Logger.showMsg(this, "Bottom Most");
-//                break;
-//
-//            case R.id.rbDontExpireActSettingsDefaultDuration :
-//                Logger.showMsg(this, "Dont expire");
-//                break;
-//
-//            case R.id.rbExpireActSettingsDefaultDuration :
-//                Logger.showMsg(this, "Expire");
-//                break;
-//        }
-//    }
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {

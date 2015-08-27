@@ -413,7 +413,8 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                 alertStepAdded.show();
             }
         } else {
-            Logger.showMsg(this, getResources().getString(R.string.msgEnterStepNameActAddNewStep));
+//            Logger.showMsg(this, getString(R.string.msgEnterStepNameActAddNewStep));
+            Logger.showSnack(this, toolbar, getString(R.string.msgEnterStepNameActAddNewStep));
         }
     }
 
