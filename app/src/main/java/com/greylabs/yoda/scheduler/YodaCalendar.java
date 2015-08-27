@@ -184,25 +184,31 @@ public class YodaCalendar {
         int quarterOfYear=-1;
         int year=-1;
 
+        boolean isChanged=false;
         Day day=new Day(context);
         cal=Calendar.getInstance();Calendar cal1=Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 0);cal1.set(Calendar.HOUR_OF_DAY, 0);
         cal.set(Calendar.MINUTE, 0);cal1.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);cal1.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);cal1.set(Calendar.MILLISECOND, 0);
+        Logger.log(TAG,"Initialized calendat variables");
 
         //get all days of calendar
         List<Day> days=day.getAll();
         day=days.get(0);
+        Logger.log(TAG,"First day in Yoda Calendar :"+day.toString());
         int daysDeleted=0;
         Calendar temp=Calendar.getInstance();
         if(day.getDate().compareTo(cal.getTime())>0){
+            Logger.log(TAG,"First date in yoda calendar is greater than current date");
             //first entry in the Calendar DB  is greater than  current
             String startDate=CalendarUtils.getSqLiteDateFormat(cal);
             cal1.setTime(day.getDate());
             String endDate=CalendarUtils.getSqLiteDateFormat(cal1);
             //daysDeleted=day.deleteNextDays(startDate, endDate);
             int numberOfDays=cal1.get(Calendar.DAY_OF_YEAR)-cal.get(Calendar.DAY_OF_YEAR);
+            Logger.log(TAG,"First date:"+day.getDate().toString()+" and Current date:"+cal.getTime().toString()+" " +
+                    " and their Difference:"+numberOfDays);
             temp.setTime(cal.getTime());
             for(int i=1;i<=numberOfDays;i++){
                 dayOfYear=i;
@@ -221,6 +227,7 @@ public class YodaCalendar {
                 day.setQuarterOfYear(quarterOfYear);
                 day.setYear(year);
                 day.save();
+                Logger.log(TAG, "Day added:" + day.toString());
                 slot=new Slot(context);
                 for(int j=0;j<6;j++){
                     slot.setId(0);
@@ -231,17 +238,22 @@ public class YodaCalendar {
                     slot.setTimeBoxId(prefs.getUnplannedTimeBoxId());
                     slot.setDayId(day.getId());
                     slot.save();
+                    Logger.log(TAG,"Slot added:"+slot.toString());
                 }
+                Logger.log(TAG, "Day Deleted :" + days.get(days.size() - i).toString());
                 int count=days.get(days.size()-i).delete();
                 cal.add(Calendar.DATE, 1);
             }
+            isChanged=true;
         }
         else if(day.getDate().compareTo(cal.getTime())<0){
+            Logger.log(TAG,"First date in yoda calendar is less than current date");
             //first entry in the Calendar DB  is less than  current
             cal1.setTime(day.getDate());
             String startDate=CalendarUtils.getSqLiteDateFormat(cal1);
             String endDate=CalendarUtils.getSqLiteDateFormat(cal);
             daysDeleted=day.deletePrevDays(startDate, endDate);
+            Logger.log(TAG,"Number of Days deleted at the end of Yoda Calendar :"+daysDeleted);
             int numberOfDays=cal.get(Calendar.DAY_OF_YEAR)-cal1.get(Calendar.DAY_OF_YEAR);
             cal.setTime(days.get(days.size() - 1).getDate());
             cal.add(Calendar.DATE, 1);
@@ -275,22 +287,25 @@ public class YodaCalendar {
                 }
                 cal.add(Calendar.DATE,1);
             }
+            isChanged=true;
         }
 
         //set dayOfYear
-        int maxDaysOfYear=getMaxDays(cal);
-        days=day.getAll();
-        for(int i=1;i<=maxDaysOfYear;i++) {
-            days.get(i-1).setDayOfYear(i);
-            days.get(i-1).save();
-        }
-        //update for all timeboxes having forever as Till time-need optimization
-        List<TimeBox> timeBoxes=new TimeBox(context).getAll(TimeBox.TimeBoxStatus.ACTIVE);
-        Goal goal=new Goal(context);
-        for(TimeBox timeBox:timeBoxes){
-            if(timeBox.getTillType()== TimeBoxTill.FOREVER){
-                this.timeBox=timeBox;
-                attachTimeBox(goal.getGoalId(timeBox.getId()));
+        if(isChanged) {
+            int maxDaysOfYear = getMaxDays(cal);
+            days = day.getAll();
+            for (int i = 1; i <= maxDaysOfYear; i++) {
+                days.get(i - 1).setDayOfYear(i);
+                days.get(i - 1).save();
+            }
+            //update for all timeboxes having forever as Till time-need optimization
+            List<TimeBox> timeBoxes = new TimeBox(context).getAll(TimeBox.TimeBoxStatus.ACTIVE);
+            Goal goal = new Goal(context);
+            for (TimeBox timeBox : timeBoxes) {
+                if (timeBox.getTillType() == TimeBoxTill.FOREVER) {
+                    this.timeBox = timeBox;
+                    attachTimeBox(goal.getGoalId(timeBox.getId()));
+                }
             }
         }
     }

@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.scheduler.AlarmScheduler;
+import com.greylabs.yoda.scheduler.YodaCalendar;
 
 import org.acra.ACRA;
 import org.acra.ReportField;

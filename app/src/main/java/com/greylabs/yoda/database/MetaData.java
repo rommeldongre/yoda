@@ -233,9 +233,16 @@ public class MetaData {
         public static final String createTrigger="" +
                 "create trigger if not exists  "+ triggerUpdatePendingStepOnSlotDelete+ " before delete on "+TableSlot.slot+" " +
                 "begin" +
-                "    update  "+TablePendingStep.pendingStep+" set " +TablePendingStep.slotId+" = 0 , " +
-                "     "+TablePendingStep.status+" = "+ PendingStep.PendingStepStatus.MISSED.ordinal()+"  "+
-                "    where "+"old."+TableSlot.id+"="+TablePendingStep.pendingStep+"."+TablePendingStep.slotId+" ;" +
+                "    update  "+TablePendingStep.pendingStep+" set " +TablePendingStep.slotId+" = 0  " +
+                "    where "+"old."+TableSlot.id+" = "+TablePendingStep.pendingStep+"."+TablePendingStep.slotId+" " +
+                "    and "+TablePendingStep.pendingStep+"."+TablePendingStep.status+" = "+ PendingStep.PendingStepStatus.COMPLETED.ordinal() +" ;"+
+                "   " +
+                "    update  "+TablePendingStep.pendingStep+" set " +TablePendingStep.slotId+" = 0  ," +
+                "     "+TablePendingStep.status+"  = "+ PendingStep.PendingStepStatus.MISSED.ordinal()+"  "+
+                "    where "+"old."+TableSlot.id+" = "+TablePendingStep.pendingStep+"."+TablePendingStep.slotId+" " +
+                "    and ( "+TablePendingStep.pendingStep+"."+TablePendingStep.status+" = "+ PendingStep.PendingStepStatus.TODO.ordinal() +" " +
+                "     or  "+TablePendingStep.pendingStep+"."+TablePendingStep.status+" = "+ PendingStep.PendingStepStatus.DOING.ordinal() +" "+
+                "     or  "+TablePendingStep.pendingStep+"."+TablePendingStep.status+" = "+ PendingStep.PendingStepStatus.MISSED.ordinal() +" ); "+
                 " end;  ";
     }
 }

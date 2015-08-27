@@ -182,12 +182,12 @@ public class AlarmScheduler implements Serializable{
     }
 
     public  void setCalendarUpdateInterval(){
-        Intent broadcastReceiver = new Intent(context, DateChangeReceiver.class);
+        Intent broadcastReceiver = new Intent(context, DayChangeReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context,2,broadcastReceiver,0);
         Calendar calendar=Calendar.getInstance();
         calendar.add(Calendar.DATE, 1);
-        calendar.set(Calendar.HOUR_OF_DAY, 1);
-        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 15);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
         this.setRepeatingAlarm(calendar, AlarmManager.INTERVAL_DAY, pendingIntent);

@@ -215,10 +215,10 @@ public class Slot {
      */
     public List<Slot> getAll(){
         List<Slot> slots = null;
-        String query=" select * from "+TableSlot.slot+" " +
-                " "+"where "+TableSlot.dayId+" = "+dayId+
-                " "+" order by strftime('%Y-%m-%d %H:%M:%S',"+TableSlot.scheduleDate+") asc , " +
-                " "+" "+TableSlot.when+" asc " ;
+        String query=" select * from "+TableSlot.slot;//+ " " +
+//                " "+"where "+TableSlot.dayId+" = "+dayId+
+//                " "+" order by strftime('%Y-%m-%d %H:%M:%S',"+TableSlot.scheduleDate+") asc , " +
+//                " "+" "+TableSlot.when+" asc " ;
 
         SQLiteDatabase db=database.getReadableDatabase();
         Cursor c=db.rawQuery(query,null);

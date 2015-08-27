@@ -16,9 +16,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.greylabs.yoda.R;
+import com.greylabs.yoda.models.Day;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.Slot;
+import com.greylabs.yoda.models.TimeBox;
+import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.BitmapUtility;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Dialogues;
@@ -61,8 +64,17 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        //test code
+//        Day day=new Day(this);
+//        List<Day> days=day.getAll();
+//        Slot slot=new Slot(this);
+//        List<Slot> slots=slot.getAll();
+//        YodaCalendar yodaCalendar=new YodaCalendar(this);
+//        yodaCalendar.updateCalendar();
+        //test code end , delete or comment out this before giving to client.
         initialize();
     }
+
 
     private void initialize() {
         layoutToBeHidden = (RelativeLayout) findViewById(R.id.LayoutToBeHiddenActHome);
