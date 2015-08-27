@@ -15,3 +15,41 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+# keep this class so that logging will show 'ACRA' and not a obfuscated name like 'a'.
+# Note: if you are removing log messages elsewhere in this file then this isn't necessary
+#-keep class com.google.**
+#-dontwarn com.google.**
+
+-keep class com.google.**
+-dontnote libcore.icu.ICU
+-dontnote sun.misc.Unsafe
+
+-keep class org.acra.ACRA {
+    *;
+}
+
+# keep this around for some enums that ACRA needs
+-keep class org.acra.ReportingInteractionMode {
+    *;
+}
+
+-keepnames class org.acra.sender.HttpSender$** {
+    *;
+}
+
+-keepnames class org.acra.ReportField {
+    *;
+}
+
+# keep this otherwise it is removed by ProGuard
+-keep public class org.acra.ErrorReporter{
+    public void addCustomData(java.lang.String,java.lang.String);
+    public void putCustomData(java.lang.String,java.lang.String);
+    public void removeCustomData(java.lang.String);
+}
+
+# keep this otherwise it is removed by ProGuard
+-keep public class org.acra.ErrorReporter{
+    public void handleSilentException(java.lang.Throwable);
+}
