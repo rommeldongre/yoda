@@ -5,15 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.greylabs.yoda.R;
+import com.greylabs.yoda.interfaces.OnCheckExpandableList;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
-import com.greylabs.yoda.models.TimeBox;
-import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.CalendarUtils;
 import com.greylabs.yoda.views.TouchCheckBox;
 
@@ -24,19 +21,20 @@ public class AdapterExpandableList extends BaseExpandableListAdapter {
 
     private Context context;
     private List<Goal> goalList;
-    private Map<Long, List<PendingStep>> _listDataChild;
+    private Map<Long, List<PendingStep>> goalIdPendingStepMap;
+    private OnCheckExpandableList onCheckExpandableList;
 
     public AdapterExpandableList(Context context, List<Goal> listDataHeader,
                                  Map<Long, List<PendingStep>> listChildData) {
         this.context = context;
         this.goalList = listDataHeader;
-        this._listDataChild = listChildData;
+        this.goalIdPendingStepMap = listChildData;
     }
 
     @Override
     public Object getChild(int groupPosition, int childPosititon) {
         Goal goal=this.goalList.get(groupPosition);
-        return this._listDataChild.get(new Long(goal.getId()));
+        return this.goalIdPendingStepMap.get(new Long(goal.getId()));
     }
 
     @Override
@@ -48,7 +46,7 @@ public class AdapterExpandableList extends BaseExpandableListAdapter {
     public View getChildView(final int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
-        List<PendingStep> ps= (List<PendingStep>) getChild(groupPosition, childPosition);
+        final List<PendingStep> ps= (List<PendingStep>) getChild(groupPosition, childPosition);
         final PendingStep pendingStep=ps.get(childPosition);
         if (convertView == null) {
             LayoutInflater inflater = (LayoutInflater) this.context
@@ -84,18 +82,31 @@ public class AdapterExpandableList extends BaseExpandableListAdapter {
                         pendingStep.updateSubSteps();
                         pendingStep.freeSlots();
                     }
-                }else {
-                    pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
-                    pendingStep.save();
-                    if(pendingStep.getPendingStepType()== PendingStep.PendingStepType.SPLIT_STEP ||
-                            pendingStep.getPendingStepType()== PendingStep.PendingStepType.SERIES_STEP){
-                        pendingStep.updateSubSteps();
+                    ps.remove(childPosition);
+                    if(ps.size()==0){
+                        Goal removedGoal = goalList.remove(groupPosition);
+                        try {
+                            onCheckExpandableList = (OnCheckExpandableList) context;
+                        } catch (ClassCastException e) {
+                            throw new ClassCastException(context.toString()
+                                    + " must implement OnCheckExpandableList");
+                        }
+                        onCheckExpandableList.onCheckExpandableList(groupPosition, childPosition, removedGoal);
                     }
-                    Goal currentGoal = goalList.get(groupPosition);
-                    TimeBox currentTimeBox = new TimeBox(context).get(currentGoal.getTimeBoxId());
-                    YodaCalendar yodaCalendar = new YodaCalendar(context, currentTimeBox);
-                    yodaCalendar.rescheduleSteps(currentGoal.getId());
+                    AdapterExpandableList.this.notifyDataSetChanged();
                 }
+//                else {
+//                    pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+//                    pendingStep.save();
+//                    if(pendingStep.getPendingStepType()== PendingStep.PendingStepType.SPLIT_STEP ||
+//                            pendingStep.getPendingStepType()== PendingStep.PendingStepType.SERIES_STEP){
+//                        pendingStep.updateSubSteps();
+//                    }
+//                    Goal currentGoal = goalList.get(groupPosition);
+//                    TimeBox currentTimeBox = new TimeBox(context).get(currentGoal.getTimeBoxId());
+//                    YodaCalendar yodaCalendar = new YodaCalendar(context, currentTimeBox);
+//                    yodaCalendar.rescheduleSteps(currentGoal.getId());
+//                }
             }
         });
         return convertView;
@@ -104,7 +115,7 @@ public class AdapterExpandableList extends BaseExpandableListAdapter {
     @Override
     public int getChildrenCount(int groupPosition) {
         Goal goal=this.goalList.get(groupPosition);
-        return this._listDataChild.get(new Long(goal.getId()))
+        return this.goalIdPendingStepMap.get(new Long(goal.getId()))
                 .size();
     }
 

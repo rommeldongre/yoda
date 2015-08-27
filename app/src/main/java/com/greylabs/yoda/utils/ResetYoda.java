@@ -36,7 +36,7 @@ public class ResetYoda {
 //         database.getWritableDatabase().execSQL("DROP TABLE IF EXISTS " + TablePendingStep.pendingStep);
 //         database.getWritableDatabase().execSQL("DROP TABLE IF EXISTS " + TableCompletedStep.completedStep);
 
-        
+
         database.getWritableDatabase().execSQL("DELETE FROM " + TableDay.day);
         database.getWritableDatabase().execSQL("DELETE FROM " + TableSlot.slot);
         database.getWritableDatabase().execSQL("DELETE FROM " + TableTimeBox.timeBox);
@@ -51,12 +51,14 @@ public class ResetYoda {
         List<Goal> goals=new Goal(context).getAll(Goal.GoalDeleted.SHOW_NOT_DELETED);
         PendingStep pendingStep=new PendingStep(context);
         AlarmScheduler alarmScheduler=new AlarmScheduler(context);
-        for(Goal goal:goals){
-            List<Integer> stepIds=pendingStep.getStepIds(goal.getId());
-            if(stepIds!=null){
-                for (Integer i:stepIds){
-                    alarmScheduler.setStepId(i);
-                    alarmScheduler.cancel();
+        if(goals!=null) {
+            for (Goal goal : goals) {
+                List<Integer> stepIds = pendingStep.getStepIds(goal.getId());
+                if (stepIds != null) {
+                    for (Integer i : stepIds) {
+                        alarmScheduler.setStepId(i);
+                        alarmScheduler.cancel();
+                    }
                 }
             }
         }

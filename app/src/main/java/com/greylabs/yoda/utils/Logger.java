@@ -36,4 +36,16 @@ public class Logger {
         textView.setTextColor(Color.WHITE);
         snackbar.show();
     }
+
+    public static  void showSnack(Context context, View view, String message, int LENGTH){
+        Snackbar snackbar = Snackbar
+                .make(view, message, LENGTH);
+//                .setAction("OK", mOnClickListener);
+        snackbar.setActionTextColor(Color.YELLOW);
+        View snackbarView = snackbar.getView();
+        snackbarView.setBackgroundColor(context.getResources().getColor(R.color.ColorPrimary));
+        TextView textView = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(Color.WHITE);
+        snackbar.show();
+    }
 }

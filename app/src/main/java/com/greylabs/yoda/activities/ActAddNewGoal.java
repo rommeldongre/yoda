@@ -15,6 +15,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.BaseColumns;
 import android.provider.ContactsContract;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.SearchView;
@@ -386,7 +387,7 @@ public class ActAddNewGoal extends AppCompatActivity implements View.OnClickList
             }else {
                 collapseSearchView();
 //                Logger.showMsg(this, getString(R.string.msgNoEmailIdAttached));
-                Logger.showSnack(this, toolbar, getString(R.string.msgNoEmailIdAttached));
+                Logger.showSnack(this, toolbar, getString(R.string.msgNoEmailIdAttached), Snackbar.LENGTH_LONG);
             }
         } else if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             // handles a search query

@@ -64,6 +64,7 @@ public abstract class TaskAccount implements AdapterView.OnItemClickListener{
         builder.setView(lv);
         dialog = builder.create();
         dialog.setOnDismissListener(dismissListener);
+        dialog.setCancelable(false);
         dialog.show();
     }
     public void dismissChooseAccountDialog() {

@@ -121,4 +121,5 @@ public class Constants {
     public static final String ACCOUNT_AUTO_SYNC ="Auto Sync" ;
     public static final String USER_ACCOUNT = "USER_ACCOUNT";
     public static final String MSG_NO_CONNECTION = "Check your Internet Connection and try again.";
+    public static final String TAG_FRAG = "FRAG_TAG";
 }
