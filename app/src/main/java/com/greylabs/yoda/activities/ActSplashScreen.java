@@ -89,11 +89,11 @@ public class ActSplashScreen extends AppCompatActivity {
     }
 
     private void checkIfOptionFromActQuickStartSelected() {
-        if(prefs.isOptionFromActQuickStartSelected() == false){
-            startActivity(new Intent(ActSplashScreen.this, ActQuickStart.class));
-            ActSplashScreen.this.finish();
-        }else if(prefs.isOptionFromActQuickStartSelected()) {
+        if(prefs.isOptionFromActQuickStartSelected()) {
             startActivity(new Intent(ActSplashScreen.this, ActHome.class));
+            ActSplashScreen.this.finish();
+        }else {
+            startActivity(new Intent(ActSplashScreen.this, ActQuickStart.class));
             ActSplashScreen.this.finish();
         }
     }

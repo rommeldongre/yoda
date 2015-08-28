@@ -65,12 +65,12 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         //test code
-//        Day day=new Day(this);
-//        List<Day> days=day.getAll();
-//        Slot slot=new Slot(this);
-//        List<Slot> slots=slot.getAll();
-//        YodaCalendar yodaCalendar=new YodaCalendar(this);
-//        yodaCalendar.updateCalendar();
+        Day day=new Day(this);
+        List<Day> days=day.getAll();
+        Slot slot=new Slot(this);
+        List<Slot> slots=slot.getAll();
+        YodaCalendar yodaCalendar=new YodaCalendar(this);
+        yodaCalendar.updateCalendar();
         //test code end , delete or comment out this before giving to client.
         initialize();
     }

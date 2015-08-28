@@ -24,6 +24,7 @@ import com.greylabs.yoda.utils.Prefs;
 public class ActQuickStart extends AppCompatActivity implements View.OnClickListener {
 
     RelativeLayout rlQuickStart, rlImport, rlNewStep;
+    Prefs prefs = Prefs.getInstance(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +50,6 @@ public class ActQuickStart extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        final Prefs prefs = Prefs.getInstance(this);
-        prefs.setOptionFromActQuickStartSelected(true);
         switch(v.getId()){
             case R.id.rlQuickStartActQuickStart :
                 new QuickStartAsyncTask(this, new MyHandler()).execute();
@@ -66,20 +65,19 @@ public class ActQuickStart extends AppCompatActivity implements View.OnClickList
                     googleAccount.chooseAccountDialog(GoogleAccount.ACCOUNT_TYPE, "Choose Account", new AdapterView.OnItemClickListener() {
                         @Override
                         public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-
                             prefs.setDefaultAccountEmailId(googleAccount.getUsers().get(position));
                             prefs.setDefaultAccountType(AccountType.GOOGLE.ordinal());
                             googleAccount.dismissChooseAccountDialog();
+                            new ImportTaskAsyncThread(ActQuickStart.this, new MyHandler()).execute();
                         }
                     }, new DialogInterface.OnDismissListener() {
                         @Override
                         public void onDismiss(DialogInterface dialogInterface) {
-                            new ImportTaskAsyncThread(ActQuickStart.this, new MyHandler()).execute();
+//                            new ImportTaskAsyncThread(ActQuickStart.this, new MyHandler()).execute();
                         }
                     });
                 }else{
-                    ConnectionUtils.showNetworkNotAvailableDialog(this,"Check your Internet Connection and try again. You can" +
-                            "You can choose Quick Start or New Step");
+                    ConnectionUtils.showNetworkNotAvailableDialog(this,getString(R.string.msgNoNetworkConnectionActQuiCkStart));
                 }
                 break;
         }
@@ -89,6 +87,7 @@ public class ActQuickStart extends AppCompatActivity implements View.OnClickList
     class MyHandler extends Handler {
         @Override
         public void handleMessage(Message msg) {
+            prefs.setOptionFromActQuickStartSelected(true);
             startActivity(new Intent(ActQuickStart.this, ActHome.class));
             ActQuickStart.this.finish();
         }
