@@ -323,8 +323,8 @@ public class YodaCalendar {
             for (Slot slot : slots) {
                 //following checks that any Unplanned Slot is assigned to some step or not
                 // If it is assigned then keep this slot as Unplanned TimeBox
-                if( pendingStep.isSlotAssigned(slot.getId()))
-                    continue;
+//                if( pendingStep.isSlotAssigned(slot.getId()))
+//                    continue;
                 slot.setTimeBoxId(timeBox.getId());
                 slot.setGoalId(goalId);
                 slot.setTime(Constants.MAX_SLOT_DURATION);
@@ -332,6 +332,7 @@ public class YodaCalendar {
                 slotCount++;
             }
         }
+        rescheduleSteps(prefs.getStretchGoalId());
         return slotCount;
     }
 
