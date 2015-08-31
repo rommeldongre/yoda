@@ -6,9 +6,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.Toolbar;
@@ -17,18 +19,20 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.apis.googleacc.GoogleAccount;
 import com.greylabs.yoda.enums.AccountType;
+import com.greylabs.yoda.threads.AsyncTaskThread;
 import com.greylabs.yoda.utils.ConnectionUtils;
 import com.greylabs.yoda.utils.Constants;
+import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.Prefs;
 import com.greylabs.yoda.views.MyFloatingActionButton;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -38,6 +42,7 @@ public class ActSettingsGoogle extends AppCompatActivity implements View.OnClick
     Spinner accountSpinner;
     SwitchCompat autoSyncSwitch;
     MyFloatingActionButton btnExportNow, btnSyncNow, btnImportNow;
+    ProgressBar pbSyncNow, pbImportNow, pbExportNow;
     SeekBar sbExportToCalendar;
     Paint thumbPaint, textPaint;
     ArrayList<Account> accountArrayList = new ArrayList<>();
@@ -77,6 +82,9 @@ public class ActSettingsGoogle extends AppCompatActivity implements View.OnClick
         btnImportNow = (MyFloatingActionButton) findViewById(R.id.btnImportNowFromGTasksActSettingsGoogle);
         btnExportNow = (MyFloatingActionButton) findViewById(R.id.btnExportNowToGoogleCalActSettingsGoogle);
         sbExportToCalendar = (SeekBar) findViewById(R.id.sbDefaultExportCalDurationActSettingsGoogle);
+        pbSyncNow = (ProgressBar) findViewById(R.id.pbSyncNowWithGoogleActSettingsGoogle);
+        pbImportNow = (ProgressBar) findViewById(R.id.pbImportNowFromGTasksActSettingsGoogle);
+        pbExportNow = (ProgressBar) findViewById(R.id.pbExportNowToGoogleCalActSettingsGoogle);
 
         sbExportToCalendar.setProgress(prefs.getExportToCalendarDuration());
         sbExportToCalendar.setThumb(writeOnDrawable(R.drawable.ic_btn_plus_sign, String.valueOf(prefs.getExportToCalendarDuration())));
@@ -143,34 +151,53 @@ public class ActSettingsGoogle extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(final View v) {
         if(ConnectionUtils.isNetworkAvailable(this)) {
-            AsyncTask asyncTask = new AsyncTask() {
-                @Override
-                protected Object doInBackground(Object[] objects) {
-                    GoogleAccount googleAccount = new GoogleAccount(ActSettingsGoogle.this);
-                    googleAccount.authenticate();
-                    try {
-                        switch (v.getId()){
-                            case R.id.btnSyncNowWithGoogleActSettingsGoogle :
-                                googleAccount.sync();
-                                break;
+            switch (v.getId()){
+                case R.id.btnSyncNowWithGoogleActSettingsGoogle :
+                    showSyncProgress(true);
+                    new AsyncTaskThread(this, new MyHandler(), Constants.OPERATION_SYNC_NOW).execute();
+                    break;
 
-                            case R.id.btnImportNowFromGTasksActSettingsGoogle:
-                                googleAccount.doImport();
-                                break;
+                case R.id.btnImportNowFromGTasksActSettingsGoogle:
+                    showImportProgress(true);
+                    new AsyncTaskThread(this, new MyHandler(), Constants.OPERATION_IMPORT).execute();
+                    break;
 
-                            case R.id.btnExportNowToGoogleCalActSettingsGoogle :
-                                googleAccount.doExport();
-                                break;
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    return null;
-                }
-            };
-            asyncTask.execute();
+                case R.id.btnExportNowToGoogleCalActSettingsGoogle :
+                    showExportProgress(true);
+                    new AsyncTaskThread(this, new MyHandler(), Constants.OPERATION_EXPORT).execute();
+                    break;
+            }
         }else{
             ConnectionUtils.showNetworkNotAvailableDialog(this, Constants.MSG_NO_CONNECTION);
+        }
+    }
+
+    private void showExportProgress(boolean show) {
+        if(show){
+            btnExportNow.setVisibility(View.GONE);
+            pbExportNow.setVisibility(View.VISIBLE);
+        }else {
+            btnExportNow.setVisibility(View.VISIBLE);
+            pbExportNow.setVisibility(View.GONE);
+        }
+    }
+
+    private void showImportProgress(boolean show) {
+        if(show){
+            btnImportNow.setVisibility(View.GONE);
+            pbImportNow.setVisibility(View.VISIBLE);
+        }else {
+            btnImportNow.setVisibility(View.VISIBLE);
+            pbImportNow.setVisibility(View.GONE);}
+    }
+
+    private void showSyncProgress(boolean show) {
+        if(show){
+            btnSyncNow.setVisibility(View.GONE);
+            pbSyncNow.setVisibility(View.VISIBLE);
+        }else {
+            btnSyncNow.setVisibility(View.VISIBLE);
+            pbSyncNow.setVisibility(View.GONE);
         }
     }
 
@@ -218,5 +245,27 @@ public class ActSettingsGoogle extends AppCompatActivity implements View.OnClick
     @Override
     public void onNothingSelected(AdapterView<?> parent) {
 
+    }
+    private class MyHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            int OPERATION=(int)msg.obj;
+            switch (OPERATION){
+                case Constants.OPERATION_SYNC_NOW :
+                    showSyncProgress(false);
+                    Logger.showSnack(ActSettingsGoogle.this, toolbar, Constants.MSG_SYNC_DONE);
+                    break;
+
+                case Constants.OPERATION_IMPORT:
+                    showImportProgress(false);
+                    Logger.showSnack(ActSettingsGoogle.this, toolbar, Constants.MSG_IMPORT_DONE);
+                    break;
+
+                case Constants.OPERATION_EXPORT :
+                    showExportProgress(false);
+                    Logger.showSnack(ActSettingsGoogle.this, toolbar, Constants.MSG_EXPORT_DONE);
+                    break;
+            }
+        }
     }
 }

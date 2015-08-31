@@ -122,4 +122,11 @@ public class Constants {
     public static final String USER_ACCOUNT = "USER_ACCOUNT";
     public static final String MSG_NO_CONNECTION = "Check your Internet Connection and try again.";
     public static final String TAG_FRAG = "FRAG_TAG";
+    public static final int OPERATION_IMPORT = 1;
+    public static final int OPERATION_EXPORT = 2;
+    public static final int OPERATION_SYNC_NOW = 3;
+    public static final String MSG_SYNC_DONE = "Synced Successfully";
+    public static final String MSG_IMPORT_DONE = "Import Successful";
+    public static final String MSG_EXPORT_DONE = "Export Successful";
+    public static final String MSG_ADD_NEW_TIMEBOX = "No free TimeBoxes available. Please add one";
 }
