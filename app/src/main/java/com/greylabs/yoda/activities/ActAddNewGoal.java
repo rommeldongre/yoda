@@ -191,8 +191,11 @@ public class ActAddNewGoal extends AppCompatActivity implements View.OnClickList
         if(caller.equals(Constants.ACT_GOAL_DETAILS))
             timeBoxList.add(new TimeBox(this).get(goal.getTimeBoxId()));
 
-        if(tempTimeBox.getAll(TimeBox.TimeBoxStatus.INACTIVE)!=null)
+        if(tempTimeBox.getAll(TimeBox.TimeBoxStatus.INACTIVE)!=null){
             timeBoxList.addAll(tempTimeBox.getAll(TimeBox.TimeBoxStatus.INACTIVE));
+        }else {
+            Logger.showSnack(this, toolbar, Constants.MSG_ADD_NEW_TIMEBOX, Snackbar.LENGTH_LONG);
+        }
         timeBoxNames.add(getResources().getString(R.string.addNewTimeBoxSpinnerItemActAddNewGoal));//add new TB option
 
         TimeBox tempTimeBox1 = new TimeBox(this);
@@ -454,13 +457,13 @@ public class ActAddNewGoal extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    public class MyHandler extends Handler {
-        @Override
-        public void handleMessage(Message msg) {
-            int res=(int)msg.obj;
-            if(res== AysncTaskWithProgressBar.SUCCESS) {
-                ActAddNewGoal.this.finish();
-            }
-        }
-    }
+//    private class MyHandler extends Handler {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            int res=(int)msg.obj;
+//            if(res== AysncTaskWithProgressBar.SUCCESS) {
+//                ActAddNewGoal.this.finish();
+//            }
+//        }
+//    }
 }
