@@ -323,7 +323,7 @@ public class ActAddTimeBox extends AppCompatActivity implements RadioGroup.OnChe
                             if(isSaved)
                                 timeBox.save();
                         }else{
-                            //Timebox is not attached , need to just update
+                            //Time box is not attached , need to just update
                             timeBox.save();
                             isSaved=true;
                         }
