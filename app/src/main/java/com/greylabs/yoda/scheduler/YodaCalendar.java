@@ -332,7 +332,6 @@ public class YodaCalendar {
                 slotCount++;
             }
         }
-        rescheduleSteps(prefs.getStretchGoalId());
         return slotCount;
     }
 
@@ -630,9 +629,7 @@ public class YodaCalendar {
         }
         if(slots.size()==0 || slots==null)
             isValid=false;
-
         return isValid;
-
     }
 
     public void removeTodaysPassedSlots(){

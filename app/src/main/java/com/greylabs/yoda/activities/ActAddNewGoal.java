@@ -268,6 +268,9 @@ public class ActAddNewGoal extends AppCompatActivity implements View.OnClickList
                             yodaCalendar.setTimeBox(timeBox);
                             yodaCalendar.attachTimeBox(goal.getId());
                             yodaCalendar.rescheduleSteps(goal.getId());
+                            Prefs prefs=Prefs.getInstance(this);
+                            yodaCalendar.setTimeBox(new TimeBox(this).get(prefs.getUnplannedTimeBoxId()));
+                            yodaCalendar.rescheduleSteps(prefs.getStretchGoalId());
                             isSaved=true;
                         }else {
                             AlertDialog.Builder alert=new AlertDialog.Builder(this);

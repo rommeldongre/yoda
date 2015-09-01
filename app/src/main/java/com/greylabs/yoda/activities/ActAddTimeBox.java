@@ -300,9 +300,13 @@ public class ActAddTimeBox extends AppCompatActivity implements RadioGroup.OnChe
                                     yodaCalendar.setTimeBox(timeBox);
                                     yodaCalendar.attachTimeBox(goalId);
                                     yodaCalendar.rescheduleSteps(goalId);
+                                    Prefs prefs=Prefs.getInstance(this);
+                                    yodaCalendar.setTimeBox(new TimeBox(this).get(prefs.getUnplannedTimeBoxId()));
+                                    yodaCalendar.rescheduleSteps(prefs.getStretchGoalId());
                                     isSaved=true;
                                 }
                                 else{
+                                    isSaved=false;
                                     AlertDialog.Builder alert=new AlertDialog.Builder(this);
                                     alert.setPositiveButton("Ok", null);
                                     alert.setMessage(getString(R.string.msgCannotSaveGoalWithSelectedTimeBox));
@@ -318,6 +322,10 @@ public class ActAddTimeBox extends AppCompatActivity implements RadioGroup.OnChe
                             }
                             if(isSaved)
                                 timeBox.save();
+                        }else{
+                            //Timebox is not attached , need to just update
+                            timeBox.save();
+                            isSaved=true;
                         }
                     }
                     if(isSaved) {

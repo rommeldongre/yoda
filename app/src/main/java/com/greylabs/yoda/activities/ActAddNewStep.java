@@ -390,8 +390,10 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                 //if user sets priority to Manual or TopMost ,then need to rearrange steps
                 if (!stepPrioritySpinner.getSelectedItem().toString().equals(Constants.TEXT_PRIORITY_SPINNER_BOTTOM_MOST)) {
                     yodaCalendar.rescheduleSteps(goalList.get(goalSpinner.getSelectedItemPosition()).getId());
+                    //yodaCalendar.rescheduleSteps(prefs.getStretchGoalId());
                 }else{
                     yodaCalendar.scheduleStep(currentStep);
+                    //yodaCalendar.rescheduleSteps(prefs.getStretchGoalId());
                 }
                 currentStep = currentStep.get(currentStep.getId());
                 //sync code
