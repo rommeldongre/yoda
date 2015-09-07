@@ -47,6 +47,7 @@
     *;
 }
 
+
 # keep this otherwise it is removed by ProGuard
 -keep public class org.acra.ErrorReporter{
     public void addCustomData(java.lang.String,java.lang.String);
@@ -93,3 +94,17 @@
 # Suppress warnings on sun.misc.Unsafe
 -dontnote sun.misc.Unsafe
 -dontwarn sun.misc.Unsafe
+
+
+
+###################################################################################################
+# Follwing rules are needed for Android support design classes
+###################################################################################################
+-keep public class * extends android.support.design.widget.CoordinatorLayout$Behavior {
+ *;
+}
+
+#-keep public class * extends android.support.design.widget.CoordinatorLayout$Behavior {
+##    public <init>(android.content.Context, android.util.AttributeSet);
+##    public <init>();
+#}

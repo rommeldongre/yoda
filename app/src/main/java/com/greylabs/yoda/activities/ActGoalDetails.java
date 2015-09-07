@@ -336,12 +336,13 @@ public class ActGoalDetails extends AppCompatActivity implements View.OnClickLis
             }
         }
         //ps.deleteAllPendingSteps();
+        long timeBoxId=goal.getTimeBoxId();
         goal.setDeleted(true);
         goal.setUpdated(new DateTime(new Date()));
         goal.setTimeBoxId(0);
         goal.save();
         yodaCalendar = new YodaCalendar(this);
-        yodaCalendar.detachTimeBox(goal.getTimeBoxId());
+        yodaCalendar.detachTimeBox(timeBoxId);
         Logger.showMsg(this, Constants.MSG_GOAL_DELETED);
         //sync code
         GoogleSync.getInstance(this).sync();
