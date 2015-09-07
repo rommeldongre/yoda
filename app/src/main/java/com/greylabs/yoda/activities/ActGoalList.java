@@ -347,7 +347,7 @@ public class ActGoalList  extends AppCompatActivity implements OnClickOfRecycler
             }
         }
         //ps.deleteAllPendingSteps();
-        long goalId=goal.getId();
+        long timeBoxId=goal.getTimeBoxId();
         goal.setDeleted(true);
         goal.setUpdated(new DateTime(new Date()));
         goal.setTimeBoxId(0);
@@ -355,7 +355,7 @@ public class ActGoalList  extends AppCompatActivity implements OnClickOfRecycler
         getGoalArrayFromLocal();
         mAdapter.notifyDataSetChanged();
         yodaCalendar = new YodaCalendar(ActGoalList.this);
-        yodaCalendar.detachTimeBox(goalId);
+        yodaCalendar.detachTimeBox(timeBoxId);
 //        Logger.showMsg(ActGoalList.this, Constants.MSG_GOAL_DELETED);
         Logger.showSnack(this, toolbar, Constants.MSG_GOAL_DELETED);
         //sync code
