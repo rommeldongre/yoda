@@ -183,7 +183,7 @@ public class MetaData {
         public static final String date="date";
         public static final String dayOfYear="dayOfYear";
         public static final String dayOfWeek="dayOfWeek";
-        public static final String weekOfMonth="dayOfMonth";
+        public static final String weekOfMonth="weekOfMonth";
         public static final String monthOfYear="monthOfYear";
         public static final String quarterOfYear="quarterOfYear";
         public static final String year="year";
