@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.models.Day;
 import com.greylabs.yoda.models.Goal;
@@ -291,7 +292,12 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
                 break;
 
             case R.id.btnGoogleSettingsActHome:
-                startActivity(new Intent(this, ActSettingsGoogle.class));
+                final int connectionStatusCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+                if (GooglePlayServicesUtil.isUserRecoverableError(connectionStatusCode)) {
+                    GooglePlayServicesUtil.getErrorDialog(connectionStatusCode, this, 0).show();
+                }else {
+                    startActivity(new Intent(this, ActSettingsGoogle.class));
+                }
                 btnSettings.collapse();
                 break;
 

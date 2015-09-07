@@ -40,7 +40,7 @@ public class ImportTaskAsyncThread extends AsyncTask<Void, Void, Void> {
         GoogleAccount googleAccount=new GoogleAccount(context);
         googleAccount.authenticate();
         try {
-            googleAccount.sync();
+            googleAccount.doImport();
         } catch (IOException e) {
             e.printStackTrace();
         }

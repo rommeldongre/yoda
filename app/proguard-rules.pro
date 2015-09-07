@@ -21,10 +21,15 @@
 #-keep class com.google.**
 #-dontwarn com.google.**
 
--keep class com.google.**
--dontnote libcore.icu.ICU
--dontnote sun.misc.Unsafe
+#-keep class com.google.**
+#-dontnote libcore.icu.ICU
+#-dontnote sun.misc.Unsafe
 
+###################################################################################################
+# Follwing rules are needed for ACRA
+###################################################################################################
+
+# keep all members of the class ACRA
 -keep class org.acra.ACRA {
     *;
 }
@@ -53,3 +58,38 @@
 -keep public class org.acra.ErrorReporter{
     public void handleSilentException(java.lang.Throwable);
 }
+
+
+###################################################################################################
+# Follwing rules are needed for Google Task API
+###################################################################################################
+
+# Needed to keep generic types and @Key annotations accessed via reflection
+
+-keepattributes Signature,RuntimeVisibleAnnotations,AnnotationDefault
+
+-keepclassmembers class * {
+  @com.google.api.client.util.Key <fields>;
+}
+
+# Needed by google-http-client-android when linking against an older platform version
+
+-dontwarn com.google.api.client.extensions.android.**
+
+# Needed by google-api-client-android when linking against an older platform version
+
+-dontwarn com.google.api.client.googleapis.extensions.android.**
+
+# Needed by google-play-services when linking against an older platform version
+
+-dontwarn com.google.android.gms.**
+
+# com.google.client.util.IOUtils references java.nio.file.Files when on Java 7+
+-dontnote java.nio.file.Files, java.nio.file.Path
+
+# Suppress notes on LicensingServices
+-dontnote **.ILicensingService
+
+# Suppress warnings on sun.misc.Unsafe
+-dontnote sun.misc.Unsafe
+-dontwarn sun.misc.Unsafe

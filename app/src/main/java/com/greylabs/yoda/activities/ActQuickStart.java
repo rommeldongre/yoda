@@ -14,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.RelativeLayout;
 
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.apis.googleacc.GoogleAccount;
 import com.greylabs.yoda.enums.AccountType;
@@ -74,21 +75,27 @@ public class ActQuickStart extends AppCompatActivity implements View.OnClickList
 
             case R.id.rlImportTaskActQuickStart :
                 if(ConnectionUtils.isNetworkAvailable(this)) {
-                    final GoogleAccount googleAccount = new GoogleAccount(this);
-                    googleAccount.chooseAccountDialog(GoogleAccount.ACCOUNT_TYPE, "Choose Account", new AdapterView.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                            prefs.setDefaultAccountEmailId(googleAccount.getUsers().get(position));
-                            prefs.setDefaultAccountType(AccountType.GOOGLE.ordinal());
-                            googleAccount.dismissChooseAccountDialog();
-                            new ImportTaskAsyncThread(ActQuickStart.this, new MyHandler(contextActQuickStart)).execute();
-                        }
-                    }, new DialogInterface.OnDismissListener() {
-                        @Override
-                        public void onDismiss(DialogInterface dialogInterface) {
+                    final int connectionStatusCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+                    if (GooglePlayServicesUtil.isUserRecoverableError(connectionStatusCode)) {
+                        GooglePlayServicesUtil.getErrorDialog(connectionStatusCode, this, 0).show();
+                    }else {
+                        //otherwise doImport
+                        final GoogleAccount googleAccount = new GoogleAccount(this);
+                        googleAccount.chooseAccountDialog(GoogleAccount.ACCOUNT_TYPE, "Choose Account", new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                                prefs.setDefaultAccountEmailId(googleAccount.getUsers().get(position));
+                                prefs.setDefaultAccountType(AccountType.GOOGLE.ordinal());
+                                googleAccount.dismissChooseAccountDialog();
+                                new ImportTaskAsyncThread(ActQuickStart.this, new MyHandler(contextActQuickStart)).execute();
+                            }
+                        }, new DialogInterface.OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogInterface dialogInterface) {
 //                            new ImportTaskAsyncThread(ActQuickStart.this, new MyHandler()).execute();
-                        }
-                    });
+                            }
+                        });
+                    }
                 }else{
                     ConnectionUtils.showNetworkNotAvailableDialog(this,getString(R.string.msgNoNetworkConnectionActQuiCkStart));
                 }

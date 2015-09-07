@@ -1,9 +1,12 @@
 package com.greylabs.yoda.utils;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+
+import com.google.android.gms.common.GooglePlayServicesUtil;
 
 /**
  * Created by Jaybhay Vijay on 8/21/2015.
