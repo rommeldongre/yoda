@@ -202,9 +202,9 @@ public class YodaCalendar {
         if(day.getDate().compareTo(cal.getTime())>0){
             Logger.log(TAG,"First date in yoda calendar is greater than current date");
             //first entry in the Calendar DB  is greater than  current
-            String startDate=CalendarUtils.getSqLiteDateFormat(cal);
+            //String startDate=CalendarUtils.getSqLiteDateFormat(cal);
             cal1.setTime(day.getDate());
-            String endDate=CalendarUtils.getSqLiteDateFormat(cal1);
+            //String endDate=CalendarUtils.getSqLiteDateFormat(cal1);
             //daysDeleted=day.deleteNextDays(startDate, endDate);
             int numberOfDays=cal1.get(Calendar.DAY_OF_YEAR)-cal.get(Calendar.DAY_OF_YEAR);
             Logger.log(TAG,"First date:"+day.getDate().toString()+" and Current date:"+cal.getTime().toString()+" " +
@@ -318,7 +318,7 @@ public class YodaCalendar {
     public int attachTimeBox(long goalId){
         int slotCount=0;
         slots=slot.getAll(timeBox);
-        PendingStep pendingStep=new PendingStep(context);
+//        PendingStep pendingStep=new PendingStep(context);
         if(slots!=null && slots.size()>0) {
             for (Slot slot : slots) {
                 //following checks that any Unplanned Slot is assigned to some step or not
