@@ -50,7 +50,7 @@ public class AdapterRecyclerViewActTimeBoxList extends RecyclerView.Adapter<Adap
         int totalSlots = slot.getTotalSlotCount(timeBoxArrayList.get(position).getId());
         String slots = totalSlots - slot.getAvailableSlotCount(timeBoxArrayList.get(position).getId())+"/"+
                 totalSlots +" Slots";
-        holder.tvSlots.setText(slots);
+//        holder.tvSlots.setText(slots);
         if(timeBoxArrayList.get(position).isActive()){
             holder.tvTimeBoxName.setTypeface(null, Typeface.ITALIC);
             holder.tvAttachedGoalName.setText(timeBoxArrayList.get(position).getGoalName());
@@ -61,6 +61,9 @@ public class AdapterRecyclerViewActTimeBoxList extends RecyclerView.Adapter<Adap
         if(timeBoxArrayList.get(position).getNickName().equals(Constants.NICKNAME_UNPLANNED_TIMEBOX)){
             holder.btnDeleteTimeBox.setVisibility(View.GONE);
             holder.tvSlots.setText("");
+        }else {
+            holder.btnDeleteTimeBox.setVisibility(View.VISIBLE);
+            holder.tvSlots.setText(slots);
         }
         holder.circleView.setShowTitle(false);
         holder.circleView.setFillColor(Integer.parseInt(timeBoxArrayList.get(position).getColorCode()));

@@ -16,6 +16,7 @@ import com.greylabs.yoda.utils.Prefs;
 import com.greylabs.yoda.utils.sorters.SortByDate;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -332,8 +333,29 @@ public class YodaCalendar {
                 slotCount++;
             }
         }
+//        rescheduleSteps(prefs.getStretchGoalId());
         return slotCount;
     }
+
+    // added by rohit to free the slots of stretch goal
+//    private void freeStretchTBSlots() {
+//        ArrayList<PendingStep> stepArrayList = new ArrayList<>();
+//        Goal stretchGoal = new Goal(context).get(prefs.getStretchGoalId());
+//        stepArrayList.addAll(new PendingStep(context).getAll(stretchGoal.getId()));
+//        int length = stepArrayList.size();
+//        for(int i=0;i<length;i++){
+//            stepArrayList.get(i).setUpdated(new DateTime(new Date()));
+//            stepArrayList.get(i).freeSlot();
+//            stepArrayList.get(i).setSlotId(0);
+//            stepArrayList.get(i).save();
+//            stepArrayList.get(i).cancelAlarm();
+//            if(stepArrayList.get(i).getPendingStepType()== PendingStep.PendingStepType.SPLIT_STEP||
+//                    stepArrayList.get(i).getPendingStepType()== PendingStep.PendingStepType.SERIES_STEP) {
+//                stepArrayList.get(i).updateSubSteps();
+//                stepArrayList.get(i).freeSlots();
+//            }
+//        }
+//    }
 
     /**
      * This method frees the slots allocated to timebox with id= timeBoxId.It removes all actual mappings

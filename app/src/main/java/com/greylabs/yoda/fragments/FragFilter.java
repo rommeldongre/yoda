@@ -75,19 +75,15 @@ public class FragFilter extends Fragment {
 
         // Listview Group expanded listener
         expListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
-
             @Override
             public void onGroupExpand(int groupPosition) {
-
             }
         });
 
         // Listview Group collasped listener
         expListView.setOnGroupCollapseListener(new ExpandableListView.OnGroupCollapseListener() {
-
             @Override
             public void onGroupCollapse(int groupPosition) {
-
             }
         });
 

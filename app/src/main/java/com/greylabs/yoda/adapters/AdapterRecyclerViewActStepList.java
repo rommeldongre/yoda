@@ -62,6 +62,8 @@ public class AdapterRecyclerViewActStepList extends RecyclerView.Adapter<Adapter
             holder.tvETAOfStep.setText(CalendarUtils.getFormattedDateWithSlot(stepsArrayList.get(position).getStepDate()));
         if(stepsArrayList.get(position).getPendingStepStatus().equals(PendingStep.PendingStepStatus.COMPLETED)){
             holder.checkBox.setChecked(true);
+        }else {
+            holder.checkBox.setChecked(false);
         }
         if(isEditOperation){
             holder.btnHandle.setVisibility(View.VISIBLE);
@@ -145,9 +147,9 @@ public class AdapterRecyclerViewActStepList extends RecyclerView.Adapter<Adapter
                 throw new ClassCastException(contxt.toString()
                         + " must implement OnHeadlineSelectedListener");
             }
-            if(isChecked){
+            if(buttonView.isPressed()&&isChecked){
                 myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_MARK_STEP_DONE);
-            }else {
+            }else if(buttonView.isPressed()&& !isChecked){
                 myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_MARK_STEP_UNDONE);
             }
         }

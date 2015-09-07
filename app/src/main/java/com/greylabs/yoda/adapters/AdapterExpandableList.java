@@ -1,6 +1,7 @@
 package com.greylabs.yoda.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +24,6 @@ public class AdapterExpandableList extends BaseExpandableListAdapter {
     private List<Goal> goalList;
     private Map<Long, List<PendingStep>> goalIdPendingStepMap;
     private OnCheckExpandableList onCheckExpandableList;
-
     public AdapterExpandableList(Context context, List<Goal> listDataHeader,
                                  Map<Long, List<PendingStep>> listChildData) {
         this.context = context;
@@ -62,17 +62,20 @@ public class AdapterExpandableList extends BaseExpandableListAdapter {
                 .findViewById(R.id.cbListItemActFilters);
 
         txtListChild.setText(pendingStep.getNickName());
-        tvETAOfStep.setText(CalendarUtils.getFormattedDateWithoutSlot(pendingStep.getStepDate()));
+        tvETAOfStep.setText(CalendarUtils.getFormattedDateWithSlot(pendingStep.getStepDate()));
+        cbCompleted.invalidate();
         cbCompleted.setCircleColor(Integer.valueOf(pendingStep.getColorCode()));
 
         if(pendingStep.getPendingStepStatus().equals(PendingStep.PendingStepStatus.COMPLETED)){
             cbCompleted.setChecked(true);
+        }else {
+            cbCompleted.setChecked(false);
         }
 
         cbCompleted.setOnCheckedChangeListener(new TouchCheckBox.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(View buttonView, boolean isChecked) {
-                if(isChecked){
+                if(buttonView.isPressed() && isChecked){
                     pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
                     pendingStep.cancelAlarm();
                     pendingStep.freeSlot();

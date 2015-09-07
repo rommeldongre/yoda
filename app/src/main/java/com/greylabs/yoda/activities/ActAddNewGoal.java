@@ -288,7 +288,8 @@ public class ActAddNewGoal extends AppCompatActivity implements View.OnClickList
                     if(isSaved) {
                         goal.initDatabase(this);
                         goal.setNickName(edtNickName.getText().toString());
-                        goal.setTimeBoxId(timeBoxList.get(timeSpinner.getSelectedItemPosition()).getId());
+                        long seletedTBId = timeBoxList.get(timeSpinner.getSelectedItemPosition()).getId();
+                        goal.setTimeBoxId(seletedTBId);
                         goal.setObjective(edtObjective.getText().toString());
                         goal.setKeyResult(edtKeyResult.getText().toString());
                         goal.setReason(edtGoalReason.getText().toString());
@@ -299,10 +300,12 @@ public class ActAddNewGoal extends AppCompatActivity implements View.OnClickList
                         goal.setAccountType(AccountType.getIntegerToEnum(prefs.getDefaultAccountType()));
                         goal.setUpdated(new DateTime(new Date()));
                         goal.save();
+                        Slot slot = new Slot(this);
+                        int totalHoursAllotted = slot.getTotalSlotCount(seletedTBId)*Constants.MAX_SLOT_DURATION;
+                        Logger.showMsg(this, getString(R.string.msgGoalSavedActAddNewGoal)+totalHoursAllotted+" hour(s) in it");
                         //sync code
                         GoogleSync.getInstance(this).sync();
                         //sync code
-                        Logger.showMsg(this, getString(R.string.msgGoalSavedActAddNewGoal));
                         switch (caller) {
                             case Constants.ACT_ADD_NEW_STEP:
                                 Intent secIntent = new Intent();

@@ -368,7 +368,7 @@ public class ActStepList extends AppCompatActivity implements onClickOfRecyclerV
                         pendingStepsArrayList.get(Position).freeSlots();
                     }
                     pendingStepsArrayList.remove(Position);
-                    mAdapter.notifyDataSetChanged();
+                    rescheduleStepsOfCurrentGoal();
                     checkForEmptyViewVisibility(pendingStepsArrayList, getString(R.string.tvEmptyViewPendingStepsActStepList));
                 }else {
                     stepArrayList.get(Position).setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
@@ -386,6 +386,7 @@ public class ActStepList extends AppCompatActivity implements onClickOfRecyclerV
                         if(stepArrayList.get(Position).getId()==pendingStepsArrayList.get(i).getId())
                             pendingStepsArrayList.remove(i);
                     }
+                    rescheduleStepsOfCurrentGoal();
                 }
                 //sync code
                 GoogleSync.getInstance(this).sync();
@@ -410,5 +411,14 @@ public class ActStepList extends AppCompatActivity implements onClickOfRecyclerV
                 //sync code
                 break;
         }
+    }
+
+    private void rescheduleStepsOfCurrentGoal() {
+        TimeBox timeBox = new TimeBox(this);
+        YodaCalendar yodaCalendar = new YodaCalendar(this, timeBox.get(currentGoal.getTimeBoxId()));
+        yodaCalendar.rescheduleSteps(currentGoal.getId());
+        // notify adapter
+        getStepArrayFromLocal();
+        mAdapter.notifyDataSetChanged();
     }
 }
