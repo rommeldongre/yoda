@@ -463,6 +463,8 @@ public class YodaCalendar {
                     pendingStep.setStepDate(pendingStepsList.get(0).getStepDate());
                     pendingStep.setStepCount(sessionCount);
                     pendingStep.save();
+                    goal.setDueDate(pendingStepsList.get(pendingStepsList.size()-1).getStepDate());
+                    goal.save();
                 }
                 break;
             case SINGLE_STEP:
@@ -575,6 +577,8 @@ public class YodaCalendar {
                             pendingStep.setStepDate(substepsList.get(0).getStepDate());
                             pendingStep.setStepCount(sessionCount);
                             pendingStep.save();
+                            goal.setDueDate(substepsList.get(substepsList.size()-1).getStepDate());
+                            goal.save();
                         }
                         break;
                     case SINGLE_STEP:

@@ -309,7 +309,7 @@ public class ActAddTimeBox extends AppCompatActivity implements RadioGroup.OnChe
                                     isSaved=false;
                                     AlertDialog.Builder alert=new AlertDialog.Builder(this);
                                     alert.setPositiveButton("Ok", null);
-                                    alert.setMessage(getString(R.string.msgCannotSaveGoalWithSelectedTimeBox));
+                                    alert.setMessage(getString(R.string.msgCannotSaveTimeBoxWithUpdatedValues));
                                     alert.show();
                                 }
                             }else{

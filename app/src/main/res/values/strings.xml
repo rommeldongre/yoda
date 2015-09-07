@@ -176,6 +176,7 @@
     <string name="btnChangeWallpaperActHome">Home Screen Wallpaper</string>
     <string name="titleNowNotification">Yoda says</string>
     <string name="msgNoNetworkConnectionActQuiCkStart">Check your Internet Connection and try again or You can choose Quick Start or New Step.</string>
+    <string name="msgCannotSaveTimeBoxWithUpdatedValues">Cannot  save TimeBox because this timebox is attached to a Goal and all present Steps in that Goal will not fit after update.Try updating  so that  TimeBox will  have more time Slots.</string>
 
     <string-array name="arrayStepTypeActAddNewStep">
         <item>Single Step</item>
