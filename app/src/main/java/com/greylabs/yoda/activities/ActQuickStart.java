@@ -1,5 +1,7 @@
 package com.greylabs.yoda.activities;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,6 +27,7 @@ public class ActQuickStart extends AppCompatActivity implements View.OnClickList
 
     RelativeLayout rlQuickStart, rlImport, rlNewStep;
     Prefs prefs = Prefs.getInstance(this);
+    Context contextActQuickStart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +41,17 @@ public class ActQuickStart extends AppCompatActivity implements View.OnClickList
         initialize();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(prefs.isOptionFromActQuickStartSelected()==true){
+            startActivity(new Intent(ActQuickStart.this, ActHome.class));
+            this.finish();
+        }
+    }
+
     private void initialize() {
+        contextActQuickStart = this;
         rlQuickStart = (RelativeLayout) findViewById(R.id.rlQuickStartActQuickStart);
         rlNewStep = (RelativeLayout) findViewById(R.id.rlNewStepActQuickStart);
         rlImport = (RelativeLayout) findViewById(R.id.rlImportTaskActQuickStart);
@@ -52,11 +65,11 @@ public class ActQuickStart extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.rlQuickStartActQuickStart :
-                new QuickStartAsyncTask(this, new MyHandler()).execute();
+                new QuickStartAsyncTask(this, new MyHandler(this)).execute();
                 break;
 
             case R.id.rlNewStepActQuickStart :
-                new NewStepAsyncTask(this, new MyHandler()).execute();
+                new NewStepAsyncTask(this, new MyHandler(this)).execute();
                 break;
 
             case R.id.rlImportTaskActQuickStart :
@@ -68,7 +81,7 @@ public class ActQuickStart extends AppCompatActivity implements View.OnClickList
                             prefs.setDefaultAccountEmailId(googleAccount.getUsers().get(position));
                             prefs.setDefaultAccountType(AccountType.GOOGLE.ordinal());
                             googleAccount.dismissChooseAccountDialog();
-                            new ImportTaskAsyncThread(ActQuickStart.this, new MyHandler()).execute();
+                            new ImportTaskAsyncThread(ActQuickStart.this, new MyHandler(contextActQuickStart)).execute();
                         }
                     }, new DialogInterface.OnDismissListener() {
                         @Override
@@ -84,12 +97,18 @@ public class ActQuickStart extends AppCompatActivity implements View.OnClickList
     }
 
 
-    class MyHandler extends Handler {
+    private class MyHandler extends Handler {
+        Context context;
+
+        public MyHandler(Context context) {
+            this.context = context;
+        }
+
         @Override
         public void handleMessage(Message msg) {
             prefs.setOptionFromActQuickStartSelected(true);
+            ((Activity)context).finish();
             startActivity(new Intent(ActQuickStart.this, ActHome.class));
-            ActQuickStart.this.finish();
         }
     }
 }
