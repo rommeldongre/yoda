@@ -435,6 +435,11 @@ public class Goal implements Serializable{
         return colorCode;
     }
 
+    public boolean allSlotsExhausted(){
+        Slot slot=new Slot(context);
+        return getRemainingStepCount()==slot.getTotalSlotCount(this.getId());
+    }
+
     public long getIdIfExists(String stringGoalId){
         long id= Prefs.getInstance(context).getStretchGoalId();
         String query="select  "+TableGoal.id +" ,"+TableGoal.stringId+" "+
