@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.greylabs.yoda.R;
+import com.greylabs.yoda.apis.TasksSample;
 import com.greylabs.yoda.models.Day;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
@@ -296,6 +297,7 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
                 if (GooglePlayServicesUtil.isUserRecoverableError(connectionStatusCode)) {
                     GooglePlayServicesUtil.getErrorDialog(connectionStatusCode, this, 0).show();
                 }else {
+                   // startActivity(new Intent(this,TasksSample.class));
                     startActivity(new Intent(this, ActSettingsGoogle.class));
                 }
                 btnSettings.collapse();

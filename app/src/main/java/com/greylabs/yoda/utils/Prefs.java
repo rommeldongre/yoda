@@ -141,6 +141,17 @@ public class Prefs  {
         editor.commit();
     }
 
+
+    public String getDefaultAccountAuthToken(){
+        return systemPrefs.getString(Constants.ACCOUNT_DEFAULT_AUTH_TOKEN, null);
+    }
+
+    public void setDefaultAccountAuthToken(String token){
+        editor.putString(Constants.ACCOUNT_DEFAULT_AUTH_TOKEN, token);
+        editor.commit();
+    }
+
+
     public int getDefaultAccountType(){
         return systemPrefs.getInt(Constants.ACCOUNT_DEFAULT_ACC_TYPE, 0);
     }

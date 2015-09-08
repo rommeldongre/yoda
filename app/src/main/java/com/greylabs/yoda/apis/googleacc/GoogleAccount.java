@@ -20,7 +20,6 @@ import com.google.api.services.tasks.model.TaskList;
 import com.google.api.services.tasks.model.TaskLists;
 import com.greylabs.yoda.apis.Sync;
 import com.greylabs.yoda.apis.TaskAccount;
-import com.greylabs.yoda.database.MetaData;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.TimeBox;
@@ -37,9 +36,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.TimeZone;
 import java.util.logging.Level;
 
@@ -74,6 +71,7 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
         credential.setSelectedAccountName(prefs.getDefaultAccountEmailId());
         service = new com.google.api.services.tasks.Tasks.Builder(httpTransport, jsonFactory, credential)
                 .setApplicationName("Yoda").build();
+        //((Activity)context).startActivity(credential.newChooseAccountIntent());
     }
 
 

@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.greylabs.yoda.apis.googleacc.GoogleAccount;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Logger;
@@ -44,7 +45,9 @@ public class AsyncTaskThread extends AsyncTask<Void, Void, Void> {
                     googleAccount.doExport();
                     break;
             }
-        } catch (IOException e) {
+        }catch (UserRecoverableAuthIOException e){
+            context.startActivity(e.getIntent());
+        }catch (IOException e) {
             e.printStackTrace();
         }
         return null;
