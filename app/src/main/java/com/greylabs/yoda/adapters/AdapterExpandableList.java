@@ -12,6 +12,8 @@ import com.greylabs.yoda.R;
 import com.greylabs.yoda.interfaces.OnCheckExpandableList;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
+import com.greylabs.yoda.models.TimeBox;
+import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.CalendarUtils;
 import com.greylabs.yoda.views.TouchCheckBox;
 
@@ -95,6 +97,12 @@ public class AdapterExpandableList extends BaseExpandableListAdapter {
                                     + " must implement OnCheckExpandableList");
                         }
                         onCheckExpandableList.onCheckExpandableList(groupPosition, childPosition, removedGoal);
+                    }
+                    if(!goalList.isEmpty()) {
+                        Goal currentGoal = goalList.get(groupPosition);
+                        TimeBox currentTimeBox = new TimeBox(context).get(currentGoal.getTimeBoxId());
+                        YodaCalendar yodaCalendar = new YodaCalendar(context, currentTimeBox);
+                        yodaCalendar.rescheduleSteps(currentGoal.getId());
                     }
                     AdapterExpandableList.this.notifyDataSetChanged();
                 }
