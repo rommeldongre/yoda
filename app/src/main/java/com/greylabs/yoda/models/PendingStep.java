@@ -614,7 +614,8 @@ public class PendingStep implements Serializable {
                 " " + " from " + TablePendingStep.pendingStep +
                 " " + " where ("  + TablePendingStep.type + "=" + PendingStepType.SUB_STEP.ordinal()+" " +
                 " " + " or "+TablePendingStep.type+"="+ PendingStepType.SINGLE_STEP.ordinal()+" ) " +
-                " " + "  and "+TablePendingStep.status+" = "+PendingStepStatus.TODO.ordinal()+" " +
+                " " + "  and ("+TablePendingStep.status+" = "+PendingStepStatus.TODO.ordinal()+" " +
+                " " + "  or "+TablePendingStep.status+" = "+PendingStepStatus.DOING.ordinal()+" ) " +
                 " " + "  and "+TablePendingStep.deleted+"=0 "+
                 " "+filterCriteria+" " +
                 " "+" order by "+TablePendingStep.priority+" asc";
