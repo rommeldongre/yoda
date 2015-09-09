@@ -42,12 +42,31 @@ public class CalendarUtils {
         Calendar cal=Calendar.getInstance();
         cal.setTime(d);
         switch (cal.get(Calendar.HOUR_OF_DAY)){
-            case 6: strDate+=" "+TimeBoxWhen.EARLY_MORNING.getDisplayName();break;
-            case 9: strDate+=" "+TimeBoxWhen.MORNING.getDisplayName();break;
-            case 12: strDate+=" "+TimeBoxWhen.AFTERNOON.getDisplayName();break;
-            case 15: strDate+=" "+TimeBoxWhen.EVENING.getDisplayName();break;
-            case 18: strDate+=" "+TimeBoxWhen.NIGHT.getDisplayName();break;
-            case 21: strDate+=" "+TimeBoxWhen.LATE_NIGHT.getDisplayName();break;
+            case 6:
+            case 7:
+            case 8:
+                strDate+=" "+TimeBoxWhen.EARLY_MORNING.getDisplayName();break;
+            case 9:
+            case 10:
+            case 11:
+                strDate+=" "+TimeBoxWhen.MORNING.getDisplayName();break;
+            case 12:
+            case 13:
+            case 14:
+                strDate+=" "+TimeBoxWhen.AFTERNOON.getDisplayName();break;
+            case 15:
+            case 16:
+            case 17:
+                strDate+=" "+TimeBoxWhen.EVENING.getDisplayName();break;
+            case 18:
+            case 19:
+            case 20:
+                strDate+=" "+TimeBoxWhen.NIGHT.getDisplayName();break;
+            case 21:
+            case 22:
+            case 23:
+            default:
+                strDate+=" "+TimeBoxWhen.LATE_NIGHT.getDisplayName();break;
         }
         return strDate;
     }
