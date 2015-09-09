@@ -37,7 +37,7 @@ public class CalendarUtils {
        return date.toStringRfc3339();
     }
     public static String getFormattedDateWithSlot(Date d){
-        SimpleDateFormat sdf=new SimpleDateFormat("EEE MMM dd");
+        SimpleDateFormat sdf=new SimpleDateFormat("EEE dd MMM");
         String strDate=sdf.format(d);
         Calendar cal=Calendar.getInstance();
         cal.setTime(d);
@@ -59,7 +59,7 @@ public class CalendarUtils {
     }
 
     public static String getOnlyFormattedDate(Date d){
-        SimpleDateFormat sdf=new SimpleDateFormat("MMM dd");
+        SimpleDateFormat sdf=new SimpleDateFormat("dd MMM");
         String strDate=sdf.format(d);
         return strDate;
     }

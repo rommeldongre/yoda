@@ -517,7 +517,10 @@ public class PendingStep implements Serializable {
         values.put(TablePendingStep.deleted,(this.deleted)?1:0);
         if(this.getStepDate()!=null) {
             Calendar cal = Calendar.getInstance();
-            cal.setTime(this.getStepDate());
+            if(this.getPendingStepStatus()==PendingStepStatus.COMPLETED)
+                cal.setTime(new Date());
+            else
+                cal.setTime(this.getStepDate());
             values.put(TablePendingStep.stepDate, CalendarUtils.getSqLiteDateFormat(cal));
         }
         values.put(TablePendingStep.slotId, this.slotId);
