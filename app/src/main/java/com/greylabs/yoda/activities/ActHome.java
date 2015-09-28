@@ -178,6 +178,7 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
     }
 
     private void setStyleToArcTotalProgress() {
+        arcTotalProgress.invalidate();
         arcTotalProgress.setProgress((int)nowGoal.getGoalProgress());
         arcTotalProgress.setStrokeWidth(30);
         arcTotalProgress.setFinishedStrokeColor(getResources().getColor(R.color.luminous_green));
@@ -235,7 +236,10 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
         btnAddGoal.setOnClickListener(this);
 
         RelativeLayout relativeLayout = new RelativeLayout(this);
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         relativeLayout.setGravity(Gravity.CENTER_VERTICAL);
+        relativeLayout.setLayoutParams(params);
+
         relativeLayout.addView(btnAddGoal);
         final LinearLayout linearLayout1 = new LinearLayout(this);
         linearLayout1.setOrientation(LinearLayout.VERTICAL);

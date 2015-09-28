@@ -302,7 +302,7 @@ public class ActAddNewGoal extends AppCompatActivity implements View.OnClickList
                         goal.save();
                         Slot slot = new Slot(this);
                         int totalHoursAllotted = slot.getTotalSlotCount(seletedTBId)*Constants.MAX_SLOT_DURATION;
-                        Logger.showMsg(this, getString(R.string.msgGoalSavedActAddNewGoal)+totalHoursAllotted+" hour(s) in it");
+                        Logger.showMsg(this, getString(R.string.msgGoalSavedActAddNewGoal)+" "+totalHoursAllotted+" hour(s) in it");
                         //sync code
                         GoogleSync.getInstance(this).sync();
                         //sync code

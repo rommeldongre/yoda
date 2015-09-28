@@ -6,4 +6,22 @@
         <item name="android:textColor">@color/textolor_settings_buttons</item>
         <item name="android:elevation">2dp</item>
     </style>
+
+    <style name="progressBarStyleMyGoalsList" parent="@android:style/Widget.SeekBar">
+        <item name="android:progressBackgroundTint">@color/progressBackgroundTint</item>
+        <item name="android:progressTint">@color/ColorPrimaryDark</item>
+        <item name="android:minHeight">5dip</item>
+        <item name="android:maxHeight">5dip</item>
+    </style>
+
+    <style name="progressBarStyleGoalDetails" parent="@android:style/Widget.SeekBar">
+        <item name="android:minHeight">5dip</item>
+        <item name="android:maxHeight">5dip</item>
+        <item name="android:progressBackgroundTint">@color/ColorPrimaryDark</item>
+        <item name="android:progressTint">@color/white</item>
+    </style>
+
+    <!--<item name="android:indeterminateOnly">false</item>-->
+    <!--<item name="android:progressDrawable">@android:drawable/progress_horizontal</item>-->
+    <!--<item name="android:indeterminateDrawable">@android:drawable/progress_horizontal</item>-->
 </resources>

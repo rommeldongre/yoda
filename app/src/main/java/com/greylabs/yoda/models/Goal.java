@@ -437,7 +437,7 @@ public class Goal implements Serializable{
 
     public boolean allSlotsExhausted(){
         Slot slot=new Slot(context);
-        return getRemainingStepCount()==slot.getTotalSlotCount(this.getId());
+        return getRemainingStepCount()==slot.getTotalSlotCount(this.getTimeBoxId());
     }
 
     public long getIdIfExists(String stringGoalId){

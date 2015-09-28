@@ -22,7 +22,7 @@
     <string name="edtGoalBuddyHintActAddNewGoal">Pick a Buddy to keep informed about your progress?</string>
     <string name="titleActAddNewGoal">New Goal</string>
     <string name="actionSaveActAddNewGoal">Save</string>
-    <string name="msgGoalSavedActAddNewGoal">Goal has been created and has </string>
+    <string name="msgGoalSavedActAddNewGoal">Goal has been created and has</string>
     <string name="msgEnterGoalNickNameActAddNewGoal">Please Enter Goal Nick Name</string>
     <string name="titleActAddNewStep">New Step</string>
     <string name="actionSaveActAddNewStep">Save</string>

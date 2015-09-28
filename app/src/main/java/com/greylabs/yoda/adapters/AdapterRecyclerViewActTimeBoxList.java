@@ -60,7 +60,7 @@ public class AdapterRecyclerViewActTimeBoxList extends RecyclerView.Adapter<Adap
         }
         if(timeBoxArrayList.get(position).getNickName().equals(Constants.NICKNAME_UNPLANNED_TIMEBOX)){
             holder.btnDeleteTimeBox.setVisibility(View.GONE);
-            holder.tvSlots.setText("");
+            holder.tvSlots.setText(slots);
         }else {
             holder.btnDeleteTimeBox.setVisibility(View.VISIBLE);
             holder.tvSlots.setText(slots);

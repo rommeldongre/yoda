@@ -1,48 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView
-    android:id="@+id/cardViewActGoalList"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardViewActGoalList"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_margin="5dp">
     <!--android:background="?android:attr/selectableItemBackground"       requires API 11-->
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="60dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp" >
+        android:paddingBottom="5dp"
+        android:paddingTop="5dp">
 
         <Button
             android:id="@+id/btnHandleRecyclerItemActGoalList"
             android:layout_width="20dp"
             android:layout_height="30dp"
             android:layout_alignParentRight="true"
-            android:gravity="center_vertical"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
-            android:background="@drawable/ic_btn_handle_gray" />
+            android:background="@drawable/ic_btn_handle_gray"
+            android:gravity="center_vertical" />
 
         <Button
             android:id="@+id/btnEditGoalRecyclerItemActGoalList"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_toLeftOf="@+id/btnHandleRecyclerItemActGoalList"
-            android:layout_marginRight="10dip"
-            android:gravity="center_vertical"
             android:layout_centerVertical="true"
-            android:background="@drawable/ic_btn_edit_gray" />
+            android:layout_marginRight="10dip"
+            android:layout_toLeftOf="@+id/btnHandleRecyclerItemActGoalList"
+            android:background="@drawable/ic_btn_edit_gray"
+            android:gravity="center_vertical" />
 
         <Button
             android:id="@+id/btnDeleteGoalRecyclerItemActGoalList"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/btnEditGoalRecyclerItemActGoalList"
-            android:layout_marginRight="10dip"
             android:layout_margin="10dp"
+            android:layout_marginRight="10dip"
+            android:layout_toLeftOf="@+id/btnEditGoalRecyclerItemActGoalList"
             android:background="@drawable/ic_btn_delete_gray" />
         <!--android:background="@android:drawable/ic_menu_delete"-->
 
@@ -51,13 +51,13 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_alignParentLeft="true"
-            android:gravity="center_vertical"
             android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            app:titleColor="@color/white"
-            app:titleText="0"
+            android:gravity="center_vertical"
+            app:fillRadius="0.9"
             app:strokeColorValue="@color/ColorPrimary"
-            app:fillRadius="0.9"/>
+            app:titleColor="@color/white"
+            app:titleText="0" />
         <!--app:backgroundColorValue="@color/gray"-->
         <!--app:fillColor="@color/pink"-->
         <!--app:titleSize="12dp"-->
@@ -70,11 +70,11 @@
             android:id="@+id/llTvsRecyclerItemActGoalList"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="50dp"
-            android:layout_toLeftOf="@id/btnDeleteGoalRecyclerItemActGoalList" >
+            android:layout_toLeftOf="@id/btnDeleteGoalRecyclerItemActGoalList"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tvGoalNameRecyclerItemActGoalList"
@@ -93,21 +93,15 @@
 
         <ProgressBar
             android:id="@+id/pbRecyclerItemActGoalList"
-            style="?android:attr/progressBarStyleHorizontal"
+            style="@style/progressBarStyleMyGoalsList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/llTvsRecyclerItemActGoalList"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="20dp"
-            android:progressTint="@color/ColorPrimaryDark"
-            android:layout_below="@+id/llTvsRecyclerItemActGoalList" />
-
+            android:layout_marginTop="20dp" />
+        <!--style="?android:attr/progressBarStyleHorizontal"-->
     </RelativeLayout>
 </android.support.v7.widget.CardView>
 
-    <!--<View-->
-    <!--android:id="@+id/lineView"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="1dp"-->
-    <!--android:layout_marginTop="8dp"/>-->
-    <!--&lt;!&ndash;android:background="@color/white" />&ndash;&gt;-->
+    <!--<View--><!--android:id="@+id/lineView"--><!--android:layout_width="match_parent"--><!--android:layout_height="1dp"--><!--android:layout_marginTop="8dp"/>--><!--&lt;!&ndash;android:background="@color/white" />&ndash;&gt;-->

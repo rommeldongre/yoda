@@ -1,6 +1,11 @@
 package com.greylabs.yoda.adapters;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.LightingColorFilter;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,13 +28,18 @@ public class AdapterRecyclerViewActGoalList extends RecyclerView.Adapter<Adapter
 
     ArrayList<Goal> goalArrayList;
     Context context;
+    Goal currentGoal;
     boolean isEditOperation = false;
+    int COLOR_RED, COLOR_GREEN, COLOR_GRAY;
 
     public AdapterRecyclerViewActGoalList(Context passedContext, ArrayList<Goal> goalArrayList, boolean isEditOperation)
     {
         this.context = passedContext;
         this.goalArrayList = goalArrayList;
         this.isEditOperation = isEditOperation;
+        this.COLOR_RED = context.getResources().getColor(R.color.colorcode_red);
+        this.COLOR_GREEN = context.getResources().getColor(R.color.luminous_green);
+        this.COLOR_GRAY = context.getResources().getColor(R.color.gray);
     }
 
     @Override
@@ -43,11 +53,22 @@ public class AdapterRecyclerViewActGoalList extends RecyclerView.Adapter<Adapter
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.tvGoalName.setText(goalArrayList.get(position).getNickName());
-        holder.tvEndDateGoal.setText(CalendarUtils.getFormattedDateWithSlot(goalArrayList.get(position).getDueDate()));
-        holder.btnBullet.setFillColor(Integer.parseInt(goalArrayList.get(position).getColorCode()));
-        holder.btnBullet.setTitleText(String.valueOf(goalArrayList.get(position).getRemainingStepCount()));
-        holder.progressBar.setProgress((int)goalArrayList.get(position).getGoalProgress());
+        currentGoal = goalArrayList.get(position);
+        holder.tvGoalName.setText(currentGoal.getNickName());
+        holder.tvEndDateGoal.setText(CalendarUtils.getFormattedDateWithSlot(currentGoal.getDueDate()));
+        holder.btnBullet.setFillColor(Integer.parseInt(currentGoal.getColorCode()));
+        holder.btnBullet.setTitleText(String.valueOf(currentGoal.getRemainingStepCount()));
+        holder.progressBar.setProgress((int)currentGoal.getGoalProgress());
+        if(currentGoal.allSlotsExhausted()){
+            Drawable drawable = holder.progressBar.getIndeterminateDrawable();
+            drawable.setColorFilter(new LightingColorFilter(0xFF000000, COLOR_RED));
+//            holder.progressBar.getBackground().setColorFilter(COLOR_GREEN, PorterDuff.Mode.SRC_IN);//IndeterminateDrawable().setColorFilter(COLOR_RED, PorterDuff.Mode.SRC_IN);
+        } else {
+            Drawable drawable = holder.progressBar.getIndeterminateDrawable();
+            drawable.setColorFilter(new LightingColorFilter(0xFF000000, COLOR_GRAY));
+//            holder.progressBar.getBackground().setColorFilter(COLOR_GREEN, PorterDuff.Mode.SRC_IN);
+//            holder.progressBar.getIndeterminateDrawable().setColorFilter(COLOR_GREEN, PorterDuff.Mode.SRC_IN);
+        }
         if(isEditOperation){
             holder.btnHandle.setVisibility(View.VISIBLE);
             holder.btnDeleteGoal.setVisibility(View.VISIBLE);
@@ -58,7 +79,7 @@ public class AdapterRecyclerViewActGoalList extends RecyclerView.Adapter<Adapter
             holder.btnEditGoal.setVisibility(View.GONE);
             holder.btnHandle.setVisibility(View.GONE);
         }
-        if(goalArrayList.get(position).getNickName().equals(Constants.NICKNAME_STRETCH_GOAL)){
+        if(currentGoal.getNickName().equals(Constants.NICKNAME_STRETCH_GOAL)){
             holder.btnDeleteGoal.setVisibility(View.GONE);
             holder.btnEditGoal.setVisibility(View.GONE);
         }

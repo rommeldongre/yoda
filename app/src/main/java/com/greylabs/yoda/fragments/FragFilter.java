@@ -3,19 +3,23 @@ package com.greylabs.yoda.fragments;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.internal.widget.AdapterViewCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.adapters.AdapterExpandableList;
+import com.greylabs.yoda.adapters.DragSortRecycler;
 import com.greylabs.yoda.enums.StepFilterType;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.FilterUtility;
+import com.greylabs.yoda.utils.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,6 +96,25 @@ public class FragFilter extends Fragment {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v,
                                         int groupPosition, int childPosition, long id) {
+                return false;
+            }
+        });
+
+        expListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                if (ExpandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+                    int groupPosition = ExpandableListView.getPackedPositionGroup(id);
+                    int childPosition = ExpandableListView.getPackedPositionChild(id);
+
+                    Logger.showMsg(context, groupPosition+" : "+childPosition);
+
+                    // You now have everything that you would as if this was an OnChildClickListener()
+                    // Add your logic here.
+
+                    // Return true as we are handling the event.
+                    return true;
+                }
                 return false;
             }
         });

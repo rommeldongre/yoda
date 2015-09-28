@@ -59,18 +59,13 @@ public class Dialogues {
         dialog = new Dialog(context);
         dialog.setCancelable(true);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//        dialog.setContentView(R.layout.dailogue_now_notification);
 
         LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         ViewGroup viewGroup = (ViewGroup) layoutInflater.inflate(R.layout.dailogue_now_notification, null);
         dialog.setContentView(viewGroup);
 
-//        dialog.setTitle(context.getString(R.string.titleNowNotification));
-
-        // set the custom dialog components - text, image and button
         TextView tvGoalName = (TextView) viewGroup.findViewById(R.id.tvGoalNameNowNotification);
         TextView tvStepName = (TextView) viewGroup.findViewById(R.id.tvStepNameNowNotification);
-//        TextView tvTime = (TextView) viewGroup.findViewById(R.id.tvTime);
         edtExcuse = (EditText) viewGroup.findViewById(R.id.edtExcuseNowNotification);
         LinearLayout llDidIt = (LinearLayout) viewGroup.findViewById(R.id.llDidNowNotification);
         LinearLayout llDoingIt = (LinearLayout) viewGroup.findViewById(R.id.llDoingItNowNotification);
@@ -78,8 +73,6 @@ public class Dialogues {
         llButtons = (LinearLayout) viewGroup.findViewById(R.id.llButtonsNowNotification);
         llExcuseLog = (LinearLayout) viewGroup.findViewById(R.id.llLogExcuseNowNotification);
         Button btnLogExcuse = (Button) viewGroup.findViewById(R.id.btnLogExcuseNowNotification);
-//        CardView cvEmptyView, cvNotEmptyView;
-//    Toolbar toolbar;, btnCloseEmptyView ;//,btnCloseNotEmptyView;
 
         tvGoalName.setText(goal.getNickName());
         tvStepName.setText(pendingStep.getNickName());
@@ -105,7 +98,6 @@ public class Dialogues {
         dialog.getWindow().setType(
                 WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         dialog.show();
-//        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
     }
 
     class MyOnClickListener implements View.OnClickListener{
@@ -114,7 +106,6 @@ public class Dialogues {
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.llDidNowNotification :
-//                    Logger.showMsg(context, "Did it");
                     if(pendingStep!=null){
                         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
                         pendingStep.save();
@@ -123,7 +114,6 @@ public class Dialogues {
                     break;
 
                 case R.id.llDoingItNowNotification :
-//                    Logger.showMsg(context, "Doing it");
                     if(pendingStep!=null){
                         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.DOING);
                         pendingStep.save();

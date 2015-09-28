@@ -21,6 +21,7 @@ public class GoalView extends LinearLayout implements View.OnClickListener {
     MyDonutProgress donutProgress;
     TextView tvGoalName, tvETGoal;
     Goal currentGoal;
+    int COLOR_RED, COLOR_GREEN, COLOR_GRAY;
 
     public GoalView(Context context) {
         super(context);
@@ -48,8 +49,10 @@ public class GoalView extends LinearLayout implements View.OnClickListener {
 //    }
 
     private void init() {
-
         inflate(getContext(), R.layout.view_goal, this);
+        this.COLOR_RED = context.getResources().getColor(R.color.colorcode_red);
+        this.COLOR_GREEN = context.getResources().getColor(R.color.luminous_green);
+        this.COLOR_GRAY = context.getResources().getColor(R.color.gray);
         this.donutProgress = (MyDonutProgress) findViewById(R.id.donutProgressViewGoal);
         this.tvETGoal = (TextView)findViewById(R.id.tvETViewGoal);
         this.tvGoalName = (TextView)findViewById(R.id.tvViewGoal);
@@ -61,14 +64,18 @@ public class GoalView extends LinearLayout implements View.OnClickListener {
     }
 
     private void setDonutProgressValues() {
-        donutProgress.setProgress((int)currentGoal.getGoalProgress());
+        donutProgress.setProgress((int) currentGoal.getGoalProgress());
         donutProgress.setTextColor(getResources().getColor(R.color.white));
         donutProgress.setTextSize(25);
         donutProgress.setSuffixText(String.valueOf(currentGoal.getRemainingStepCount()));
         donutProgress.setFinishedStrokeWidth(7);
         donutProgress.setUnfinishedStrokeWidth(7);
-        donutProgress.setFinishedStrokeColor(getResources().getColor(R.color.luminous_green));
-        donutProgress.setUnfinishedStrokeColor(getResources().getColor(R.color.gray));
+        donutProgress.setFinishedStrokeColor(COLOR_GREEN);
+        if(currentGoal.allSlotsExhausted()){
+            donutProgress.setUnfinishedStrokeColor(COLOR_RED);
+        }else {
+            donutProgress.setUnfinishedStrokeColor(COLOR_GRAY);
+        }
         //        donutProgress.setInnerBottomText("3");
 //        donutProgress.setInnerBottomTextColor(getResources().getColor(R.color.white));
 //        donutProgress.setMax(int max);
