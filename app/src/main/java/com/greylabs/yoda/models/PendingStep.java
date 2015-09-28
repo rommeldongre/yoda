@@ -650,6 +650,49 @@ public class PendingStep implements Serializable {
         return pendingSteps;
     }
 
+    public ArrayList<PendingStep> getAllStepsArrayList(String filterCriteria){
+        ArrayList<PendingStep> pendingSteps = null;
+        SQLiteDatabase db = database.getReadableDatabase();
+        String query = "select * "+
+                " " + " from " + TablePendingStep.pendingStep +
+                " " + " where ("  + TablePendingStep.type + "=" + PendingStepType.SUB_STEP.ordinal()+" " +
+                " " + " or "+TablePendingStep.type+"="+ PendingStepType.SINGLE_STEP.ordinal()+" ) " +
+                " " + "  and ("+TablePendingStep.status+" = "+PendingStepStatus.TODO.ordinal()+" " +
+                " " + "  or "+TablePendingStep.status+" = "+PendingStepStatus.DOING.ordinal()+" ) " +
+                " " + "  and "+TablePendingStep.deleted+"=0 "+
+                " "+filterCriteria+" " +
+                " "+" order by "+TablePendingStep.stepDate+" asc";
+
+        Cursor c = db.rawQuery(query, null);
+        if (c.moveToFirst()) {
+            pendingSteps = new ArrayList<>();
+            do {
+                PendingStep pendingStep = new PendingStep(context);
+                pendingStep.id = c.getInt(c.getColumnIndex(TablePendingStep.id));
+                pendingStep.stringId=c.getString(c.getColumnIndex(TablePendingStep.stringId));
+                pendingStep.nickName = c.getString(c.getColumnIndex(TablePendingStep.nickName));
+                pendingStep.priority = c.getInt(c.getColumnIndex(TablePendingStep.priority));
+                pendingStep.time = c.getInt(c.getColumnIndex(TablePendingStep.time));
+                pendingStep.pendingStepType = PendingStepType.getIntegerToEnumType(
+                        c.getInt(c.getColumnIndex(TablePendingStep.type)));
+                pendingStep.stepCount = c.getInt(c.getColumnIndex(TablePendingStep.stepCount));
+                pendingStep.skipCount = c.getInt(c.getColumnIndex(TablePendingStep.skipCount));
+                pendingStep.pendingStepStatus = PendingStepStatus.getPendingStepStatus(
+                        c.getInt(c.getColumnIndex(TablePendingStep.status)));
+                pendingStep.goalId = c.getInt(c.getColumnIndex(TablePendingStep.goalId));
+                pendingStep.goalStringId=c.getString(c.getColumnIndex(TablePendingStep.goalStringId));
+                pendingStep.stepDate= CalendarUtils.parseDate(c.getString(c.getColumnIndex(TablePendingStep.stepDate)));
+                pendingStep.slotId = c.getLong(c.getColumnIndex(TablePendingStep.slotId));
+                pendingStep.subStepOf = c.getLong(c.getColumnIndex(TablePendingStep.subStepOf));
+                pendingStep.updated=CalendarUtils.getStringToRFCTimestamp(c.getString(c.getColumnIndex(TablePendingStep.updated)));
+                pendingStep.deleted=(c.getInt(c.getColumnIndex(TablePendingStep.deleted))==1)?true:false;
+                pendingSteps.add(pendingStep);
+            } while (c.moveToNext());
+        }
+        c.close();
+        return pendingSteps;
+    }
+
     public List<PendingStep> getPendingSteps(long slotId){
         ArrayList<PendingStep> pendingSteps = null;
         SQLiteDatabase db = database.getReadableDatabase();

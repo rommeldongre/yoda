@@ -117,4 +117,9 @@ public class FilterUtility {
         }
         return  filteredSteps;
     }
+
+    public ArrayList<PendingStep> getPendingStepsArrayList(StepFilterType stepFilterType){
+        ArrayList<PendingStep> pendingSteps= new PendingStep(context).getAllStepsArrayList(buildCriteria(stepFilterType));
+        return  pendingSteps;
+    }
 }
