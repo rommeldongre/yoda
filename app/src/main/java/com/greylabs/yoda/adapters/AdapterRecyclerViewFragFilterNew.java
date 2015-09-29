@@ -13,6 +13,7 @@ import com.greylabs.yoda.interfaces.OnClickOfRecyclerViewFragFiltrNew;
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.utils.CalendarUtils;
 import com.greylabs.yoda.utils.Constants;
+import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.views.TouchCheckBox;
 
 import java.util.ArrayList;
@@ -95,6 +96,7 @@ public class AdapterRecyclerViewFragFilterNew extends RecyclerView.Adapter<Adapt
             switch (v.getId()){
                 case R.id.cardViewActStepList :
             myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_EDIT);
+                    Logger.showMsg(contxt, stepsArrayList.get(getPosition()).getNickName());
 //            onClickRecyclerView(getPosition(), Constants.OPERATION_EDIT);
                     break;
             }

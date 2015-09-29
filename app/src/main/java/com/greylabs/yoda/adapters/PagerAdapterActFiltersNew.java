@@ -4,9 +4,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.ViewGroup;
 
 import com.greylabs.yoda.enums.StepFilterType;
-import com.greylabs.yoda.fragments.FragFilter;
 import com.greylabs.yoda.fragments.FragFilterNew;
 import com.greylabs.yoda.utils.Constants;
 
@@ -14,13 +14,13 @@ public class PagerAdapterActFiltersNew extends FragmentPagerAdapter
 {
     private final String[] titles = { "Today", "This Week", "This Month", "This Quarter", "This Year"};
 
-    public FragFilterNew getFragFilterNew() { return fragFilter; }
-
     FragFilterNew fragFilter;
 
     public PagerAdapterActFiltersNew(FragmentManager fm) {
         super(fm);
     }
+
+    public FragFilterNew getFragFilterNew() { return fragFilter; }
 
     @Override
     public Fragment getItem(int index) {
