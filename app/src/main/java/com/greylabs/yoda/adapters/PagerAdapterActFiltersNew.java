@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.view.ViewGroup;
 
 import com.greylabs.yoda.enums.StepFilterType;
 import com.greylabs.yoda.fragments.FragFilterNew;
@@ -67,6 +66,7 @@ public class PagerAdapterActFiltersNew extends FragmentPagerAdapter
         return titles[position];
     }
 
+    //refresh content (create new fragment each time)
     @Override
     public int getItemPosition(Object object) {
         return POSITION_NONE;

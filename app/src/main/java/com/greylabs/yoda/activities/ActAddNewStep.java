@@ -22,6 +22,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -54,6 +56,9 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
     SeekBar sbNoOfSteps, sbTimeSeriesStep, sbTimeSingleStep;
     LinearLayout singleStepPanel, seriesPanel;
     ScrollView scrollView;
+    RadioButton rbDontExpire, rbExpire;
+    RadioGroup rgBehaviourOfExpiredSteps;
+
     AdapterGoalSpinner adapterGoalSpinner;
     //    ArrayAdapter<String> spinnerArrayAdapter;
     List<Goal> goalList = new ArrayList<>();
@@ -108,9 +113,11 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
         sbTimeSeriesStep = (SeekBar) findViewById(R.id.seekbarTimeForEachStepActAddNewStep);
         singleStepPanel = (LinearLayout) findViewById(R.id.SingleStepPanelActAddNewStep);
         seriesPanel = (LinearLayout) findViewById(R.id.SeriesPanelActAddNewStep);
+        rbDontExpire = (RadioButton) findViewById(R.id.rbDontExpireActAddNewStep);
+        rbExpire = (RadioButton) findViewById(R.id.rbDontExpireActAddNewStep);
+        rgBehaviourOfExpiredSteps = (RadioGroup) findViewById(R.id.rgBehaviourOfExpiredStepsActAddNewStep);
 
         //get defaults from settings and set Spinners accordingly
-
 
         getGoalListAndPopulate();
 
@@ -122,6 +129,8 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
         goalSpinner.setOnItemSelectedListener(this);
         stepTypeSpinner.setOnItemSelectedListener(this);
         stepPrioritySpinner.setOnItemSelectedListener(this);
+
+
 
         setDefaultValues();
         getStepArrayFromLocal();
@@ -138,6 +147,11 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
             stepPrioritySpinner.setSelection(1);
         } else {
             stepPrioritySpinner.setSelection(0);
+        }
+        if(goalList.get(goalSpinner.getSelectedItemPosition()).getId() == prefs.getStretchGoalId()){
+            rbExpire.setChecked(true);
+        }else {
+            rbDontExpire.setChecked(false);
         }
     }
 
@@ -460,6 +474,11 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                 } else {
                     goalChosen = position;
                     getStepArrayFromLocal();
+                    if(currentGoal.getId() == prefs.getStretchGoalId()){
+                        rbExpire.setChecked(true);
+                    }else {
+                        rbDontExpire.setChecked(true);
+                    }
                 }
                 break;
 

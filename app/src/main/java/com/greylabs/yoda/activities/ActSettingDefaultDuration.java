@@ -32,8 +32,8 @@ public class ActSettingDefaultDuration extends AppCompatActivity implements Seek
     Toolbar toolbar;
     SeekBar sbStepDuration, sbSessionDuration, sbYodaSaysNotification;//, sbExportToCalendar;
     Paint thumbPaint, textPaint;
-    RadioButton rbTopMost, rbBottomMost, rbDontExpire, rbExpire;
-    RadioGroup rgPriorityNewStep, rgBehaviourOfExpiredSteps;
+    RadioButton rbTopMost, rbBottomMost;//, rbDontExpire, rbExpire;
+    RadioGroup rgPriorityNewStep;//, rgBehaviourOfExpiredSteps;
     Button btnResetYoda;
     Prefs prefs;
 
@@ -55,11 +55,11 @@ public class ActSettingDefaultDuration extends AppCompatActivity implements Seek
         sbYodaSaysNotification = (SeekBar) findViewById(R.id.sbDefaultYodaSaysNotificationActSettingsDefaultDuration);
 //        sbExportToCalendar = (SeekBar) findViewById(R.id.sbDefaultExportToCalendarActSettingsDefaultDuration);
         rgPriorityNewStep = (RadioGroup) findViewById(R.id.rgPriorityNewStepSettingsDefaultDuration);
-        rgBehaviourOfExpiredSteps = (RadioGroup) findViewById(R.id.rgBehaviourOfExpiredStepsSettingsDefaultDuration);
+//        rgBehaviourOfExpiredSteps = (RadioGroup) findViewById(R.id.rgBehaviourOfExpiredStepsSettingsDefaultDuration);
         rbTopMost = (RadioButton) findViewById(R.id.rbTopMostActSettingsDefaultDuration);
         rbBottomMost = (RadioButton) findViewById(R.id.rbBottomMostActSettingsDefaultDuration);
-        rbDontExpire = (RadioButton) findViewById(R.id.rbDontExpireActSettingsDefaultDuration);
-        rbExpire = (RadioButton) findViewById(R.id.rbExpireActSettingsDefaultDuration);
+//        rbDontExpire = (RadioButton) findViewById(R.id.rbDontExpireActSettingsDefaultDuration);
+//        rbExpire = (RadioButton) findViewById(R.id.rbExpireActSettingsDefaultDuration);
         btnResetYoda = (Button) findViewById(R.id.btnResetYodaActSettingsDefaultDuration);
 
         sbStepDuration.setOnSeekBarChangeListener(this);
@@ -68,7 +68,7 @@ public class ActSettingDefaultDuration extends AppCompatActivity implements Seek
 //        sbExportToCalendar.setOnSeekBarChangeListener(this);
         btnResetYoda.setOnClickListener(this);
         rgPriorityNewStep.setOnCheckedChangeListener(this);
-        rgBehaviourOfExpiredSteps.setOnCheckedChangeListener(this);
+//        rgBehaviourOfExpiredSteps.setOnCheckedChangeListener(this);
 
         textPaint = new Paint();
         textPaint.setColor(Color.WHITE);
@@ -90,11 +90,11 @@ public class ActSettingDefaultDuration extends AppCompatActivity implements Seek
         }else {
             rbTopMost.setChecked(true);
         }
-        if(prefs.isBehaviourDoNotExpire()){
-            rbDontExpire.setChecked(true);
-        }else {
-            rbExpire.setChecked(true);
-        }
+//        if(prefs.isBehaviourDoNotExpire()){
+//            rbDontExpire.setChecked(true);
+//        }else {
+//            rbExpire.setChecked(true);
+//        }
     }
 
     @Override
@@ -186,15 +186,15 @@ public class ActSettingDefaultDuration extends AppCompatActivity implements Seek
                     prefs.setPriorityNewStepBottomMost(true);
                 break;
 
-            case R.id.rbDontExpireActSettingsDefaultDuration :
-                if(rbDontExpire.isChecked())
-                    prefs.setBehaviourDoNotExpire(true);
-                break;
-
-            case R.id.rbExpireActSettingsDefaultDuration :
-                if(rbExpire.isChecked())
-                    prefs.setBehaviourDoNotExpire(false);
-                break;
+//            case R.id.rbDontExpireActSettingsDefaultDuration :
+//                if(rbDontExpire.isChecked())
+//                    prefs.setBehaviourDoNotExpire(true);
+//                break;
+//
+//            case R.id.rbExpireActSettingsDefaultDuration :
+//                if(rbExpire.isChecked())
+//                    prefs.setBehaviourDoNotExpire(false);
+//                break;
         }
     }
 

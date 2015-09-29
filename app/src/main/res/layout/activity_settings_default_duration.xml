@@ -188,49 +188,49 @@
                         android:background="@color/button_material_light" />
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_margin="10dip" >
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:orientation="vertical"-->
+                    <!--android:layout_margin="10dip" >-->
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                        android:textStyle="bold"
-                        android:text="@string/tvDefaultBehaviourForPassedStepsActSettingsDefaultDuration"
-                        />
+                    <!--<TextView-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"-->
+                        <!--android:textStyle="bold"-->
+                        <!--android:text="@string/tvDefaultBehaviourForPassedStepsActSettingsDefaultDuration"-->
+                        <!--/>-->
 
-                    <RadioGroup
-                        android:id="@+id/rgBehaviourOfExpiredStepsSettingsDefaultDuration"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dip"
-                        android:layout_marginTop="8dip">
+                    <!--<RadioGroup-->
+                        <!--android:id="@+id/rgBehaviourOfExpiredStepsSettingsDefaultDuration"-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_marginLeft="20dip"-->
+                        <!--android:layout_marginTop="8dip">-->
 
-                        <RadioButton
-                            android:id="@+id/rbDontExpireActSettingsDefaultDuration"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/rbDontExpireActSettingsDefaultDuration"
-                            />
+                        <!--<RadioButton-->
+                            <!--android:id="@+id/rbDontExpireActSettingsDefaultDuration"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:text="@string/rbDontExpireActSettingsDefaultDuration"-->
+                            <!--/>-->
 
-                        <RadioButton
-                            android:id="@+id/rbExpireActSettingsDefaultDuration"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/rbExpireActSettingsDefaultDuration"
-                            />
+                        <!--<RadioButton-->
+                            <!--android:id="@+id/rbExpireActSettingsDefaultDuration"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:text="@string/rbExpireActSettingsDefaultDuration"-->
+                            <!--/>-->
 
-                    </RadioGroup>
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginLeft="20dip"
-                        android:background="@color/button_material_light" />
-                </LinearLayout>
+                    <!--</RadioGroup>-->
+                    <!--<View-->
+                        <!--android:layout_width="match_parent"-->
+                        <!--android:layout_height="1dp"-->
+                        <!--android:layout_marginTop="8dp"-->
+                        <!--android:layout_marginLeft="20dip"-->
+                        <!--android:background="@color/button_material_light" />-->
+                <!--</LinearLayout>-->
 
                 <LinearLayout
                     android:layout_width="match_parent"
