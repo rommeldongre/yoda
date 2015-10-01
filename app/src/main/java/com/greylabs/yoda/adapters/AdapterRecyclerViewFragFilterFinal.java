@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.google.api.client.util.DateTime;
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.apis.googleacc.GoogleSync;
+import com.greylabs.yoda.enums.StepFilterType;
 import com.greylabs.yoda.interfaces.OnClickOfRecyclerViewFragFilterFinal;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
@@ -27,11 +28,13 @@ public class AdapterRecyclerViewFragFilterFinal extends RecyclerView.Adapter<Ada
 
     ArrayList<PendingStep> stepsArrayList;
     Context context;
+    StepFilterType scope;
 
-    public AdapterRecyclerViewFragFilterFinal(Context passedContext, ArrayList<PendingStep> stepsArrayList)
+    public AdapterRecyclerViewFragFilterFinal(Context passedContext, ArrayList<PendingStep> stepsArrayList, StepFilterType scope)
     {
         this.context = passedContext;
         this.stepsArrayList = stepsArrayList;
+        this.scope = scope;
     }
 
     @Override
@@ -102,7 +105,7 @@ public class AdapterRecyclerViewFragFilterFinal extends RecyclerView.Adapter<Ada
             rescheduleStepsOfCurrentGoal(currentPendingStep);
             //sync code
             GoogleSync.getInstance(contxt).sync();
-            myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_MARK_STEP_DONE);
+            myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_MARK_STEP_DONE, scope);
         }
 
         private void rescheduleStepsOfCurrentGoal(PendingStep currentPendingStep) {

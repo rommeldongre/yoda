@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import com.astuetz.PagerSlidingTabStrip;
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.adapters.PagerAdapterActFiltersNew;
+import com.greylabs.yoda.enums.StepFilterType;
 import com.greylabs.yoda.fragments.FragFilterFinal;
 import com.greylabs.yoda.interfaces.OnClickOfRecyclerViewFragFilterFinal;
 
@@ -58,7 +59,8 @@ public class ActFilters extends AppCompatActivity implements OnClickOfRecyclerVi
     }
 
     @Override
-    public void onClickRecyclerView(int position, String operation) {
+    public void onClickRecyclerView(int position, String operation, StepFilterType scope) {
+        //scope is not used yet
         FragFilterFinal fragFilterFinal = pagerAdapter.getFragFilterNew();
         fragFilterFinal.onClickRecyclerView(position, operation);
     }
