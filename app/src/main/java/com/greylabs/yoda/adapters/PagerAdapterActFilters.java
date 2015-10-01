@@ -9,6 +9,7 @@ import com.greylabs.yoda.enums.StepFilterType;
 import com.greylabs.yoda.fragments.FragFilter;
 import com.greylabs.yoda.utils.Constants;
 
+//previously used but not now
 public class PagerAdapterActFilters extends FragmentPagerAdapter
 {
     private final String[] titles = { "Today", "This Week", "This Month", "This Quarter", "This Year"};

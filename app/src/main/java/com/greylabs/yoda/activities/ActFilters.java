@@ -9,9 +9,10 @@ import android.view.MenuItem;
 import com.astuetz.PagerSlidingTabStrip;
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.adapters.PagerAdapterActFiltersNew;
-import com.greylabs.yoda.interfaces.OnClickOfRecyclerViewFragFiltrNew;
+import com.greylabs.yoda.fragments.FragFilterFinal;
+import com.greylabs.yoda.interfaces.OnClickOfRecyclerViewFragFilterFinal;
 
-public class ActFilters extends AppCompatActivity implements OnClickOfRecyclerViewFragFiltrNew//OnCheckExpandableList
+public class ActFilters extends AppCompatActivity implements OnClickOfRecyclerViewFragFilterFinal//OnCheckExpandableList
 {
     private Toolbar toolbar;
     private PagerSlidingTabStrip tabStrip;
@@ -56,15 +57,9 @@ public class ActFilters extends AppCompatActivity implements OnClickOfRecyclerVi
         return super.onOptionsItemSelected(item);
     }
 
-//    @Override
-//    public void onCheckExpandableList(int groupPosition, int childPosition, Goal goal) {
-//        FragFilter fragFilter = pagerAdapter.getFragFilter();
-//        fragFilter.onCheckExpandableList(groupPosition, childPosition, goal);
-//    }
-
     @Override
     public void onClickRecyclerView(int position, String operation) {
-//        FragFilterNew fragFilterToday = pagerAdapter.getFragFilterNew();
-//        fragFilterToday.onClickRecyclerView(position, operation);
+        FragFilterFinal fragFilterFinal = pagerAdapter.getFragFilterNew();
+        fragFilterFinal.onClickRecyclerView(position, operation);
     }
 }

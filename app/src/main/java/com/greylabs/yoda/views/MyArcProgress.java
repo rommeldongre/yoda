@@ -21,6 +21,7 @@ public class MyArcProgress extends View {
     private Paint paint;
     protected Paint textPaint;
     private RectF rectF;
+    private RectF arcRectF;
     private float strokeWidth;
     private float suffixTextSize;
     private float bottomTextSize;
@@ -77,6 +78,7 @@ public class MyArcProgress extends View {
     public MyArcProgress(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         this.rectF = new RectF();
+        this.arcRectF = new RectF();
         this.progress = 0;
         this.suffixText = "%";
         this.default_finished_color = -1;
@@ -301,6 +303,7 @@ public class MyArcProgress extends View {
 //        this.rectF.set(this.strokeWidth / 2.0F, this.strokeWidth / 2.0F, (float)MeasureSpec.getSize(widthMeasureSpec) - this.strokeWidth / 2.0F, (float)MeasureSpec.getSize(heightMeasureSpec) - this.strokeWidth / 2.0F);
         padding = strokeWidth/2;
         this.rectF.set((this.strokeWidth / 2.0F)+padding ,( this.strokeWidth / 2.0F)+padding, ((float)MeasureSpec.getSize(widthMeasureSpec) - this.strokeWidth / 2.0F)-padding, ((float)MeasureSpec.getSize(heightMeasureSpec) - this.strokeWidth / 2.0F)-padding);
+        this.arcRectF.set(this.rectF.left+padding, rectF.top, this.rectF.right - padding, rectF.bottom);
         float radius = (float)this.getWidth() / 2.0F;
         float angle = (360.0F - this.arcAngle) / 2.0F;
         this.arcBottomHeight = radius * (float)(1.0D - Math.cos((double)(angle / 180.0F) * 3.141592653589793D));
@@ -317,21 +320,21 @@ public class MyArcProgress extends View {
         paintBackgroundCircle.setColor(this.backgroundCircleColor);
         canvas.drawCircle((float) this.getWidth() / 2.0F, (float) this.getHeight() / 2.0F, (float) this.getHeight() / 2.0F, paintBackgroundCircle);
 
-        this.rectF.left = this.rectF.left+padding;
-        this.rectF.right = this.rectF.right - padding;
+//        this.rectF.left = this.rectF.left+padding;
+//        this.rectF.right = this.rectF.right - padding;
 
         // divider line
         Paint paintLine = new Paint();
         paintLine.setColor(this.dividerColor);
         paintLine.setStrokeWidth(2);
-        canvas.drawLine(this.rectF.left + this.getStrokeWidth(), this.rectF.centerY(), this.rectF.right - this.getStrokeWidth(), this.rectF.centerY(), paintLine);
+        canvas.drawLine(this.arcRectF.left + this.getStrokeWidth(), this.arcRectF.centerY(), this.arcRectF.right - this.getStrokeWidth(), this.arcRectF.centerY(), paintLine);
 
         // two arcs
         this.paint.setColor(this.unfinishedStrokeColor);
         this.paint.setStrokeCap(Paint.Cap.BUTT);
-        canvas.drawArc(this.rectF, startAngle, this.arcAngle, false, this.paint);
+        canvas.drawArc(this.arcRectF, startAngle, this.arcAngle, false, this.paint);
         this.paint.setColor(this.finishedStrokeColor);
-        canvas.drawArc(this.rectF, startAngle, finishedSweepAngle, false, this.paint);
+        canvas.drawArc(this.arcRectF, startAngle, finishedSweepAngle, false, this.paint);
 
 //        String text = String.valueOf(this.getProgress());
 //        float bottomTextBaseline;

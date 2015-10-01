@@ -6,27 +6,26 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.greylabs.yoda.enums.StepFilterType;
-import com.greylabs.yoda.fragments.FragFilterNew;
+import com.greylabs.yoda.fragments.FragFilterFinal;
 import com.greylabs.yoda.utils.Constants;
 
 public class PagerAdapterActFiltersNew extends FragmentPagerAdapter
 {
     private final String[] titles = { "Today", "This Week", "This Month", "This Quarter", "This Year"};
 
-    FragFilterNew fragFilter;
+    FragFilterFinal fragFilter;
 
     public PagerAdapterActFiltersNew(FragmentManager fm) {
         super(fm);
     }
 
-    public FragFilterNew getFragFilterNew() { return fragFilter; }
+    public FragFilterFinal getFragFilterNew() { return fragFilter; }
 
     @Override
     public Fragment getItem(int index) {
 
         Bundle bundle = new Bundle();
-        fragFilter = new FragFilterNew();
-
+        fragFilter = new FragFilterFinal();
         switch (index) {
             case 0:
                 bundle.putSerializable(Constants.FILTER_SCOPE, StepFilterType.TODAY);
@@ -66,7 +65,6 @@ public class PagerAdapterActFiltersNew extends FragmentPagerAdapter
         return titles[position];
     }
 
-    //refresh content (create new fragment each time)
     @Override
     public int getItemPosition(Object object) {
         return POSITION_NONE;
