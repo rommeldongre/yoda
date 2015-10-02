@@ -60,7 +60,7 @@ public class FragFilterFinal extends Fragment {
         recyclerView.setHasFixedSize(true);
         getThinResultsFromLocal(scope);
 
-        mAdapter = new AdapterRecyclerViewFragFilterFinal(context, pendingStepArrayList, scope);
+        mAdapter = new AdapterRecyclerViewFragFilterFinal(context, pendingStepArrayList, scope, recyclerView, tvEmptyView);
         recyclerView.setAdapter(mAdapter);
         mLayoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(mLayoutManager);

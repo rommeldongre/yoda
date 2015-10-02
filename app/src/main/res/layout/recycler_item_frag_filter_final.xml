@@ -35,6 +35,8 @@
                 android:id="@+id/tvStepNameRecyclerItemFragFilterNew"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minLines="1"
+                android:maxLines="1"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
             <TextView

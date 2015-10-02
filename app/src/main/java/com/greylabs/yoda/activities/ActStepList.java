@@ -368,6 +368,10 @@ public class ActStepList extends AppCompatActivity implements onClickOfRecyclerV
                         pendingStepsArrayList.get(Position).freeSlots();
                     }
                     pendingStepsArrayList.remove(Position);
+                    if(pendingStepsArrayList.get(Position).isExpire() == PendingStep.PendingStepExpire.EXPIRE){
+                        pendingStepsArrayList.get(Position).setDeleted(true);
+                        pendingStepsArrayList.get(Position).save();
+                    }
                     rescheduleStepsOfCurrentGoal();
                     checkForEmptyViewVisibility(pendingStepsArrayList, getString(R.string.tvEmptyViewPendingStepsActStepList));
                 }else {
@@ -385,6 +389,10 @@ public class ActStepList extends AppCompatActivity implements onClickOfRecyclerV
                     for(int i=0;i<pendingStepsArrayList.size();i++){
                         if(stepArrayList.get(Position).getId()==pendingStepsArrayList.get(i).getId())
                             pendingStepsArrayList.remove(i);
+                    }
+                    if(stepArrayList.get(Position).isExpire() == PendingStep.PendingStepExpire.EXPIRE){
+                        stepArrayList.get(Position).setDeleted(true);
+                        stepArrayList.get(Position).save();
                     }
                     rescheduleStepsOfCurrentGoal();
                 }

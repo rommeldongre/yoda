@@ -40,7 +40,6 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
-            android:layout_margin="10dp"
             android:layout_marginRight="10dip"
             android:layout_toLeftOf="@+id/btnEditGoalRecyclerItemActGoalList"
             android:background="@drawable/ic_btn_delete_gray" />
@@ -80,6 +79,8 @@
                 android:id="@+id/tvGoalNameRecyclerItemActGoalList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:layout_marginRight="10dp"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
             <TextView

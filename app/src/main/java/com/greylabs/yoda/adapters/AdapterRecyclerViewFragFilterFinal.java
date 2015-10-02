@@ -30,11 +30,16 @@ public class AdapterRecyclerViewFragFilterFinal extends RecyclerView.Adapter<Ada
     Context context;
     StepFilterType scope;
 
-    public AdapterRecyclerViewFragFilterFinal(Context passedContext, ArrayList<PendingStep> stepsArrayList, StepFilterType scope)
+    RecyclerView recyclerView;
+    TextView tvEmptyView;
+
+    public AdapterRecyclerViewFragFilterFinal(Context passedContext, ArrayList<PendingStep> stepsArrayList, StepFilterType scope, RecyclerView recyclerView, TextView tvEmptyView)
     {
         this.context = passedContext;
         this.stepsArrayList = stepsArrayList;
         this.scope = scope;
+        this.recyclerView = recyclerView;
+        this.tvEmptyView = tvEmptyView;
     }
 
     @Override
@@ -95,6 +100,7 @@ public class AdapterRecyclerViewFragFilterFinal extends RecyclerView.Adapter<Ada
 
             PendingStep currentPendingStep = stepsArrayList.get(getPosition());
             stepsArrayList.remove(getPosition());
+            setEmptyViewVisibility();
             notifyItemRemoved(getPosition());
             currentPendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
             currentPendingStep.setUpdated(new DateTime(new Date()));
@@ -102,6 +108,10 @@ public class AdapterRecyclerViewFragFilterFinal extends RecyclerView.Adapter<Ada
             currentPendingStep.setSlotId(0);
             currentPendingStep.save();
             currentPendingStep.cancelAlarm();
+            if(currentPendingStep.isExpire() == PendingStep.PendingStepExpire.EXPIRE){
+                currentPendingStep.setDeleted(true);
+                currentPendingStep.save();
+            }
             rescheduleStepsOfCurrentGoal(currentPendingStep);
             //sync code
             GoogleSync.getInstance(contxt).sync();
@@ -113,6 +123,17 @@ public class AdapterRecyclerViewFragFilterFinal extends RecyclerView.Adapter<Ada
             TimeBox currentTimeBox = new TimeBox(contxt).get(currentGoal.getTimeBoxId());
             YodaCalendar yodaCalendar = new YodaCalendar(contxt, currentTimeBox);
             yodaCalendar.rescheduleSteps(currentGoal.getId());
+        }
+
+        public void setEmptyViewVisibility() {
+            if (stepsArrayList.isEmpty()) {
+                recyclerView.setVisibility(View.GONE);
+                tvEmptyView.setVisibility(View.VISIBLE);
+            }
+            else {
+                recyclerView.setVisibility(View.VISIBLE);
+                tvEmptyView.setVisibility(View.GONE);
+            }
         }
     }
 }

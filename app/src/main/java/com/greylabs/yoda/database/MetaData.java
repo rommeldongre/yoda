@@ -70,6 +70,7 @@ public class MetaData {
         public static final String stringId="stringId";
         public static final String nickName="nickName";
         public static final String priority="priority";
+        public static final String expire="expire";
         public static final String time="time";
         public static final String type="type";
         public static final String stepCount="stepCount";
@@ -89,6 +90,7 @@ public class MetaData {
                 " "+nickName+" text, " +
                 " "+priority+" integer, " +
                 " "+time+" integer, " +
+                " "+expire+" integer, " +
                 " "+type+" integer, " +
                 " "+stepCount+" integer, " +
                 " "+skipCount+" integer ," +

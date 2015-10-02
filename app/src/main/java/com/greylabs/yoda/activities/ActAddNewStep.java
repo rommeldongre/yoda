@@ -32,6 +32,7 @@ import com.google.api.client.util.DateTime;
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.adapters.AdapterGoalSpinner;
 import com.greylabs.yoda.apis.googleacc.GoogleSync;
+import com.greylabs.yoda.enums.TimeBoxTill;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.Slot;
@@ -57,7 +58,7 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
     LinearLayout singleStepPanel, seriesPanel;
     ScrollView scrollView;
     RadioButton rbDontExpire, rbExpire;
-    RadioGroup rgBehaviourOfExpiredSteps;
+//    RadioGroup rgBehaviourOfExpiredSteps;
 
     AdapterGoalSpinner adapterGoalSpinner;
     //    ArrayAdapter<String> spinnerArrayAdapter;
@@ -114,8 +115,8 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
         singleStepPanel = (LinearLayout) findViewById(R.id.SingleStepPanelActAddNewStep);
         seriesPanel = (LinearLayout) findViewById(R.id.SeriesPanelActAddNewStep);
         rbDontExpire = (RadioButton) findViewById(R.id.rbDontExpireActAddNewStep);
-        rbExpire = (RadioButton) findViewById(R.id.rbDontExpireActAddNewStep);
-        rgBehaviourOfExpiredSteps = (RadioGroup) findViewById(R.id.rgBehaviourOfExpiredStepsActAddNewStep);
+        rbExpire = (RadioButton) findViewById(R.id.rbExpireActAddNewStep);
+//        rgBehaviourOfExpiredSteps = (RadioGroup) findViewById(R.id.rgBehaviourOfExpiredStepsActAddNewStep);
 
         //get defaults from settings and set Spinners accordingly
 
@@ -148,11 +149,7 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
         } else {
             stepPrioritySpinner.setSelection(0);
         }
-        if(goalList.get(goalSpinner.getSelectedItemPosition()).getId() == prefs.getStretchGoalId()){
-            rbExpire.setChecked(true);
-        }else {
-            rbDontExpire.setChecked(false);
-        }
+//        setWhetherToExpireValue(goalList.get(goalSpinner.getSelectedItemPosition()));
     }
 
 
@@ -303,6 +300,11 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
             }
             currentStep.setNickName(edtStepName.getText().toString());
             currentStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+            if(rbExpire.isChecked()){
+                currentStep.setExpire(PendingStep.PendingStepExpire.EXPIRE);
+            }else {
+                currentStep.setExpire(PendingStep.PendingStepExpire.NOT_EXPIRE);
+            }
 
             if (stepTypeSpinner.getSelectedItem().equals(Constants.PENDING_STEP_TYPE_SINGLE_STEP)) {
                 if (sbTimeSingleStep.getProgress() > 3) {
@@ -466,6 +468,7 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
         switch (parent.getId()) {
             case R.id.spinnerGoalNameActAddNewStep:
 //                if (position + 1 == goalNamesList.size()) {
+                setWhetherToExpireValue(goalList.get(position));
                 if (position + 1 == goalList.size()) {
                     Intent intent = new Intent(this, ActAddNewGoal.class);
                     intent.putExtra(Constants.CALLER, Constants.ACT_ADD_NEW_STEP);
@@ -474,11 +477,6 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                 } else {
                     goalChosen = position;
                     getStepArrayFromLocal();
-                    if(currentGoal.getId() == prefs.getStretchGoalId()){
-                        rbExpire.setChecked(true);
-                    }else {
-                        rbDontExpire.setChecked(true);
-                    }
                 }
                 break;
 
@@ -522,6 +520,14 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                     });
                 }
                 break;
+        }
+    }
+
+    private void setWhetherToExpireValue(Goal goal) {
+        if(new TimeBox(this).get(goal.getTimeBoxId()).getTillType() == TimeBoxTill.FOREVER){
+            rbExpire.setChecked(true);
+        }else {
+            rbDontExpire.setChecked(true);
         }
     }
 
