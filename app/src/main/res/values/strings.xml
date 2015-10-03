@@ -30,8 +30,11 @@
     <string name="msgNoEmailIdAttached">This contact don\'t have an email id.\nPlease select another.</string>
 
 
+    <!--ActAddNewStep-->
     <string name="tvStepNameActAddNewStep">Nick Name</string>
     <string name="edtStepNameHintActAddNewStep">Enter Step Nick Name</string>
+    <string name="tvStepNotesActAddNewStep">Notes</string>
+    <string name="edtStepNotesHintActAddNewStep">Enter Notes Here</string>
     <string name="tvGoalNameActAddNewStep">Goal Name</string>
     <string name="edtGoalNameHintActAddNewStep">Select Goal</string>
     <string name="btnAdvancedActAddNewStep">Advanced</string>
@@ -43,6 +46,7 @@
     <string name="tvSingleStepTimeActAddNewStep">How long would it take to do this?(Hrs)</string>
     <string name="tvStepsInSeriesActAddNewStep">No of steps in series</string>
     <string name="tvTimeForEachStepActAddNewStep">Time for each step in series (Hrs)</string>
+    <string name="tvExpirOrNotActAddNewStep">Expire after due date?</string>
     <string name="addNewTimeBoxSpinnerItemActAddNewGoal">Add New Time Box</string>
     <string name="addNewGoalSpinnerItemActAddNewStep">Add New Goal</string>
     <string name="tvDefaultStepDurationActSettingsDefaultDuration">Default Step Duration (Hrs)</string>
@@ -177,7 +181,6 @@
     <string name="titleNowNotification">Yoda says</string>
     <string name="msgNoNetworkConnectionActQuiCkStart">Check your Internet Connection and try again or You can choose Quick Start or New Step.</string>
     <string name="msgCannotSaveTimeBoxWithUpdatedValues">Cannot  save TimeBox because this timebox is attached to a Goal and all present Steps in that Goal will not fit after update.Try updating  so that  TimeBox will  have more time Slots.</string>
-    <string name="tvExpirOrNotActAddNewStep">Expire after due date?</string>
 
     <string-array name="arrayStepTypeActAddNewStep">
         <item>Single Step</item>

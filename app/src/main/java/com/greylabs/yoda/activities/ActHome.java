@@ -346,13 +346,13 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
         layoutSettingsBackground.setBackgroundColor(getResources().getColor(R.color.transparent));
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        scrollView.removeAllViews();
-        getGoalsFromLocalAndPopulate();
-        populateNowInfo();
-    }
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        scrollView.removeAllViews();
+//        getGoalsFromLocalAndPopulate();
+//        populateNowInfo();
+//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -361,5 +361,19 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
 //            prefs = Prefs.getInstance(this);
             layoutWallpaper.setBackgroundResource(prefs.getWallpaperResourceId());
         }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        scrollView.removeAllViews();
+        getGoalsFromLocalAndPopulate();
+        populateNowInfo();
+    }
+
+    public void onDialogueClosed() {
+        scrollView.removeAllViews();
+        getGoalsFromLocalAndPopulate();
+        populateNowInfo();
     }
 }

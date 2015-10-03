@@ -37,21 +37,21 @@ public class Dialogues {
     }
 
     public void showNowNotificationDialogue(String CALLER, AlarmScheduler myAlarmScheduler1, PendingStep myPendingStep1) {
-        if(dialog!=null && dialog.isShowing()){
+        if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
         }
         caller = CALLER;
-        if(caller.equals(Constants.ALARM_SERVICE)){
-            alarmScheduler=myAlarmScheduler1;
-            if(alarmScheduler!=null) {
+        if (caller.equals(Constants.ALARM_SERVICE)) {
+            alarmScheduler = myAlarmScheduler1;
+            if (alarmScheduler != null) {
                 pendingStep = new PendingStep(context).get(alarmScheduler.getStepId());
             }
-        }else if(caller.equals(Constants.ACT_HOME)){
-            pendingStep=myPendingStep1;
+        } else if (caller.equals(Constants.ACT_HOME)) {
+            pendingStep = myPendingStep1;
             pendingStep.initDatabase(context);
         }
 
-        if(pendingStep!=null){
+        if (pendingStep != null) {
             goal = new Goal(context).get(pendingStep.getGoalId());
         }
 
@@ -100,26 +100,26 @@ public class Dialogues {
         dialog.show();
     }
 
-    class MyOnClickListener implements View.OnClickListener{
+    class MyOnClickListener implements View.OnClickListener {
 
         @Override
         public void onClick(View v) {
-            switch (v.getId()){
-                case R.id.llDidNowNotification :
-                    if(pendingStep!=null){
+            switch (v.getId()) {
+                case R.id.llDidNowNotification:
+                    if (pendingStep != null) {
                         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
                         pendingStep.save();
                     }
                     dialog.dismiss();
                     break;
 
-                case R.id.llDoingItNowNotification :
-                    if(pendingStep!=null){
+                case R.id.llDoingItNowNotification:
+                    if (pendingStep != null) {
                         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.DOING);
                         pendingStep.save();
-                        Logger.log("TAG","Alarm Scheduler : "+alarmScheduler);
-                        if(alarmScheduler==null)
-                            alarmScheduler=new AlarmScheduler(context);
+                        Logger.log("TAG", "Alarm Scheduler : " + alarmScheduler);
+                        if (alarmScheduler == null)
+                            alarmScheduler = new AlarmScheduler(context);
                         else
                             alarmScheduler.initContext(context);
                         alarmScheduler.setStepId(pendingStep.getId());
@@ -128,8 +128,8 @@ public class Dialogues {
                     dialog.dismiss();
                     break;
 
-                case R.id.llMissedNowNotification :
-                    if(pendingStep!=null){
+                case R.id.llMissedNowNotification:
+                    if (pendingStep != null) {
                         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.MISSED);
                         pendingStep.setSkipCount(pendingStep.getSkipCount() + 1);
                         pendingStep.save();
@@ -139,8 +139,9 @@ public class Dialogues {
                     }
                     break;
 
-                case R.id.btnLogExcuseNowNotification :
-                    edtExcuse.getText();
+                case R.id.btnLogExcuseNowNotification:
+                    pendingStep.setNotes(edtExcuse.getText().toString());
+                    pendingStep.save();
                     // put this text into the pendingStep
 //                if(pendingStep!=null){
 //                    pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.MISSED);
@@ -156,11 +157,11 @@ public class Dialogues {
     private class MyDialogueDismissListener implements DialogInterface.OnDismissListener {
         @Override
         public void onDismiss(DialogInterface dialog) {
-            if(caller.equals(Constants.ACT_HOME)){
+            if (caller.equals(Constants.ACT_HOME)) {
 //                ((ActHome) context).runOnUiThread(new Runnable() {
 //                    @Override
 //                    public void run() {
-                        ((ActHome) context).populateNowInfo();
+                ((ActHome) context).onDialogueClosed();
 //                    }
 //                });
             }

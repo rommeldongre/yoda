@@ -69,6 +69,7 @@ public class MetaData {
         public static final String id="id";
         public static final String stringId="stringId";
         public static final String nickName="nickName";
+        public static final String notes="notes";
         public static final String priority="priority";
         public static final String expire="expire";
         public static final String time="time";
@@ -88,6 +89,7 @@ public class MetaData {
                 " "+id+" integer primary key autoincrement," +
                 " "+stringId+" text , "+
                 " "+nickName+" text, " +
+                " "+notes+" text, " +
                 " "+priority+" integer, " +
                 " "+time+" integer, " +
                 " "+expire+" integer, " +

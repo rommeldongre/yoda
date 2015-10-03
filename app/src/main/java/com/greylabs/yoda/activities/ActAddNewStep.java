@@ -50,7 +50,7 @@ import java.util.List;
 public class ActAddNewStep extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener, SeekBar.OnSeekBarChangeListener {
 
     Toolbar toolbar;
-    EditText edtStepName;
+    EditText edtStepName, edtStepNotes;
     CardView cardViewAdvanced;
     Button btnShowAdvanced, btnHideAdvanced;
     Spinner goalSpinner, stepTypeSpinner, stepPrioritySpinner;
@@ -101,6 +101,7 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
 
         scrollView = (ScrollView) findViewById(R.id.scrollViewAvtAddNewStep);
         edtStepName = (EditText) findViewById(R.id.edtStepNameActAddNewStep);
+        edtStepNotes = (EditText) findViewById(R.id.edtStepNotesActAddNewStep);
         goalSpinner = (Spinner) findViewById(R.id.spinnerGoalNameActAddNewStep);
         btnShowAdvanced = (Button) findViewById(R.id.btnShowAdvancedActAddNewStep);
 
@@ -204,6 +205,7 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                     getGoalListFromLocal();
                     getSupportActionBar().setTitle(currentStep.getNickName());
                     edtStepName.setText(currentStep.getNickName());
+                    edtStepNotes.setText(currentStep.getNotes());
 
                     int oldGoalPosition = 0;
                     for(int i=0; i<goalList.size();i++){
@@ -299,6 +301,7 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                 currentStep.setUpdated(new DateTime(new Date()));
             }
             currentStep.setNickName(edtStepName.getText().toString());
+            currentStep.setNotes(edtStepNotes.getText().toString());
             currentStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
             if(rbExpire.isChecked()){
                 currentStep.setExpire(PendingStep.PendingStepExpire.EXPIRE);

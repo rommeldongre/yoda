@@ -28,6 +28,7 @@ public class PendingStep implements Serializable {
     private long id;
     private String stringId="";//used for google task
     private String nickName;
+    private String notes;
     private PendingStepExpire expire;
     private int priority;
     private int time;
@@ -73,6 +74,14 @@ public class PendingStep implements Serializable {
 
     public void setNickName(String nickName) {
         this.nickName = nickName;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
     public int getPriority() {
@@ -224,6 +233,7 @@ public class PendingStep implements Serializable {
                 this.id = c.getInt(c.getColumnIndex(TablePendingStep.id));
                 this.stringId=c.getString(c.getColumnIndex(TablePendingStep.stringId));
                 this.nickName = c.getString(c.getColumnIndex(TablePendingStep.nickName));
+                this.notes = c.getString(c.getColumnIndex(TablePendingStep.notes));
                 this.priority = c.getInt(c.getColumnIndex(TablePendingStep.priority));
                 this.time = c.getInt(c.getColumnIndex(TablePendingStep.time));
                 this.expire = PendingStepExpire.getPendingStepExpire(
@@ -263,6 +273,7 @@ public class PendingStep implements Serializable {
                 pendingStep.id = c.getInt(c.getColumnIndex(TablePendingStep.id));
                 pendingStep.stringId=c.getString(c.getColumnIndex(TablePendingStep.stringId));
                 pendingStep.nickName = c.getString(c.getColumnIndex(TablePendingStep.nickName));
+                pendingStep.notes = c.getString(c.getColumnIndex(TablePendingStep.notes));
                 pendingStep.priority = c.getInt(c.getColumnIndex(TablePendingStep.priority));
                 pendingStep.time = c.getInt(c.getColumnIndex(TablePendingStep.time));
                 pendingStep.expire = PendingStepExpire.getPendingStepExpire(
@@ -318,6 +329,7 @@ public class PendingStep implements Serializable {
                 pendingStep.id = c.getInt(c.getColumnIndex(TablePendingStep.id));
                 pendingStep.stringId=c.getString(c.getColumnIndex(TablePendingStep.stringId));
                 pendingStep.nickName = c.getString(c.getColumnIndex(TablePendingStep.nickName));
+                pendingStep.notes = c.getString(c.getColumnIndex(TablePendingStep.notes));
                 pendingStep.priority = c.getInt(c.getColumnIndex(TablePendingStep.priority));
                 pendingStep.time = c.getInt(c.getColumnIndex(TablePendingStep.time));
                 pendingStep.expire = PendingStepExpire.getPendingStepExpire(
@@ -360,6 +372,7 @@ public class PendingStep implements Serializable {
                 pendingStep.id = c.getInt(c.getColumnIndex(TablePendingStep.id));
                 pendingStep.stringId=c.getString(c.getColumnIndex(TablePendingStep.stringId));
                 pendingStep.nickName = c.getString(c.getColumnIndex(TablePendingStep.nickName));
+                pendingStep.notes = c.getString(c.getColumnIndex(TablePendingStep.notes));
                 pendingStep.priority = c.getInt(c.getColumnIndex(TablePendingStep.priority));
                 pendingStep.time = c.getInt(c.getColumnIndex(TablePendingStep.time));
                 pendingStep.expire = PendingStepExpire.getPendingStepExpire(
@@ -409,6 +422,51 @@ public class PendingStep implements Serializable {
                 pendingStep.id = c.getInt(c.getColumnIndex(TablePendingStep.id));
                 pendingStep.stringId=c.getString(c.getColumnIndex(TablePendingStep.stringId));
                 pendingStep.nickName = c.getString(c.getColumnIndex(TablePendingStep.nickName));
+                pendingStep.notes = c.getString(c.getColumnIndex(TablePendingStep.notes));
+                pendingStep.priority = c.getInt(c.getColumnIndex(TablePendingStep.priority));
+                pendingStep.time = c.getInt(c.getColumnIndex(TablePendingStep.time));
+                pendingStep.expire = PendingStepExpire.getPendingStepExpire(
+                        c.getInt(c.getColumnIndex(TablePendingStep.expire)));
+                pendingStep.pendingStepType = PendingStepType.getIntegerToEnumType(
+                        c.getInt(c.getColumnIndex(TablePendingStep.type)));
+                pendingStep.stepCount = c.getInt(c.getColumnIndex(TablePendingStep.stepCount));
+                pendingStep.skipCount = c.getInt(c.getColumnIndex(TablePendingStep.skipCount));
+                pendingStep.pendingStepStatus = PendingStepStatus.getPendingStepStatus(
+                        c.getInt(c.getColumnIndex(TablePendingStep.status)));
+                pendingStep.goalId = c.getInt(c.getColumnIndex(TablePendingStep.goalId));
+                pendingStep.goalStringId=c.getString(c.getColumnIndex(TablePendingStep.goalStringId));
+                pendingStep.stepDate= CalendarUtils.parseDate(c.getString(c.getColumnIndex(TablePendingStep.stepDate)));
+                pendingStep.slotId = c.getLong(c.getColumnIndex(TablePendingStep.slotId));
+                pendingStep.subStepOf = c.getLong(c.getColumnIndex(TablePendingStep.subStepOf));
+                pendingStep.updated=CalendarUtils.getStringToRFCTimestamp(c.getString(c.getColumnIndex(TablePendingStep.updated)));
+                pendingStep.deleted=(c.getInt(c.getColumnIndex(TablePendingStep.deleted))==1)?true:false;
+                pendingSteps.add(pendingStep);
+            } while (c.moveToNext());
+        }
+        c.close();
+        return pendingSteps;
+    }
+
+    public List<PendingStep> getAllSingleAndSubSteps(long goalId) {
+        ArrayList<PendingStep> pendingSteps = null;
+        SQLiteDatabase db = database.getReadableDatabase();
+        String query = "select * " +
+                " " + " from " + TablePendingStep.pendingStep + " " +
+                " " + " where " + TablePendingStep.goalId + " = " + goalId + " " +
+                " " + " and " + TablePendingStep.type + "!=" + PendingStepType.SPLIT_STEP.ordinal()+" " +
+                " " + " and " + TablePendingStep.type + "!=" + PendingStepType.SERIES_STEP.ordinal()+" " +
+                " " + " and "+TablePendingStep.deleted+"=0"+
+                " " + " order by "+TablePendingStep.priority+" asc ";
+
+        Cursor c = db.rawQuery(query, null);
+        if (c.moveToFirst()) {
+            pendingSteps = new ArrayList<>();
+            do {
+                PendingStep pendingStep = new PendingStep(context);
+                pendingStep.id = c.getInt(c.getColumnIndex(TablePendingStep.id));
+                pendingStep.stringId=c.getString(c.getColumnIndex(TablePendingStep.stringId));
+                pendingStep.nickName = c.getString(c.getColumnIndex(TablePendingStep.nickName));
+                pendingStep.notes = c.getString(c.getColumnIndex(TablePendingStep.notes));
                 pendingStep.priority = c.getInt(c.getColumnIndex(TablePendingStep.priority));
                 pendingStep.time = c.getInt(c.getColumnIndex(TablePendingStep.time));
                 pendingStep.expire = PendingStepExpire.getPendingStepExpire(
@@ -449,6 +507,7 @@ public class PendingStep implements Serializable {
                 pendingStep.id = c.getInt(c.getColumnIndex(TablePendingStep.id));
                 pendingStep.stringId=c.getString(c.getColumnIndex(TablePendingStep.stringId));
                 pendingStep.nickName = c.getString(c.getColumnIndex(TablePendingStep.nickName));
+                pendingStep.notes = c.getString(c.getColumnIndex(TablePendingStep.notes));
                 pendingStep.priority = c.getInt(c.getColumnIndex(TablePendingStep.priority));
                 pendingStep.time = c.getInt(c.getColumnIndex(TablePendingStep.time));
                 pendingStep.expire = PendingStepExpire.getPendingStepExpire(
@@ -493,6 +552,7 @@ public class PendingStep implements Serializable {
                 pendingStep.id = c.getInt(c.getColumnIndex(TablePendingStep.id));
                 pendingStep.stringId=c.getString(c.getColumnIndex(TablePendingStep.stringId));
                 pendingStep.nickName = c.getString(c.getColumnIndex(TablePendingStep.nickName));
+                pendingStep.notes = c.getString(c.getColumnIndex(TablePendingStep.notes));
                 pendingStep.priority = c.getInt(c.getColumnIndex(TablePendingStep.priority));
                 pendingStep.time = c.getInt(c.getColumnIndex(TablePendingStep.time));
                 pendingStep.expire = PendingStepExpire.getPendingStepExpire(
@@ -524,6 +584,7 @@ public class PendingStep implements Serializable {
         ContentValues values = new ContentValues();
         values.put(TablePendingStep.stringId,this.stringId);
         values.put(TablePendingStep.nickName, this.nickName);
+        values.put(TablePendingStep.notes, this.notes);
         values.put(TablePendingStep.priority, this.priority);
         values.put(TablePendingStep.expire, this.expire.ordinal());
         values.put(TablePendingStep.time, this.time);
@@ -561,6 +622,7 @@ public class PendingStep implements Serializable {
         pendingStep.setId(0);
         values.put(TablePendingStep.stringId, pendingStep.stringId);
         values.put(TablePendingStep.nickName, pendingStep.nickName);
+        values.put(TablePendingStep.notes, pendingStep.notes);
         values.put(TablePendingStep.priority, pendingStep.priority);
         values.put(TablePendingStep.time, pendingStep.time);
         values.put(TablePendingStep.expire, pendingStep.expire.ordinal());
@@ -650,6 +712,7 @@ public class PendingStep implements Serializable {
                 pendingStep.id = c.getInt(c.getColumnIndex(TablePendingStep.id));
                 pendingStep.stringId=c.getString(c.getColumnIndex(TablePendingStep.stringId));
                 pendingStep.nickName = c.getString(c.getColumnIndex(TablePendingStep.nickName));
+                pendingStep.notes = c.getString(c.getColumnIndex(TablePendingStep.notes));
                 pendingStep.priority = c.getInt(c.getColumnIndex(TablePendingStep.priority));
                 pendingStep.time = c.getInt(c.getColumnIndex(TablePendingStep.time));
                 pendingStep.expire = PendingStepExpire.getPendingStepExpire(
@@ -695,6 +758,7 @@ public class PendingStep implements Serializable {
                 pendingStep.id = c.getInt(c.getColumnIndex(TablePendingStep.id));
                 pendingStep.stringId=c.getString(c.getColumnIndex(TablePendingStep.stringId));
                 pendingStep.nickName = c.getString(c.getColumnIndex(TablePendingStep.nickName));
+                pendingStep.notes = c.getString(c.getColumnIndex(TablePendingStep.notes));
                 pendingStep.priority = c.getInt(c.getColumnIndex(TablePendingStep.priority));
                 pendingStep.time = c.getInt(c.getColumnIndex(TablePendingStep.time));
                 pendingStep.expire = PendingStepExpire.getPendingStepExpire(
@@ -736,6 +800,7 @@ public class PendingStep implements Serializable {
                 pendingStep.id = c.getInt(c.getColumnIndex(TablePendingStep.id));
                 pendingStep.stringId=c.getString(c.getColumnIndex(TablePendingStep.stringId));
                 pendingStep.nickName = c.getString(c.getColumnIndex(TablePendingStep.nickName));
+                pendingStep.notes = c.getString(c.getColumnIndex(TablePendingStep.notes));
                 pendingStep.priority = c.getInt(c.getColumnIndex(TablePendingStep.priority));
                 pendingStep.time = c.getInt(c.getColumnIndex(TablePendingStep.time));
                 pendingStep.expire = PendingStepExpire.getPendingStepExpire(
@@ -785,6 +850,7 @@ public class PendingStep implements Serializable {
             pendingStepNew.setId(0);
             pendingStepNew.setGoalStringId("");
             pendingStepNew.setNickName(this.getNickName() + " Session " + i);
+            pendingStepNew.setNotes(this.getNotes());
             pendingStepNew.setPriority(this.getPriority());
             pendingStepNew.setExpire(this.isExpire());
             pendingStepNew.setPendingStepType(PendingStepType.SUB_STEP);
@@ -812,6 +878,7 @@ public class PendingStep implements Serializable {
         if(subSteps!=null) {
             for (PendingStep subStep : subSteps) {
                 subStep.setNickName(subStep.nickName);
+                subStep.setNotes(subStep.notes);
                 subStep.setPriority(this.getPriority());
                 subStep.setExpire(this.isExpire());
                 subStep.setPendingStepType(PendingStepType.SUB_STEP);
