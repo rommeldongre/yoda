@@ -127,9 +127,16 @@ public class ActStepList extends AppCompatActivity implements onClickOfRecyclerV
         recyclerView.setOnScrollListener(dragSortRecycler.getScrollListener());
     }
 
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        getStepArrayFromLocal();
+//        mAdapter.notifyDataSetChanged();
+//    }
+
     @Override
-    protected void onResume() {
-        super.onResume();
+    protected void onRestart() {
+        super.onRestart();
         getStepArrayFromLocal();
         mAdapter.notifyDataSetChanged();
     }

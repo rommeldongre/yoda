@@ -1034,9 +1034,9 @@ public class PendingStep implements Serializable {
         public static PendingStepExpire getPendingStepExpire(int status) {
             switch (status) {
                 case 0:
-                    return NOT_EXPIRE;
-                case 1:
                     return EXPIRE;
+                case 1:
+                    return NOT_EXPIRE;
             }
             return NOT_EXPIRE;
         }
