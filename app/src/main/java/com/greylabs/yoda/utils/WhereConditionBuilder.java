@@ -83,6 +83,7 @@ public class WhereConditionBuilder {
                         }
                         strTill=strTill.substring(0,strTill.lastIndexOf("or"));
                         strTill+=" )";
+                        calendar.add(Calendar.MONTH,-1);
                         strTill="("+strTill+" and "+TableDay.year+"="+calendar.get(Calendar.YEAR)+" )";
                     }
                     break;

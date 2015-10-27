@@ -338,6 +338,7 @@ public final class QuickStart {
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.setDeleted(false);
         pendingStep.setUpdated(new DateTime(new Date()));
+        pendingStep.setExpire(PendingStep.PendingStepExpire.NOT_EXPIRE);
         pendingStep.save();
         pendingStep=new PendingStep(context);
         pendingStep.setNickName("Oatmeal breakfast");
@@ -349,6 +350,7 @@ public final class QuickStart {
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.setDeleted(false);
         pendingStep.setUpdated(new DateTime(new Date()));
+        pendingStep.setExpire(PendingStep.PendingStepExpire.NOT_EXPIRE);
         pendingStep.save();
 
 //        pendingStep=new PendingStep(context);
@@ -399,6 +401,7 @@ public final class QuickStart {
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.setDeleted(false);
         pendingStep.setUpdated(new DateTime(new Date()));
+        pendingStep.setExpire(PendingStep.PendingStepExpire.NOT_EXPIRE);
         pendingStep.save();
         pendingStep=new PendingStep(context);
         pendingStep.setNickName("Cook with spouse");
@@ -410,6 +413,7 @@ public final class QuickStart {
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.setDeleted(false);
         pendingStep.setUpdated(new DateTime(new Date()));
+        pendingStep.setExpire(PendingStep.PendingStepExpire.NOT_EXPIRE);
         pendingStep.save();
         pendingStep=new PendingStep(context);
         pendingStep.setNickName("Skype with parents");
@@ -421,6 +425,7 @@ public final class QuickStart {
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.setDeleted(false);
         pendingStep.setUpdated(new DateTime(new Date()));
+        pendingStep.setExpire(PendingStep.PendingStepExpire.NOT_EXPIRE);
         pendingStep.save();
 
         //steps for goal 3
@@ -434,6 +439,7 @@ public final class QuickStart {
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.setDeleted(false);
         pendingStep.setUpdated(new DateTime(new Date()));
+        pendingStep.setExpire(PendingStep.PendingStepExpire.NOT_EXPIRE);
         pendingStep.save();
         pendingStep=new PendingStep(context);
         pendingStep.setNickName("Clean out inbox");
@@ -445,6 +451,7 @@ public final class QuickStart {
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.setDeleted(false);
         pendingStep.setUpdated(new DateTime(new Date()));
+        pendingStep.setExpire(PendingStep.PendingStepExpire.NOT_EXPIRE);
         pendingStep.save();
 
 //        pendingStep=new PendingStep(context);
@@ -468,6 +475,7 @@ public final class QuickStart {
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.setDeleted(false);
         pendingStep.setUpdated(new DateTime(new Date()));
+        pendingStep.setExpire(PendingStep.PendingStepExpire.NOT_EXPIRE);
         pendingStep.save();
 
         //steps for goal 5
@@ -481,6 +489,7 @@ public final class QuickStart {
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.setDeleted(false);
         pendingStep.setUpdated(new DateTime(new Date()));
+        pendingStep.setExpire(PendingStep.PendingStepExpire.NOT_EXPIRE);
         pendingStep.save();
 
         //steps for goal 6
@@ -494,6 +503,7 @@ public final class QuickStart {
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.setDeleted(false);
         pendingStep.setUpdated(new DateTime(new Date()));
+        pendingStep.setExpire(PendingStep.PendingStepExpire.NOT_EXPIRE);
         pendingStep.save();
         pendingStep=new PendingStep(context);
         pendingStep.setNickName("Fix Piano");
@@ -505,6 +515,7 @@ public final class QuickStart {
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.setDeleted(false);
         pendingStep.setUpdated(new DateTime(new Date()));
+        pendingStep.setExpire(PendingStep.PendingStepExpire.NOT_EXPIRE);
         pendingStep.save();
     }
 }
