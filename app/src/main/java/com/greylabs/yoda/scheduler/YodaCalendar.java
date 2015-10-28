@@ -418,85 +418,60 @@ public class YodaCalendar {
             return false;
         Goal goal=new Goal(context).get(pendingStep.getGoalId());
         removeTodaysPassedSlots();
+        List<PendingStep> pendingStepsList=new ArrayList<>();
         switch (pendingStep.getPendingStepType()){
             case SPLIT_STEP:
             case SERIES_STEP:
-                List<PendingStep> pendingStepsList=pendingStep.
-                        getAllSubSteps(pendingStep.getId(), pendingStep.getGoalId());
-                Iterator<PendingStep> pendingSteps =pendingStepsList .iterator();
-                PendingStep ps = null;
-                int sessionCount=0;
-                while (pendingSteps.hasNext()) {
-                    ps=pendingSteps.next();
-                    Iterator<Slot> it = slots.iterator();
-                    while (it.hasNext()) {
-                        Slot slot = it.next();
-                        if (ps.getTime() <=slot.getTime() && slot.getTimeBoxId()==timeBox.getId()  ) {
-                            slot.setTime(slot.getTime() - ps.getTime());
-                            slot.setGoalId(ps.getGoalId());
-                            ps.setSlotId(slot.getId());
-                            calendar.setTime(slot.getScheduleDate());
-                            calendar.add(Calendar.HOUR_OF_DAY, slot.getWhen().getStartTime());
-                            updateStep(ps, slot);
-                            ps.setStepDate(calendar.getTime());
-                            slot.save();
-                            ps.save();
-                            goal.setDueDate(ps.getStepDate());
-                            goal.save();
-                            AlarmScheduler alarmScheduler = new AlarmScheduler(context);
-                            alarmScheduler.setStepId(ps.getId());
-                            alarmScheduler.setSubStepId(ps.getSubStepOf());
-                            alarmScheduler.setPendingStepType(PendingStep.PendingStepType.SUB_STEP);
-                            alarmScheduler.setStartTime(slot.getWhen().getStartTime());
-                            alarmScheduler.setDuration(ps.getTime());
-                            alarmScheduler.setAlarmDate(slot.getScheduleDate());
-                            alarmScheduler.cancel();
-                            alarmScheduler.setAlarm();
-                            isScheduled=true;
-                            break;
-                        }
-                    }
-                    sessionCount++;
-                }
-                if(pendingStepsList!=null && pendingStepsList.size()>=1 && ps!=null) {
-                    pendingStep.setUpdated(ps.getUpdated());
-                    pendingStep.setStepDate(pendingStepsList.get(0).getStepDate());
-                    pendingStep.setStepCount(sessionCount);
-                    pendingStep.save();
-                    goal.setDueDate(pendingStepsList.get(pendingStepsList.size()-1).getStepDate());
-                    goal.save();
-                }
+                List<PendingStep> temp=pendingStep.getAllSubSteps(pendingStep.getId(), pendingStep.getGoalId());
+                if (temp!=null)
+                    pendingStepsList.addAll(temp);
                 break;
             case SINGLE_STEP:
-                Iterator<Slot> it = slots.iterator();
-                while (it.hasNext()) {
-                    Slot slot = it.next();
-                    if (pendingStep.getTime() <=slot.getTime() && slot.getTimeBoxId()==timeBox.getId()  ) {
-                        slot.setTime(slot.getTime() - pendingStep.getTime());
-                        slot.setGoalId(pendingStep.getGoalId());
-                        slot.save();
-                        pendingStep.setSlotId(slot.getId());
-                        calendar.setTime(slot.getScheduleDate());
-                        calendar.add(Calendar.HOUR_OF_DAY, slot.getWhen().getStartTime());
-                        updateStep(pendingStep, slot);
-                        pendingStep.setStepDate(calendar.getTime());
-                        pendingStep.save();
-                        goal.setDueDate(pendingStep.getStepDate());
-                        goal.save();
-                        AlarmScheduler alarmScheduler = new AlarmScheduler(context);
-                        alarmScheduler.setStepId(pendingStep.getId());
-                        alarmScheduler.setSubStepId(pendingStep.getId());
-                        alarmScheduler.setPendingStepType(pendingStep.getPendingStepType());
-                        alarmScheduler.setStartTime(slot.getWhen().getStartTime());
-                        alarmScheduler.setDuration(pendingStep.getTime());
-                        alarmScheduler.setAlarmDate(slot.getScheduleDate());
-                        alarmScheduler.cancel();
-                        alarmScheduler.setAlarm();
-                        isScheduled =true;
-                        break;
-                    }
-                }
+                pendingStepsList.add(pendingStep);
                 break;
+        }
+        Iterator<PendingStep> pendingSteps =pendingStepsList .iterator();
+        PendingStep ps = null;
+        int sessionCount=0;
+        while (pendingSteps.hasNext()) {
+            ps=pendingSteps.next();
+            Iterator<Slot> it = slots.iterator();
+            while (it.hasNext()) {
+                Slot slot = it.next();
+                if (ps.getTime() <=slot.getTime() && slot.getTimeBoxId()==timeBox.getId()  ) {
+                    slot.setTime(slot.getTime() - ps.getTime());
+                    slot.setGoalId(ps.getGoalId());
+                    ps.setSlotId(slot.getId());
+                    calendar.setTime(slot.getScheduleDate());
+                    calendar.add(Calendar.HOUR_OF_DAY, slot.getWhen().getStartTime());
+                    updateStep(ps, slot);
+                    ps.setStepDate(calendar.getTime());
+                    slot.save();
+                    ps.save();
+                    goal.setDueDate(ps.getStepDate());
+                    goal.save();
+                    AlarmScheduler alarmScheduler = new AlarmScheduler(context);
+                    alarmScheduler.setStepId(ps.getId());
+                    alarmScheduler.setSubStepId(ps.getSubStepOf());
+                    alarmScheduler.setPendingStepType(PendingStep.PendingStepType.SUB_STEP);
+                    alarmScheduler.setStartTime(slot.getWhen().getStartTime());
+                    alarmScheduler.setDuration(ps.getTime());
+                    alarmScheduler.setAlarmDate(slot.getScheduleDate());
+                    alarmScheduler.cancel();
+                    alarmScheduler.setAlarm();
+                    isScheduled=true;
+                    break;
+                }
+            }
+            sessionCount++;
+        }
+        if(pendingStepsList!=null && pendingStepsList.size()>=1 && ps!=null) {
+            pendingStep.setUpdated(ps.getUpdated());
+            pendingStep.setStepDate(pendingStepsList.get(0).getStepDate());
+            pendingStep.setStepCount(sessionCount);
+            pendingStep.save();
+            goal.setDueDate(pendingStepsList.get(pendingStepsList.size()-1).getStepDate());
+            goal.save();
         }
         return isScheduled;
     }
@@ -522,99 +497,45 @@ public class YodaCalendar {
         int count=0;
         Calendar calendar=Calendar.getInstance();
         Goal goal=new Goal(context).get(goalId);
-        List<PendingStep> pendingSteps= new PendingStep(context).getAll(PendingStep.PendingStepStatus.TODO,
+        removeTodaysPassedSlots();
+        List<PendingStep> pendingStepsList= new PendingStep(context).getAll(PendingStep.PendingStepStatus.TODO,
                 PendingStep.PendingStepDeleted.SHOW_NOT_DELETED,goalId);
-        if(pendingSteps!=null) {
-            slots=slot.getAll(timeBox.getId());
-            Iterator<Slot> it;
-            for (PendingStep pendingStep : pendingSteps) {
-                removeTodaysPassedSlots();
-                switch (pendingStep.getPendingStepType()){
-                    case SPLIT_STEP:
-                    case SERIES_STEP:
-                        List<PendingStep> substepsList=pendingStep.
-                                getAllSubSteps(PendingStep.PendingStepStatus.TODO,PendingStep.PendingStepDeleted.SHOW_NOT_DELETED,pendingStep.getId(),
-                                        pendingStep.getGoalId());
-                        Iterator<PendingStep> substeps = substepsList.iterator();
-                        it = slots.iterator();
-                        int sessionCount=0;
-                        PendingStep substep=null;
-                        while (substeps.hasNext()) {
-                            substep=substeps.next();
-                            while (it.hasNext()) {
-                                Slot slot = it.next();
-                                slot.setTime(Constants.MAX_SLOT_DURATION);
-                                if (substep.getTime() <=slot.getTime() && slot.getTimeBoxId()==timeBox.getId()  ) {
-                                    slot.setTime(slot.getTime() - substep.getTime());
-                                    slot.setGoalId(substep.getGoalId());
-                                    substep.setSlotId(slot.getId());
-                                    calendar.setTime(slot.getScheduleDate());
-                                    calendar.add(Calendar.HOUR_OF_DAY, slot.getWhen().getStartTime());
-                                    updateStep(substep, slot);
-                                    substep.setStepDate(calendar.getTime());
-                                    slot.save();
-                                    substep.save();
-                                    goal.setDueDate(substep.getStepDate());
-                                    goal.save();
-                                    AlarmScheduler alarmScheduler = new AlarmScheduler(context);
-                                    alarmScheduler.setStepId(substep.getId());
-                                    alarmScheduler.setSubStepId(pendingStep.getSubStepOf());
-                                    alarmScheduler.setPendingStepType(PendingStep.PendingStepType.SUB_STEP);
-                                    alarmScheduler.setStartTime(slot.getWhen().getStartTime());
-                                    alarmScheduler.setDuration(substep.getTime());
-                                    alarmScheduler.setAlarmDate(slot.getScheduleDate());
-                                    alarmScheduler.cancel();
-                                    alarmScheduler.setAlarm();
-                                    count++;
-                                    it.remove();
-                                    break;
-                                }
-                            }
-                            sessionCount++;
-                        }
-                        if(substepsList!=null && substepsList.size()>=1 && substep!=null) {
-                            pendingStep.setUpdated(substep.getUpdated());
-                            pendingStep.setStepDate(substepsList.get(0).getStepDate());
-                            pendingStep.setStepCount(sessionCount);
-                            pendingStep.save();
-                            goal.setDueDate(substepsList.get(substepsList.size()-1).getStepDate());
-                            goal.save();
-                        }
-                        break;
-                    case SINGLE_STEP:
-                        it = slots.iterator();
-                        while (it.hasNext()) {
-                            Slot slot = it.next();
-                            slot.setTime(Constants.MAX_SLOT_DURATION);
-                            if (pendingStep.getTime() <=slot.getTime() && slot.getTimeBoxId()==timeBox.getId()  ) {
-                                slot.setTime(slot.getTime() - pendingStep.getTime());
-                                slot.setGoalId(pendingStep.getGoalId());
-                                pendingStep.setSlotId(slot.getId());
-                                calendar.setTime(slot.getScheduleDate());
-                                calendar.set(Calendar.HOUR_OF_DAY, slot.getWhen().getStartTime());
-                                updateStep(pendingStep, slot);
-                                pendingStep.setStepDate(calendar.getTime());
-                                slot.save();
-                                pendingStep.save();
-                                goal.setDueDate(pendingStep.getStepDate());
-                                goal.save();
-                                AlarmScheduler alarmScheduler = new AlarmScheduler(context);
-                                alarmScheduler.setStepId(pendingStep.getId());
-                                alarmScheduler.setSubStepId(pendingStep.getId());
-                                alarmScheduler.setPendingStepType(pendingStep.getPendingStepType());
-                                alarmScheduler.setStartTime(slot.getWhen().getStartTime());
-                                alarmScheduler.setDuration(pendingStep.getTime());
-                                alarmScheduler.setAlarmDate(slot.getScheduleDate());
-                                alarmScheduler.cancel();
-                                alarmScheduler.setAlarm();
-                                count++;
-                                it.remove();
-                                break;
-                            }
-                        }
-                        break;
+        if (pendingStepsList==null) return count;
+        Iterator<PendingStep> pendingSteps =pendingStepsList .iterator();
+        PendingStep ps;
+        while (pendingSteps.hasNext()) {
+            ps=pendingSteps.next();
+            Iterator<Slot> it = slots.iterator();
+            while (it.hasNext()) {
+                Slot slot = it.next();
+                slot.setTime(Constants.MAX_SLOT_DURATION);
+                if (ps.getTime() <= slot.getTime() && slot.getTimeBoxId() == timeBox.getId()) {
+                    slot.setTime(slot.getTime() - ps.getTime());
+                    slot.setGoalId(ps.getGoalId());
+                    ps.setSlotId(slot.getId());
+                    calendar.setTime(slot.getScheduleDate());
+                    calendar.add(Calendar.HOUR_OF_DAY, slot.getWhen().getStartTime());
+                    updateStep(ps, slot);
+                    ps.setStepDate(calendar.getTime());
+                    slot.save();
+                    ps.save();
+                    AlarmScheduler alarmScheduler = new AlarmScheduler(context);
+                    alarmScheduler.setStepId(ps.getId());
+                    alarmScheduler.setSubStepId(ps.getSubStepOf());
+                    alarmScheduler.setPendingStepType(PendingStep.PendingStepType.SUB_STEP);
+                    alarmScheduler.setStartTime(slot.getWhen().getStartTime());
+                    alarmScheduler.setDuration(ps.getTime());
+                    alarmScheduler.setAlarmDate(slot.getScheduleDate());
+                    alarmScheduler.cancel();
+                    alarmScheduler.setAlarm();
+                    it.remove();
+                    break;
                 }
             }
+        }
+        if(pendingStepsList!=null && pendingStepsList.size()>0){
+            goal.setDueDate(pendingStepsList.get(pendingStepsList.size()-1).getStepDate());
+            goal.save();
         }
         return count;
     }

@@ -311,16 +311,25 @@ public class PendingStep implements Serializable {
 //                " " + " and "+TablePendingStep.goalId+" = "+goalId+" " +
 //                " " + " and "+deleted.getCriteria()+" " +
 //                " " + " order by "+TablePendingStep.priority+" asc , "+TablePendingStep.nickName+" asc ";
-
+//Old ---- working
+//        String query = "select * " +
+//                " " + " from " + TablePendingStep.pendingStep + " " +
+//                " " + " where "+ TablePendingStep.status+"="+status.ordinal()+" " +
+//                " " + " and "+TablePendingStep.type+"!="+PendingStepType.SUB_STEP.ordinal()+"" +
+//                " " + " and "+TablePendingStep.status+" = "+status.ordinal()+" "+
+//                " " + " and "+TablePendingStep.goalId+" = "+goalId+" " +
+//                " " + " and "+deleted.getCriteria()+" " +
+//                " " + " order by "+TablePendingStep.priority+" asc , "+TablePendingStep.nickName+" asc ";
+//new ----
         String query = "select * " +
                 " " + " from " + TablePendingStep.pendingStep + " " +
                 " " + " where "+ TablePendingStep.status+"="+status.ordinal()+" " +
-                " " + " and "+TablePendingStep.type+"!="+PendingStepType.SUB_STEP.ordinal()+"" +
+                " " + " and ("+TablePendingStep.type+"="+PendingStepType.SUB_STEP.ordinal()+" or" +
+                " " + " "+TablePendingStep.type+"="+PendingStepType.SINGLE_STEP.ordinal()+")"+
                 " " + " and "+TablePendingStep.status+" = "+status.ordinal()+" "+
                 " " + " and "+TablePendingStep.goalId+" = "+goalId+" " +
                 " " + " and "+deleted.getCriteria()+" " +
                 " " + " order by "+TablePendingStep.priority+" asc , "+TablePendingStep.nickName+" asc ";
-
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
             pendingSteps = new ArrayList<>();

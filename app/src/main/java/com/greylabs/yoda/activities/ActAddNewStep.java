@@ -225,7 +225,9 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
 //                    stepPrioritySpinner.setSelection(0);
                     stepPrioritySpinner.setEnabled(false);
 
-                    if(currentStep.getPendingStepType() == PendingStep.PendingStepType.SINGLE_STEP){
+                    if(currentStep.getPendingStepType() == PendingStep.PendingStepType.SINGLE_STEP
+                            || currentStep.getPendingStepType() == PendingStep.PendingStepType.SUB_STEP
+                            ){
                         stepTypeSpinner.setSelection(0);
                         sbTimeSingleStep.setProgress(currentStep.getTime());
                         sbTimeSingleStep.setThumb(writeOnDrawable(R.drawable.ic_btn_plus_sign, String.valueOf(currentStep.getTime())));
@@ -331,11 +333,11 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                 currentStep.setGoalStringId(currentGoal.getStringId());
 
 
-            if (stepPrioritySpinner.getSelectedItem().equals(Constants.PENDING_STEP_PRIORITY_TOP_MOST)) {
-                stepArrayList.add(0, currentStep);
-            } else if (stepPrioritySpinner.getSelectedItem().equals(Constants.PENDING_STEP_PRIORITY_BOTTOM_MOST)) {
-                stepArrayList.add(currentStep);
-            }
+//            if (stepPrioritySpinner.getSelectedItem().equals(Constants.PENDING_STEP_PRIORITY_TOP_MOST)) {
+//                stepArrayList.add(0, currentStep);
+//            } else if (stepPrioritySpinner.getSelectedItem().equals(Constants.PENDING_STEP_PRIORITY_BOTTOM_MOST)) {
+//                stepArrayList.add(currentStep);
+//            }
 //            else {
 //                stepArrayList.add(Integer.parseInt(stepPrioritySpinner.getSelectedItem().toString()) - 1, currentStep);
 //            }
@@ -364,27 +366,19 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                 builder.setPositiveButton(getString(R.string.btnOk), null);
                 builder.show();
             } else {
-                //save all the steps in the array with priorities
-                for (int i = 0; i < stepArrayList.size(); i++) {
-                    stepArrayList.get(i).initDatabase(this);
-                    stepArrayList.get(i).setPriority(i + 1);
-                    stepArrayList.get(i).setUpdated(new DateTime(new Date()));
-                    stepArrayList.get(i).save();
-
-                    stepArrayList.get(i).updateSubSteps();
-                }
+                List<PendingStep> subStepsList=new ArrayList<>();
                 currentStep.initDatabase(this);
                 PendingStep ps =currentStep;
                 switch (ps.getPendingStepType()){
                     case SPLIT_STEP:
-                        if(ps.getStringId()!=null || ps.getStringId().equals("")){
-                            ps.freeSlots();//and cancel alarms
-                            ps.deleteSubSteps();
-                        }else{
-                            ps.save();
-                            ps.markSubSteps(true);
-                            ps.freeSlots();
-                        }
+//                        if(ps.getStringId()!=null || ps.getStringId().equals("")){
+//                            ps.freeSlots();//and cancel alarms
+//                            ps.deleteSubSteps();
+//                        }else{
+//                            ps.save();
+//                            ps.markSubSteps(true);
+//                            ps.freeSlots();
+//                        }
                         if(ps.getTime()>Constants.MAX_SLOT_DURATION){
                             float numberOfSteps=(float)ps.getTime()/Constants.MAX_SLOT_DURATION;
                             Float f=new Float(numberOfSteps);
@@ -392,18 +386,38 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                             if(numberOfSteps-f.intValue()>0.0f)
                                 ps.createSubSteps(f.intValue()+1,f.intValue()+1,currentStep.getTime()%Constants.MAX_SLOT_DURATION);
                         }
+                        subStepsList =currentStep.getAllSubSteps(currentStep.getId(),currentGoal.getId());
                         break;
                     case SERIES_STEP:
-                        if(ps.getStringId()!=null || ps.getStringId().equals("")){
-                            ps.freeSlots();//and cancel alarms
-                            ps.deleteSubSteps();
-                        }else {
-                            ps.save();
-                            ps.markSubSteps(true);
-                            ps.freeSlots();
-                        }
+//                        if(ps.getStringId()!=null || ps.getStringId().equals("")){
+//                            ps.freeSlots();//and cancel alarms
+//                            ps.deleteSubSteps();
+//                        }else {
+//                            ps.save();
+//                            ps.markSubSteps(true);
+//                            ps.freeSlots();
+//                        }
                         ps.createSubSteps(1, currentStep.getStepCount(), currentStep.getTime());
+                        subStepsList =currentStep.getAllSubSteps(currentStep.getId(),currentGoal.getId());
                         break;
+                    case SUB_STEP:
+                    case SINGLE_STEP:
+                        subStepsList.add(currentStep);
+                }
+                if(subStepsList!=null){
+                    if(stepPrioritySpinner.getSelectedItem().equals(Constants.PENDING_STEP_PRIORITY_TOP_MOST)){
+                        stepArrayList.addAll(0,subStepsList);
+                    }else if (stepPrioritySpinner.getSelectedItem().equals(Constants.PENDING_STEP_PRIORITY_BOTTOM_MOST)) {
+                        stepArrayList.addAll(subStepsList);
+                    }
+                }
+                //save all the steps in the array with priorities
+                for (int i = 0; i < stepArrayList.size(); i++) {
+                    stepArrayList.get(i).initDatabase(this);
+                    stepArrayList.get(i).setPriority(i + 1);
+                    stepArrayList.get(i).setUpdated(new DateTime(new Date()));
+                    stepArrayList.get(i).save();
+                    //stepArrayList.get(i).updateSubSteps();
                 }
                 currentStep.save();
                 //if user sets priority to Manual or TopMost ,then need to rearrange steps
@@ -427,9 +441,16 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                     }
                 });
                 isScheduled=true;
+                Date stepDate=new Date();
+                if(subStepsList!=null&& subStepsList.size()>0 && (currentStep.getPendingStepType()== PendingStep.PendingStepType.SPLIT_STEP ||
+                        currentStep.getPendingStepType()== PendingStep.PendingStepType.SERIES_STEP)){
+                    stepDate=subStepsList.get(0).getStepDate();
+                }else{
+                    stepDate=currentStep.getStepDate();
+                }
                 alertStepAdded.setMessage("Step " + currentStep.getNickName() + " added towards Goal " +
                         currentGoal.getNickName() + " with Done date of " +
-                        CalendarUtils.getOnlyFormattedDate(currentStep.getStepDate()));
+                        CalendarUtils.getOnlyFormattedDate(stepDate));
                 alertStepAdded.setCancelable(false);
                 alertStepAdded.show();
             }
