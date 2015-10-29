@@ -1131,4 +1131,17 @@ public class PendingStep implements Serializable {
             return criteria;
         }
     }
+
+    public enum PendingStepStartEnd{
+        START,END;
+        public static PendingStepStartEnd getPendingStepStartEnd(int startEnd){
+            switch (startEnd){
+                case 0:
+                    return START;
+                case 1:
+                    return END;
+            }
+            return END;
+        }
+    }
 }

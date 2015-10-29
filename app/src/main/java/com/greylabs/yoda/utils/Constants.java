@@ -130,4 +130,5 @@ public class Constants {
     public static final String MSG_EXPORT_DONE = "Export Successful";
     public static final String MSG_ADD_NEW_TIMEBOX = "No free TimeBoxes available. Please add one";
     public static final String ACCOUNT_DEFAULT_AUTH_TOKEN ="accountAuthToken" ;
+    public static final String STEP_START_END ="stepStartEnd" ;
 }

@@ -372,17 +372,19 @@ public class ActStepList extends AppCompatActivity implements onClickOfRecyclerV
 
             case Constants.OPERATION_MARK_STEP_DONE :
                 if(isShowingPendingSteps){
-                    pendingStepsArrayList.get(Position).setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
-                    pendingStepsArrayList.get(Position).setUpdated(new DateTime(new Date()));
-                    pendingStepsArrayList.get(Position).freeSlot();
-                    pendingStepsArrayList.get(Position).setSlotId(0);
-                    pendingStepsArrayList.get(Position).save();
-                    pendingStepsArrayList.get(Position).cancelAlarm();
-                    if(pendingStepsArrayList.get(Position).getPendingStepType()== PendingStep.PendingStepType.SPLIT_STEP||
-                            pendingStepsArrayList.get(Position).getPendingStepType()== PendingStep.PendingStepType.SERIES_STEP) {
-                        pendingStepsArrayList.get(Position).updateSubSteps();
-                        pendingStepsArrayList.get(Position).freeSlots();
-                    }
+                    PendingStep currentStep=pendingStepsArrayList.get(Position);
+                    currentStep.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
+                    currentStep.setUpdated(new DateTime(new Date()));
+                    currentStep.freeSlot();
+                    currentStep.setSlotId(0);
+                    currentStep.save();
+                    currentStep.cancelAlarm();
+
+//                    if(pendingStepsArrayList.get(Position).getPendingStepType()== PendingStep.PendingStepType.SPLIT_STEP||
+//                            pendingStepsArrayList.get(Position).getPendingStepType()== PendingStep.PendingStepType.SERIES_STEP) {
+//                        pendingStepsArrayList.get(Position).updateSubSteps();
+//                        pendingStepsArrayList.get(Position).freeSlots();
+//                    }
                     if(pendingStepsArrayList.get(Position).isExpire() == PendingStep.PendingStepExpire.EXPIRE){
                         pendingStepsArrayList.get(Position).setDeleted(true);
                         pendingStepsArrayList.get(Position).save();
@@ -392,24 +394,29 @@ public class ActStepList extends AppCompatActivity implements onClickOfRecyclerV
                         rescheduleStepsOfCurrentGoal();
                     checkForEmptyViewVisibility(pendingStepsArrayList, getString(R.string.tvEmptyViewPendingStepsActStepList));
                 }else {
-                    stepArrayList.get(Position).setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
-                    stepArrayList.get(Position).setUpdated(new DateTime(new Date()));
-                    stepArrayList.get(Position).freeSlot();
-                    stepArrayList.get(Position).setSlotId(0);
-                    stepArrayList.get(Position).save();
-                    stepArrayList.get(Position).cancelAlarm();
-                    if(stepArrayList.get(Position).getPendingStepType()== PendingStep.PendingStepType.SPLIT_STEP||
-                            stepArrayList.get(Position).getPendingStepType()== PendingStep.PendingStepType.SERIES_STEP) {
-                        stepArrayList.get(Position).updateSubSteps();
-                        stepArrayList.get(Position).freeSlots();
-                    }
+                    PendingStep currentStep= stepArrayList.get(Position);
+                    currentStep.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
+                    currentStep.setUpdated(new DateTime(new Date()));
+                    currentStep.freeSlot();
+                    currentStep.setSlotId(0);
+                    currentStep.save();
+                    currentStep.cancelAlarm();
+//                    if(stepArrayList.get(Position).getPendingStepType()== PendingStep.PendingStepType.SPLIT_STEP||
+//                            stepArrayList.get(Position).getPendingStepType()== PendingStep.PendingStepType.SERIES_STEP) {
+//                        stepArrayList.get(Position).updateSubSteps();
+//                        stepArrayList.get(Position).freeSlots();
+//                    }
                     for(int i=0;i<pendingStepsArrayList.size();i++){
-                        if(stepArrayList.get(Position).getId()==pendingStepsArrayList.get(i).getId())
+                        if(currentStep.getId()==pendingStepsArrayList.get(i).getId())
                             pendingStepsArrayList.remove(i);
                     }
-                    if(stepArrayList.get(Position).isExpire() == PendingStep.PendingStepExpire.EXPIRE){
-                        stepArrayList.get(Position).setDeleted(true);
-                        stepArrayList.get(Position).save();
+                    if(currentStep.isExpire() == PendingStep.PendingStepExpire.EXPIRE){
+                        if(currentStep.getStringId()==null && currentStep.getStringId().equals("")){
+                            currentStep.delete();//delete step directly
+                        }else {
+                            currentStep.setDeleted(true);
+                            currentStep.save();
+                        }
                     }
                     if(!pendingStepsArrayList.isEmpty())
                         rescheduleStepsOfCurrentGoal();
@@ -420,13 +427,15 @@ public class ActStepList extends AppCompatActivity implements onClickOfRecyclerV
                 break;
 
             case Constants.OPERATION_MARK_STEP_UNDONE :
-                stepArrayList.get(Position).setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
-                stepArrayList.get(Position).setUpdated(new DateTime(new Date()));
-                stepArrayList.get(Position).save();
-                if(stepArrayList.get(Position).getPendingStepType()== PendingStep.PendingStepType.SPLIT_STEP||
-                        stepArrayList.get(Position).getPendingStepType()== PendingStep.PendingStepType.SERIES_STEP) {
-                    stepArrayList.get(Position).updateSubSteps();
-                }
+                PendingStep currentStep=stepArrayList.get(Position);
+                currentStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+                currentStep.setUpdated(new DateTime(new Date()));
+                currentStep.save();
+//                if(stepArrayList.get(Position).getPendingStepType()== PendingStep.PendingStepType.SPLIT_STEP||
+//                        stepArrayList.get(Position).getPendingStepType()== PendingStep.PendingStepType.SERIES_STEP) {
+//                    stepArrayList.get(Position).updateSubSteps();
+//                }
+                //Re-schedule steps
                 TimeBox currentTimeBox = new TimeBox(this).get(currentGoal.getTimeBoxId());
                 YodaCalendar yodaCalendar = new YodaCalendar(this, currentTimeBox);
                 yodaCalendar.rescheduleSteps(currentGoal.getId());

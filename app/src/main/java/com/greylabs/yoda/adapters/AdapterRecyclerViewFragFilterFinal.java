@@ -109,8 +109,12 @@ public class AdapterRecyclerViewFragFilterFinal extends RecyclerView.Adapter<Ada
             currentPendingStep.save();
             currentPendingStep.cancelAlarm();
             if(currentPendingStep.isExpire() == PendingStep.PendingStepExpire.EXPIRE){
-                currentPendingStep.setDeleted(true);
-                currentPendingStep.save();
+                if (currentPendingStep.getStringId()==null && currentPendingStep.getStringId().equals("")){
+                    currentPendingStep.delete();
+                }else {
+                    currentPendingStep.setDeleted(true);
+                    currentPendingStep.save();
+                }
             }
             rescheduleStepsOfCurrentGoal(currentPendingStep);
             //sync code

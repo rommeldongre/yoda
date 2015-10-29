@@ -262,7 +262,7 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
             case R.id.arcTotalProgressActHome :
 
                 Dialogues dialogues = new Dialogues(this);
-                dialogues.showNowNotificationDialogue(Constants.ACT_HOME, null, nowPendingStep);
+                dialogues.showNowNotificationDialogue(Constants.ACT_HOME, null, PendingStep.PendingStepStartEnd.START, nowPendingStep);
 //
 //                Intent intent1 = new Intent(this, ActNowFilter.class);
 //                intent1.putExtra(Constants.CALLER, Constants.ACT_HOME);

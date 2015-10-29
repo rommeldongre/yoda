@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 
+import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Dialogues;
 import com.greylabs.yoda.utils.Logger;
@@ -31,12 +32,14 @@ public class AlarmService extends Service {
        // YodaNotificationManager yodaNotificationManager=new YodaNotificationManager(this);
         //yodaNotificationManager.showNotification();
         AlarmScheduler alarmScheduler=null;
-        if(intent!=null)
-             alarmScheduler=(AlarmScheduler)intent.getSerializableExtra(Constants.ALARM_SCHEDULER);
+        PendingStep.PendingStepStartEnd startEnd=null;
+        if(intent!=null) {
+            alarmScheduler = (AlarmScheduler) intent.getSerializableExtra(Constants.ALARM_SCHEDULER);
+            startEnd= (PendingStep.PendingStepStartEnd) intent.getSerializableExtra(Constants.STEP_START_END);
+        }
         if(alarmScheduler!=null) {
-
             Dialogues dialogues = new Dialogues(this);
-            dialogues.showNowNotificationDialogue(Constants.ALARM_SERVICE, alarmScheduler, null);
+            dialogues.showNowNotificationDialogue(Constants.ALARM_SERVICE, alarmScheduler,startEnd, null);
 
 //            Intent actNowFilter = new Intent(this, ActNowFilter.class);
 //            actNowFilter.putExtra(Constants.CALLER, Constants.ALARM_SERVICE);

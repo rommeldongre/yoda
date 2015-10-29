@@ -50,10 +50,6 @@ public class QuickStartAsyncTask extends AsyncTask<String, String, String> {
         TimeBox timeBox=new TimeBox(context);
         Goal stretchGoal=new Goal(context);
         stretchGoal.setId(Prefs.getInstance(context).getStretchGoalId());
-        timeBox=timeBox.get(Prefs.getInstance(context).getUnplannedTimeBoxId());
-        yodaCalendar.setTimeBox(timeBox);
-        yodaCalendar.rescheduleSteps(stretchGoal.getId());
-
         goals.remove(stretchGoal);
         for (Goal goal:goals ){
             timeBox=timeBox.get(goal.getTimeBoxId());
@@ -61,6 +57,9 @@ public class QuickStartAsyncTask extends AsyncTask<String, String, String> {
             yodaCalendar.attachTimeBox(goal.getId());
             yodaCalendar.rescheduleSteps(goal.getId());
         }
+        timeBox=timeBox.get(Prefs.getInstance(context).getUnplannedTimeBoxId());
+        yodaCalendar.setTimeBox(timeBox);
+        yodaCalendar.rescheduleSteps(stretchGoal.getId());
         return null;
     }
 

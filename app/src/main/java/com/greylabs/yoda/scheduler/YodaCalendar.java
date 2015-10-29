@@ -497,6 +497,7 @@ public class YodaCalendar {
         int count=0;
         Calendar calendar=Calendar.getInstance();
         Goal goal=new Goal(context).get(goalId);
+        slots=slot.getAll(timeBox.getId());
         removeTodaysPassedSlots();
         List<PendingStep> pendingStepsList= new PendingStep(context).getAll(PendingStep.PendingStepStatus.TODO,
                 PendingStep.PendingStepDeleted.SHOW_NOT_DELETED,goalId);

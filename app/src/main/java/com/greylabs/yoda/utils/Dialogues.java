@@ -18,12 +18,15 @@ import com.greylabs.yoda.R;
 import com.greylabs.yoda.activities.ActHome;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
+import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.scheduler.AlarmScheduler;
+import com.greylabs.yoda.scheduler.YodaCalendar;
 
 public class Dialogues {
 
     Dialog dialog;
     PendingStep pendingStep = null;
+    PendingStep.PendingStepStartEnd startEnd;
     Goal goal = null;
     Context context;
     AlarmScheduler alarmScheduler;
@@ -36,11 +39,13 @@ public class Dialogues {
         this.context = passedContext;
     }
 
-    public void showNowNotificationDialogue(String CALLER, AlarmScheduler myAlarmScheduler1, PendingStep myPendingStep1) {
+    public void showNowNotificationDialogue(String CALLER, AlarmScheduler myAlarmScheduler1,PendingStep.PendingStepStartEnd startEnd, PendingStep myPendingStep1) {
         if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
         }
+
         caller = CALLER;
+        this.startEnd=startEnd;
         if (caller.equals(Constants.ALARM_SERVICE)) {
             alarmScheduler = myAlarmScheduler1;
             if (alarmScheduler != null) {
@@ -102,6 +107,7 @@ public class Dialogues {
 
     class MyOnClickListener implements View.OnClickListener {
 
+        boolean checkExpiry=false;
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
@@ -133,7 +139,7 @@ public class Dialogues {
                         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.MISSED);
                         pendingStep.setSkipCount(pendingStep.getSkipCount() + 1);
                         pendingStep.save();
-
+                        checkExpiry=true;
                         llButtons.setVisibility(View.GONE);
                         llExcuseLog.setVisibility(View.VISIBLE);
                     }
@@ -144,14 +150,38 @@ public class Dialogues {
                     pendingStep.save();
                     // put this text into the pendingStep
 //                if(pendingStep!=null){
-//                    pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.MISSED);
+//                    pendingStep.sebtPendingStepStatus(PendingStep.PendingStepStatus.MISSED);
 //                    pendingStep.setSkipCount(pendingStep.getSkipCount() + 1);
 //                    pendingStep.save();
 //                }
                     dialog.dismiss();
                     break;
             }
+            if(startEnd== PendingStep.PendingStepStartEnd.END || checkExpiry){
+                checkExpiryOfStep();
+            }
+    }
+
+    private void checkExpiryOfStep(){
+        if(pendingStep.isExpire()== PendingStep.PendingStepExpire.EXPIRE) {
+            //delete or mark step as deleted
+            if (pendingStep.getStringId() == null || pendingStep.getStringId().equals("")) {
+                pendingStep.freeSlot();
+                pendingStep.delete();
+            } else {
+                pendingStep.freeSlot();
+                pendingStep.setSlotId(0);
+                pendingStep.setDeleted(true);
+                pendingStep.save();
+            }
+        }else{
+            //reschedule steps
+            Goal goal=new Goal(context).get(pendingStep.getGoalId());
+            TimeBox timeBox=new TimeBox(context).get(goal.getTimeBoxId());
+            YodaCalendar yodaCalendar=new YodaCalendar(context,timeBox);
+            yodaCalendar.rescheduleSteps(goal.getId());
         }
+    }
     }
 
     private class MyDialogueDismissListener implements DialogInterface.OnDismissListener {
