@@ -106,7 +106,6 @@ public class Dialogues {
     }
 
     class MyOnClickListener implements View.OnClickListener {
-
         boolean checkExpiry=false;
         @Override
         public void onClick(View v) {
@@ -118,7 +117,6 @@ public class Dialogues {
                     }
                     dialog.dismiss();
                     break;
-
                 case R.id.llDoingItNowNotification:
                     if (pendingStep != null) {
                         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.DOING);
@@ -133,7 +131,6 @@ public class Dialogues {
                     }
                     dialog.dismiss();
                     break;
-
                 case R.id.llMissedNowNotification:
                     if (pendingStep != null) {
                         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.MISSED);
@@ -144,10 +141,10 @@ public class Dialogues {
                         llExcuseLog.setVisibility(View.VISIBLE);
                     }
                     break;
-
                 case R.id.btnLogExcuseNowNotification:
                     pendingStep.setNotes(edtExcuse.getText().toString());
                     pendingStep.save();
+                    checkExpiryOfStep();
                     // put this text into the pendingStep
 //                if(pendingStep!=null){
 //                    pendingStep.sebtPendingStepStatus(PendingStep.PendingStepStatus.MISSED);
@@ -157,9 +154,9 @@ public class Dialogues {
                     dialog.dismiss();
                     break;
             }
-            if(startEnd== PendingStep.PendingStepStartEnd.END || checkExpiry){
-                checkExpiryOfStep();
-            }
+//            if(startEnd== PendingStep.PendingStepStartEnd.END || checkExpiry){
+//                checkExpiryOfStep();
+//            }
     }
 
     private void checkExpiryOfStep(){
