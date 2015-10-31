@@ -26,6 +26,7 @@ import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Logger;
+import com.greylabs.yoda.utils.PendingStepUtils;
 import com.greylabs.yoda.utils.Prefs;
 
 import java.util.ArrayList;
@@ -273,29 +274,18 @@ public class ActGoalList  extends AppCompatActivity implements OnClickOfRecycler
                         temp=ps.getAllSubSteps(PendingStep.PendingStepStatus.COMPLETED, PendingStep.PendingStepDeleted.SHOW_NOT_DELETED,ps.getId(),goal.getId());
                         if(temp!=null)
                             subSteps.addAll(temp);
+                        if(subSteps==null){
+                            PendingStepUtils.deletePendingStep(ps);
+                            continue;
+                        }
                         for(PendingStep substep:subSteps){
-                            substep.cancelAlarm();
-                            substep.setStringId("");
-                            substep.setGoalStringId(stretchGoal.getStringId());
-                            substep.setGoalId(stretchGoal.getId());
-                            substep.freeSlot();
-                            substep.save();
+                            PendingStepUtils.movePendingStepToStretchGoal(substep, stretchGoal);
                         }
                     }
-                    ps.cancelAlarm();
-                    ps.freeSlot();
-                    ps.setStringId("");
-                    ps.setGoalStringId(stretchGoal.getStringId());
-                    ps.setGoalId(stretchGoal.getId());
-                    ps.save();
+                    PendingStepUtils.movePendingStepToStretchGoal(ps, stretchGoal);
                     break;
                 case SINGLE_STEP:
-                    ps.cancelAlarm();
-                    ps.setStringId("");
-                    ps.setGoalStringId(stretchGoal.getStringId());
-                    ps.setGoalId(stretchGoal.getId());
-                    ps.freeSlot();
-                    ps.save();
+                    PendingStepUtils.movePendingStepToStretchGoal(ps, stretchGoal);
             }
         }
         long oldTimeBoxId=goal.getTimeBoxId();
@@ -330,18 +320,17 @@ public class ActGoalList  extends AppCompatActivity implements OnClickOfRecycler
                     case SUB_STEP:
                     case SERIES_STEP:
                         List<PendingStep> subSteps = pendingStep.getAllSubSteps(pendingStep.getId(), goal.getId());
-                        for (PendingStep subStep : subSteps) {
-                            subStep.cancelAlarm();
-                            subStep.setDeleted(true);
-                            subStep.save();
+                        if(subSteps==null){
+                            PendingStepUtils.deletePendingStep(pendingStep);
+                        }else {
+                            for (PendingStep subStep : subSteps) {
+                                PendingStepUtils.deletePendingStep(subStep);
+                            }
+                            PendingStepUtils.deletePendingStep(pendingStep);
                         }
-                        pendingStep.setDeleted(true);
-                        pendingStep.save();
                         break;
                     case SINGLE_STEP:
-                        pendingStep.cancelAlarm();
-                        pendingStep.setDeleted(true);
-                        pendingStep.save();
+                        PendingStepUtils.deletePendingStep(pendingStep);
                         break;
                 }
             }
@@ -363,5 +352,4 @@ public class ActGoalList  extends AppCompatActivity implements OnClickOfRecycler
         //sync code
 
     }
-
 }

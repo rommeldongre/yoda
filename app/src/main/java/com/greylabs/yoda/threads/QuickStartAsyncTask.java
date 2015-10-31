@@ -54,8 +54,14 @@ public class QuickStartAsyncTask extends AsyncTask<String, String, String> {
         for (Goal goal:goals ){
             timeBox=timeBox.get(goal.getTimeBoxId());
             yodaCalendar.setTimeBox(timeBox);
-            yodaCalendar.attachTimeBox(goal.getId());
-            yodaCalendar.rescheduleSteps(goal.getId());
+            try {
+                yodaCalendar.attachTimeBox(goal.getId());
+                yodaCalendar.rescheduleSteps(goal.getId());
+            }catch (NullPointerException e){
+                //this means time-box has not available slots, so we are deleting steps
+                e.printStackTrace();
+                goal.deletePendingSteps();
+            }
         }
         timeBox=timeBox.get(Prefs.getInstance(context).getUnplannedTimeBoxId());
         yodaCalendar.setTimeBox(timeBox);

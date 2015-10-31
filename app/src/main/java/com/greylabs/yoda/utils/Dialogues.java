@@ -175,7 +175,9 @@ public class Dialogues {
                 pendingStep.save();
             }
         }else{
-            //reschedule steps
+            //reschedule steps set current step as TODO.
+            pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+            pendingStep.save();
             Goal goal=new Goal(context).get(pendingStep.getGoalId());
             TimeBox timeBox=new TimeBox(context).get(goal.getTimeBoxId());
             YodaCalendar yodaCalendar=new YodaCalendar(context,timeBox);

@@ -1,7 +1,6 @@
 package com.greylabs.yoda.activities;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
@@ -23,7 +23,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -369,6 +368,7 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                 List<PendingStep> subStepsList=new ArrayList<>();
                 currentStep.initDatabase(this);
                 PendingStep ps =currentStep;
+                ps.save();
                 switch (ps.getPendingStepType()){
                     case SPLIT_STEP:
 //                        if(ps.getStringId()!=null || ps.getStringId().equals("")){
@@ -444,7 +444,7 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                 Date stepDate=new Date();
                 if(subStepsList!=null&& subStepsList.size()>0 && (currentStep.getPendingStepType()== PendingStep.PendingStepType.SPLIT_STEP ||
                         currentStep.getPendingStepType()== PendingStep.PendingStepType.SERIES_STEP)){
-                    stepDate=subStepsList.get(0).getStepDate();
+                    stepDate=subStepsList.get(0).getTopmostSubstepScheduleDate(currentStep.getId());
                 }else{
                     stepDate=currentStep.getStepDate();
                 }

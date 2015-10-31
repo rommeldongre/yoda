@@ -320,7 +320,7 @@ public class Goal implements Serializable{
     }
     public int delete(){
         SQLiteDatabase db=database.getWritableDatabase();
-        int numOfRowAffected=db.delete(TableGoal.goal,TableGoal.id+"="+id,null);
+        int numOfRowAffected=db.delete(TableGoal.goal, TableGoal.id + "=" + id, null);
         return numOfRowAffected;
     }
 
@@ -410,6 +410,17 @@ public class Goal implements Serializable{
         return stepCount;
     }
 
+    public int getHighestPriority(long goalId){
+        int highestPriority=0;
+        String query="select max("+TablePendingStep.priority+") as highestPriority" +
+                " "+" from "+TablePendingStep.pendingStep+" " +
+                " "+" where "+TablePendingStep.goalId+" = "+goalId+" " ;
+        SQLiteDatabase db=database.getReadableDatabase();
+        Cursor c=db.rawQuery(query,null);
+        c.moveToFirst();
+        highestPriority=c.getInt(c.getColumnIndex("highestPriority"));
+        return highestPriority;
+    }
     public long getGoalId(long timeBoxId){
         long goalId=0;
         String query="select id " +

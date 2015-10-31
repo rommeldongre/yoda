@@ -190,6 +190,7 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                 pendingStep.setStringId(task.getId());
                 pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
                 pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+                pendingStep.setExpire(PendingStep.PendingStepExpire.NOT_EXPIRE);
                 pendingStep.setUpdated(task.getUpdated());
             }
             if (!task.getStatus().equals("needsAction"))
@@ -263,6 +264,7 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                                 pendingStep.setStringId(task.getId());
                                 pendingStep.setGoalStringId(taskList.getId());
                                 pendingStep.setGoalId(goal.getId());
+                                pendingStep.setPriority(goal.getHighestPriority(goal.getId())+1);
                                 pendingStep.save();
                             }else
                             {

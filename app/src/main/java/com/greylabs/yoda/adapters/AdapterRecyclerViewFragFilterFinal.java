@@ -19,6 +19,7 @@ import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.CalendarUtils;
 import com.greylabs.yoda.utils.Constants;
+import com.greylabs.yoda.utils.PendingStepUtils;
 import com.greylabs.yoda.views.TouchCheckBox;
 
 import java.util.ArrayList;
@@ -102,20 +103,7 @@ public class AdapterRecyclerViewFragFilterFinal extends RecyclerView.Adapter<Ada
             stepsArrayList.remove(getPosition());
             setEmptyViewVisibility();
             notifyItemRemoved(getPosition());
-            currentPendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
-            currentPendingStep.setUpdated(new DateTime(new Date()));
-            currentPendingStep.freeSlot();
-            currentPendingStep.setSlotId(0);
-            currentPendingStep.save();
-            currentPendingStep.cancelAlarm();
-            if(currentPendingStep.isExpire() == PendingStep.PendingStepExpire.EXPIRE){
-                if (currentPendingStep.getStringId()==null && currentPendingStep.getStringId().equals("")){
-                    currentPendingStep.delete();
-                }else {
-                    currentPendingStep.setDeleted(true);
-                    currentPendingStep.save();
-                }
-            }
+            PendingStepUtils.markPendingStepDone(currentPendingStep);
             rescheduleStepsOfCurrentGoal(currentPendingStep);
             //sync code
             GoogleSync.getInstance(contxt).sync();

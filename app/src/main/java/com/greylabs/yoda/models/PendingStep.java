@@ -687,6 +687,20 @@ public class PendingStep implements Serializable {
     //Utility Methods
     /********************************************************************************************/
 
+    public Date getTopmostSubstepScheduleDate(long parentStepId){
+        SQLiteDatabase db = database.getReadableDatabase();
+        String query = "select  "+TablePendingStep.stepDate+" "+
+                " " + " from " +TablePendingStep.pendingStep+" " +
+                " " + " where "+TablePendingStep.subStepOf+"="+parentStepId+" " +
+                " " + " order by "+TablePendingStep.priority+" asc" ;
+        Cursor c = db.rawQuery(query, null);
+        Date stepDate=new Date();
+        if (c.moveToFirst()) {
+           stepDate= CalendarUtils.parseDate(c.getString(c.getColumnIndex(TablePendingStep.stepDate)));
+        }
+        c.close();
+        return stepDate;
+    }
     public long getIdIfExists(String stringId) {
         SQLiteDatabase db = database.getReadableDatabase();
         String query = "select  "+TablePendingStep.id+","+TablePendingStep.stringId+" "+
@@ -1064,6 +1078,22 @@ public class PendingStep implements Serializable {
         return timeSum;
     }
 
+    public boolean hasAnyOtherSubsteps(){
+        String query= " select count("+TablePendingStep.subStepOf+") as stepCount" +
+                " " + " from "+TablePendingStep.pendingStep+" " +
+                " " + " where "+TablePendingStep.subStepOf+"="+this.subStepOf;
+        SQLiteDatabase db=database.getReadableDatabase();
+        Cursor c=db.rawQuery(query,null);
+        c.moveToFirst();
+        int count=c.getInt(c.getColumnIndex("stepCount"));
+        c.close();
+        if(count==1) {
+            return false;
+        } else if(count>1){
+            return true;
+        }
+        return false;
+    }
     /**********************************************************************************************/
     // Enum Constants
 
