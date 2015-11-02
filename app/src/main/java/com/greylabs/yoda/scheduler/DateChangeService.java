@@ -6,6 +6,7 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.widget.Toast;
 
+import com.greylabs.yoda.utils.GoalUtils;
 import com.greylabs.yoda.utils.Logger;
 
 /**
@@ -35,6 +36,7 @@ public class DateChangeService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         yodaCalendar.updateCalendar();
+        //GoalUtils.rescheduleAllSteps();
         return START_STICKY;
     }
 

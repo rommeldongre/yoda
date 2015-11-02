@@ -3,13 +3,14 @@ package com.greylabs.yoda.scheduler;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.WakefulBroadcastReceiver;
 
 import com.greylabs.yoda.utils.Logger;
 
 /**
  * Created by Jaybhay Vijay on 8/27/2015.
  */
-public class DayChangeReceiver extends BroadcastReceiver {
+public class DayChangeReceiver extends WakefulBroadcastReceiver {
     private static final String TAG="DayChangeReceiver";
     @Override
     public void onReceive(Context context, Intent intent) {

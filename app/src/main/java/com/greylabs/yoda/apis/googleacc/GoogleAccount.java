@@ -194,6 +194,7 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                 pendingStep.setUpdated(task.getUpdated());
             }
             if (!task.getStatus().equals("needsAction"))
+
                 pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
         } else {
             pendingStep = pendingStep.get(id);
@@ -409,7 +410,10 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                 task.setNotes("This step is added by Yoda");
                 if (ps.getStepDate() != null)
                     task.setDue(new DateTime(ps.getStepDate()));
-                Task result = service.tasks().get(ps.getGoalStringId(), ps.getStringId()).execute();
+                Task result=null;
+                if(ps.getStringId() != null || !ps.getStringId().equals("")){
+                    result=service.tasks().get(ps.getGoalStringId(), ps.getStringId()).execute();
+                }
                 if (ps.getStringId() == null || ps.getStringId().equals("")) {
                     //new steps simply insert
                     result = service.tasks().insert(goal.getStringId(), task).execute();

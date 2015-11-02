@@ -107,14 +107,14 @@
         <service android:name=".scheduler.AlarmService"/>
         <receiver android:name=".scheduler.AlarmReceiver"/>
 
-        <!--<service android:name=".scheduler.DateChangeService"/>-->
-        <!--<receiver android:name=".scheduler.DayChangeReceiver"/>-->
+        <service android:name=".scheduler.DateChangeService"/>
+        <receiver android:name=".scheduler.DayChangeReceiver"/>
 
-        <!--<receiver android:name=".scheduler.DateChangeReceiver">-->
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.DATE_CHANGED" />-->
-            <!--</intent-filter>-->
-        <!--</receiver>-->
+        <receiver android:name=".scheduler.DateChangeReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.DATE_CHANGED" />
+            </intent-filter>
+        </receiver>
 
 
         <service android:name=".scheduler.BootCompleteService"/>

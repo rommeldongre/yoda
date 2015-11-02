@@ -27,6 +27,7 @@ import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.BitmapUtility;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Dialogues;
+import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.Prefs;
 import com.greylabs.yoda.views.GoalView;
 import com.greylabs.yoda.views.MyArcProgress;
@@ -123,6 +124,10 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
 //        btnImportGoogleTasks.setOnClickListener(this);
         populateNowInfo();
         setStyleToArcTotalProgress();
+        //Test code ,comment out this code on production.
+        Slot slot=new Slot(this);
+        List<Slot> slots=slot.getAll();
+        Logger.log("ActHome",""+slots.size());
     }
 
     public void populateNowInfo() {

@@ -3,6 +3,7 @@ package com.greylabs.yoda.scheduler;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.WakefulBroadcastReceiver;
 
 import com.greylabs.yoda.utils.Logger;
 
@@ -11,7 +12,7 @@ import com.greylabs.yoda.utils.Logger;
  * This broadcast receiver will receive only if device is ON and date has been changed i.e. next day
  */
 
-public class DateChangeReceiver extends BroadcastReceiver {
+public class DateChangeReceiver extends WakefulBroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals(Intent.ACTION_DATE_CHANGED)) {

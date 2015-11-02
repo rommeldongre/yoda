@@ -9,6 +9,7 @@ import android.os.Parcelable;
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.Slot;
 import com.greylabs.yoda.utils.Constants;
+import com.greylabs.yoda.utils.GoalUtils;
 import com.greylabs.yoda.utils.Logger;
 import java.io.Serializable;
 import java.util.Calendar;
@@ -196,23 +197,6 @@ public class AlarmScheduler implements Serializable{
     }
 
     public void rescheduleAllSteps(){
-        List<PendingStep> pendingSteps=new PendingStep(context).getAll(PendingStep.PendingStepStatus.TODO);
-        Calendar calendar=Calendar.getInstance();
-        if(pendingSteps!=null) {
-            for (PendingStep pendingStep : pendingSteps) {
-                Slot slot = new Slot(context).get(pendingStep.getSlotId());
-                if(slot.getScheduleDate().compareTo(calendar.getTime())>0) {
-                    AlarmScheduler alarmScheduler = new AlarmScheduler(context);
-                    alarmScheduler.setStepId(pendingStep.getId());
-                    alarmScheduler.setSubStepId(pendingStep.getSubStepOf());
-                    alarmScheduler.setPendingStepType(pendingStep.getPendingStepType());
-                    alarmScheduler.setStartTime(slot.getWhen().getStartTime());
-                    alarmScheduler.setDuration(pendingStep.getTime());
-                    alarmScheduler.setAlarmDate(slot.getScheduleDate());
-                    alarmScheduler.cancel();//cancel previous alarm if any
-                    alarmScheduler.setAlarm();
-                }
-            }
-        }
+        GoalUtils.rescheduleAllSteps();
     }
 }
