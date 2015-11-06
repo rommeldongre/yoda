@@ -23,7 +23,7 @@ public class BootCompleteService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Logger.log(TAG, "BootCompleteService created.");
+        Logger.d(TAG, "BootCompleteService created.");
     }
 
     @Override

@@ -23,7 +23,7 @@ public class AlarmService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Logger.log(TAG, "Alarm Service created.");
+        Logger.d(TAG, "Alarm Service created.");
     }
 
     @Override

@@ -11,12 +11,10 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.greylabs.yoda.apis.googleacc.GoogleAccount;
-import com.greylabs.yoda.apis.googleacc.GoogleSync;
 import com.greylabs.yoda.database.NewStep;
 import com.greylabs.yoda.models.Slot;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Logger;
-import com.greylabs.yoda.utils.Prefs;
 
 import java.io.IOException;
 
@@ -62,7 +60,7 @@ public class ImportTaskAsyncThread extends AsyncTask<Void, Void, Void> {
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);
         progressDialog.dismiss();
-        Logger.log("ImportTaskAsyncThread", "Task Imported to stretch Goal");
+        Logger.d("ImportTaskAsyncThread", "Task Imported to stretch Goal");
         Message message = new Message();
         message.obj = result;
         myHandler.sendMessage(message);

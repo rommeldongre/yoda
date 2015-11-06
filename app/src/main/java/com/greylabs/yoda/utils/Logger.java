@@ -11,14 +11,28 @@ import android.widget.Toast;
 import com.greylabs.yoda.R;
 
 public class Logger {
-    private static boolean isLoggingTrue;
+    public static boolean isDebug;
+    public static boolean isWarning;
+    public static boolean isError;
     static {
-        isLoggingTrue = true;
+        isDebug = true;
+        isError=true;
+        isWarning=true;
     }
     private Logger(){}
-    public static  void log(String tag,String message){
-            if (isLoggingTrue)
-                Log.d(tag, message);
+    public static  void d(String tag, String message){
+        if (isDebug)
+            Log.d(tag, message);
+    }
+
+    public static void w(String tag,String message){
+        if (isWarning)
+            Log.w(tag, message);
+    }
+
+    public static void e(String tag,String message){
+        if (isError)
+            Log.e(tag, message);
     }
 
     public static  void showMsg(Context context,String message){

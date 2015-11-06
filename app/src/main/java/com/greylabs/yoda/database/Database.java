@@ -4,7 +4,6 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.utils.Logger;
 
 import java.io.Serializable;
@@ -52,7 +51,7 @@ public class Database extends SQLiteOpenHelper implements Serializable{
         sqLiteDatabase.execSQL(TableDay.createTrigger);
         sqLiteDatabase.execSQL(TableSlot.createTrigger);
 
-        Logger.log(TAG, "All tables created successfully");
+        Logger.d(TAG, "All tables created successfully");
     }
 
     @Override

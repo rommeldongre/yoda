@@ -3,18 +3,14 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Parcel;
-import android.os.Parcelable;
 
 import com.greylabs.yoda.models.PendingStep;
-import com.greylabs.yoda.models.Slot;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.GoalUtils;
 import com.greylabs.yoda.utils.Logger;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by Jaybhay Vijay on 7/13/2015.
@@ -137,7 +133,7 @@ public class AlarmScheduler implements Serializable{
 
         //start Time
         calTarget.set(Calendar.HOUR_OF_DAY, startTime);
-        Logger.log(TAG, "Target date:[Start Time]" + calTarget.getTime().toString());
+        Logger.d(TAG, "Target date:[Start Time]" + calTarget.getTime().toString());
         Intent broadcastReceiver = new Intent(context, AlarmReceiver.class);
         broadcastReceiver.putExtra(Constants.ALARM_SCHEDULER,this);
         broadcastReceiver.putExtra(Constants.STEP_START_END,PendingStep.PendingStepStartEnd.START);
@@ -147,7 +143,7 @@ public class AlarmScheduler implements Serializable{
         //end time
         calTarget.add(Calendar.HOUR_OF_DAY, duration);
         calTarget.add(Calendar.MINUTE, -1);
-        Logger.log(TAG, "Target date:[End Time]" + calTarget.getTime().toString());
+        Logger.d(TAG, "Target date:[End Time]" + calTarget.getTime().toString());
         broadcastReceiver = new Intent(context, AlarmReceiver.class);
         broadcastReceiver.putExtra(Constants.ALARM_SCHEDULER, this);
         broadcastReceiver.putExtra(Constants.STEP_START_END,PendingStep.PendingStepStartEnd.END);
@@ -163,7 +159,7 @@ public class AlarmScheduler implements Serializable{
     public void postponeAlarm(int mins){
         Calendar calTarget=Calendar.getInstance();
         calTarget.add(Calendar.MINUTE, mins);
-        Logger.log(TAG, "Target date:[Postpone to]" + calTarget.getTime().toString());
+        Logger.d(TAG, "Target date:[Postpone to]" + calTarget.getTime().toString());
         Intent broadcastReceiver = new Intent(context, AlarmReceiver.class);
         broadcastReceiver.putExtra(Constants.ALARM_SCHEDULER, this);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int)stepId,broadcastReceiver,PendingIntent.FLAG_UPDATE_CURRENT);

@@ -1,6 +1,5 @@
 package com.greylabs.yoda.scheduler;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.WakefulBroadcastReceiver;
@@ -18,11 +17,11 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
     private static final String TAG="AlarmReceiver";
     @Override
     public void onReceive(Context context, Intent intent) {
-        Logger.log(TAG,"Received Alarm. Starting Alarm Service to do background task.");
+        Logger.d(TAG, "Received Alarm. Starting Alarm Service to do background task.");
         AlarmScheduler alarmScheduler=(AlarmScheduler)intent.getSerializableExtra(Constants.ALARM_SCHEDULER);
         PendingStep.PendingStepStartEnd startEnd= (PendingStep.PendingStepStartEnd) intent.getSerializableExtra(Constants.STEP_START_END);
          if(alarmScheduler==null || startEnd==null){
-            Logger.log(TAG,"AlarmScheduler received null or Step Start End is null");
+            Logger.d(TAG, "AlarmScheduler received null or Step Start End is null");
         }else{
              Calendar calendar=Calendar.getInstance();
              calendar.set(Calendar.SECOND,0);
@@ -32,9 +31,9 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
                  alarmService.putExtra(Constants.ALARM_SCHEDULER, alarmScheduler);
                  alarmService.putExtra(Constants.STEP_START_END,startEnd);
                  context.startService(alarmService);
-                 Logger.log(TAG, "AlarmScheduler is not null:" + alarmScheduler.toString());
+                 Logger.d(TAG, "AlarmScheduler is not null:" + alarmScheduler.toString());
              }else
-                 Logger.log(TAG,"Skipping alarm as alarm date is less than today's date");
+                 Logger.d(TAG, "Skipping alarm as alarm date is less than today's date");
         }
     }
 }

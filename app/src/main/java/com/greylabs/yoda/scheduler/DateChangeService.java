@@ -4,9 +4,7 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import android.widget.Toast;
 
-import com.greylabs.yoda.utils.GoalUtils;
 import com.greylabs.yoda.utils.Logger;
 
 /**
@@ -29,7 +27,7 @@ public class DateChangeService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Logger.log(TAG, "Date Change Service created. Now updating database.");
+        Logger.d(TAG, "Date Change Service created. Now updating database.");
         yodaCalendar=new YodaCalendar(this);
     }
 

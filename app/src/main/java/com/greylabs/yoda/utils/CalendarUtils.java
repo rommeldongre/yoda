@@ -11,15 +11,13 @@ import com.greylabs.yoda.enums.TimeBoxWhen;
 import com.greylabs.yoda.models.Day;
 import com.greylabs.yoda.models.Slot;
 
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.TreeSet;
 
 /**
@@ -35,6 +33,18 @@ public class CalendarUtils {
     }
     public static String getRFCTimestampToString(DateTime date){
        return date.toStringRfc3339();
+    }
+    public static DateTime getUtcDate(DateTime date){
+        String ISO_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
+        TimeZone utc = TimeZone.getTimeZone("UTC");
+        SimpleDateFormat isoFormatter = new SimpleDateFormat(ISO_FORMAT);
+        isoFormatter.setTimeZone(utc);
+        try {
+             return new DateTime(isoFormatter.parse(CalendarUtils.getRFCTimestampToString(date)));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
     public static String getFormattedDateWithSlot(Date d){
         SimpleDateFormat sdf=new SimpleDateFormat("EEE dd MMM");
@@ -114,7 +124,7 @@ public class CalendarUtils {
                 calString+=" "+slot.toString()+" ++++++ "+day.toString()+"  \n";
             }while (c.moveToNext());
         }
-        Logger.log(TAG,calString);
+        Logger.d(TAG, calString);
         return calString;
     }
 
@@ -126,7 +136,7 @@ public class CalendarUtils {
                 return sdf.parse(dateInString);
         } catch (ParseException e) {
             e.printStackTrace();
-            Logger.log(TAG,"Unable to parse date.");
+            Logger.d(TAG, "Unable to parse date.");
         }
         return null;
     }

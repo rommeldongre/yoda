@@ -17,13 +17,9 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.greylabs.yoda.R;
-import com.greylabs.yoda.apis.TasksSample;
-import com.greylabs.yoda.models.Day;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.Slot;
-import com.greylabs.yoda.models.TimeBox;
-import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.BitmapUtility;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Dialogues;
@@ -127,7 +123,7 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
         //Test code ,comment out this code on production.
         Slot slot=new Slot(this);
         List<Slot> slots=slot.getAll();
-        Logger.log("ActHome",""+slots.size());
+        Logger.d("ActHome", "" + slots.size());
     }
 
     public void populateNowInfo() {

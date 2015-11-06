@@ -6,7 +6,12 @@ import android.content.SharedPreferences;
 
 import com.greylabs.yoda.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class Prefs  {
+    public static final String TAG="Prefs";
     Context context;
     SharedPreferences systemPrefs;
     SharedPreferences.Editor editor;
@@ -181,5 +186,23 @@ public class Prefs  {
     public void setAutoSyncState(boolean state){
         editor.putBoolean(Constants.ACCOUNT_AUTO_SYNC, state);
         editor.commit();
+    }
+
+    public void setLastSyncDate(Date date){
+        editor.putString(Constants.LAST_SYNC_DATE, date.toString());
+    }
+
+    public Date getLastSyncDate(){
+        String dateStr=systemPrefs.getString(Constants.LAST_SYNC_DATE,null);
+        SimpleDateFormat sdf=new SimpleDateFormat("E MMM dd hh:mm:ss zzz yyyy");
+        Date d=null;
+        try {
+            d=sdf.parse(dateStr);
+        } catch (ParseException e) {
+            Logger.d(TAG, "Unable to parse date. Stacktrace:");
+            e.printStackTrace();
+        }finally {
+            return d;
+        }
     }
 }

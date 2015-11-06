@@ -21,6 +21,7 @@ import com.greylabs.yoda.utils.Prefs;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.TreeSet;
 
 public final class QuickStart {
@@ -67,7 +68,7 @@ public final class QuickStart {
         timeBox.setColorCode(String.valueOf(context.getResources().getColor(R.color.colorcode_red)));
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
-        Logger.log(TAG, "1 Added");
+        Logger.d(TAG, "1 Added");
 
         //2
         timeBox=new TimeBox(context);
@@ -93,7 +94,7 @@ public final class QuickStart {
         timeBox.setColorCode(String.valueOf(context.getResources().getColor(R.color.colorcode_blue)));
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
-        Logger.log(TAG, "1 Added");
+        Logger.d(TAG, "1 Added");
 
         //3
         timeBox=new TimeBox(context);
@@ -115,7 +116,7 @@ public final class QuickStart {
         timeBox.setColorCode(String.valueOf(context.getResources().getColor(R.color.colorcode_green)));
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
-        Logger.log(TAG, "1 Added");
+        Logger.d(TAG, "1 Added");
 
         //4
         timeBox=new TimeBox(context);
@@ -138,7 +139,7 @@ public final class QuickStart {
         timeBox.setColorCode(String.valueOf(context.getResources().getColor(R.color.colorcode_yellow)));
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
-        Logger.log(TAG, "1 Added");
+        Logger.d(TAG, "1 Added");
 
         //5
         timeBox=new TimeBox(context);
@@ -164,7 +165,7 @@ public final class QuickStart {
         timeBox.setColorCode(String.valueOf(context.getResources().getColor(R.color.colorcode_orange)));
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
-        Logger.log(TAG, "1 Added");
+        Logger.d(TAG, "1 Added");
 
 //        //6
 //        timeBox=new TimeBox(context);
@@ -234,7 +235,7 @@ public final class QuickStart {
         Prefs pref=Prefs.getInstance(context);
         pref.setUnplannedTimeBoxId(timeBox.getId());
         timeBoxIds.add(timeBox.getId());
-        Logger.log(TAG, "1 Added");
+        Logger.d(TAG, "1 Added");
     }
 
     private void addDefaultsGoals(){
@@ -247,7 +248,7 @@ public final class QuickStart {
         goal.setKeyResult("Weight under 70Kg");
         goal.setTimeBoxId(timeBoxIds.get(0));
         goal.setDeleted(false);
-        goal.setUpdated(new DateTime(new Date()));
+        goal.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
         goal.setAccount(prefs.getDefaultAccountEmailId());
         goal.setAccountType(AccountType.getIntegerToEnum(prefs.getDefaultAccountType()));
         goal.save();
@@ -260,7 +261,7 @@ public final class QuickStart {
         goal.setKeyResult("Happy Life");
         goal.setTimeBoxId(timeBoxIds.get(1));
         goal.setDeleted(false);
-        goal.setUpdated(new DateTime(new Date()));
+        goal.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
         goal.setAccount(prefs.getDefaultAccountEmailId());
         goal.setAccountType(AccountType.getIntegerToEnum(prefs.getDefaultAccountType()));
         goal.save();
@@ -274,7 +275,7 @@ public final class QuickStart {
         goal.setKeyResult("");
         goal.setTimeBoxId(timeBoxIds.get(2));
         goal.setDeleted(false);
-        goal.setUpdated(new DateTime(new Date()));
+        goal.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
         goal.setAccount(prefs.getDefaultAccountEmailId());
         goal.setAccountType(AccountType.getIntegerToEnum(prefs.getDefaultAccountType()));
         goal.save();
@@ -288,7 +289,7 @@ public final class QuickStart {
         goal.setKeyResult("");
         goal.setTimeBoxId(timeBoxIds.get(3));
         goal.setDeleted(false);
-        goal.setUpdated(new DateTime(new Date()));
+        goal.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
         goal.setAccount(prefs.getDefaultAccountEmailId());
         goal.setAccountType(AccountType.getIntegerToEnum(prefs.getDefaultAccountType()));
         goal.save();
@@ -301,7 +302,7 @@ public final class QuickStart {
         goal.setKeyResult("");
         goal.setTimeBoxId(timeBoxIds.get(4));
         goal.setDeleted(false);
-        goal.setUpdated(new DateTime(new Date()));
+        goal.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
         goal.setAccount(prefs.getDefaultAccountEmailId());
         goal.setAccountType(AccountType.getIntegerToEnum(prefs.getDefaultAccountType()));
         goal.save();
@@ -314,7 +315,7 @@ public final class QuickStart {
         goal.setKeyResult("");
         goal.setTimeBoxId(timeBoxIds.get(5));
         goal.setDeleted(false);
-        goal.setUpdated(new DateTime(new Date()));
+        goal.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
         goal.setAccount(prefs.getDefaultAccountEmailId());
         goal.setAccountType(AccountType.getIntegerToEnum(prefs.getDefaultAccountType()));
         goal.setStringId("@default");
@@ -349,7 +350,7 @@ public final class QuickStart {
         pendingStep.setGoalId(goalIds.get(0));
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.setDeleted(false);
-        pendingStep.setUpdated(new DateTime(new Date()));
+        pendingStep.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
         pendingStep.setExpire(PendingStep.PendingStepExpire.NOT_EXPIRE);
         pendingStep.save();
 
@@ -412,7 +413,7 @@ public final class QuickStart {
         pendingStep.setGoalId(goalIds.get(1));
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.setDeleted(false);
-        pendingStep.setUpdated(new DateTime(new Date()));
+        pendingStep.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
         pendingStep.setExpire(PendingStep.PendingStepExpire.NOT_EXPIRE);
         pendingStep.save();
         pendingStep=new PendingStep(context);
@@ -424,7 +425,7 @@ public final class QuickStart {
         pendingStep.setGoalId(goalIds.get(1));
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.setDeleted(false);
-        pendingStep.setUpdated(new DateTime(new Date()));
+        pendingStep.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
         pendingStep.setExpire(PendingStep.PendingStepExpire.NOT_EXPIRE);
         pendingStep.save();
 
@@ -438,7 +439,7 @@ public final class QuickStart {
         pendingStep.setGoalId(goalIds.get(2));
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.setDeleted(false);
-        pendingStep.setUpdated(new DateTime(new Date()));
+        pendingStep.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
         pendingStep.setExpire(PendingStep.PendingStepExpire.NOT_EXPIRE);
         pendingStep.save();
         pendingStep=new PendingStep(context);
@@ -450,7 +451,7 @@ public final class QuickStart {
         pendingStep.setGoalId(goalIds.get(2));
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.setDeleted(false);
-        pendingStep.setUpdated(new DateTime(new Date()));
+        pendingStep.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
         pendingStep.setExpire(PendingStep.PendingStepExpire.NOT_EXPIRE);
         pendingStep.save();
 
@@ -474,7 +475,7 @@ public final class QuickStart {
         pendingStep.setGoalId(goalIds.get(3));
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.setDeleted(false);
-        pendingStep.setUpdated(new DateTime(new Date()));
+        pendingStep.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
         pendingStep.setExpire(PendingStep.PendingStepExpire.NOT_EXPIRE);
         pendingStep.save();
 
@@ -488,7 +489,7 @@ public final class QuickStart {
         pendingStep.setGoalId(goalIds.get(4));
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.setDeleted(false);
-        pendingStep.setUpdated(new DateTime(new Date()));
+        pendingStep.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
         pendingStep.setExpire(PendingStep.PendingStepExpire.NOT_EXPIRE);
         pendingStep.save();
 
@@ -502,7 +503,7 @@ public final class QuickStart {
         pendingStep.setGoalId(goalIds.get(5));
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.setDeleted(false);
-        pendingStep.setUpdated(new DateTime(new Date()));
+        pendingStep.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
         pendingStep.setExpire(PendingStep.PendingStepExpire.NOT_EXPIRE);
         pendingStep.save();
         pendingStep=new PendingStep(context);
@@ -514,7 +515,7 @@ public final class QuickStart {
         pendingStep.setGoalId(goalIds.get(5));
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.setDeleted(false);
-        pendingStep.setUpdated(new DateTime(new Date()));
+        pendingStep.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
         pendingStep.setExpire(PendingStep.PendingStepExpire.NOT_EXPIRE);
         pendingStep.save();
     }

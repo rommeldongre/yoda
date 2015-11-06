@@ -7,14 +7,10 @@ import android.os.Handler;
 import android.os.Message;
 
 import com.greylabs.yoda.database.NewStep;
-import com.greylabs.yoda.database.QuickStart;
 import com.greylabs.yoda.models.Slot;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.Prefs;
-
-import java.util.List;
-import java.util.ServiceLoader;
 
 public class NewStepAsyncTask extends AsyncTask<String, String, String> {
 
@@ -50,7 +46,7 @@ public class NewStepAsyncTask extends AsyncTask<String, String, String> {
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
         progressDialog.dismiss();
-        Logger.log("InitCalendarAsyncTask", "Calendar Initialized");
+        Logger.d("InitCalendarAsyncTask", "Calendar Initialized");
         Message message = new Message();
         message.obj = result;
         myHandler.sendMessage(message);

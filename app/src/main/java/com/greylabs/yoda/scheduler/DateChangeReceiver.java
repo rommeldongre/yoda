@@ -1,6 +1,5 @@
 package com.greylabs.yoda.scheduler;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.WakefulBroadcastReceiver;
@@ -16,7 +15,7 @@ public class DateChangeReceiver extends WakefulBroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (intent.getAction().equals(Intent.ACTION_DATE_CHANGED)) {
-            Logger.log("DateChangeReceiver", "Inside DateChangeReceiver");
+            Logger.d("DateChangeReceiver", "Inside DateChangeReceiver");
             Intent dateChangeService = new Intent(context, DateChangeService.class);
             context.startService(dateChangeService);
         }

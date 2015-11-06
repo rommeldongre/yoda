@@ -8,7 +8,6 @@ import android.os.Message;
 
 import com.greylabs.yoda.database.QuickStart;
 import com.greylabs.yoda.models.Goal;
-import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.Slot;
 import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.scheduler.YodaCalendar;
@@ -78,7 +77,7 @@ public class QuickStartAsyncTask extends AsyncTask<String, String, String> {
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
         progressDialog.dismiss();
-        Logger.log("InitCalendarAsyncTask", "Calendar Initialized");
+        Logger.d("InitCalendarAsyncTask", "Calendar Initialized");
         Message message = new Message();
         message.obj = result;
         myHandler.sendMessage(message);

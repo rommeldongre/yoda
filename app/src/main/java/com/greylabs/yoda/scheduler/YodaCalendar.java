@@ -13,16 +13,14 @@ import com.greylabs.yoda.utils.CalendarUtils;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.Prefs;
-import com.greylabs.yoda.utils.sorters.SortByDate;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TimeZone;
 
 /**
  * Created by Jaybhay Vijay on 7/15/2015.
@@ -75,27 +73,27 @@ public class YodaCalendar {
         cal.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
-        Logger.log(TAG, "Initializing calender from date:"+cal.getTime().toString());
+        Logger.d(TAG, "Initializing calender from date:" + cal.getTime().toString());
         int maxDays=365;
         //Check for leap year condition
         Calendar yr=Calendar.getInstance();
         if(cal.get(Calendar.MONTH)>Calendar.FEBRUARY){
             //Feb of current year passed, check for next year Feb month
-            Logger.log(TAG, "Feb of current month is passed.");
+            Logger.d(TAG, "Feb of current month is passed.");
             yr.add(Calendar.YEAR, 1);
             yr.set(Calendar.MONTH, Calendar.FEBRUARY);
         }else{
             //Feb of next month is appearing in current year
-            Logger.log(TAG, "Feb of current month is coming.");
+            Logger.d(TAG, "Feb of current month is coming.");
             yr.set(Calendar.MONTH, Calendar.FEBRUARY);
         }
         if(yr.getActualMaximum(Calendar.DAY_OF_MONTH)==29) {
             maxDays++;
-            Logger.log(TAG,"Detected Leap year. One more day added to maxDays");
+            Logger.d(TAG, "Detected Leap year. One more day added to maxDays");
         }
-        Logger.log(TAG,"Maximum Days in Calender:"+maxDays);
+        Logger.d(TAG, "Maximum Days in Calender:" + maxDays);
         //Fill database
-        Logger.log(TAG,"Filling entries in database.");
+        Logger.d(TAG, "Filling entries in database.");
         int dayOfYear=1;
         int dayOfWeek=-1;
         int weekOfMonth=-1;
@@ -135,7 +133,7 @@ public class YodaCalendar {
                 slot.setTimeBoxId(prefs.getUnplannedTimeBoxId());
                 slot.setDayId(day.getId());
                 slot.save();
-                Logger.log(TAG, " " + dayOfYear + "Day and Slot:" + slot.toString() + "|||" + day.toString());
+                Logger.d(TAG, " " + dayOfYear + "Day and Slot:" + slot.toString() + "|||" + day.toString());
             }
             cal.add(Calendar.DATE,1);
         }
@@ -157,27 +155,27 @@ public class YodaCalendar {
         Calendar yr=Calendar.getInstance();
         if(cal.get(Calendar.MONTH)>Calendar.FEBRUARY){
             //Feb of current year passed, check for next year Feb month
-            Logger.log(TAG, "Feb of current month is passed.");
+            Logger.d(TAG, "Feb of current month is passed.");
             yr.add(Calendar.YEAR, 1);
             yr.set(Calendar.MONTH, Calendar.FEBRUARY);
         }else{
             //Feb of next month is appearing in current year
-            Logger.log(TAG, "Feb of current month is coming.");
+            Logger.d(TAG, "Feb of current month is coming.");
             yr.set(Calendar.MONTH, Calendar.FEBRUARY);
         }
         if(yr.getActualMaximum(Calendar.DAY_OF_MONTH)==29) {
             maxDays++;
-            Logger.log(TAG,"Detected Leap year. One more day added to maxDays");
+            Logger.d(TAG, "Detected Leap year. One more day added to maxDays");
         }
-        Logger.log(TAG,"Maximum Days in Calender:"+maxDays);
+        Logger.d(TAG, "Maximum Days in Calender:" + maxDays);
         return maxDays;
     }
     public void updateCalendar(){
         //Create calender and set todays date
         Calendar cal=getCalendarInstance();
-        Logger.log(TAG, "Updating calender from date:"+cal.getTime().toString());
+        Logger.d(TAG, "Updating calender from date:" + cal.getTime().toString());
         //update database
-        Logger.log(TAG,"Updating entries in database.");
+        Logger.d(TAG, "Updating entries in database.");
         int dayOfYear=1;
         int dayOfWeek=-1;
         int weekOfMonth=-1;
@@ -192,24 +190,24 @@ public class YodaCalendar {
         cal.set(Calendar.MINUTE, 0);cal1.set(Calendar.MINUTE, 0);
         cal.set(Calendar.SECOND, 0);cal1.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);cal1.set(Calendar.MILLISECOND, 0);
-        Logger.log(TAG,"Initialized calendat variables");
+        Logger.d(TAG, "Initialized calendat variables");
 
         //get all days of calendar
         List<Day> days=day.getAll();
         day=days.get(0);
-        Logger.log(TAG,"First day in Yoda Calendar :"+day.toString());
+        Logger.d(TAG, "First day in Yoda Calendar :" + day.toString());
         int daysDeleted=0;
         Calendar temp=Calendar.getInstance();
         if(day.getDate().compareTo(cal.getTime())>0){
-            Logger.log(TAG,"First date in yoda calendar is greater than current date");
+            Logger.d(TAG, "First date in yoda calendar is greater than current date");
             //first entry in the Calendar DB  is greater than  current
             //String startDate=CalendarUtils.getSqLiteDateFormat(cal);
             cal1.setTime(day.getDate());
             //String endDate=CalendarUtils.getSqLiteDateFormat(cal1);
             //daysDeleted=day.deleteNextDays(startDate, endDate);
             int numberOfDays=cal1.get(Calendar.DAY_OF_YEAR)-cal.get(Calendar.DAY_OF_YEAR);
-            Logger.log(TAG,"First date:"+day.getDate().toString()+" and Current date:"+cal.getTime().toString()+" " +
-                    " and their Difference:"+numberOfDays);
+            Logger.d(TAG, "First date:" + day.getDate().toString() + " and Current date:" + cal.getTime().toString() + " " +
+                    " and their Difference:" + numberOfDays);
             temp.setTime(cal.getTime());
             for(int i=1;i<=numberOfDays;i++){
                 dayOfYear=i;
@@ -228,7 +226,7 @@ public class YodaCalendar {
                 day.setQuarterOfYear(quarterOfYear);
                 day.setYear(year);
                 day.save();
-                Logger.log(TAG, "Day added:" + day.toString());
+                Logger.d(TAG, "Day added:" + day.toString());
                 slot=new Slot(context);
                 for(int j=0;j<6;j++){
                     slot.setId(0);
@@ -239,22 +237,22 @@ public class YodaCalendar {
                     slot.setTimeBoxId(prefs.getUnplannedTimeBoxId());
                     slot.setDayId(day.getId());
                     slot.save();
-                    Logger.log(TAG,"Slot added:"+slot.toString());
+                    Logger.d(TAG, "Slot added:" + slot.toString());
                 }
-                Logger.log(TAG, "Day Deleted :" + days.get(days.size() - i).toString());
+                Logger.d(TAG, "Day Deleted :" + days.get(days.size() - i).toString());
                 int count=days.get(days.size()-i).delete();
                 cal.add(Calendar.DATE, 1);
             }
             isChanged=true;
         }
         else if(day.getDate().compareTo(cal.getTime())<0){
-            Logger.log(TAG,"First date in yoda calendar is less than current date");
+            Logger.d(TAG, "First date in yoda calendar is less than current date");
             //first entry in the Calendar DB  is less than  current
             cal1.setTime(day.getDate());
             String startDate=CalendarUtils.getSqLiteDateFormat(cal1);
             String endDate=CalendarUtils.getSqLiteDateFormat(cal);
             daysDeleted=day.deletePrevDays(startDate, endDate);
-            Logger.log(TAG,"Number of Days deleted at the end of Yoda Calendar :"+daysDeleted);
+            Logger.d(TAG, "Number of Days deleted at the end of Yoda Calendar :" + daysDeleted);
             int numberOfDays=cal.get(Calendar.DAY_OF_YEAR)-cal1.get(Calendar.DAY_OF_YEAR);
             cal.setTime(days.get(days.size() - 1).getDate());
             cal.add(Calendar.DATE, 1);
@@ -446,6 +444,7 @@ public class YodaCalendar {
                     calendar.add(Calendar.HOUR_OF_DAY, slot.getWhen().getStartTime());
                     updateStep(ps, slot);
                     ps.setStepDate(calendar.getTime());
+                    ps.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
                     slot.save();
                     ps.save();
                     goal.setDueDate(ps.getStepDate());
@@ -518,6 +517,7 @@ public class YodaCalendar {
                     calendar.add(Calendar.HOUR_OF_DAY, slot.getWhen().getStartTime());
                     updateStep(ps, slot);
                     ps.setStepDate(calendar.getTime());
+                    ps.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
                     slot.save();
                     ps.save();
                     AlarmScheduler alarmScheduler = new AlarmScheduler(context);

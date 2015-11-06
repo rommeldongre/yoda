@@ -48,6 +48,7 @@ import com.greylabs.yoda.utils.Prefs;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 public class ActAddNewGoal extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
 
@@ -298,7 +299,7 @@ public class ActAddNewGoal extends AppCompatActivity implements View.OnClickList
                         Prefs prefs = Prefs.getInstance(this);
                         goal.setAccount(prefs.getDefaultAccountEmailId());
                         goal.setAccountType(AccountType.getIntegerToEnum(prefs.getDefaultAccountType()));
-                        goal.setUpdated(new DateTime(new Date()));
+                        goal.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
                         goal.save();
                         Slot slot = new Slot(this);
                         int totalHoursAllotted = slot.getTotalSlotCount(seletedTBId)*Constants.MAX_SLOT_DURATION;

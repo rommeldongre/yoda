@@ -112,7 +112,7 @@ public class ActNowFilter extends AppCompatActivity implements View.OnClickListe
                 if(pendingStep!=null){
                     pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.DOING);
                     pendingStep.save();
-                    Logger.log("TAG","Alarm Scheduler : "+alarmScheduler);
+                    Logger.d("TAG", "Alarm Scheduler : " + alarmScheduler);
                     if(alarmScheduler==null)
                         alarmScheduler=new AlarmScheduler(this);
                     else

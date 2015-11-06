@@ -56,7 +56,7 @@ public class AsyncTaskThread extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void result) {
         super.onPostExecute(result);
-        Logger.log("Import(1) / Export(2) done :", " " + OPERATION);
+        Logger.d("Import(1) / Export(2) done :", " " + OPERATION);
         Message message = new Message();
         message.obj = OPERATION;
         myHandler.sendMessage(message);

@@ -45,6 +45,7 @@ import com.greylabs.yoda.utils.Prefs;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 public class ActAddNewStep extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener, SeekBar.OnSeekBarChangeListener {
 
@@ -304,6 +305,7 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
             currentStep.setNickName(edtStepName.getText().toString());
             currentStep.setNotes(edtStepNotes.getText().toString());
             currentStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+            currentStep.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
             if(rbExpire.isChecked()){
                 currentStep.setExpire(PendingStep.PendingStepExpire.EXPIRE);
             }else {

@@ -324,9 +324,10 @@ public class Slot {
                 " " +" and "+TableSlot.when+" = "+TimeBoxWhen.getEnumToIntegerType(timeBoxWhen);
 
         SQLiteDatabase db=database.getReadableDatabase();
-        Cursor c=db.rawQuery(query,null);
-        c.moveToFirst();
-        long id=c.getLong(c.getColumnIndex(TableSlot.id));
+        Cursor c=db.rawQuery(query, null);
+        long id=0;
+        if(c.moveToFirst())
+            id=c.getLong(c.getColumnIndex(TableSlot.id));
         c.close();
         return id;
     }

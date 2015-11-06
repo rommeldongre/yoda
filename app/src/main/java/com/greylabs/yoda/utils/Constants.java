@@ -131,4 +131,7 @@ public class Constants {
     public static final String MSG_ADD_NEW_TIMEBOX = "No free TimeBoxes available. Please add one";
     public static final String ACCOUNT_DEFAULT_AUTH_TOKEN ="accountAuthToken" ;
     public static final String STEP_START_END ="stepStartEnd" ;
+    public static final String LAST_SYNC_DATE = "lastSyncDate";
+    public static final String GOOGLE_TASK_NEEDS_ACTION = "needsAction";
+    public static final String GOOGLE_TASK_COMPLETED = "completed";
 }

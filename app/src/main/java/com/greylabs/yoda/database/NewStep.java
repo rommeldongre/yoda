@@ -70,7 +70,7 @@ public final class NewStep {
         Prefs pref=Prefs.getInstance(context);
         pref.setUnplannedTimeBoxId(timeBox.getId());
         timeBoxIds.add(timeBox.getId());
-        Logger.log(TAG, "1 Added");
+        Logger.d(TAG, "1 Added");
     }
 
     private void addDefaultsGoals(){
