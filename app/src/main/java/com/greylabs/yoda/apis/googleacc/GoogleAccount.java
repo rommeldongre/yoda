@@ -243,13 +243,13 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                 Logger.d(TAG, "Task List: " + taskList.toString() + "  Goal: " + goal.toString());
                 com.google.api.services.tasks.model.Tasks tasks=null;
                 if(!goal.isDeleted())
-                    tasks = service.tasks().list(taskList.getId()).setShowCompleted(false).setShowCompleted(false).execute();
+                    tasks = service.tasks().list(taskList.getId()).setShowDeleted(true).execute();
                 if (tasks != null) {
                     List<Task> myTasks = tasks.getItems();
                     if (myTasks != null) {
                         for (Task task : myTasks) {
                             PendingStep pendingStep = convertToPendingStep(task);
-                            if(pendingStep.getId()==0){
+                            if(pendingStep.getId()==0 && task.getDeleted()==Boolean.FALSE){
                                 //means that this new step , insert it to our database
                                 pendingStep.setStringId(task.getId());
                                 pendingStep.setGoalStringId(taskList.getId());
