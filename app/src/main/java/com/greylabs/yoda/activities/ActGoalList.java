@@ -25,6 +25,7 @@ import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.Constants;
+import com.greylabs.yoda.utils.GoalUtils;
 import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.PendingStepUtils;
 import com.greylabs.yoda.utils.Prefs;
@@ -249,104 +250,22 @@ public class ActGoalList  extends AppCompatActivity implements OnClickOfRecycler
     }
 
     private void performActionDeleteGoalYes(int position){
-        Prefs prefs = Prefs.getInstance(ActGoalList.this);
-        Goal goal = goalArrayList.get(position);
-        Goal stretchGoal=new Goal(this).get(prefs.getStretchGoalId());
-
-        PendingStep pendingStep = new PendingStep(ActGoalList.this);
-        List<PendingStep> temp=pendingStep.getAll(PendingStep.PendingStepStatus.TODO, PendingStep.PendingStepDeleted.SHOW_NOT_DELETED,goal.getId());
-        List<PendingStep> pendingSteps=new ArrayList<>();
-        if(temp!=null){
-            pendingSteps.addAll(temp);
-            temp=pendingStep.getAll(PendingStep.PendingStepStatus.COMPLETED, PendingStep.PendingStepDeleted.SHOW_NOT_DELETED,goal.getId());
-            if(temp!=null){
-                pendingSteps.addAll(temp);
-            }
-        }
-        for(PendingStep ps:pendingSteps){
-            switch (ps.getPendingStepType()){
-                case SPLIT_STEP:
-                case SERIES_STEP:
-                    temp=ps.getAllSubSteps(PendingStep.PendingStepStatus.TODO, PendingStep.PendingStepDeleted.SHOW_NOT_DELETED,ps.getId(),goal.getId());
-                    if(temp!=null){
-                        List<PendingStep> subSteps=new ArrayList<>();
-                        subSteps.addAll(temp);
-                        temp=ps.getAllSubSteps(PendingStep.PendingStepStatus.COMPLETED, PendingStep.PendingStepDeleted.SHOW_NOT_DELETED,ps.getId(),goal.getId());
-                        if(temp!=null)
-                            subSteps.addAll(temp);
-                        if(subSteps==null){
-                            PendingStepUtils.deletePendingStep(ps);
-                            continue;
-                        }
-                        for(PendingStep substep:subSteps){
-                            PendingStepUtils.movePendingStepToStretchGoal(substep, stretchGoal);
-                        }
-                    }
-                    PendingStepUtils.movePendingStepToStretchGoal(ps, stretchGoal);
-                    break;
-                case SINGLE_STEP:
-                    PendingStepUtils.movePendingStepToStretchGoal(ps, stretchGoal);
-            }
-        }
-        long oldTimeBoxId=goal.getTimeBoxId();
-        goal.setDeleted(true);
-        goal.setTimeBoxId(0);//No TimeBox
-        goal.setUpdated(new DateTime(new Date()));
-        goal.save();
+        Goal goal=goalArrayList.get(position);
+        GoalUtils.performActionDeleteGoalYes(goal);
+        Logger.showSnack(Yoda.getContext(), toolbar, Constants.MSG_GOAL_DELETED);
         getGoalArrayFromLocal();
         mAdapter.notifyDataSetChanged();
-        yodaCalendar = new YodaCalendar(ActGoalList.this);
-        yodaCalendar.detachTimeBox(oldTimeBoxId);
-        //move steps to Stretch Goal
-        TimeBox timeBox = new TimeBox(ActGoalList.this).get(prefs.getUnplannedTimeBoxId());
-        yodaCalendar.setTimeBox(timeBox);
-        yodaCalendar.rescheduleSteps(prefs.getStretchGoalId());
-//        Logger.showMsg(ActGoalList.this, Constants.MSG_GOAL_DELETED);
-        Logger.showSnack(this, toolbar, Constants.MSG_GOAL_DELETED);
         //sync code
-        GoogleSync.getInstance(this).sync();
+        GoogleSync.getInstance(Yoda.getContext()).sync();
         //sync code
     }
 
     private void performActionDeleteGoalNo(int position) {
-        //delete goal here and all the steps related to it
-        Goal goal = goalArrayList.get(position);
-        PendingStep ps = new PendingStep(ActGoalList.this);
-        ps.setGoalId(goal.getId());
-        List<PendingStep> pendingSteps = ps.getAll(goal.getId());
-        if (pendingSteps != null){
-            for (PendingStep pendingStep : pendingSteps) {
-                switch (pendingStep.getPendingStepType()) {
-                    case SUB_STEP:
-                    case SERIES_STEP:
-                        List<PendingStep> subSteps = pendingStep.getAllSubSteps(pendingStep.getId(), goal.getId());
-                        if(subSteps==null){
-                            PendingStepUtils.deletePendingStep(pendingStep);
-                        }else {
-                            for (PendingStep subStep : subSteps) {
-                                PendingStepUtils.deletePendingStep(subStep);
-                            }
-                            PendingStepUtils.deletePendingStep(pendingStep);
-                        }
-                        break;
-                    case SINGLE_STEP:
-                        PendingStepUtils.deletePendingStep(pendingStep);
-                        break;
-                }
-            }
-        }
-        //ps.deleteAllPendingSteps();
-        long timeBoxId=goal.getTimeBoxId();
-        goal.setDeleted(true);
-        goal.setUpdated(new DateTime(new Date()));
-        goal.setTimeBoxId(0);
-        goal.save();
+        Goal goal=goalArrayList.get(position);
+        GoalUtils.performActionDeleteGoalNo(goal);
+        Logger.showSnack(Yoda.getContext(), toolbar, Constants.MSG_GOAL_DELETED);
         getGoalArrayFromLocal();
         mAdapter.notifyDataSetChanged();
-        yodaCalendar = new YodaCalendar(ActGoalList.this);
-        yodaCalendar.detachTimeBox(timeBoxId);
-//        Logger.showMsg(ActGoalList.this, Constants.MSG_GOAL_DELETED);
-        Logger.showSnack(this, toolbar, Constants.MSG_GOAL_DELETED);
         //sync code
         GoogleSync.getInstance(this).sync();
         //sync code

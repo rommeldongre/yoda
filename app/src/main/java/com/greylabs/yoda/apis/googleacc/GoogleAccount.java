@@ -146,6 +146,9 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
             task.setParent(ps.getStringId());
         }
         task.setTitle(pendingStep.getNickName());
+        if(pendingStep.getNotes()!=null){
+            task.setNotes(pendingStep.getNotes());
+        }
         return task;
     }
 
@@ -184,7 +187,7 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
         long id = pendingStep.getIdIfExists(task.getId());
         if (id == 0) {
             //new step ,need to insert
-            if (task.getStatus().equals("needsAction") || (task.getDeleted() == Boolean.FALSE)) {
+            if (task.getStatus().equals("needsAction") || (task.getDeleted() ==null)) {
                 pendingStep.setId(0);
                 pendingStep.setTime(Constants.MAX_SLOT_DURATION);
                 pendingStep.setStringId(task.getId());
@@ -192,6 +195,9 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                 pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
                 pendingStep.setExpire(PendingStep.PendingStepExpire.NOT_EXPIRE);
                 pendingStep.setUpdated(task.getUpdated());
+                if(task.getNotes()!=null){
+                    pendingStep.setNotes(task.getNotes());
+                }
             }
             if (!task.getStatus().equals("needsAction"))
                 pendingStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
@@ -200,8 +206,8 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
         }
         //check for parent
         id = pendingStep.getIdIfExists(task.getParent());
-        pendingStep.setSubStepOf(id);
         if (id != 0) {
+            pendingStep.setSubStepOf(id);
             pendingStep.setPendingStepType(PendingStep.PendingStepType.SUB_STEP);
             //and its parents type set to Series Step
             PendingStep ps = new PendingStep(context).get(id);
@@ -249,7 +255,7 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                     if (myTasks != null) {
                         for (Task task : myTasks) {
                             PendingStep pendingStep = convertToPendingStep(task);
-                            if(pendingStep.getId()==0 && task.getDeleted()==Boolean.FALSE){
+                            if(pendingStep.getId()==0 && (task.getDeleted()==null || task.getDeleted()==Boolean.FALSE)){
                                 //means that this new step , insert it to our database
                                 pendingStep.setStringId(task.getId());
                                 pendingStep.setGoalStringId(taskList.getId());
@@ -370,7 +376,6 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                 if(ps.getGoalStringId()==null || ps.getGoalStringId().equals(""))
                     ps.setGoalStringId(goal.getStringId());
                 task.setTitle(ps.getNickName());
-                task.setNotes("This step is added by Yoda");
                 if (ps.getStepDate() != null)
                     task.setDue(new DateTime(ps.getStepDate()));
                 Task result=null;

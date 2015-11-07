@@ -42,14 +42,6 @@ public class PendingStepUtils {
         pendingStep.setSlotId(0);
         pendingStep.save();
         pendingStep.cancelAlarm();
-        if(pendingStep.isExpire() == PendingStep.PendingStepExpire.EXPIRE){
-            if(pendingStep.getStringId()==null && pendingStep.getStringId().equals("")){
-                pendingStep.delete();//delete step directly
-            }else {
-                pendingStep.setDeleted(true);
-                pendingStep.save();
-            }
-        }
     }
 
 

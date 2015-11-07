@@ -82,7 +82,17 @@ public class Dialogues {
         tvGoalName.setText(goal.getNickName());
         tvStepName.setText(pendingStep.getNickName());
 
-        dialog.setOnDismissListener(new MyDialogueDismissListener());
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                if (caller.equals(Constants.ACT_HOME)) {
+                    ((ActHome) context).onDialogueClosed();
+                    if(Dialogues.this.startEnd== PendingStep.PendingStepStartEnd.END){
+                        checkExpiryOfStep();
+                    }
+                }
+            }
+        });
 
         MyOnClickListener myOnClickListener = new MyOnClickListener();
         btnLogExcuse.setOnClickListener(myOnClickListener);
@@ -103,6 +113,25 @@ public class Dialogues {
         dialog.getWindow().setType(
                 WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         dialog.show();
+    }
+
+    public void checkExpiryOfStep(){
+        if(pendingStep.isExpire()== PendingStep.PendingStepExpire.EXPIRE) {
+            //delete or mark step as deleted
+            pendingStep.freeSlot();
+            pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
+            pendingStep.setSlotId(0);
+            pendingStep.cancelAlarm();
+            pendingStep.save();
+        }else{
+            //reschedule steps set current step as TODO.
+            pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+            pendingStep.save();
+            Goal goal=new Goal(context).get(pendingStep.getGoalId());
+            TimeBox timeBox=new TimeBox(context).get(goal.getTimeBoxId());
+            YodaCalendar yodaCalendar=new YodaCalendar(context,timeBox);
+            yodaCalendar.rescheduleSteps(goal.getId());
+        }
     }
 
     class MyOnClickListener implements View.OnClickListener {
@@ -154,46 +183,9 @@ public class Dialogues {
                     dialog.dismiss();
                     break;
             }
-//            if(startEnd== PendingStep.PendingStepStartEnd.END || checkExpiry){
+//            if(startEnd== PendingStep.PendingStepStartEnd.END){
 //                checkExpiryOfStep();
 //            }
-    }
-
-    private void checkExpiryOfStep(){
-        if(pendingStep.isExpire()== PendingStep.PendingStepExpire.EXPIRE) {
-            //delete or mark step as deleted
-            if (pendingStep.getStringId() == null || pendingStep.getStringId().equals("")) {
-                pendingStep.freeSlot();
-                pendingStep.delete();
-            } else {
-                pendingStep.freeSlot();
-                pendingStep.setSlotId(0);
-                pendingStep.setDeleted(true);
-                pendingStep.save();
-            }
-        }else{
-            //reschedule steps set current step as TODO.
-            pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
-            pendingStep.save();
-            Goal goal=new Goal(context).get(pendingStep.getGoalId());
-            TimeBox timeBox=new TimeBox(context).get(goal.getTimeBoxId());
-            YodaCalendar yodaCalendar=new YodaCalendar(context,timeBox);
-            yodaCalendar.rescheduleSteps(goal.getId());
-        }
-    }
-    }
-
-    private class MyDialogueDismissListener implements DialogInterface.OnDismissListener {
-        @Override
-        public void onDismiss(DialogInterface dialog) {
-            if (caller.equals(Constants.ACT_HOME)) {
-//                ((ActHome) context).runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-                ((ActHome) context).onDialogueClosed();
-//                    }
-//                });
-            }
         }
     }
 }

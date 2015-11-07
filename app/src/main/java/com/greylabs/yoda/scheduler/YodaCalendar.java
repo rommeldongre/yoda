@@ -301,7 +301,7 @@ public class YodaCalendar {
             List<TimeBox> timeBoxes = new TimeBox(context).getAll(TimeBox.TimeBoxStatus.ACTIVE);
             Goal goal = new Goal(context);
             for (TimeBox timeBox : timeBoxes) {
-                if (timeBox.getTillType() == TimeBoxTill.FOREVER) {
+                if (timeBox.getTillType() == TimeBoxTill.FOREVER && timeBox.getId()!=prefs.getUnplannedTimeBoxId()) {
                     this.timeBox = timeBox;
                     attachTimeBox(goal.getGoalId(timeBox.getId()));
                 }
