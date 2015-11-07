@@ -38,7 +38,7 @@ public class ActStepList extends AppCompatActivity implements onClickOfRecyclerV
     TextView emptyViewActChangeStepPriority;
     ArrayList<PendingStep> stepArrayList = new ArrayList<>();
     ArrayList<PendingStep> pendingStepsArrayList = new ArrayList<>();
-    boolean isOperationEdit = false, isPriorityChanged = false, isShowingPendingSteps;
+    boolean isOperationEdit = false, isPriorityChanged = false, isShowingPendingSteps=true;
     Menu menu;
     Goal currentGoal;
     String caller;
@@ -83,7 +83,7 @@ public class ActStepList extends AppCompatActivity implements onClickOfRecyclerV
                 break;
         }
 
-        mAdapter = new AdapterRecyclerViewActStepList(this, stepArrayList, isOperationEdit, caller);
+        mAdapter = new AdapterRecyclerViewActStepList(this, pendingStepsArrayList, isOperationEdit, caller);
         recyclerView.setAdapter(mAdapter);
         mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
