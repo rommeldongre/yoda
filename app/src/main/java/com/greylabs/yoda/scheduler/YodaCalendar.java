@@ -300,12 +300,17 @@ public class YodaCalendar {
             //update for all timeboxes having forever as Till time-need optimization
             List<TimeBox> timeBoxes = new TimeBox(context).getAll(TimeBox.TimeBoxStatus.ACTIVE);
             Goal goal = new Goal(context);
+            timeBoxes.remove(new TimeBox(context).get(prefs.getUnplannedTimeBoxId()));
             for (TimeBox timeBox : timeBoxes) {
-                if (timeBox.getTillType() == TimeBoxTill.FOREVER && timeBox.getId()!=prefs.getUnplannedTimeBoxId()) {
+                if (timeBox.getTillType() == TimeBoxTill.FOREVER){
                     this.timeBox = timeBox;
                     attachTimeBox(goal.getGoalId(timeBox.getId()));
+                    rescheduleSteps(goal.getGoalId(timeBox.getId()));
                 }
             }
+            //reschedule steps in stretch Goal
+            this.timeBox=new TimeBox(context).get(prefs.getUnplannedTimeBoxId());
+            rescheduleSteps(prefs.getStretchGoalId());
         }
     }
     /**
@@ -376,7 +381,6 @@ public class YodaCalendar {
             }
         }
         return slotCount;
-
     }
 
     /**

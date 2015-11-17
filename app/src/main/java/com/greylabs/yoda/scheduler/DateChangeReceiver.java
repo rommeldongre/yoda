@@ -17,7 +17,7 @@ public class DateChangeReceiver extends WakefulBroadcastReceiver {
         if (intent.getAction().equals(Intent.ACTION_DATE_CHANGED)) {
             Logger.d("DateChangeReceiver", "Inside DateChangeReceiver");
             Intent dateChangeService = new Intent(context, DateChangeService.class);
-            context.startService(dateChangeService);
+            startWakefulService(context,dateChangeService);
         }
     }
 }

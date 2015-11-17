@@ -14,11 +14,20 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.greylabs.yoda.R;
+import com.greylabs.yoda.models.Day;
+import com.greylabs.yoda.models.Goal;
+import com.greylabs.yoda.scheduler.YodaCalendar;
+import com.greylabs.yoda.threads.CalendarUpdateAsyncThread;
 import com.greylabs.yoda.threads.InitCalendarAsyncTask;
+import com.greylabs.yoda.utils.CalendarUtils;
+import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.Prefs;
 
-public class ActSplashScreen extends AppCompatActivity {
+import java.util.Date;
+import java.util.List;
 
+public class ActSplashScreen extends AppCompatActivity {
+    private static final String TAG="ActSplashScreen";
     RelativeLayout rl;
     ImageView iv;
     Prefs prefs;
@@ -62,6 +71,19 @@ public class ActSplashScreen extends AppCompatActivity {
                 } else if (!prefs.isCalendarInitialized()) {
                     new InitCalendarAsyncTask(ActSplashScreen.this, new MyHandler()).execute();
                 }
+
+                if(prefs.isCalendarInitialized()){
+                    //new CalendarUpdateAsyncThread(ActSplashScreen.this,new CalendarUpdateHandler()).execute();
+                    Logger.d(TAG, "Checking Calendar State");
+                    Day day=new Day(ActSplashScreen.this);
+                    if(CalendarUtils.compareOnlyDates(day.getFirstDay(), new Date())==false) {
+                        YodaCalendar yodaCalendar = new YodaCalendar(ActSplashScreen.this);
+                        yodaCalendar.updateCalendar();
+                        Logger.d(TAG, "Calendar updated success");
+                    }else{
+                        Logger.d(TAG,"Calendar up to date");
+                    }
+                }
             }
         }, 3000);
     }
@@ -88,6 +110,13 @@ public class ActSplashScreen extends AppCompatActivity {
         }
     }
 
+    class CalendarUpdateHandler extends Handler {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            ActSplashScreen.this.finish();
+        }
+    }
     private void checkIfOptionFromActQuickStartSelected() {
         if(prefs.isOptionFromActQuickStartSelected()) {
             startActivity(new Intent(ActSplashScreen.this, ActHome.class));

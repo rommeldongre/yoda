@@ -234,6 +234,11 @@ public class TimeBox implements Serializable{
                 ", timeBoxWhen=" + timeBoxWhen +
                 '}';
     }
+    @Override
+    public boolean equals(Object o) {
+        TimeBox timeBox=(TimeBox)o;
+        return timeBox.id==this.id;
+    }
 
     /**********************************************************************************************/
     // Utils
@@ -278,5 +283,7 @@ public class TimeBox implements Serializable{
         return nickName;
 
     }
+
+
 
 }

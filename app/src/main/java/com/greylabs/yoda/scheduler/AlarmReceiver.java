@@ -1,5 +1,6 @@
 package com.greylabs.yoda.scheduler;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.WakefulBroadcastReceiver;
@@ -13,7 +14,7 @@ import java.util.Calendar;
 /**
  * Created by Jaybhay Vijay on 7/13/2015.
  */
-public class AlarmReceiver extends WakefulBroadcastReceiver {
+public class AlarmReceiver extends BroadcastReceiver {
     private static final String TAG="AlarmReceiver";
     @Override
     public void onReceive(Context context, Intent intent) {

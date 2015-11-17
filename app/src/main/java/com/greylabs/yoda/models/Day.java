@@ -224,4 +224,17 @@ public class Day {
         return numOfRowAffected;
     }
 
+    public Date getFirstDay(){
+        String query="select " +TableDay.date+" "+
+                " "+" from "+TableDay.day+" " +
+                " "+" order by strftime('%Y-%m-%d %H:%M:%S',"+TableDay.date+") asc ";
+        SQLiteDatabase db=database.getReadableDatabase();
+        Cursor c=db.rawQuery(query, null);
+        Date firstDate=new Date();
+        if(c.moveToFirst()){
+            firstDate=CalendarUtils.parseDate(c.getString(c.getColumnIndex(TableDay.date)));
+        }
+        return firstDate;
+    }
+
 }

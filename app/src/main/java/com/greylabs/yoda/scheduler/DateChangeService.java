@@ -35,6 +35,7 @@ public class DateChangeService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         yodaCalendar.updateCalendar();
         //GoalUtils.rescheduleAllSteps();
+        DateChangeReceiver.completeWakefulIntent(intent);
         return START_STICKY;
     }
 

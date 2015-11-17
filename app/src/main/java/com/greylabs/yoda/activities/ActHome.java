@@ -17,9 +17,11 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.greylabs.yoda.R;
+import com.greylabs.yoda.models.Day;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.Slot;
+import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.BitmapUtility;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Dialogues;
@@ -68,8 +70,10 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
 //        List<Day> days=day.getAll();
 //        Slot slot=new Slot(this);
 //        List<Slot> slots=slot.getAll();
-//        YodaCalendar yodaCalendar=new YodaCalendar(this);
+
+//        YodaCalendar yodaCalendar = new YodaCalendar(this);
 //        yodaCalendar.updateCalendar();
+
 //        //test code end , delete or comment out this before giving to client.
         initialize();
     }
@@ -98,7 +102,7 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
 //        btnImportGoogleTasks = (MyFloatingActionButton) findViewById(R.id.btnImportGoogleTasksActHome);
 
         //set wallpaper here
-                prefs = Prefs.getInstance(this);
+        prefs = Prefs.getInstance(this);
 //        layoutWallpaper.setBackgroundResource(prefs.getWallpaperResourceId());
 //        layoutWallpaper.setBackground(new BitmapDrawable(BitmapUtility.decodeSampledBitmapFromResource(getResources(),prefs.getWallpaperResourceId(),ivWallpaper.getWidth(),ivWallpaper.getHeight())));
 //        ivWallpaper.setImageBitmap(BitmapUtility.decodeSampledBitmapFromResource(getResources(),prefs.getWallpaperResourceId(),100,200));
