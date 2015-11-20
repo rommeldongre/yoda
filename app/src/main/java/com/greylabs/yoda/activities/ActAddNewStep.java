@@ -359,14 +359,14 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
             int substeps=0;
 
 
-            if (slot.getTotalSlotCount(timeBox.getId())<(currentStep.getAllStepCount(currentGoal.getId())+stepCount)) {
-                isScheduled=false;
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(getString(R.string.msgYodaSays));
-                builder.setMessage(getString(R.string.msgCannotSaveStepActAddNewStep));
-                builder.setPositiveButton(getString(R.string.btnOk), null);
-                builder.show();
-            } else {
+//            if (slot.getTotalSlotCount(timeBox.getId())<(currentStep.getAllStepCount(currentGoal.getId())+stepCount)) {
+//                isScheduled=false;
+//                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//                builder.setTitle(getString(R.string.msgYodaSays));
+//                builder.setMessage(getString(R.string.msgCannotSaveStepActAddNewStep));
+//                builder.setPositiveButton(getString(R.string.btnOk), null);
+//                builder.show();
+//            } else {
                 List<PendingStep> subStepsList=new ArrayList<>();
                 currentStep.initDatabase(this);
                 PendingStep ps =currentStep;
@@ -412,7 +412,7 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                     }else if (stepPrioritySpinner.getSelectedItem().equals(Constants.PENDING_STEP_PRIORITY_BOTTOM_MOST)) {
                         stepArrayList.addAll(subStepsList);
                     }
-                }
+                //}
                 //save all the steps in the array with priorities
                 for (int i = 0; i < stepArrayList.size(); i++) {
                     stepArrayList.get(i).initDatabase(this);

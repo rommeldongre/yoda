@@ -13,9 +13,11 @@ import com.greylabs.yoda.utils.CalendarUtils;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.Prefs;
+import com.greylabs.yoda.utils.sorters.SortPendingStepByPriority;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -416,8 +418,11 @@ public class YodaCalendar {
         boolean isScheduled=false;
         slots=slot.getAll(timeBox.getId());
         //Collections.sort(slots, new SortByDate());
-        if(slots==null | slots.size()==0)
+        if(slots==null | slots.size()==0) {
+            pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.UNSCHEDULED);
+            pendingStep.save();
             return false;
+        }
         Goal goal=new Goal(context).get(pendingStep.getGoalId());
         removeTodaysPassedSlots();
         List<PendingStep> pendingStepsList=new ArrayList<>();
@@ -464,6 +469,9 @@ public class YodaCalendar {
                     alarmScheduler.setAlarm();
                     isScheduled=true;
                     break;
+                }else{
+                    ps.setPendingStepStatus(PendingStep.PendingStepStatus.UNSCHEDULED);
+                    ps.save();
                 }
             }
             sessionCount++;
@@ -502,14 +510,31 @@ public class YodaCalendar {
         Goal goal=new Goal(context).get(goalId);
         slots=slot.getAll(timeBox.getId());
         removeTodaysPassedSlots();
-        List<PendingStep> pendingStepsList= new PendingStep(context).getAll(PendingStep.PendingStepStatus.TODO,
-                PendingStep.PendingStepDeleted.SHOW_NOT_DELETED,goalId);
+        PendingStep pendingStep=new PendingStep(context);
+        List<PendingStep> pendingStepsList=new ArrayList<>();
+        List<PendingStep> temp= pendingStep.getAll(PendingStep.PendingStepStatus.TODO,
+                PendingStep.PendingStepDeleted.SHOW_NOT_DELETED, goalId);
+        if(temp!=null){
+            pendingStepsList.addAll(temp);
+        }
+        temp=pendingStep.getAll(PendingStep.PendingStepStatus.UNSCHEDULED,
+                PendingStep.PendingStepDeleted.SHOW_NOT_DELETED, goalId);
+        if(temp!=null){
+            pendingStepsList.addAll(temp);
+        }
+        Collections.sort(pendingStepsList,new SortPendingStepByPriority());
+
         if (pendingStepsList==null) return count;
         Iterator<PendingStep> pendingSteps =pendingStepsList .iterator();
         PendingStep ps;
         while (pendingSteps.hasNext()) {
             ps=pendingSteps.next();
             Iterator<Slot> it = slots.iterator();
+            if(slots.size()==0) {
+                ps.setPendingStepStatus(PendingStep.PendingStepStatus.UNSCHEDULED);
+                ps.setSlotId(0);
+                ps.save();
+            }
             while (it.hasNext()) {
                 Slot slot = it.next();
                 slot.setTime(Constants.MAX_SLOT_DURATION);
@@ -517,6 +542,7 @@ public class YodaCalendar {
                     slot.setTime(slot.getTime() - ps.getTime());
                     slot.setGoalId(ps.getGoalId());
                     ps.setSlotId(slot.getId());
+                    ps.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
                     calendar.setTime(slot.getScheduleDate());
                     calendar.add(Calendar.HOUR_OF_DAY, slot.getWhen().getStartTime());
                     updateStep(ps, slot);
@@ -537,10 +563,6 @@ public class YodaCalendar {
                     break;
                 }
             }
-        }
-        if(pendingStepsList!=null && pendingStepsList.size()>0){
-            goal.setDueDate(pendingStepsList.get(pendingStepsList.size()-1).getStepDate());
-            goal.save();
         }
         return count;
     }

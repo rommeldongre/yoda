@@ -353,8 +353,8 @@ public class Slot {
                 " " +" where "+TableSlot.timeBoxId+"="+timeBoxId;
         SQLiteDatabase db=database.getReadableDatabase();
         Cursor c=db.rawQuery(query,null);
-        c.moveToFirst();
-        slotCount=c.getShort(c.getColumnIndex("slotCount"));
+        if(c.moveToFirst())
+            slotCount=c.getShort(c.getColumnIndex("slotCount"));
         c.close();
         return slotCount;
     }

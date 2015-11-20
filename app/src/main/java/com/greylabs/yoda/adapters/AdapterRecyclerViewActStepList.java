@@ -58,8 +58,11 @@ public class AdapterRecyclerViewActStepList extends RecyclerView.Adapter<Adapter
         }else {
             holder.tvStepName.setText(stepsArrayList.get(position).getNickName());
         }
-        if(stepsArrayList.get(position).getStepDate()!=null)
+        if(stepsArrayList.get(position).getStepDate()!=null && stepsArrayList.get(position).getPendingStepStatus()!= PendingStep.PendingStepStatus.UNSCHEDULED)
             holder.tvETAOfStep.setText(CalendarUtils.getFormattedDateWithSlot(stepsArrayList.get(position).getStepDate()));
+       else{
+            holder.tvETAOfStep.setText("Not Scheduled");
+        }
         if(stepsArrayList.get(position).getPendingStepStatus().equals(PendingStep.PendingStepStatus.COMPLETED)){
             holder.checkBox.setChecked(true);
         }else {

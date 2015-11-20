@@ -1117,7 +1117,7 @@ public class PendingStep implements Serializable {
     }
 
     public enum PendingStepStatus {
-        TODO, DOING, MISSED, COMPLETED;
+        TODO, DOING, MISSED, COMPLETED, UNSCHEDULED;
 
         public static PendingStepStatus getPendingStepStatus(int status) {
             switch (status) {
@@ -1129,6 +1129,8 @@ public class PendingStep implements Serializable {
                     return MISSED;
                 case 3:
                     return COMPLETED;
+                case 4:
+                    return UNSCHEDULED;
             }
             return TODO;
         }
