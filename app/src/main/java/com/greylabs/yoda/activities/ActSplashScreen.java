@@ -67,22 +67,22 @@ public class ActSplashScreen extends AppCompatActivity {
             @Override
             public void run() {
                 if (prefs.isCalendarInitialized()) {
-                    checkIfOptionFromActQuickStartSelected();
+                    new CalendarUpdateAsyncThread(ActSplashScreen.this,new CalendarUpdateHandler()).execute();
                 } else if (!prefs.isCalendarInitialized()) {
                     new InitCalendarAsyncTask(ActSplashScreen.this, new MyHandler()).execute();
                 }
 
                 if(prefs.isCalendarInitialized()){
-                    //new CalendarUpdateAsyncThread(ActSplashScreen.this,new CalendarUpdateHandler()).execute();
-                    Logger.d(TAG, "Checking Calendar State");
-                    Day day=new Day(ActSplashScreen.this);
-                    if(CalendarUtils.compareOnlyDates(day.getFirstDay(), new Date())==false) {
-                        YodaCalendar yodaCalendar = new YodaCalendar(ActSplashScreen.this);
-                        yodaCalendar.updateCalendar();
-                        Logger.d(TAG, "Calendar updated success");
-                    }else{
-                        Logger.d(TAG,"Calendar up to date");
-                    }
+//                    new CalendarUpdateAsyncThread(ActSplashScreen.this,new CalendarUpdateHandler()).execute();
+//                    Logger.d(TAG, "Checking Calendar State");
+//                    Day day=new Day(ActSplashScreen.this);
+//                    if(CalendarUtils.compareOnlyDates(day.getFirstDay(), new Date())==false) {
+//                        YodaCalendar yodaCalendar = new YodaCalendar(ActSplashScreen.this);
+//                        yodaCalendar.updateCalendar();
+//                        Logger.d(TAG, "Calendar updated success");
+//                    }else{
+//                        Logger.d(TAG,"Calendar up to date");
+//                    }
                 }
             }
         }, 3000);
@@ -114,6 +114,7 @@ public class ActSplashScreen extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
+            checkIfOptionFromActQuickStartSelected();
             ActSplashScreen.this.finish();
         }
     }
