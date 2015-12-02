@@ -200,6 +200,7 @@ public class CalendarUtils {
             return 4;
         return -1;
     }
+
     public static Set<TimeBoxWhen> getTodaysPassedSlots(){
         Calendar cal=Calendar.getInstance();
         Set<TimeBoxWhen> whens=new TreeSet<>();

@@ -298,7 +298,13 @@ public class ActStepList extends AppCompatActivity implements onClickOfRecyclerV
             case Constants.OPERATION_EDIT :
                 Intent intent = new Intent(this, ActAddNewStep.class);
                 intent.putExtra(Constants.CALLER, Constants.ACT_STEP_LIST);
-                intent.putExtra(Constants.STEP_OBJECT, stepArrayList.get(Position));
+                PendingStep pendingStep=null;
+                if(isShowingPendingSteps){
+                    pendingStep=pendingStepsArrayList.get(Position);
+                }else{
+                    pendingStep=stepArrayList.get(Position);
+                }
+                intent.putExtra(Constants.STEP_OBJECT,pendingStep);
                 intent.putExtra(Constants.  OPERATION, Constants.OPERATION_EDIT);
                 this.startActivity(intent);
                 break;

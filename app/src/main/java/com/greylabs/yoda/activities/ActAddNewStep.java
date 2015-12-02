@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -58,7 +59,7 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
     LinearLayout singleStepPanel, seriesPanel;
     ScrollView scrollView;
     RadioButton rbDontExpire, rbExpire;
-//    RadioGroup rgBehaviourOfExpiredSteps;
+    RadioGroup rgBehaviourOfExpiredSteps;
 
     AdapterGoalSpinner adapterGoalSpinner;
     //    ArrayAdapter<String> spinnerArrayAdapter;
@@ -117,12 +118,9 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
         seriesPanel = (LinearLayout) findViewById(R.id.SeriesPanelActAddNewStep);
         rbDontExpire = (RadioButton) findViewById(R.id.rbDontExpireActAddNewStep);
         rbExpire = (RadioButton) findViewById(R.id.rbExpireActAddNewStep);
-//        rgBehaviourOfExpiredSteps = (RadioGroup) findViewById(R.id.rgBehaviourOfExpiredStepsActAddNewStep);
+        rgBehaviourOfExpiredSteps = (RadioGroup) findViewById(R.id.rgBehaviourOfExpiredStepsActAddNewStep);
 
         //get defaults from settings and set Spinners accordingly
-
-        getGoalListAndPopulate();
-
         sbTimeSingleStep.setOnSeekBarChangeListener(this);
         sbNoOfSteps.setOnSeekBarChangeListener(this);
         sbTimeSeriesStep.setOnSeekBarChangeListener(this);
@@ -135,6 +133,7 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
 
 
         setDefaultValues();
+        getGoalListAndPopulate();
         getStepArrayFromLocal();
     }
 
@@ -206,6 +205,13 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                     getSupportActionBar().setTitle(currentStep.getNickName());
                     edtStepName.setText(currentStep.getNickName());
                     edtStepNotes.setText(currentStep.getNotes());
+                    if(currentStep.isExpire()== PendingStep.PendingStepExpire.EXPIRE){
+                        if(!rbExpire.isChecked())
+                            rbExpire.setChecked(true);
+                    }else{
+                        if(!rbDontExpire.isChecked())
+                            rbDontExpire.setChecked(true);
+                    }
 
                     int oldGoalPosition = 0;
                     for(int i=0; i<goalList.size();i++){

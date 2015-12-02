@@ -230,27 +230,7 @@ public class PendingStep implements Serializable {
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
             do {
-                this.id = c.getInt(c.getColumnIndex(TablePendingStep.id));
-                this.stringId=c.getString(c.getColumnIndex(TablePendingStep.stringId));
-                this.nickName = c.getString(c.getColumnIndex(TablePendingStep.nickName));
-                this.notes = c.getString(c.getColumnIndex(TablePendingStep.notes));
-                this.priority = c.getInt(c.getColumnIndex(TablePendingStep.priority));
-                this.time = c.getInt(c.getColumnIndex(TablePendingStep.time));
-                this.expire = PendingStepExpire.getPendingStepExpire(
-                        c.getInt(c.getColumnIndex(TablePendingStep.expire)));
-                this.pendingStepType = PendingStepType.getIntegerToEnumType(
-                        c.getInt(c.getColumnIndex(TablePendingStep.type)));
-                this.stepCount = c.getInt(c.getColumnIndex(TablePendingStep.stepCount));
-                this.skipCount = c.getInt(c.getColumnIndex(TablePendingStep.skipCount));
-                this.pendingStepStatus = PendingStepStatus.getPendingStepStatus(
-                        c.getInt(c.getColumnIndex(TablePendingStep.status)));
-                this.goalId = c.getLong(c.getColumnIndex(TablePendingStep.goalId));
-                this.goalStringId=c.getString(c.getColumnIndex(TablePendingStep.goalStringId));
-                this.stepDate= CalendarUtils.parseDate(c.getString(c.getColumnIndex(TablePendingStep.stepDate)));
-                this.slotId = c.getLong(c.getColumnIndex(TablePendingStep.slotId));
-                this.subStepOf = c.getLong(c.getColumnIndex(TablePendingStep.subStepOf));
-                this.updated=CalendarUtils.getStringToRFCTimestamp(c.getString(c.getColumnIndex(TablePendingStep.updated)));
-                this.deleted=(c.getInt(c.getColumnIndex(TablePendingStep.deleted))==1)?true:false;
+              makePendingStepObject(c,this);
             } while (c.moveToNext());
         }
         c.close();
@@ -270,27 +250,7 @@ public class PendingStep implements Serializable {
             pendingSteps = new ArrayList<>();
             do {
                 PendingStep pendingStep = new PendingStep(context);
-                pendingStep.id = c.getInt(c.getColumnIndex(TablePendingStep.id));
-                pendingStep.stringId=c.getString(c.getColumnIndex(TablePendingStep.stringId));
-                pendingStep.nickName = c.getString(c.getColumnIndex(TablePendingStep.nickName));
-                pendingStep.notes = c.getString(c.getColumnIndex(TablePendingStep.notes));
-                pendingStep.priority = c.getInt(c.getColumnIndex(TablePendingStep.priority));
-                pendingStep.time = c.getInt(c.getColumnIndex(TablePendingStep.time));
-                pendingStep.expire = PendingStepExpire.getPendingStepExpire(
-                        c.getInt(c.getColumnIndex(TablePendingStep.expire)));
-                pendingStep.pendingStepType = PendingStepType.getIntegerToEnumType(
-                        c.getInt(c.getColumnIndex(TablePendingStep.type)));
-                pendingStep.stepCount = c.getInt(c.getColumnIndex(TablePendingStep.stepCount));
-                pendingStep.skipCount = c.getInt(c.getColumnIndex(TablePendingStep.skipCount));
-                pendingStep.pendingStepStatus = PendingStepStatus.getPendingStepStatus(
-                        c.getInt(c.getColumnIndex(TablePendingStep.status)));
-                pendingStep.goalId = c.getInt(c.getColumnIndex(TablePendingStep.goalId));
-                pendingStep.goalStringId=c.getString(c.getColumnIndex(TablePendingStep.goalStringId));
-                pendingStep.stepDate= CalendarUtils.parseDate(c.getString(c.getColumnIndex(TablePendingStep.stepDate)));
-                pendingStep.slotId = c.getLong(c.getColumnIndex(TablePendingStep.slotId));
-                pendingStep.subStepOf = c.getLong(c.getColumnIndex(TablePendingStep.subStepOf));
-                pendingStep.updated=CalendarUtils.getStringToRFCTimestamp(c.getString(c.getColumnIndex(TablePendingStep.updated)));
-                pendingStep.deleted=(c.getInt(c.getColumnIndex(TablePendingStep.deleted))==1)?true:false;
+                pendingStep=makePendingStepObject(c,pendingStep);
                 pendingSteps.add(pendingStep);
             } while (c.moveToNext());
         }
@@ -298,6 +258,32 @@ public class PendingStep implements Serializable {
         return pendingSteps;
     }
 
+    public  List<PendingStep> getAllExpireSteps(){
+        ArrayList<PendingStep> pendingSteps = null;
+        Calendar cal=Calendar.getInstance();
+        String date=cal.get(Calendar.YEAR)+"-"+cal.get(Calendar.MONTH)+"-"+cal.get(Calendar.DATE);
+        String time=cal.get(Calendar.HOUR)+":00:00";
+        SQLiteDatabase db = database.getReadableDatabase();
+        String query = "select * " +
+                " " + " from " + TablePendingStep.pendingStep + " " +
+                " " + " where "+TablePendingStep.expire+"="+PendingStepExpire.EXPIRE+"" +
+                " " + " and ("+TablePendingStep.status+"="+PendingStepStatus.MISSED+" or "+"" +
+                " " + " "+TablePendingStep.status+"="+PendingStepStatus.TODO+" )"+
+                " " + " and "+TablePendingStep.deleted+"="+PendingStepDeleted.SHOW_NOT_DELETED.ordinal()+"" +
+                " " + " and "+TablePendingStep.stepDate+"<= strftime('%Y-%m-%d %H:%M:%S',"+(date+" "+time )+")";
+
+        Cursor c = db.rawQuery(query, null);
+        if (c.moveToFirst()) {
+            pendingSteps = new ArrayList<>();
+            do {
+                PendingStep pendingStep = new PendingStep(context);
+                pendingStep=makePendingStepObject(c,pendingStep);
+                pendingSteps.add(pendingStep);
+            } while (c.moveToNext());
+        }
+        c.close();
+        return pendingSteps;
+    }
 
     public List<PendingStep> getAll(PendingStepStatus status,PendingStepDeleted deleted,long goalId) {
         ArrayList<PendingStep> pendingSteps = null;
@@ -335,27 +321,7 @@ public class PendingStep implements Serializable {
             pendingSteps = new ArrayList<>();
             do {
                 PendingStep pendingStep = new PendingStep(context);
-                pendingStep.id = c.getInt(c.getColumnIndex(TablePendingStep.id));
-                pendingStep.stringId=c.getString(c.getColumnIndex(TablePendingStep.stringId));
-                pendingStep.nickName = c.getString(c.getColumnIndex(TablePendingStep.nickName));
-                pendingStep.notes = c.getString(c.getColumnIndex(TablePendingStep.notes));
-                pendingStep.priority = c.getInt(c.getColumnIndex(TablePendingStep.priority));
-                pendingStep.time = c.getInt(c.getColumnIndex(TablePendingStep.time));
-                pendingStep.expire = PendingStepExpire.getPendingStepExpire(
-                        c.getInt(c.getColumnIndex(TablePendingStep.expire)));
-                pendingStep.pendingStepType = PendingStepType.getIntegerToEnumType(
-                        c.getInt(c.getColumnIndex(TablePendingStep.type)));
-                pendingStep.stepCount = c.getInt(c.getColumnIndex(TablePendingStep.stepCount));
-                pendingStep.skipCount = c.getInt(c.getColumnIndex(TablePendingStep.skipCount));
-                pendingStep.pendingStepStatus = PendingStepStatus.getPendingStepStatus(
-                        c.getInt(c.getColumnIndex(TablePendingStep.status)));
-                pendingStep.goalId = c.getInt(c.getColumnIndex(TablePendingStep.goalId));
-                pendingStep.goalStringId=c.getString(c.getColumnIndex(TablePendingStep.goalStringId));
-                pendingStep.stepDate= CalendarUtils.parseDate(c.getString(c.getColumnIndex(TablePendingStep.stepDate)));
-                pendingStep.slotId = c.getLong(c.getColumnIndex(TablePendingStep.slotId));
-                pendingStep.subStepOf = c.getLong(c.getColumnIndex(TablePendingStep.subStepOf));
-                pendingStep.updated=CalendarUtils.getStringToRFCTimestamp(c.getString(c.getColumnIndex(TablePendingStep.updated)));
-                pendingStep.deleted=(c.getInt(c.getColumnIndex(TablePendingStep.deleted))==1)?true:false;
+                pendingStep=makePendingStepObject(c,pendingStep);
                 pendingSteps.add(pendingStep);
             } while (c.moveToNext());
         }
@@ -378,27 +344,7 @@ public class PendingStep implements Serializable {
             pendingSteps = new ArrayList<>();
             do {
                 PendingStep pendingStep = new PendingStep(context);
-                pendingStep.id = c.getInt(c.getColumnIndex(TablePendingStep.id));
-                pendingStep.stringId=c.getString(c.getColumnIndex(TablePendingStep.stringId));
-                pendingStep.nickName = c.getString(c.getColumnIndex(TablePendingStep.nickName));
-                pendingStep.notes = c.getString(c.getColumnIndex(TablePendingStep.notes));
-                pendingStep.priority = c.getInt(c.getColumnIndex(TablePendingStep.priority));
-                pendingStep.time = c.getInt(c.getColumnIndex(TablePendingStep.time));
-                pendingStep.expire = PendingStepExpire.getPendingStepExpire(
-                        c.getInt(c.getColumnIndex(TablePendingStep.expire)));
-                pendingStep.pendingStepType = PendingStepType.getIntegerToEnumType(
-                        c.getInt(c.getColumnIndex(TablePendingStep.type)));
-                pendingStep.stepCount = c.getInt(c.getColumnIndex(TablePendingStep.stepCount));
-                pendingStep.skipCount = c.getInt(c.getColumnIndex(TablePendingStep.skipCount));
-                pendingStep.pendingStepStatus = PendingStepStatus.getPendingStepStatus(
-                        c.getInt(c.getColumnIndex(TablePendingStep.status)));
-                pendingStep.goalId = c.getInt(c.getColumnIndex(TablePendingStep.goalId));
-                pendingStep.goalStringId=c.getString(c.getColumnIndex(TablePendingStep.goalStringId));
-                pendingStep.stepDate= CalendarUtils.parseDate(c.getString(c.getColumnIndex(TablePendingStep.stepDate)));
-                pendingStep.slotId = c.getLong(c.getColumnIndex(TablePendingStep.slotId));
-                pendingStep.subStepOf = c.getLong(c.getColumnIndex(TablePendingStep.subStepOf));
-                pendingStep.updated=CalendarUtils.getStringToRFCTimestamp(c.getString(c.getColumnIndex(TablePendingStep.updated)));
-                pendingStep.deleted=(c.getInt(c.getColumnIndex(TablePendingStep.deleted))==1)?true:false;
+                pendingStep=makePendingStepObject(c,pendingStep);
                 pendingSteps.add(pendingStep);
             } while (c.moveToNext());
         }
@@ -428,27 +374,7 @@ public class PendingStep implements Serializable {
             pendingSteps = new ArrayList<>();
             do {
                 PendingStep pendingStep = new PendingStep(context);
-                pendingStep.id = c.getInt(c.getColumnIndex(TablePendingStep.id));
-                pendingStep.stringId=c.getString(c.getColumnIndex(TablePendingStep.stringId));
-                pendingStep.nickName = c.getString(c.getColumnIndex(TablePendingStep.nickName));
-                pendingStep.notes = c.getString(c.getColumnIndex(TablePendingStep.notes));
-                pendingStep.priority = c.getInt(c.getColumnIndex(TablePendingStep.priority));
-                pendingStep.time = c.getInt(c.getColumnIndex(TablePendingStep.time));
-                pendingStep.expire = PendingStepExpire.getPendingStepExpire(
-                        c.getInt(c.getColumnIndex(TablePendingStep.expire)));
-                pendingStep.pendingStepType = PendingStepType.getIntegerToEnumType(
-                        c.getInt(c.getColumnIndex(TablePendingStep.type)));
-                pendingStep.stepCount = c.getInt(c.getColumnIndex(TablePendingStep.stepCount));
-                pendingStep.skipCount = c.getInt(c.getColumnIndex(TablePendingStep.skipCount));
-                pendingStep.pendingStepStatus = PendingStepStatus.getPendingStepStatus(
-                        c.getInt(c.getColumnIndex(TablePendingStep.status)));
-                pendingStep.goalId = c.getInt(c.getColumnIndex(TablePendingStep.goalId));
-                pendingStep.goalStringId=c.getString(c.getColumnIndex(TablePendingStep.goalStringId));
-                pendingStep.stepDate= CalendarUtils.parseDate(c.getString(c.getColumnIndex(TablePendingStep.stepDate)));
-                pendingStep.slotId = c.getLong(c.getColumnIndex(TablePendingStep.slotId));
-                pendingStep.subStepOf = c.getLong(c.getColumnIndex(TablePendingStep.subStepOf));
-                pendingStep.updated=CalendarUtils.getStringToRFCTimestamp(c.getString(c.getColumnIndex(TablePendingStep.updated)));
-                pendingStep.deleted=(c.getInt(c.getColumnIndex(TablePendingStep.deleted))==1)?true:false;
+                pendingStep=makePendingStepObject(c,pendingStep);
                 pendingSteps.add(pendingStep);
             } while (c.moveToNext());
         }
@@ -472,27 +398,7 @@ public class PendingStep implements Serializable {
             pendingSteps = new ArrayList<>();
             do {
                 PendingStep pendingStep = new PendingStep(context);
-                pendingStep.id = c.getInt(c.getColumnIndex(TablePendingStep.id));
-                pendingStep.stringId=c.getString(c.getColumnIndex(TablePendingStep.stringId));
-                pendingStep.nickName = c.getString(c.getColumnIndex(TablePendingStep.nickName));
-                pendingStep.notes = c.getString(c.getColumnIndex(TablePendingStep.notes));
-                pendingStep.priority = c.getInt(c.getColumnIndex(TablePendingStep.priority));
-                pendingStep.time = c.getInt(c.getColumnIndex(TablePendingStep.time));
-                pendingStep.expire = PendingStepExpire.getPendingStepExpire(
-                        c.getInt(c.getColumnIndex(TablePendingStep.expire)));
-                pendingStep.pendingStepType = PendingStepType.getIntegerToEnumType(
-                        c.getInt(c.getColumnIndex(TablePendingStep.type)));
-                pendingStep.stepCount = c.getInt(c.getColumnIndex(TablePendingStep.stepCount));
-                pendingStep.skipCount = c.getInt(c.getColumnIndex(TablePendingStep.skipCount));
-                pendingStep.pendingStepStatus = PendingStepStatus.getPendingStepStatus(
-                        c.getInt(c.getColumnIndex(TablePendingStep.status)));
-                pendingStep.goalId = c.getInt(c.getColumnIndex(TablePendingStep.goalId));
-                pendingStep.goalStringId=c.getString(c.getColumnIndex(TablePendingStep.goalStringId));
-                pendingStep.stepDate= CalendarUtils.parseDate(c.getString(c.getColumnIndex(TablePendingStep.stepDate)));
-                pendingStep.slotId = c.getLong(c.getColumnIndex(TablePendingStep.slotId));
-                pendingStep.subStepOf = c.getLong(c.getColumnIndex(TablePendingStep.subStepOf));
-                pendingStep.updated=CalendarUtils.getStringToRFCTimestamp(c.getString(c.getColumnIndex(TablePendingStep.updated)));
-                pendingStep.deleted=(c.getInt(c.getColumnIndex(TablePendingStep.deleted))==1)?true:false;
+                pendingStep=makePendingStepObject(c,pendingStep);
                 pendingSteps.add(pendingStep);
             } while (c.moveToNext());
         }
@@ -513,27 +419,7 @@ public class PendingStep implements Serializable {
             pendingSteps = new ArrayList<>();
             do {
                 PendingStep pendingStep = new PendingStep(context);
-                pendingStep.id = c.getInt(c.getColumnIndex(TablePendingStep.id));
-                pendingStep.stringId=c.getString(c.getColumnIndex(TablePendingStep.stringId));
-                pendingStep.nickName = c.getString(c.getColumnIndex(TablePendingStep.nickName));
-                pendingStep.notes = c.getString(c.getColumnIndex(TablePendingStep.notes));
-                pendingStep.priority = c.getInt(c.getColumnIndex(TablePendingStep.priority));
-                pendingStep.time = c.getInt(c.getColumnIndex(TablePendingStep.time));
-                pendingStep.expire = PendingStepExpire.getPendingStepExpire(
-                        c.getInt(c.getColumnIndex(TablePendingStep.expire)));
-                pendingStep.pendingStepType = PendingStepType.getIntegerToEnumType(
-                        c.getInt(c.getColumnIndex(TablePendingStep.type)));
-                pendingStep.stepCount = c.getInt(c.getColumnIndex(TablePendingStep.stepCount));
-                pendingStep.skipCount = c.getInt(c.getColumnIndex(TablePendingStep.skipCount));
-                pendingStep.pendingStepStatus = PendingStepStatus.getPendingStepStatus(
-                        c.getInt(c.getColumnIndex(TablePendingStep.status)));
-                pendingStep.goalId = c.getInt(c.getColumnIndex(TablePendingStep.goalId));
-                pendingStep.goalStringId=c.getString(c.getColumnIndex(TablePendingStep.goalStringId));
-                pendingStep.stepDate= CalendarUtils.parseDate(c.getString(c.getColumnIndex(TablePendingStep.stepDate)));
-                pendingStep.slotId = c.getLong(c.getColumnIndex(TablePendingStep.slotId));
-                pendingStep.subStepOf = c.getLong(c.getColumnIndex(TablePendingStep.subStepOf));
-                pendingStep.updated=CalendarUtils.getStringToRFCTimestamp(c.getString(c.getColumnIndex(TablePendingStep.updated)));
-                pendingStep.deleted=(c.getInt(c.getColumnIndex(TablePendingStep.deleted))==1)?true:false;
+                pendingStep=makePendingStepObject(c,pendingStep);
                 pendingSteps.add(pendingStep);
             } while (c.moveToNext());
         }
@@ -558,27 +444,7 @@ public class PendingStep implements Serializable {
             pendingSteps = new ArrayList<>();
             do {
                 PendingStep pendingStep = new PendingStep(context);
-                pendingStep.id = c.getInt(c.getColumnIndex(TablePendingStep.id));
-                pendingStep.stringId=c.getString(c.getColumnIndex(TablePendingStep.stringId));
-                pendingStep.nickName = c.getString(c.getColumnIndex(TablePendingStep.nickName));
-                pendingStep.notes = c.getString(c.getColumnIndex(TablePendingStep.notes));
-                pendingStep.priority = c.getInt(c.getColumnIndex(TablePendingStep.priority));
-                pendingStep.time = c.getInt(c.getColumnIndex(TablePendingStep.time));
-                pendingStep.expire = PendingStepExpire.getPendingStepExpire(
-                        c.getInt(c.getColumnIndex(TablePendingStep.expire)));
-                pendingStep.pendingStepType = PendingStepType.getIntegerToEnumType(
-                        c.getInt(c.getColumnIndex(TablePendingStep.type)));
-                pendingStep.stepCount = c.getInt(c.getColumnIndex(TablePendingStep.stepCount));
-                pendingStep.skipCount = c.getInt(c.getColumnIndex(TablePendingStep.skipCount));
-                pendingStep.pendingStepStatus = PendingStepStatus.getPendingStepStatus(
-                        c.getInt(c.getColumnIndex(TablePendingStep.status)));
-                pendingStep.goalId = c.getInt(c.getColumnIndex(TablePendingStep.goalId));
-                pendingStep.goalStringId=c.getString(c.getColumnIndex(TablePendingStep.goalStringId));
-                pendingStep.stepDate= CalendarUtils.parseDate(c.getString(c.getColumnIndex(TablePendingStep.stepDate)));
-                pendingStep.slotId = c.getLong(c.getColumnIndex(TablePendingStep.slotId));
-                pendingStep.subStepOf = c.getLong(c.getColumnIndex(TablePendingStep.subStepOf));
-                pendingStep.updated=CalendarUtils.getStringToRFCTimestamp(c.getString(c.getColumnIndex(TablePendingStep.updated)));
-                pendingStep.deleted=(c.getInt(c.getColumnIndex(TablePendingStep.deleted))==1)?true:false;
+                pendingStep=makePendingStepObject(c,pendingStep);
                 pendingSteps.add(pendingStep);
             } while (c.moveToNext());
         }
@@ -732,27 +598,7 @@ public class PendingStep implements Serializable {
             pendingSteps = new ArrayList<>();
             do {
                 PendingStep pendingStep = new PendingStep(context);
-                pendingStep.id = c.getInt(c.getColumnIndex(TablePendingStep.id));
-                pendingStep.stringId=c.getString(c.getColumnIndex(TablePendingStep.stringId));
-                pendingStep.nickName = c.getString(c.getColumnIndex(TablePendingStep.nickName));
-                pendingStep.notes = c.getString(c.getColumnIndex(TablePendingStep.notes));
-                pendingStep.priority = c.getInt(c.getColumnIndex(TablePendingStep.priority));
-                pendingStep.time = c.getInt(c.getColumnIndex(TablePendingStep.time));
-                pendingStep.expire = PendingStepExpire.getPendingStepExpire(
-                        c.getInt(c.getColumnIndex(TablePendingStep.expire)));
-                pendingStep.pendingStepType = PendingStepType.getIntegerToEnumType(
-                        c.getInt(c.getColumnIndex(TablePendingStep.type)));
-                pendingStep.stepCount = c.getInt(c.getColumnIndex(TablePendingStep.stepCount));
-                pendingStep.skipCount = c.getInt(c.getColumnIndex(TablePendingStep.skipCount));
-                pendingStep.pendingStepStatus = PendingStepStatus.getPendingStepStatus(
-                        c.getInt(c.getColumnIndex(TablePendingStep.status)));
-                pendingStep.goalId = c.getInt(c.getColumnIndex(TablePendingStep.goalId));
-                pendingStep.goalStringId=c.getString(c.getColumnIndex(TablePendingStep.goalStringId));
-                pendingStep.stepDate= CalendarUtils.parseDate(c.getString(c.getColumnIndex(TablePendingStep.stepDate)));
-                pendingStep.slotId = c.getLong(c.getColumnIndex(TablePendingStep.slotId));
-                pendingStep.subStepOf = c.getLong(c.getColumnIndex(TablePendingStep.subStepOf));
-                pendingStep.updated=CalendarUtils.getStringToRFCTimestamp(c.getString(c.getColumnIndex(TablePendingStep.updated)));
-                pendingStep.deleted=(c.getInt(c.getColumnIndex(TablePendingStep.deleted))==1)?true:false;
+                pendingStep=makePendingStepObject(c,pendingStep);
                 pendingSteps.add(pendingStep);
             } while (c.moveToNext());
         }
@@ -778,27 +624,7 @@ public class PendingStep implements Serializable {
             pendingSteps = new ArrayList<>();
             do {
                 PendingStep pendingStep = new PendingStep(context);
-                pendingStep.id = c.getInt(c.getColumnIndex(TablePendingStep.id));
-                pendingStep.stringId=c.getString(c.getColumnIndex(TablePendingStep.stringId));
-                pendingStep.nickName = c.getString(c.getColumnIndex(TablePendingStep.nickName));
-                pendingStep.notes = c.getString(c.getColumnIndex(TablePendingStep.notes));
-                pendingStep.priority = c.getInt(c.getColumnIndex(TablePendingStep.priority));
-                pendingStep.time = c.getInt(c.getColumnIndex(TablePendingStep.time));
-                pendingStep.expire = PendingStepExpire.getPendingStepExpire(
-                        c.getInt(c.getColumnIndex(TablePendingStep.expire)));
-                pendingStep.pendingStepType = PendingStepType.getIntegerToEnumType(
-                        c.getInt(c.getColumnIndex(TablePendingStep.type)));
-                pendingStep.stepCount = c.getInt(c.getColumnIndex(TablePendingStep.stepCount));
-                pendingStep.skipCount = c.getInt(c.getColumnIndex(TablePendingStep.skipCount));
-                pendingStep.pendingStepStatus = PendingStepStatus.getPendingStepStatus(
-                        c.getInt(c.getColumnIndex(TablePendingStep.status)));
-                pendingStep.goalId = c.getInt(c.getColumnIndex(TablePendingStep.goalId));
-                pendingStep.goalStringId=c.getString(c.getColumnIndex(TablePendingStep.goalStringId));
-                pendingStep.stepDate= CalendarUtils.parseDate(c.getString(c.getColumnIndex(TablePendingStep.stepDate)));
-                pendingStep.slotId = c.getLong(c.getColumnIndex(TablePendingStep.slotId));
-                pendingStep.subStepOf = c.getLong(c.getColumnIndex(TablePendingStep.subStepOf));
-                pendingStep.updated=CalendarUtils.getStringToRFCTimestamp(c.getString(c.getColumnIndex(TablePendingStep.updated)));
-                pendingStep.deleted=(c.getInt(c.getColumnIndex(TablePendingStep.deleted))==1)?true:false;
+                pendingStep=makePendingStepObject(c,pendingStep);
                 pendingSteps.add(pendingStep);
             } while (c.moveToNext());
         }
@@ -820,27 +646,7 @@ public class PendingStep implements Serializable {
             pendingSteps = new ArrayList<>();
             do {
                 PendingStep pendingStep = new PendingStep(context);
-                pendingStep.id = c.getInt(c.getColumnIndex(TablePendingStep.id));
-                pendingStep.stringId=c.getString(c.getColumnIndex(TablePendingStep.stringId));
-                pendingStep.nickName = c.getString(c.getColumnIndex(TablePendingStep.nickName));
-                pendingStep.notes = c.getString(c.getColumnIndex(TablePendingStep.notes));
-                pendingStep.priority = c.getInt(c.getColumnIndex(TablePendingStep.priority));
-                pendingStep.time = c.getInt(c.getColumnIndex(TablePendingStep.time));
-                pendingStep.expire = PendingStepExpire.getPendingStepExpire(
-                        c.getInt(c.getColumnIndex(TablePendingStep.expire)));
-                pendingStep.pendingStepType = PendingStepType.getIntegerToEnumType(
-                        c.getInt(c.getColumnIndex(TablePendingStep.type)));
-                pendingStep.stepCount = c.getInt(c.getColumnIndex(TablePendingStep.stepCount));
-                pendingStep.skipCount = c.getInt(c.getColumnIndex(TablePendingStep.skipCount));
-                pendingStep.pendingStepStatus = PendingStepStatus.getPendingStepStatus(
-                        c.getInt(c.getColumnIndex(TablePendingStep.status)));
-                pendingStep.goalId = c.getInt(c.getColumnIndex(TablePendingStep.goalId));
-                pendingStep.goalStringId=c.getString(c.getColumnIndex(TablePendingStep.goalStringId));
-                pendingStep.stepDate= CalendarUtils.parseDate(c.getString(c.getColumnIndex(TablePendingStep.stepDate)));
-                pendingStep.slotId = c.getLong(c.getColumnIndex(TablePendingStep.slotId));
-                pendingStep.subStepOf = c.getLong(c.getColumnIndex(TablePendingStep.subStepOf));
-                pendingStep.updated=CalendarUtils.getStringToRFCTimestamp(c.getString(c.getColumnIndex(TablePendingStep.updated)));
-                pendingStep.deleted=(c.getInt(c.getColumnIndex(TablePendingStep.deleted))==1)?true:false;
+                pendingStep=makePendingStepObject(c,pendingStep);
                 pendingSteps.add(pendingStep);
             } while (c.moveToNext());
         }
@@ -848,6 +654,31 @@ public class PendingStep implements Serializable {
         return pendingSteps;
     }
 
+
+    private PendingStep makePendingStepObject(Cursor c,PendingStep pendingStep){
+        pendingStep.id = c.getInt(c.getColumnIndex(TablePendingStep.id));
+        pendingStep.stringId=c.getString(c.getColumnIndex(TablePendingStep.stringId));
+        pendingStep.nickName = c.getString(c.getColumnIndex(TablePendingStep.nickName));
+        pendingStep.notes = c.getString(c.getColumnIndex(TablePendingStep.notes));
+        pendingStep.priority = c.getInt(c.getColumnIndex(TablePendingStep.priority));
+        pendingStep.time = c.getInt(c.getColumnIndex(TablePendingStep.time));
+        pendingStep.expire = PendingStepExpire.getPendingStepExpire(
+                c.getInt(c.getColumnIndex(TablePendingStep.expire)));
+        pendingStep.pendingStepType = PendingStepType.getIntegerToEnumType(
+                c.getInt(c.getColumnIndex(TablePendingStep.type)));
+        pendingStep.stepCount = c.getInt(c.getColumnIndex(TablePendingStep.stepCount));
+        pendingStep.skipCount = c.getInt(c.getColumnIndex(TablePendingStep.skipCount));
+        pendingStep.pendingStepStatus = PendingStepStatus.getPendingStepStatus(
+                c.getInt(c.getColumnIndex(TablePendingStep.status)));
+        pendingStep.goalId = c.getInt(c.getColumnIndex(TablePendingStep.goalId));
+        pendingStep.goalStringId=c.getString(c.getColumnIndex(TablePendingStep.goalStringId));
+        pendingStep.stepDate= CalendarUtils.parseDate(c.getString(c.getColumnIndex(TablePendingStep.stepDate)));
+        pendingStep.slotId = c.getLong(c.getColumnIndex(TablePendingStep.slotId));
+        pendingStep.subStepOf = c.getLong(c.getColumnIndex(TablePendingStep.subStepOf));
+        pendingStep.updated=CalendarUtils.getStringToRFCTimestamp(c.getString(c.getColumnIndex(TablePendingStep.updated)));
+        pendingStep.deleted=(c.getInt(c.getColumnIndex(TablePendingStep.deleted))==1)?true:false;
+        return pendingStep;
+    }
     public long getPendingStepCount(long goalId) {
         long pendingStepCount = 0;
         SQLiteDatabase db = database.getReadableDatabase();

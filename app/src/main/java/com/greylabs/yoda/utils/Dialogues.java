@@ -60,6 +60,13 @@ public class Dialogues {
             goal = new Goal(context).get(pendingStep.getGoalId());
         }
 
+        if(caller.equals(Constants.ALARM_SERVICE) && Dialogues.this.startEnd== PendingStep.PendingStepStartEnd.END)
+        {
+            if(pendingStep.getPendingStepStatus()== PendingStep.PendingStepStatus.TODO ||
+                    pendingStep.getPendingStepStatus()== PendingStep.PendingStepStatus.MISSED)
+                checkExpiryOfStep();
+            return;
+        }
         // custom dialog
         dialog = new Dialog(context);
         dialog.setCancelable(true);
@@ -87,9 +94,9 @@ public class Dialogues {
             public void onDismiss(DialogInterface dialogInterface) {
                 if (caller.equals(Constants.ACT_HOME)) {
                     ((ActHome) context).onDialogueClosed();
-                    if(Dialogues.this.startEnd== PendingStep.PendingStepStartEnd.END){
-                        checkExpiryOfStep();
-                    }
+//                    if(Dialogues.this.startEnd== PendingStep.PendingStepStartEnd.END){
+//                        checkExpiryOfStep();
+//                    }
                 }
             }
         });
@@ -119,6 +126,12 @@ public class Dialogues {
         if(pendingStep.isExpire()== PendingStep.PendingStepExpire.EXPIRE) {
             //delete or mark step as deleted
             pendingStep.freeSlot();
+            String notesString=pendingStep.getNotes();
+            if(notesString!=null)
+                notesString=notesString+"\n Expired";
+            else
+                notesString="Expired";
+            pendingStep.setNotes(notesString);
             pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
             pendingStep.setSlotId(0);
             pendingStep.cancelAlarm();

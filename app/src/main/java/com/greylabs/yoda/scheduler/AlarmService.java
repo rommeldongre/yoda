@@ -2,6 +2,9 @@ package com.greylabs.yoda.scheduler;
 
 import android.app.Service;
 import android.content.Intent;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
 
@@ -28,6 +31,13 @@ public class AlarmService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        try {
+            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+            r.play();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         //Toast.makeText(this, "Alarm on start command...", Toast.LENGTH_SHORT).show();
        // YodaNotificationManager yodaNotificationManager=new YodaNotificationManager(this);
         //yodaNotificationManager.showNotification();
