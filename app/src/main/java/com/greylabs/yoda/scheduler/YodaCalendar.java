@@ -313,6 +313,7 @@ public class YodaCalendar {
                 Logger.d(TAG, "No need to clean up steps");
             }
 
+
             //update for all time boxes having forever as Till time-need optimization
             List<TimeBox> timeBoxes = new TimeBox(context).getAll(TimeBox.TimeBoxStatus.ACTIVE);
             Goal goal = new Goal(context);
@@ -327,6 +328,7 @@ public class YodaCalendar {
             //reschedule steps in stretch Goal
             this.timeBox=new TimeBox(context).get(prefs.getUnplannedTimeBoxId());
             rescheduleSteps(prefs.getStretchGoalId());
+
         }
     }
     /**

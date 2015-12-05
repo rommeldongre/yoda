@@ -62,8 +62,8 @@ public class Dialogues {
 
         if(caller.equals(Constants.ALARM_SERVICE) && Dialogues.this.startEnd== PendingStep.PendingStepStartEnd.END)
         {
-            if(pendingStep.getPendingStepStatus()== PendingStep.PendingStepStatus.TODO)
-                checkExpiryOfStep();
+//            if(pendingStep.getPendingStepStatus()== PendingStep.PendingStepStatus.TODO)
+//                checkExpiryOfStep();
             return;
         }
         // custom dialog

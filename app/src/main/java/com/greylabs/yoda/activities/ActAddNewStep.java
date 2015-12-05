@@ -204,13 +204,7 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                     getSupportActionBar().setTitle(currentStep.getNickName());
                     edtStepName.setText(currentStep.getNickName());
                     edtStepNotes.setText(currentStep.getNotes());
-                    if(currentStep.isExpire().equals(PendingStep.PendingStepExpire.EXPIRE)){
-                        if(!rbExpire.isChecked())
-                            rbExpire.setChecked(true);
-                    }else{
-                        if(!rbDontExpire.isChecked())
-                            rbDontExpire.setChecked(true);
-                    }
+
 
                     int oldGoalPosition = 0;
                     for(int i=0; i<goalList.size();i++){
@@ -258,6 +252,14 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
         adapterGoalSpinner = new AdapterGoalSpinner(this, goalList);
         goalSpinner.setAdapter(adapterGoalSpinner);
         goalSpinner.setSelection(0);
+        if(!intent.getStringExtra(Constants.OPERATION).equals(Constants.OPERATION_ADD) ){
+            if (currentStep.isExpire().equals(PendingStep.PendingStepExpire.EXPIRE)) {
+                rbExpire.setChecked(true);
+            } else {
+
+                rbDontExpire.setChecked(true);
+            }
+        }
     }
 
     private void getGoalListFromLocal() {
@@ -372,12 +374,12 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
 //                builder.setPositiveButton(getString(R.string.btnOk), null);
 //                builder.show();
 //            } else {
-                List<PendingStep> subStepsList=new ArrayList<>();
-                currentStep.initDatabase(this);
-                PendingStep ps =currentStep;
-                ps.save();
-                switch (ps.getPendingStepType()){
-                    case SPLIT_STEP:
+            List<PendingStep> subStepsList=new ArrayList<>();
+            currentStep.initDatabase(this);
+            PendingStep ps =currentStep;
+            ps.save();
+            switch (ps.getPendingStepType()){
+                case SPLIT_STEP:
 //                        if(ps.getStringId()!=null || ps.getStringId().equals("")){
 //                            ps.freeSlots();//and cancel alarms
 //                            ps.deleteSubSteps();
@@ -386,16 +388,16 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
 //                            ps.markSubSteps(true);
 //                            ps.freeSlots();
 //                        }
-                        if(ps.getTime()>Constants.MAX_SLOT_DURATION){
-                            float numberOfSteps=(float)ps.getTime()/Constants.MAX_SLOT_DURATION;
-                            Float f=new Float(numberOfSteps);
-                            ps.createSubSteps(1, f.intValue(), Constants.MAX_SLOT_DURATION);
-                            if(numberOfSteps-f.intValue()>0.0f)
-                                ps.createSubSteps(f.intValue()+1,f.intValue()+1,currentStep.getTime()%Constants.MAX_SLOT_DURATION);
-                        }
-                        subStepsList =currentStep.getAllSubSteps(currentStep.getId(),currentGoal.getId());
-                        break;
-                    case SERIES_STEP:
+                    if(ps.getTime()>Constants.MAX_SLOT_DURATION){
+                        float numberOfSteps=(float)ps.getTime()/Constants.MAX_SLOT_DURATION;
+                        Float f=new Float(numberOfSteps);
+                        ps.createSubSteps(1, f.intValue(), Constants.MAX_SLOT_DURATION);
+                        if(numberOfSteps-f.intValue()>0.0f)
+                            ps.createSubSteps(f.intValue()+1,f.intValue()+1,currentStep.getTime()%Constants.MAX_SLOT_DURATION);
+                    }
+                    subStepsList =currentStep.getAllSubSteps(currentStep.getId(),currentGoal.getId());
+                    break;
+                case SERIES_STEP:
 //                        if(ps.getStringId()!=null || ps.getStringId().equals("")){
 //                            ps.freeSlots();//and cancel alarms
 //                            ps.deleteSubSteps();
@@ -404,19 +406,19 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
 //                            ps.markSubSteps(true);
 //                            ps.freeSlots();
 //                        }
-                        ps.createSubSteps(1, currentStep.getStepCount(), currentStep.getTime());
-                        subStepsList =currentStep.getAllSubSteps(currentStep.getId(),currentGoal.getId());
-                        break;
-                    case SUB_STEP:
-                    case SINGLE_STEP:
-                        subStepsList.add(currentStep);
+                    ps.createSubSteps(1, currentStep.getStepCount(), currentStep.getTime());
+                    subStepsList =currentStep.getAllSubSteps(currentStep.getId(),currentGoal.getId());
+                    break;
+                case SUB_STEP:
+                case SINGLE_STEP:
+                    subStepsList.add(currentStep);
+            }
+            if(subStepsList!=null && stepPrioritySpinner.getSelectedItem()!=null){
+                if(stepPrioritySpinner.getSelectedItem().equals(Constants.PENDING_STEP_PRIORITY_TOP_MOST)){
+                    stepArrayList.addAll(0,subStepsList);
+                }else if (stepPrioritySpinner.getSelectedItem().equals(Constants.PENDING_STEP_PRIORITY_BOTTOM_MOST)) {
+                    stepArrayList.addAll(subStepsList);
                 }
-                if(subStepsList!=null && stepPrioritySpinner.getSelectedItem()!=null){
-                    if(stepPrioritySpinner.getSelectedItem().equals(Constants.PENDING_STEP_PRIORITY_TOP_MOST)){
-                        stepArrayList.addAll(0,subStepsList);
-                    }else if (stepPrioritySpinner.getSelectedItem().equals(Constants.PENDING_STEP_PRIORITY_BOTTOM_MOST)) {
-                        stepArrayList.addAll(subStepsList);
-                    }
                 //}
                 //save all the steps in the array with priorities
                 for (int i = 0; i < stepArrayList.size(); i++) {
