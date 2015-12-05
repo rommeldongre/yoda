@@ -107,7 +107,6 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
         btnShowAdvanced = (Button) findViewById(R.id.btnShowAdvancedActAddNewStep);
 
         cardViewAdvanced = (CardView) findViewById(R.id.cardViewAdvancedActAddNewStep);
-        cardViewAdvanced.setVisibility(View.VISIBLE);
         btnHideAdvanced = (Button) findViewById(R.id.btnHideAdvancedActAddNewStep);
         stepPrioritySpinner = (Spinner) findViewById(R.id.spinnerPriorityActAddNewStep);
         stepTypeSpinner = (Spinner) findViewById(R.id.spinnerStepTypeActAddNewStep);
