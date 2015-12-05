@@ -56,6 +56,8 @@ public class AlarmService extends Service {
 //            actNowFilter.putExtra(Constants.ALARM_SCHEDULER, alarmScheduler);
 //            actNowFilter.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //            startActivity(actNowFilter);
+            AlarmReceiver.completeWakefulIntent(intent);
+
         }
         return START_STICKY;
     }

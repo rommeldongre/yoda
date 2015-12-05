@@ -14,7 +14,7 @@ import java.util.Calendar;
 /**
  * Created by Jaybhay Vijay on 7/13/2015.
  */
-public class AlarmReceiver extends BroadcastReceiver {
+public class AlarmReceiver extends WakefulBroadcastReceiver {
     private static final String TAG="AlarmReceiver";
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -31,7 +31,8 @@ public class AlarmReceiver extends BroadcastReceiver {
                  Intent alarmService = new Intent(context, AlarmService.class);
                  alarmService.putExtra(Constants.ALARM_SCHEDULER, alarmScheduler);
                  alarmService.putExtra(Constants.STEP_START_END,startEnd);
-                 context.startService(alarmService);
+                 //context.startService(alarmService);
+                 startWakefulService(context,alarmService);
                  Logger.d(TAG, "AlarmScheduler is not null:" + alarmScheduler.toString());
              }else
                  Logger.d(TAG, "Skipping alarm as alarm date is less than today's date");

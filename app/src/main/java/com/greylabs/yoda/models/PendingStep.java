@@ -230,7 +230,7 @@ public class PendingStep implements Serializable {
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
             do {
-              makePendingStepObject(c,this);
+              makePendingStepObject(c, this);
             } while (c.moveToNext());
         }
         c.close();
@@ -267,10 +267,10 @@ public class PendingStep implements Serializable {
         String query = "select * " +
                 " " + " from " + TablePendingStep.pendingStep + " " +
                 " " + " where "+TablePendingStep.expire+"="+PendingStepExpire.EXPIRE.ordinal()+"" +
-                " " + " and ("+TablePendingStep.status+"="+PendingStepStatus.MISSED.ordinal()+" or "+"" +
-                " " + " "+TablePendingStep.status+"="+PendingStepStatus.TODO.ordinal()+" )"+
-                " " + " and "+TablePendingStep.deleted+"="+PendingStepDeleted.SHOW_NOT_DELETED.ordinal()+"" +
-                " " + " and "+TablePendingStep.stepDate+"<= strftime('%Y-%m-%d %H:%M:%S','"+(date+" "+time )+"')";
+                " " + " and ("+TablePendingStep.type+"="+PendingStepType.SINGLE_STEP.ordinal()+" or " +
+                " " + " "+TablePendingStep.type+"="+PendingStepType.SUB_STEP.ordinal()+" ) "+
+                " " + " and "+TablePendingStep.deleted+"="+PendingStepDeleted.SHOW_NOT_DELETED.ordinal();
+              //  " " + " and "+TablePendingStep.stepDate+"<= strftime('%Y-%m-%d %H:%M:%S','"+(date+" "+time )+"')";
 
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
@@ -328,6 +328,11 @@ public class PendingStep implements Serializable {
         c.close();
         return pendingSteps;
     }
+
+    /**
+     * Gets steps with type SUB_STEP and SINGLE_STEP
+     * @return
+     */
 
 
     public List<PendingStep> getAll(PendingStepStatus status) {

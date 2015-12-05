@@ -302,11 +302,14 @@ public class YodaCalendar {
             //mark for steps expired
             PendingStep pendingStep=new PendingStep(context);
             List<PendingStep> pendingSteps=pendingStep.getAllExpireSteps();
+            Date today=Calendar.getInstance().getTime();
             if(pendingSteps!=null) {
                 for (PendingStep ps : pendingSteps) {
-                    ps.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
-                    ps.cancelAlarm();
-                    ps.save();
+                    if(ps.getStepDate().compareTo(today)<0) {
+                        ps.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
+                        ps.cancelAlarm();
+                        ps.save();
+                    }
                 }
                 Logger.d(TAG, "Step clean up done");
             }else {
