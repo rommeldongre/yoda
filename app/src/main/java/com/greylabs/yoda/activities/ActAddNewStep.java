@@ -131,8 +131,6 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
         stepTypeSpinner.setOnItemSelectedListener(this);
         stepPrioritySpinner.setOnItemSelectedListener(this);
 
-
-
         setDefaultValues();
         getGoalListAndPopulate();
         getStepArrayFromLocal();
@@ -206,7 +204,7 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                     getSupportActionBar().setTitle(currentStep.getNickName());
                     edtStepName.setText(currentStep.getNickName());
                     edtStepNotes.setText(currentStep.getNotes());
-                    if(currentStep.isExpire()== PendingStep.PendingStepExpire.EXPIRE){
+                    if(currentStep.isExpire().equals(PendingStep.PendingStepExpire.EXPIRE)){
                         if(!rbExpire.isChecked())
                             rbExpire.setChecked(true);
                     }else{
