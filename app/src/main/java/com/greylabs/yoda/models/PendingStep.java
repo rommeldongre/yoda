@@ -262,15 +262,15 @@ public class PendingStep implements Serializable {
         ArrayList<PendingStep> pendingSteps = null;
         Calendar cal=Calendar.getInstance();
         String date=cal.get(Calendar.YEAR)+"-"+cal.get(Calendar.MONTH)+"-"+cal.get(Calendar.DATE);
-        String time=cal.get(Calendar.HOUR)+":00:00";
+        String time=cal.get(Calendar.HOUR_OF_DAY)+":00:00";
         SQLiteDatabase db = database.getReadableDatabase();
         String query = "select * " +
                 " " + " from " + TablePendingStep.pendingStep + " " +
-                " " + " where "+TablePendingStep.expire+"="+PendingStepExpire.EXPIRE+"" +
-                " " + " and ("+TablePendingStep.status+"="+PendingStepStatus.MISSED+" or "+"" +
-                " " + " "+TablePendingStep.status+"="+PendingStepStatus.TODO+" )"+
+                " " + " where "+TablePendingStep.expire+"="+PendingStepExpire.EXPIRE.ordinal()+"" +
+                " " + " and ("+TablePendingStep.status+"="+PendingStepStatus.MISSED.ordinal()+" or "+"" +
+                " " + " "+TablePendingStep.status+"="+PendingStepStatus.TODO.ordinal()+" )"+
                 " " + " and "+TablePendingStep.deleted+"="+PendingStepDeleted.SHOW_NOT_DELETED.ordinal()+"" +
-                " " + " and "+TablePendingStep.stepDate+"<= strftime('%Y-%m-%d %H:%M:%S',"+(date+" "+time )+")";
+                " " + " and "+TablePendingStep.stepDate+"<= strftime('%Y-%m-%d %H:%M:%S','"+(date+" "+time )+"')";
 
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {

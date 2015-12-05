@@ -53,7 +53,7 @@ public class FilterUtility {
                 endDate=CalendarUtils.getSqLiteDateFormat(calEnd);
                 break;
             case THIS_MONTH:
-                calStart.add(Calendar.WEEK_OF_MONTH, 1);
+                calStart.add(Calendar.WEEK_OF_MONTH,CalendarUtils.getWeek(calStart.get(Calendar.DATE))-1);
                 calStart.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
                 startDate=CalendarUtils.getSqLiteDateFormat(calStart);
 

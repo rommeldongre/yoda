@@ -44,8 +44,8 @@ public class Yoda extends Application {
         super.onCreate();
         ACRA.init(this);
         context=getApplicationContext();
-        AlarmScheduler alarmScheduler=new AlarmScheduler(context);
-        alarmScheduler.setCalendarUpdateInterval();
+//        AlarmScheduler alarmScheduler=new AlarmScheduler(context);
+//        alarmScheduler.setCalendarUpdateInterval();
     }
 
     public static Context getContext(){

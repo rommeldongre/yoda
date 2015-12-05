@@ -42,14 +42,6 @@ public class CalendarUpdateAsyncThread extends AsyncTask<Void,Void,Void>{
         Logger.d(TAG,"Checking Calendar State");
         Day day=new Day(context);
         if(CalendarUtils.compareOnlyDates(day.getFirstDay(),new Date())==false) {
-            PendingStep pendingStep=new PendingStep(context);
-            List<PendingStep> pendingSteps=pendingStep.getAllExpireSteps();
-            for (PendingStep ps:pendingSteps){
-                ps.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
-                ps.cancelAlarm();
-                ps.save();
-            }
-            Logger.d(TAG,"Step clean up done");
             YodaCalendar yodaCalendar = new YodaCalendar(context);
             yodaCalendar.updateCalendar();
             Logger.d(TAG, "Calendar updated success");

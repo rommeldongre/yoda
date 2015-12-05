@@ -107,6 +107,7 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
         btnShowAdvanced = (Button) findViewById(R.id.btnShowAdvancedActAddNewStep);
 
         cardViewAdvanced = (CardView) findViewById(R.id.cardViewAdvancedActAddNewStep);
+        cardViewAdvanced.setVisibility(View.VISIBLE);
         btnHideAdvanced = (Button) findViewById(R.id.btnHideAdvancedActAddNewStep);
         stepPrioritySpinner = (Spinner) findViewById(R.id.spinnerPriorityActAddNewStep);
         stepTypeSpinner = (Spinner) findViewById(R.id.spinnerStepTypeActAddNewStep);
@@ -412,7 +413,7 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                     case SINGLE_STEP:
                         subStepsList.add(currentStep);
                 }
-                if(subStepsList!=null){
+                if(subStepsList!=null && stepPrioritySpinner.getSelectedItem()!=null){
                     if(stepPrioritySpinner.getSelectedItem().equals(Constants.PENDING_STEP_PRIORITY_TOP_MOST)){
                         stepArrayList.addAll(0,subStepsList);
                     }else if (stepPrioritySpinner.getSelectedItem().equals(Constants.PENDING_STEP_PRIORITY_BOTTOM_MOST)) {

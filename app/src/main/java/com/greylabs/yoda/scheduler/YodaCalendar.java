@@ -299,7 +299,21 @@ public class YodaCalendar {
                 days.get(i - 1).setDayOfYear(i);
                 days.get(i - 1).save();
             }
-            //update for all timeboxes having forever as Till time-need optimization
+            //mark for steps expired
+            PendingStep pendingStep=new PendingStep(context);
+            List<PendingStep> pendingSteps=pendingStep.getAllExpireSteps();
+            if(pendingSteps!=null) {
+                for (PendingStep ps : pendingSteps) {
+                    ps.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
+                    ps.cancelAlarm();
+                    ps.save();
+                }
+                Logger.d(TAG, "Step clean up done");
+            }else {
+                Logger.d(TAG, "No need to clean up steps");
+            }
+
+            //update for all time boxes having forever as Till time-need optimization
             List<TimeBox> timeBoxes = new TimeBox(context).getAll(TimeBox.TimeBoxStatus.ACTIVE);
             Goal goal = new Goal(context);
             timeBoxes.remove(new TimeBox(context).get(prefs.getUnplannedTimeBoxId()));

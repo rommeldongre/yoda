@@ -62,8 +62,7 @@ public class Dialogues {
 
         if(caller.equals(Constants.ALARM_SERVICE) && Dialogues.this.startEnd== PendingStep.PendingStepStartEnd.END)
         {
-            if(pendingStep.getPendingStepStatus()== PendingStep.PendingStepStatus.TODO ||
-                    pendingStep.getPendingStepStatus()== PendingStep.PendingStepStatus.MISSED)
+            if(pendingStep.getPendingStepStatus()== PendingStep.PendingStepStatus.TODO)
                 checkExpiryOfStep();
             return;
         }
@@ -186,7 +185,6 @@ public class Dialogues {
                 case R.id.btnLogExcuseNowNotification:
                     pendingStep.setNotes(edtExcuse.getText().toString());
                     pendingStep.save();
-                    checkExpiryOfStep();
                     // put this text into the pendingStep
 //                if(pendingStep!=null){
 //                    pendingStep.sebtPendingStepStatus(PendingStep.PendingStepStatus.MISSED);
