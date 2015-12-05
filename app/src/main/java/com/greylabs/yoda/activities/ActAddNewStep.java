@@ -252,7 +252,7 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
         adapterGoalSpinner = new AdapterGoalSpinner(this, goalList);
         goalSpinner.setAdapter(adapterGoalSpinner);
         goalSpinner.setSelection(0);
-        if(!intent.getStringExtra(Constants.OPERATION).equals(Constants.OPERATION_ADD) ){
+        if(caller.equals(Constants.ACT_STEP_LIST)==true &&!intent.getStringExtra(Constants.OPERATION).equals(Constants.OPERATION_ADD) ){
             if (currentStep.isExpire().equals(PendingStep.PendingStepExpire.EXPIRE)) {
                 rbExpire.setChecked(true);
             } else {
