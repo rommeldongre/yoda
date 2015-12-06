@@ -322,10 +322,12 @@ public class YodaCalendar {
             Goal goal = new Goal(context);
             timeBoxes.remove(new TimeBox(context).get(prefs.getUnplannedTimeBoxId()));
             for (TimeBox timeBox : timeBoxes) {
+                this.timeBox = timeBox;
                 if (timeBox.getTillType() == TimeBoxTill.FOREVER){
-                    this.timeBox = timeBox;
                     attachTimeBox(goal.getGoalId(timeBox.getId()));
                     rescheduleSteps(goal.getGoalId(timeBox.getId()));
+                }else{
+                     rescheduleSteps(goal.getGoalId(timeBox.getId()));
                 }
             }
             //reschedule steps in stretch Goal
