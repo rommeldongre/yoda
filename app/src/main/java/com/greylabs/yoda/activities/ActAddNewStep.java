@@ -253,9 +253,10 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
         goalSpinner.setSelection(0);
         if(caller.equals(Constants.ACT_STEP_LIST)==true &&!intent.getStringExtra(Constants.OPERATION).equals(Constants.OPERATION_ADD) ){
             if (currentStep.isExpire().equals(PendingStep.PendingStepExpire.EXPIRE)) {
+                rgBehaviourOfExpiredSteps.clearCheck();
                 rbExpire.setChecked(true);
             } else {
-
+                rgBehaviourOfExpiredSteps.clearCheck();
                 rbDontExpire.setChecked(true);
             }
         }
@@ -511,33 +512,6 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                     getStepArrayFromLocal();
                 }
                 break;
-
-//            case R.id.spinnerPriorityActAddNewStep:
-//                if (stepPrioritySpinner.getSelectedItem().toString().equals("Change Manually")) {
-//                    if (edtStepName.getText() != null && edtStepName.getText().length() > 0) {
-//                        if (stepArrayList.size() > 0)
-//                            stepArrayList.clear();
-//                        getStepArrayFromLocal();
-//                        stepArrayList.add(generateCurrentStepObject());
-//
-//                        Intent i = new Intent(this, ActStepList.class);
-////                    //--------------------- send the current step object also
-//                        i.putExtra(Constants.STEP_ARRAY_LIST, stepArrayList);
-//                        i.putExtra(Constants.GOAL_OBJECT, goalList.get(goalSpinner.getSelectedItemPosition()));
-//                        i.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, true);
-//                        i.putExtra(Constants.CALLER, Constants.ACT_ADD_NEW_STEP);
-//                        startActivityForResult(i, 1);
-//                    } else {
-//                        Logger.showMsg(this, Constants.MSG_ENTER_STEP_NAME);
-//                        if (prefs.isPriorityNewStepBottomMost()) {
-//                            stepPrioritySpinner.setSelection(1);
-//                        } else {
-//                            stepPrioritySpinner.setSelection(0);
-//                        }
-//                    }
-//                }
-//                break;
-
             case R.id.spinnerStepTypeActAddNewStep:
                 if (position == 0) {
                     singleStepPanel.setVisibility(View.VISIBLE);
@@ -557,8 +531,10 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
 
     private void setWhetherToExpireValue(Goal goal) {
         if(new TimeBox(this).get(goal.getTimeBoxId()).getTillType() == TimeBoxTill.FOREVER){
+            rgBehaviourOfExpiredSteps.clearCheck();
             rbExpire.setChecked(true);
         }else {
+            rgBehaviourOfExpiredSteps.clearCheck();
             rbDontExpire.setChecked(true);
         }
     }

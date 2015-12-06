@@ -35,10 +35,10 @@ public class BootCompleteService extends Service {
 
         //set calendar update interval
         AlarmScheduler alarmScheduler=new AlarmScheduler(this);
-        alarmScheduler.setCalendarUpdateInterval();
+//        alarmScheduler.setCalendarUpdateInterval();
 
         //reschedule all step alarms
-        alarmScheduler.rescheduleAllSteps();
+        alarmScheduler.rescheduleAllSteps(this);
 
 
 

@@ -545,7 +545,7 @@ public class YodaCalendar {
 
         if (pendingStepsList==null) return count;
         Iterator<PendingStep> pendingSteps =pendingStepsList .iterator();
-        PendingStep ps;
+        PendingStep ps=null;
         while (pendingSteps.hasNext()) {
             ps=pendingSteps.next();
             Iterator<Slot> it = slots.iterator();
@@ -582,6 +582,10 @@ public class YodaCalendar {
                     break;
                 }
             }
+        }
+        if(ps!=null){
+            goal.setDueDate(ps.getStepDate());
+            goal.save();
         }
         return count;
     }

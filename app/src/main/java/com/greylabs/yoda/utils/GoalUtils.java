@@ -5,6 +5,7 @@ import android.content.Context;
 import com.google.api.client.util.DateTime;
 import com.greylabs.yoda.activities.Yoda;
 import com.greylabs.yoda.apis.googleacc.GoogleSync;
+import com.greylabs.yoda.models.Day;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.Slot;
@@ -23,13 +24,27 @@ import java.util.TimeZone;
  */
 public class GoalUtils {
 
-    public static void rescheduleAllSteps(){
+    private static final String TAG=GoalUtils.class.getName();
+    public static void rescheduleAllSteps(Context context){
+        Logger.d(TAG,"Checking Calendar State");
+        Day day=new Day(context);
+        if(CalendarUtils.compareOnlyDates(day.getFirstDay(),new Date())==false) {
+            YodaCalendar yodaCalendar = new YodaCalendar(context);
+            yodaCalendar.updateCalendar();
+            Logger.d(TAG, "Calendar updated success");
+        }else{
+            Logger.d(TAG,"Calendar up to date");
+        }
+
         List<PendingStep> pendingSteps=new PendingStep(Yoda.getContext()).getAll(PendingStep.PendingStepStatus.TODO);
         Calendar calendar=Calendar.getInstance();
         if(pendingSteps!=null) {
             AlarmScheduler alarmScheduler = new AlarmScheduler(Yoda.getContext());
             for (PendingStep pendingStep : pendingSteps) {
                 Slot slot = new Slot(Yoda.getContext()).get(pendingStep.getSlotId());
+                if(slot==null){
+                    return;
+                }
                 if(slot.getScheduleDate().compareTo(calendar.getTime())>0) {
                     alarmScheduler.setStepId(pendingStep.getId());
                     alarmScheduler.setSubStepId(pendingStep.getSubStepOf());

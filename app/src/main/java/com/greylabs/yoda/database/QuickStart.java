@@ -339,7 +339,7 @@ public final class QuickStart {
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.setDeleted(false);
         pendingStep.setUpdated(new DateTime(new Date()));
-        pendingStep.setExpire(PendingStep.PendingStepExpire.NOT_EXPIRE);
+        pendingStep.setExpire(PendingStep.PendingStepExpire.EXPIRE);
         pendingStep.save();
         pendingStep=new PendingStep(context);
         pendingStep.setNickName("Oatmeal breakfast");
@@ -351,7 +351,7 @@ public final class QuickStart {
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.setDeleted(false);
         pendingStep.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
-        pendingStep.setExpire(PendingStep.PendingStepExpire.NOT_EXPIRE);
+        pendingStep.setExpire(PendingStep.PendingStepExpire.EXPIRE);
         pendingStep.save();
 
 //        pendingStep=new PendingStep(context);
@@ -504,7 +504,7 @@ public final class QuickStart {
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.setDeleted(false);
         pendingStep.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
-        pendingStep.setExpire(PendingStep.PendingStepExpire.NOT_EXPIRE);
+        pendingStep.setExpire(PendingStep.PendingStepExpire.EXPIRE);
         pendingStep.save();
         pendingStep=new PendingStep(context);
         pendingStep.setNickName("Fix Piano");
@@ -516,7 +516,7 @@ public final class QuickStart {
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.setDeleted(false);
         pendingStep.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
-        pendingStep.setExpire(PendingStep.PendingStepExpire.NOT_EXPIRE);
+        pendingStep.setExpire(PendingStep.PendingStepExpire.EXPIRE);
         pendingStep.save();
     }
 }

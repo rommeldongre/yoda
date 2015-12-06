@@ -244,9 +244,7 @@ public class MetaData {
                 "    update  "+TablePendingStep.pendingStep+" set " +TablePendingStep.slotId+" = 0  ," +
                 "     "+TablePendingStep.status+"  = "+ PendingStep.PendingStepStatus.COMPLETED.ordinal()+"  "+
                 "    where "+"old."+TableSlot.id+" = "+TablePendingStep.pendingStep+"."+TablePendingStep.slotId+" " +
-                "    and ( "+TablePendingStep.pendingStep+"."+TablePendingStep.status+" = "+ PendingStep.PendingStepStatus.TODO.ordinal() +" " +
-                "     or  "+TablePendingStep.pendingStep+"."+TablePendingStep.status+" = "+ PendingStep.PendingStepStatus.DOING.ordinal() +" "+
-                "     or  "+TablePendingStep.pendingStep+"."+TablePendingStep.status+" = "+ PendingStep.PendingStepStatus.MISSED.ordinal() +" )" +
+                "    and  "+TablePendingStep.pendingStep+"."+TablePendingStep.status+" = "+ PendingStep.PendingStepStatus.TODO.ordinal() +" " +
                 "    and "+TablePendingStep.pendingStep+"."+TablePendingStep.expire+"="+PendingStep.PendingStepExpire.EXPIRE.ordinal()+" ;"+
 
                 "    update  "+TablePendingStep.pendingStep+" set " +TablePendingStep.slotId+" = 0  ," +

@@ -62,8 +62,22 @@ public class Dialogues {
 
         if(caller.equals(Constants.ALARM_SERVICE) && Dialogues.this.startEnd== PendingStep.PendingStepStartEnd.END)
         {
-//            if(pendingStep.getPendingStepStatus()== PendingStep.PendingStepStatus.TODO)
-//                checkExpiryOfStep();
+            if(pendingStep.getPendingStepStatus()== PendingStep.PendingStepStatus.TODO &&
+                    pendingStep.isExpire()== PendingStep.PendingStepExpire.EXPIRE) {
+                //delete or mark step as deleted
+                pendingStep.freeSlot();
+                String notesString=pendingStep.getNotes();
+                if(notesString!=null)
+                    notesString=notesString+"\n Expired";
+                else
+                    notesString="Expired";
+                pendingStep.setNotes(notesString);
+                pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
+                pendingStep.setSlotId(0);
+                pendingStep.cancelAlarm();
+                pendingStep.save();
+            }
+
             return;
         }
         // custom dialog

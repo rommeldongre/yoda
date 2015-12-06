@@ -192,7 +192,7 @@ public class AlarmScheduler implements Serializable{
         this.setRepeatingAlarm(calendar, AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
-    public void rescheduleAllSteps(){
-        GoalUtils.rescheduleAllSteps();
+    public void rescheduleAllSteps(Context context){
+        GoalUtils.rescheduleAllSteps(context);
     }
 }
