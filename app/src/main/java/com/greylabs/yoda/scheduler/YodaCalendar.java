@@ -490,9 +490,6 @@ public class YodaCalendar {
                     alarmScheduler.setAlarm();
                     isScheduled=true;
                     break;
-                }else{
-                    ps.setPendingStepStatus(PendingStep.PendingStepStatus.UNSCHEDULED);
-                    ps.save();
                 }
             }
             sessionCount++;

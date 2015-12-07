@@ -109,7 +109,6 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
         btnShowAdvanced = (Button) findViewById(R.id.btnShowAdvancedActAddNewStep);
 
         cardViewAdvanced = (CardView) findViewById(R.id.cardViewAdvancedActAddNewStep);
-        cardViewAdvanced.setVisibility(View.VISIBLE);
         btnHideAdvanced = (Button) findViewById(R.id.btnHideAdvancedActAddNewStep);
         stepPrioritySpinner = (Spinner) findViewById(R.id.spinnerPriorityActAddNewStep);
         stepTypeSpinner = (Spinner) findViewById(R.id.spinnerStepTypeActAddNewStep);
@@ -415,11 +414,13 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                 case SINGLE_STEP:
                     subStepsList.add(currentStep);
             }
-            if (subStepsList != null && stepPrioritySpinner.getSelectedItem() != null) {
-                if (stepPrioritySpinner.getSelectedItem().equals(Constants.PENDING_STEP_PRIORITY_TOP_MOST)) {
+            if (subStepsList != null) {
+                if ( stepPrioritySpinner.getSelectedItem() != null && stepPrioritySpinner.getSelectedItem().equals(Constants.PENDING_STEP_PRIORITY_TOP_MOST)) {
                     stepArrayList.addAll(0, subStepsList);
-                } else if (stepPrioritySpinner.getSelectedItem().equals(Constants.PENDING_STEP_PRIORITY_BOTTOM_MOST)) {
+                } else if ( stepPrioritySpinner.getSelectedItem() != null && stepPrioritySpinner.getSelectedItem().equals(Constants.PENDING_STEP_PRIORITY_BOTTOM_MOST)) {
                     stepArrayList.addAll(subStepsList);
+                }else{
+                    stepArrayList.addAll(currentStep.getPriority(),subStepsList);
                 }
                 //}
                 //save all the steps in the array with priorities
@@ -432,12 +433,15 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                 }
                 currentStep.save();
                 //if user sets priority to Manual or TopMost ,then need to rearrange steps
-                if (!stepPrioritySpinner.getSelectedItem().toString().equals(Constants.TEXT_PRIORITY_SPINNER_BOTTOM_MOST)) {
+                if ( stepPrioritySpinner.getSelectedItem() != null
+                        && stepPrioritySpinner.getSelectedItem().toString().equals(Constants.TEXT_PRIORITY_SPINNER_TOP_MOST)) {
                     yodaCalendar.rescheduleSteps(goalList.get(goalSpinner.getSelectedItemPosition()).getId());
                     //yodaCalendar.rescheduleSteps(prefs.getStretchGoalId());
-                } else {
+                } else if ( stepPrioritySpinner.getSelectedItem() != null
+                        && stepPrioritySpinner.getSelectedItem().toString().equals(Constants.TEXT_PRIORITY_SPINNER_BOTTOM_MOST)){
                     yodaCalendar.scheduleStep(currentStep);
-                    //yodaCalendar.rescheduleSteps(prefs.getStretchGoalId());
+                }else{
+                    yodaCalendar.rescheduleSteps(goalList.get(goalSpinner.getSelectedItemPosition()).getId());
                 }
                 currentStep = currentStep.get(currentStep.getId());
                 //sync code
@@ -459,9 +463,9 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                 } else {
                     stepDate = currentStep.getStepDate();
                 }
-                alertStepAdded.setMessage("Step " + currentStep.getNickName() + " added towards Goal " +
-                        currentGoal.getNickName() + " with Done date of " +
-                        CalendarUtils.getOnlyFormattedDate(stepDate));
+                alertStepAdded.setMessage("The Step \'"+currentStep.getNickName()+
+                        "\' has been scheduled with a start date of \'" +
+                        CalendarUtils.getOnlyFormattedDate(stepDate)+"\'");
                 alertStepAdded.setCancelable(false);
                 alertStepAdded.show();
             }
