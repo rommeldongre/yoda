@@ -345,6 +345,7 @@ public class YodaCalendar {
     public int attachTimeBox(long goalId){
         int slotCount=0;
         slots=slot.getAll(timeBox);
+        removeTodaysPassedSlots();
 //        PendingStep pendingStep=new PendingStep(context);
         if(slots!=null && slots.size()>0) {
             for (Slot slot : slots) {
@@ -490,9 +491,6 @@ public class YodaCalendar {
                     alarmScheduler.setAlarm();
                     isScheduled=true;
                     break;
-                }else{
-                    ps.setPendingStepStatus(PendingStep.PendingStepStatus.UNSCHEDULED);
-                    ps.save();
                 }
             }
             sessionCount++;
@@ -631,7 +629,7 @@ public class YodaCalendar {
         return isValid;
     }
 
-    public void removeTodaysPassedSlots(){
+    public  int removeTodaysPassedSlots(){
         //remove today's passed slots
         Calendar cal=Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -641,19 +639,8 @@ public class YodaCalendar {
         String  sqliteDate=CalendarUtils.getSqLiteDateFormat(cal);
         Date date=CalendarUtils.parseDate(sqliteDate);
 
-//       if (slots!=null) {
-//           Slot slot;
-//           Iterator<Slot> itSlots = slots.iterator();
-//           while (itSlots.hasNext()) {
-//               slot = itSlots.next();
-//               if (date.compareTo(slot.getScheduleDate()) == 0) {
-//                   itSlots.remove();
-//               } else {
-//                   break;
-//               }
-//           }
-//       }
-
+        //check for slots
+        int count=0;
         Set<TimeBoxWhen> whens=CalendarUtils.getTodaysPassedSlots();
         if(slots!=null && whens!=null) {
             for (TimeBoxWhen when : whens) {
@@ -663,10 +650,12 @@ public class YodaCalendar {
                     slot = itSlots.next();
                     if (date.compareTo(slot.getScheduleDate()) == 0 && (when == slot.getWhen())) {
                         itSlots.remove();
+                        count++;
                         break;
                     }
                 }
             }
         }
+        return  count;
     }
 }

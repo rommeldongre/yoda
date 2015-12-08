@@ -73,8 +73,9 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
     Prefs prefs;
     private boolean isScheduled;
     int newPosition = 0;
-    String caller;
+    String caller, operation;
     Intent intent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +95,7 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
 
         intent = getIntent();
         caller = intent.getStringExtra(Constants.CALLER);
+        operation = intent.getStringExtra(Constants.OPERATION);
         prefs = Prefs.getInstance(this);
         toolbar = (Toolbar) findViewById(R.id.toolBarActAddNewStep);
         setSupportActionBar(toolbar);
@@ -159,18 +161,19 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
 //            if(pendingStep.getAll(PendingStep.PendingStepStatus.TODO, PendingStep.PendingStepDeleted.SHOW_NOT_DELETED,currentGoal.getId())!=null)
 //                stepArrayList.addAll(pendingStep.getAll(PendingStep.PendingStepStatus.TODO,currentGoal.getId()));
 
-        List<PendingStep> temp=pendingStep.getAll(PendingStep.PendingStepStatus.TODO,
-                PendingStep.PendingStepDeleted.SHOW_NOT_DELETED,currentGoal.getId());
-        if(currentGoal!=null && temp!=null){
+        List<PendingStep> temp = pendingStep.getAll(PendingStep.PendingStepStatus.TODO,
+                PendingStep.PendingStepDeleted.SHOW_NOT_DELETED, currentGoal.getId());
+        if (currentGoal != null && temp != null) {
             stepArrayList.addAll(temp);
         }
     }
 
     private void getGoalListAndPopulate() {
         // check context and populate spinner else show only one currentGoal
-        switch (caller){
+        switch (caller) {
 
-            case Constants.ACT_HOME :
+            case Constants.ACT_HOME:
+                operation = new String();
                 getGoalListFromLocal();
                 currentStep = new PendingStep(this);
                 break;
@@ -182,13 +185,13 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
 //                currentStep = new PendingStep(this);
 //                break;
 
-            case Constants.ACT_STEP_LIST :
-                if(intent.getStringExtra(Constants.OPERATION).equals(Constants.OPERATION_ADD)){
+            case Constants.ACT_STEP_LIST:
+                if (operation.equals(Constants.OPERATION_ADD)) {
                     getGoalListFromLocal();
                     currentGoal = (Goal) intent.getSerializableExtra(Constants.GOAL_OBJECT);
                     int oldGoalPosition = 0;
-                    for(int i=0; i<goalList.size();i++){
-                        if(currentGoal.getId() == goalList.get(i).getId())
+                    for (int i = 0; i < goalList.size(); i++) {
+                        if (currentGoal.getId() == goalList.get(i).getId())
                             oldGoalPosition = i;
                     }
                     goalSpinner.setSelection(oldGoalPosition);
@@ -196,18 +199,25 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
 //                    getGoalListFromLocal();
                     currentStep = new PendingStep(this);
 
-                }else {
+                } else {
                     currentStep = (PendingStep) intent.getSerializableExtra(Constants.STEP_OBJECT);
                     currentStep.initDatabase(this);
                     getGoalListFromLocal();
                     getSupportActionBar().setTitle(currentStep.getNickName());
                     edtStepName.setText(currentStep.getNickName());
                     edtStepNotes.setText(currentStep.getNotes());
+                    if (currentStep.isExpire().equals(PendingStep.PendingStepExpire.EXPIRE)) {
+                        if (!rbExpire.isChecked())
+                            rbExpire.setChecked(true);
+                    } else {
+                        if (!rbDontExpire.isChecked())
+                            rbDontExpire.setChecked(true);
+                    }
 
 
                     int oldGoalPosition = 0;
-                    for(int i=0; i<goalList.size();i++){
-                        if(currentStep.getGoalId() == goalList.get(i).getId())
+                    for (int i = 0; i < goalList.size(); i++) {
+                        if (currentStep.getGoalId() == goalList.get(i).getId())
                             oldGoalPosition = i;
                     }
                     goalSpinner.setSelection(oldGoalPosition);
@@ -223,13 +233,13 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
 //                    stepPrioritySpinner.setSelection(0);
                     stepPrioritySpinner.setEnabled(false);
 
-                    if(currentStep.getPendingStepType() == PendingStep.PendingStepType.SINGLE_STEP
+                    if (currentStep.getPendingStepType() == PendingStep.PendingStepType.SINGLE_STEP
                             || currentStep.getPendingStepType() == PendingStep.PendingStepType.SUB_STEP
-                            ){
+                            ) {
                         stepTypeSpinner.setSelection(0);
                         sbTimeSingleStep.setProgress(currentStep.getTime());
                         sbTimeSingleStep.setThumb(writeOnDrawable(R.drawable.ic_btn_plus_sign, String.valueOf(currentStep.getTime())));
-                    }else {
+                    } else {
                         stepTypeSpinner.setSelection(1);
                         sbTimeSeriesStep.setProgress(currentStep.getTime());
                         sbTimeSeriesStep.setThumb(writeOnDrawable(R.drawable.ic_btn_plus_sign, String.valueOf(currentStep.getTime())));
@@ -251,24 +261,15 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
         adapterGoalSpinner = new AdapterGoalSpinner(this, goalList);
         goalSpinner.setAdapter(adapterGoalSpinner);
         goalSpinner.setSelection(0);
-        if(caller.equals(Constants.ACT_STEP_LIST)==true &&!intent.getStringExtra(Constants.OPERATION).equals(Constants.OPERATION_ADD) ){
-            if (currentStep.isExpire().equals(PendingStep.PendingStepExpire.EXPIRE)) {
-                rgBehaviourOfExpiredSteps.clearCheck();
-                rbExpire.setChecked(true);
-            } else {
-                rgBehaviourOfExpiredSteps.clearCheck();
-                rbDontExpire.setChecked(true);
-            }
-        }
     }
 
     private void getGoalListFromLocal() {
-        if(goalList.size()>0){
+        if (goalList.size() > 0) {
             goalList.clear();
         }
         currentGoal = new Goal(this);
-        List<Goal> temp=currentGoal.getAll(Goal.GoalDeleted.SHOW_NOT_DELETED);
-        if(temp!=null)
+        List<Goal> temp = currentGoal.getAll(Goal.GoalDeleted.SHOW_NOT_DELETED);
+        if (temp != null)
             goalList.addAll(temp);
 //        if (goalList != null) {
 //            for (int i = 0; i < goalList.size(); i++) {
@@ -290,7 +291,7 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                goalChosen=0;
+                goalChosen = 0;
                 finish();
                 break;
             case R.id.actionSaveActAddNewStep:
@@ -302,20 +303,20 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
 
     private void saveStep() {
         if (edtStepName.getText() != null && edtStepName.getText().length() > 0) {
-            if(currentStep.getId()!=0){
+            if (currentStep.getId() != 0) {
                 //change updated date only if nickname is different than previous
-                if(currentStep.getNickName().equals(edtStepName.getText().toString()))
+                if (currentStep.getNickName().equals(edtStepName.getText().toString()))
                     currentStep.setUpdated(new DateTime(new Date()));
-            }else{
+            } else {
                 currentStep.setUpdated(new DateTime(new Date()));
             }
             currentStep.setNickName(edtStepName.getText().toString());
             currentStep.setNotes(edtStepNotes.getText().toString());
             currentStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
             currentStep.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
-            if(rbExpire.isChecked()){
+            if (rbExpire.isChecked()) {
                 currentStep.setExpire(PendingStep.PendingStepExpire.EXPIRE);
-            }else {
+            } else {
                 currentStep.setExpire(PendingStep.PendingStepExpire.NOT_EXPIRE);
             }
 
@@ -323,7 +324,7 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                 if (sbTimeSingleStep.getProgress() > 3) {
                     currentStep.setPendingStepType(PendingStep.PendingStepType.SPLIT_STEP);
                     currentStep.setStepCount(sbTimeSingleStep.getProgress() / 3);
-                    if(sbTimeSingleStep.getProgress()%3>=1)
+                    if (sbTimeSingleStep.getProgress() % 3 >= 1)
                         currentStep.setStepCount(currentStep.getStepCount() + 1);
                 } else {
                     currentStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
@@ -337,7 +338,7 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
             }
 //            currentStep.setSkipCount();
             currentStep.setGoalId(currentGoal.getId());
-            if(currentStep.getStringId()==null || currentStep.getStringId().equals(""))
+            if (currentStep.getStringId() == null || currentStep.getStringId().equals(""))
                 currentStep.setGoalStringId(currentGoal.getStringId());
 
 
@@ -350,20 +351,20 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
 //                stepArrayList.add(Integer.parseInt(stepPrioritySpinner.getSelectedItem().toString()) - 1, currentStep);
 //            }
             TimeBox timeBox = new TimeBox(this);
-            timeBox=timeBox.get(currentGoal.getTimeBoxId());
-            YodaCalendar yodaCalendar = new YodaCalendar(this,timeBox );
+            timeBox = timeBox.get(currentGoal.getTimeBoxId());
+            YodaCalendar yodaCalendar = new YodaCalendar(this, timeBox);
             //assume default priority is bottom most irrespective of settings
             //boolean isScheduled = yodaCalendar.scheduleStep(currentStep);
-            Slot slot=new Slot(this);
-            int stepCount=0;
-            if(currentStep.getId()==0){
+            Slot slot = new Slot(this);
+            int stepCount = 0;
+            if (currentStep.getId() == 0) {
                 //stepTime=currentStep.getStepCount()*currentStep.getTime();
-                stepCount=currentStep.getStepCount();
+                stepCount = currentStep.getStepCount();
             }
 
             //slot.getTotalSlotCount(timeBox.getId())*Constants.MAX_SLOT_DURATION<=
             //(currentStep.getAllStepTimeSum(currentGoal.getId())+stepTime)
-            int substeps=0;
+            int substeps = 0;
 
 
 //            if (slot.getTotalSlotCount(timeBox.getId())<(currentStep.getAllStepCount(currentGoal.getId())+stepCount)) {
@@ -374,11 +375,11 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
 //                builder.setPositiveButton(getString(R.string.btnOk), null);
 //                builder.show();
 //            } else {
-            List<PendingStep> subStepsList=new ArrayList<>();
+            List<PendingStep> subStepsList = new ArrayList<>();
             currentStep.initDatabase(this);
-            PendingStep ps =currentStep;
+            PendingStep ps = currentStep;
             ps.save();
-            switch (ps.getPendingStepType()){
+            switch (ps.getPendingStepType()) {
                 case SPLIT_STEP:
 //                        if(ps.getStringId()!=null || ps.getStringId().equals("")){
 //                            ps.freeSlots();//and cancel alarms
@@ -388,14 +389,14 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
 //                            ps.markSubSteps(true);
 //                            ps.freeSlots();
 //                        }
-                    if(ps.getTime()>Constants.MAX_SLOT_DURATION){
-                        float numberOfSteps=(float)ps.getTime()/Constants.MAX_SLOT_DURATION;
-                        Float f=new Float(numberOfSteps);
+                    if (ps.getTime() > Constants.MAX_SLOT_DURATION) {
+                        float numberOfSteps = (float) ps.getTime() / Constants.MAX_SLOT_DURATION;
+                        Float f = new Float(numberOfSteps);
                         ps.createSubSteps(1, f.intValue(), Constants.MAX_SLOT_DURATION);
-                        if(numberOfSteps-f.intValue()>0.0f)
-                            ps.createSubSteps(f.intValue()+1,f.intValue()+1,currentStep.getTime()%Constants.MAX_SLOT_DURATION);
+                        if (numberOfSteps - f.intValue() > 0.0f)
+                            ps.createSubSteps(f.intValue() + 1, f.intValue() + 1, currentStep.getTime() % Constants.MAX_SLOT_DURATION);
                     }
-                    subStepsList =currentStep.getAllSubSteps(currentStep.getId(),currentGoal.getId());
+                    subStepsList = currentStep.getAllSubSteps(currentStep.getId(), currentGoal.getId());
                     break;
                 case SERIES_STEP:
 //                        if(ps.getStringId()!=null || ps.getStringId().equals("")){
@@ -407,17 +408,19 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
 //                            ps.freeSlots();
 //                        }
                     ps.createSubSteps(1, currentStep.getStepCount(), currentStep.getTime());
-                    subStepsList =currentStep.getAllSubSteps(currentStep.getId(),currentGoal.getId());
+                    subStepsList = currentStep.getAllSubSteps(currentStep.getId(), currentGoal.getId());
                     break;
                 case SUB_STEP:
                 case SINGLE_STEP:
                     subStepsList.add(currentStep);
             }
-            if(subStepsList!=null && stepPrioritySpinner.getSelectedItem()!=null){
-                if(stepPrioritySpinner.getSelectedItem().equals(Constants.PENDING_STEP_PRIORITY_TOP_MOST)){
-                    stepArrayList.addAll(0,subStepsList);
-                }else if (stepPrioritySpinner.getSelectedItem().equals(Constants.PENDING_STEP_PRIORITY_BOTTOM_MOST)) {
+            if (subStepsList != null) {
+                if ( stepPrioritySpinner.getSelectedItem() != null && stepPrioritySpinner.getSelectedItem().equals(Constants.PENDING_STEP_PRIORITY_TOP_MOST)) {
+                    stepArrayList.addAll(0, subStepsList);
+                } else if ( stepPrioritySpinner.getSelectedItem() != null && stepPrioritySpinner.getSelectedItem().equals(Constants.PENDING_STEP_PRIORITY_BOTTOM_MOST)) {
                     stepArrayList.addAll(subStepsList);
+                }else{
+                    stepArrayList.addAll(currentStep.getPriority(),subStepsList);
                 }
                 //}
                 //save all the steps in the array with priorities
@@ -430,12 +433,15 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                 }
                 currentStep.save();
                 //if user sets priority to Manual or TopMost ,then need to rearrange steps
-                if (!stepPrioritySpinner.getSelectedItem().toString().equals(Constants.TEXT_PRIORITY_SPINNER_BOTTOM_MOST)) {
+                if ( stepPrioritySpinner.getSelectedItem() != null
+                        && stepPrioritySpinner.getSelectedItem().toString().equals(Constants.TEXT_PRIORITY_SPINNER_TOP_MOST)) {
                     yodaCalendar.rescheduleSteps(goalList.get(goalSpinner.getSelectedItemPosition()).getId());
                     //yodaCalendar.rescheduleSteps(prefs.getStretchGoalId());
-                }else{
+                } else if ( stepPrioritySpinner.getSelectedItem() != null
+                        && stepPrioritySpinner.getSelectedItem().toString().equals(Constants.TEXT_PRIORITY_SPINNER_BOTTOM_MOST)){
                     yodaCalendar.scheduleStep(currentStep);
-                    //yodaCalendar.rescheduleSteps(prefs.getStretchGoalId());
+                }else{
+                    yodaCalendar.rescheduleSteps(goalList.get(goalSpinner.getSelectedItemPosition()).getId());
                 }
                 currentStep = currentStep.get(currentStep.getId());
                 //sync code
@@ -445,21 +451,21 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                 alertStepAdded.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        goalChosen=0;
+                        goalChosen = 0;
                         ActAddNewStep.this.finish();
                     }
                 });
-                isScheduled=true;
-                Date stepDate=new Date();
-                if(subStepsList!=null&& subStepsList.size()>0 && (currentStep.getPendingStepType()== PendingStep.PendingStepType.SPLIT_STEP ||
-                        currentStep.getPendingStepType()== PendingStep.PendingStepType.SERIES_STEP)){
-                    stepDate=subStepsList.get(0).getTopmostSubstepScheduleDate(currentStep.getId());
-                }else{
-                    stepDate=currentStep.getStepDate();
+                isScheduled = true;
+                Date stepDate = new Date();
+                if (subStepsList != null && subStepsList.size() > 0 && (currentStep.getPendingStepType() == PendingStep.PendingStepType.SPLIT_STEP ||
+                        currentStep.getPendingStepType() == PendingStep.PendingStepType.SERIES_STEP)) {
+                    stepDate = subStepsList.get(0).getTopmostSubstepScheduleDate(currentStep.getId());
+                } else {
+                    stepDate = currentStep.getStepDate();
                 }
-                alertStepAdded.setMessage("Step " + currentStep.getNickName() + " added towards Goal " +
-                        currentGoal.getNickName() + " with Done date of " +
-                        CalendarUtils.getOnlyFormattedDate(stepDate));
+                alertStepAdded.setMessage("The Step \'"+currentStep.getNickName()+
+                        "\' has been scheduled with a start date of \'" +
+                        CalendarUtils.getOnlyFormattedDate(stepDate)+"\'");
                 alertStepAdded.setCancelable(false);
                 alertStepAdded.show();
             }
@@ -500,8 +506,8 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         switch (parent.getId()) {
             case R.id.spinnerGoalNameActAddNewStep:
-//                if (position + 1 == goalNamesList.size()) {
-                setWhetherToExpireValue(goalList.get(position));
+                if (!operation.equals(Constants.OPERATION_EDIT))
+                    setWhetherToExpireValue(goalList.get(position));
                 if (position + 1 == goalList.size()) {
                     Intent intent = new Intent(this, ActAddNewGoal.class);
                     intent.putExtra(Constants.CALLER, Constants.ACT_ADD_NEW_STEP);
@@ -531,10 +537,8 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
 
     private void setWhetherToExpireValue(Goal goal) {
         if(new TimeBox(this).get(goal.getTimeBoxId()).getTillType() == TimeBoxTill.FOREVER){
-            rgBehaviourOfExpiredSteps.clearCheck();
             rbExpire.setChecked(true);
         }else {
-            rgBehaviourOfExpiredSteps.clearCheck();
             rbDontExpire.setChecked(true);
         }
     }
@@ -552,19 +556,19 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
 
         switch (seekBar.getId()) {
             case R.id.seekbarSingleStepTimeActAddNewStep:
-                if(progress<1){
+                if (progress < 1) {
                     sbTimeSingleStep.setProgress(1);
                 }
                 break;
 
             case R.id.seekbarStepsInSeriesActAddNewStep:
-                if(stepTypeSpinner.getSelectedItemPosition()==1 && progress<2){
+                if (stepTypeSpinner.getSelectedItemPosition() == 1 && progress < 2) {
                     sbNoOfSteps.setProgress(2);
                 }
                 break;
 
             case R.id.seekbarTimeForEachStepActAddNewStep:
-                if(progress<1){
+                if (progress < 1) {
                     sbTimeSeriesStep.setProgress(1);
                 }
                 break;

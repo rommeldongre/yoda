@@ -49,19 +49,23 @@ public class AdapterRecyclerViewActStepList extends RecyclerView.Adapter<Adapter
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String noOfSteps="";
+        String noOfSteps = "";
         holder.checkBox.setCircleColor(Integer.valueOf(stepsArrayList.get(position).getColorCode()));
-        if(stepsArrayList.get(position).getPendingStepType().equals(TYPE_SERIES_STEP)
-                ||stepsArrayList.get(position).getPendingStepType().equals(TYPE_SPLIT_STEP) ){
+        if (stepsArrayList.get(position).getPendingStepType().equals(TYPE_SERIES_STEP)
+                || stepsArrayList.get(position).getPendingStepType().equals(TYPE_SPLIT_STEP)) {
             noOfSteps = String.valueOf(stepsArrayList.get(position).getStepCount());
-            holder.tvStepName.setText(stepsArrayList.get(position).getNickName()+" - "+noOfSteps+" session");
-        }else {
+            holder.tvStepName.setText(stepsArrayList.get(position).getNickName() + " - " + noOfSteps + " session");
+        } else {
             holder.tvStepName.setText(stepsArrayList.get(position).getNickName());
         }
-        if(stepsArrayList.get(position).getStepDate()!=null && stepsArrayList.get(position).getPendingStepStatus()!= PendingStep.PendingStepStatus.UNSCHEDULED)
+        if (stepsArrayList.get(position).getStepDate() != null && stepsArrayList.get(position).getPendingStepStatus() != PendingStep.PendingStepStatus.UNSCHEDULED)
             holder.tvETAOfStep.setText(CalendarUtils.getFormattedDateWithSlot(stepsArrayList.get(position).getStepDate()));
-       else{
+        if (stepsArrayList.get(position).getPendingStepStatus()== PendingStep.PendingStepStatus.UNSCHEDULED){
             holder.tvETAOfStep.setText("Not Scheduled");
+        }else if(stepsArrayList.get(position).getPendingStepStatus()== PendingStep.PendingStepStatus.DOING){
+            holder.tvETAOfStep.setText("Doing");
+        }else if(stepsArrayList.get(position).getPendingStepStatus()== PendingStep.PendingStepStatus.MISSED){
+            holder.tvETAOfStep.setText("Missed");
         }
         if(stepsArrayList.get(position).getPendingStepStatus().equals(PendingStep.PendingStepStatus.COMPLETED)){
             holder.checkBox.setChecked(true);

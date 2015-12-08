@@ -62,7 +62,8 @@ public class Dialogues {
 
         if(caller.equals(Constants.ALARM_SERVICE) && Dialogues.this.startEnd== PendingStep.PendingStepStartEnd.END)
         {
-            if(pendingStep.getPendingStepStatus()== PendingStep.PendingStepStatus.TODO &&
+            if((pendingStep.getPendingStepStatus()== PendingStep.PendingStepStatus.TODO ||
+                pendingStep.getPendingStepStatus()== PendingStep.PendingStepStatus.DOING) &&
                     pendingStep.isExpire()== PendingStep.PendingStepExpire.EXPIRE) {
                 //delete or mark step as deleted
                 pendingStep.freeSlot();
@@ -197,7 +198,13 @@ public class Dialogues {
                     }
                     break;
                 case R.id.btnLogExcuseNowNotification:
-                    pendingStep.setNotes(edtExcuse.getText().toString());
+                    String notesString=pendingStep.getNotes();
+                    if(notesString!=null)
+                        notesString=notesString+
+                                ((edtExcuse.getText().toString()==null)? "":edtExcuse.getText().toString());
+                    else
+                        notesString="";
+                    pendingStep.setNotes(notesString);
                     pendingStep.save();
                     // put this text into the pendingStep
 //                if(pendingStep!=null){
