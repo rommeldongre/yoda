@@ -1,6 +1,8 @@
 package com.greylabs.yoda.adapters;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -89,7 +91,6 @@ public class AdapterRecyclerViewFragFilterFinal extends RecyclerView.Adapter<Ada
 
             if (scope == StepFilterType.DONE) {
                 checkBox.setChecked(true);
-                checkBox.setEnabled(false);
             }
 
             checkBox.setOnCheckedChangeListener(this);
@@ -104,19 +105,42 @@ public class AdapterRecyclerViewFragFilterFinal extends RecyclerView.Adapter<Ada
                         + " must implement OnClickOfRecyclerViewFragFilterFinal");
             }
 
-            PendingStep currentPendingStep = stepsArrayList.get(getPosition());
+            final PendingStep currentPendingStep = stepsArrayList.get(getPosition());
 
-            if (scope == StepFilterType.DONE)
-                return;
+            if (scope == StepFilterType.DONE){
+                checkBox.setChecked(false);
 
-            stepsArrayList.remove(getPosition());
-            setEmptyViewVisibility();
-            notifyItemRemoved(getPosition());
-            PendingStepUtils.markPendingStepDone(currentPendingStep);
-            rescheduleStepsOfCurrentGoal(currentPendingStep);
-            //sync code
-            GoogleSync.getInstance(contxt).sync();
-            myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_MARK_STEP_DONE, scope);
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        stepsArrayList.remove(getPosition());
+                        setEmptyViewVisibility();
+                        notifyItemRemoved(getPosition());
+                        PendingStepUtils.markPendingStepUnDone(currentPendingStep);
+                        rescheduleStepsOfCurrentGoal(currentPendingStep);
+                        //sync code
+                        GoogleSync.getInstance(contxt).sync();
+                        myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_MARK_STEP_UNDONE, scope);
+                    }
+                }, 100);
+            }
+            else {
+
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        checkBox.setChecked(true);
+                        stepsArrayList.remove(getPosition());
+                        setEmptyViewVisibility();
+                        notifyItemRemoved(getPosition());
+                        PendingStepUtils.markPendingStepDone(currentPendingStep);
+                        rescheduleStepsOfCurrentGoal(currentPendingStep);
+                        //sync code
+                        GoogleSync.getInstance(contxt).sync();
+                        myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_MARK_STEP_DONE, scope);
+                    }
+                }, 100);
+            }
 
 
         }
@@ -138,5 +162,14 @@ public class AdapterRecyclerViewFragFilterFinal extends RecyclerView.Adapter<Ada
                 tvEmptyView.setVisibility(View.GONE);
             }
         }
+    }
+
+    public void addDelayOnUIThread(int milliseconds){
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                //Do something here
+            }
+        }, milliseconds);
     }
 }
