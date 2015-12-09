@@ -52,7 +52,7 @@ public class PagerAdapterActFiltersNew extends FragmentPagerAdapter
                 fragFilter.setArguments(bundle);
                 return fragFilter;
 
-            case 6:
+            case 5:
                 bundle.putSerializable(Constants.FILTER_SCOPE, StepFilterType.NEVER);
                 fragFilter.setArguments(bundle);
                 return fragFilter;
