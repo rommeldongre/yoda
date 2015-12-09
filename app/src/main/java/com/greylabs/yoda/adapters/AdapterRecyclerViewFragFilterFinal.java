@@ -87,6 +87,11 @@ public class AdapterRecyclerViewFragFilterFinal extends RecyclerView.Adapter<Ada
             tvETAOfStep = (TextView) itemView.findViewById(R.id.tvETAOfStepRecyclerItemFragFilterNew);
             cardView = (CardView) itemView.findViewById(R.id.cvRecyclerItemFragFilterNew);
 
+            if (scope == StepFilterType.DONE) {
+                checkBox.setChecked(true);
+                checkBox.setEnabled(false);
+            }
+
             checkBox.setOnCheckedChangeListener(this);
         }
 
@@ -100,6 +105,10 @@ public class AdapterRecyclerViewFragFilterFinal extends RecyclerView.Adapter<Ada
             }
 
             PendingStep currentPendingStep = stepsArrayList.get(getPosition());
+
+            if (scope == StepFilterType.DONE)
+                return;
+
             stepsArrayList.remove(getPosition());
             setEmptyViewVisibility();
             notifyItemRemoved(getPosition());
@@ -108,6 +117,8 @@ public class AdapterRecyclerViewFragFilterFinal extends RecyclerView.Adapter<Ada
             //sync code
             GoogleSync.getInstance(contxt).sync();
             myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_MARK_STEP_DONE, scope);
+
+
         }
 
         private void rescheduleStepsOfCurrentGoal(PendingStep currentPendingStep) {

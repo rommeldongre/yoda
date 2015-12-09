@@ -11,7 +11,7 @@ import com.greylabs.yoda.utils.Constants;
 
 public class PagerAdapterActFiltersNew extends FragmentPagerAdapter
 {
-    private final String[] titles = { "Today", "This Week", "This Month", "This Quarter", "This Year", "Never"};
+    private final String[] titles = { "Today", "This Week", "This Month", "This Quarter", "This Year", "Done", "Never"};
 
     FragFilterFinal fragFilter;
 
@@ -53,6 +53,11 @@ public class PagerAdapterActFiltersNew extends FragmentPagerAdapter
                 return fragFilter;
 
             case 5:
+                bundle.putSerializable(Constants.FILTER_SCOPE, StepFilterType.DONE);
+                fragFilter.setArguments(bundle);
+                return fragFilter;
+
+            case 6:
                 bundle.putSerializable(Constants.FILTER_SCOPE, StepFilterType.NEVER);
                 fragFilter.setArguments(bundle);
                 return fragFilter;

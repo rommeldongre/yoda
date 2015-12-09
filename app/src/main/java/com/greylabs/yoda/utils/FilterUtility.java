@@ -122,6 +122,11 @@ public class FilterUtility {
 
     public ArrayList<PendingStep> getPendingStepsArrayList(StepFilterType stepFilterType){
 
+        if (stepFilterType == StepFilterType.DONE){
+            ArrayList<PendingStep> pendingSteps= new PendingStep(context).getAllPendingStepsByStatus(PendingStep.PendingStepStatus.COMPLETED);
+            return  pendingSteps;
+        }
+
         if (stepFilterType == StepFilterType.NEVER){
             ArrayList<PendingStep> pendingSteps= new PendingStep(context).getAllPendingStepsByStatus(PendingStep.PendingStepStatus.UNSCHEDULED);
             return  pendingSteps;
