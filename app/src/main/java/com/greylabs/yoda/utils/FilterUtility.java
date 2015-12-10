@@ -123,12 +123,12 @@ public class FilterUtility {
     public ArrayList<PendingStep> getPendingStepsArrayList(StepFilterType stepFilterType){
 
         if (stepFilterType == StepFilterType.DONE){
-            ArrayList<PendingStep> pendingSteps= new PendingStep(context).getAllPendingStepsByStatus(PendingStep.PendingStepStatus.COMPLETED);
+            ArrayList<PendingStep> pendingSteps= new PendingStep(context).getAllPendingStepsByStatus(PendingStep.PendingStepStatus.COMPLETED, MetaData.TablePendingStep.stepDate+" desc ");
             return  pendingSteps;
         }
 
         if (stepFilterType == StepFilterType.NEVER){
-            ArrayList<PendingStep> pendingSteps= new PendingStep(context).getAllPendingStepsByStatus(PendingStep.PendingStepStatus.UNSCHEDULED);
+            ArrayList<PendingStep> pendingSteps= new PendingStep(context).getAllPendingStepsByStatus(PendingStep.PendingStepStatus.UNSCHEDULED, MetaData.TablePendingStep.priority + " asc ");
             return  pendingSteps;
         }
 

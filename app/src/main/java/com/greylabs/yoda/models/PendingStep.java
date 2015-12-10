@@ -377,6 +377,27 @@ public class PendingStep implements Serializable {
         return pendingSteps;
     }
 
+    public ArrayList<PendingStep> getAllPendingStepsByStatus(PendingStepStatus status, String orderParam) {
+        ArrayList<PendingStep> pendingSteps = null;
+        SQLiteDatabase db = database.getReadableDatabase();
+        String query = "select * " +
+                " " + " from " + TablePendingStep.pendingStep + " " +
+                " " + " where "+ TablePendingStep.status+"="+status.ordinal() + " " +
+                " " + " order by " + orderParam;
+
+        Cursor c = db.rawQuery(query, null);
+        if (c.moveToFirst()) {
+            pendingSteps = new ArrayList<>();
+            do {
+                PendingStep pendingStep = new PendingStep(context);
+                pendingStep=makePendingStepObject(c,pendingStep);
+                pendingSteps.add(pendingStep);
+            } while (c.moveToNext());
+        }
+        c.close();
+        return pendingSteps;
+    }
+
 
     /**
      * This method return list of PendingStep of given goal and that are not substeps of some other

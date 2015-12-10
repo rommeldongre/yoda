@@ -58,7 +58,13 @@ public class AdapterRecyclerViewFragFilterFinal extends RecyclerView.Adapter<Ada
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.checkBox.setCircleColor(Integer.valueOf(stepsArrayList.get(position).getColorCode()));
         holder.tvStepName.setText(stepsArrayList.get(position).getNickName());
-        holder.tvETAOfStep.setText(CalendarUtils.getFormattedDateWithSlot(stepsArrayList.get(position).getStepDate()));
+
+        if (scope == StepFilterType.NEVER){
+            holder.tvETAOfStep.setText("Priority: " + stepsArrayList.get(position).getPriority());
+        }
+        else{
+            holder.tvETAOfStep.setText(CalendarUtils.getFormattedDateWithSlot(stepsArrayList.get(position).getStepDate()));
+        }
     }
 
     @Override
