@@ -148,6 +148,10 @@
     <string name="findContact">Search in Contacts</string>
 
 
+    <!--ActAddNewStep-->
+    <string name="save">SAVE</string>
+    <string name="discard">DISCARD</string>
+
     <string name="accounts">Accounts</string>
     <string name="icon_desc">Application icon</string>
     <string name="title_separator_desc">Title separator</string>
