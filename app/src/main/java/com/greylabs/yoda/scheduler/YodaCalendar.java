@@ -468,28 +468,7 @@ public class YodaCalendar {
             while (it.hasNext()) {
                 Slot slot = it.next();
                 if (!ps.isSlotAssigned(slot.getId()) && slot.getTimeBoxId()==timeBox.getId()  ) {
-                    slot.setTime(slot.getTime() - ps.getTime());
-                    slot.setGoalId(ps.getGoalId());
-                    ps.setSlotId(slot.getId());
-                    calendar.setTime(slot.getScheduleDate());
-                    calendar.add(Calendar.HOUR_OF_DAY, slot.getWhen().getStartTime());
-                    updateStep(ps, slot);
-                    ps.setStepDate(calendar.getTime());
-                    ps.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
-                    slot.save();
-                    ps.save();
-                    goal.setDueDate(ps.getStepDate());
-                    goal.save();
-                    AlarmScheduler alarmScheduler = new AlarmScheduler(context);
-                    alarmScheduler.setStepId(ps.getId());
-                    alarmScheduler.setSubStepId(ps.getSubStepOf());
-                    alarmScheduler.setPendingStepType(PendingStep.PendingStepType.SUB_STEP);
-                    alarmScheduler.setStartTime(slot.getWhen().getStartTime());
-                    alarmScheduler.setDuration(ps.getTime());
-                    alarmScheduler.setAlarmDate(slot.getScheduleDate());
-                    alarmScheduler.cancel();
-                    alarmScheduler.setAlarm();
-                    isScheduled=true;
+                    isScheduled=scheduleSingleStep(ps,goal, slot, calendar);
                     break;
                 }
             }
@@ -506,6 +485,30 @@ public class YodaCalendar {
         return isScheduled;
     }
 
+    private boolean scheduleSingleStep(PendingStep ps,Goal goal,Slot slot,Calendar calendar){
+        slot.setTime(slot.getTime() - ps.getTime());
+        slot.setGoalId(ps.getGoalId());
+        ps.setSlotId(slot.getId());
+        calendar.setTime(slot.getScheduleDate());
+        calendar.add(Calendar.HOUR_OF_DAY, slot.getWhen().getStartTime());
+        updateStep(ps, slot);
+        ps.setStepDate(calendar.getTime());
+        ps.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
+        slot.save();
+        ps.save();
+        goal.setDueDate(ps.getStepDate());
+        goal.save();
+        AlarmScheduler alarmScheduler = new AlarmScheduler(context);
+        alarmScheduler.setStepId(ps.getId());
+        alarmScheduler.setSubStepId(ps.getSubStepOf());
+        alarmScheduler.setPendingStepType(PendingStep.PendingStepType.SUB_STEP);
+        alarmScheduler.setStartTime(slot.getWhen().getStartTime());
+        alarmScheduler.setDuration(ps.getTime());
+        alarmScheduler.setAlarmDate(slot.getScheduleDate());
+        alarmScheduler.cancel();
+        alarmScheduler.setAlarm();
+        return  true;
+    }
     private void updateStep(PendingStep pendingStep, Slot slot) {
         if(pendingStep.getStepDate()!=null && pendingStep.getId()!=0){
             //change updated date,only if step date changed
@@ -558,26 +561,7 @@ public class YodaCalendar {
                 Slot slot = it.next();
                 slot.setTime(Constants.MAX_SLOT_DURATION);
                 if (ps.getTime() <= slot.getTime() && slot.getTimeBoxId() == timeBox.getId()) {
-                    slot.setTime(slot.getTime() - ps.getTime());
-                    slot.setGoalId(ps.getGoalId());
-                    ps.setSlotId(slot.getId());
-                    ps.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
-                    calendar.setTime(slot.getScheduleDate());
-                    calendar.add(Calendar.HOUR_OF_DAY, slot.getWhen().getStartTime());
-                    updateStep(ps, slot);
-                    ps.setStepDate(calendar.getTime());
-                    ps.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
-                    slot.save();
-                    ps.save();
-                    AlarmScheduler alarmScheduler = new AlarmScheduler(context);
-                    alarmScheduler.setStepId(ps.getId());
-                    alarmScheduler.setSubStepId(ps.getSubStepOf());
-                    alarmScheduler.setPendingStepType(PendingStep.PendingStepType.SUB_STEP);
-                    alarmScheduler.setStartTime(slot.getWhen().getStartTime());
-                    alarmScheduler.setDuration(ps.getTime());
-                    alarmScheduler.setAlarmDate(slot.getScheduleDate());
-                    alarmScheduler.cancel();
-                    alarmScheduler.setAlarm();
+                    scheduleSingleStep(ps,goal,slot,calendar);
                     it.remove();
                     break;
                 }
