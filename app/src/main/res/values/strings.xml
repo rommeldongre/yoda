@@ -28,6 +28,7 @@
     <string name="titleActAddNewStep">New Step</string>
     <string name="actionSaveActAddNewStep">Save</string>
     <string name="msgEnterStepNameActAddNewStep">Please Enter Step Name</string>
+    <string name="msgStepNameExistsActAddNewStep">This Step already exists</string>
     <string name="msgNoEmailIdAttached">This contact don\'t have an email id.\nPlease select another.</string>
 
 

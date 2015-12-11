@@ -285,6 +285,16 @@ public class PendingStep implements Serializable {
         return pendingSteps;
     }
 
+    public boolean ifStepNameExists(String stepName){
+        SQLiteDatabase db = database.getReadableDatabase();
+        String query = "select id from " + TablePendingStep.pendingStep +
+                 " where " + TablePendingStep.nickName + " =? ";
+        Cursor c = db.rawQuery(query, new String[]{stepName});
+        boolean returnValue = (c.getCount() != 0);
+        c.close();
+        return returnValue;
+    }
+
     public List<PendingStep> getAll(PendingStepStatus status,PendingStepDeleted deleted,long goalId) {
         ArrayList<PendingStep> pendingSteps = null;
         SQLiteDatabase db = database.getReadableDatabase();
