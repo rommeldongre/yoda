@@ -11,6 +11,7 @@ import java.util.List;
 import static com.greylabs.yoda.database.MetaData.*;
 
 public class ResetYoda {
+    private static final String TAG="ResetYoda";
     public static void reset(Context context) {
         clearAlarms(context);
         clearPrefs(context);
@@ -58,6 +59,7 @@ public class ResetYoda {
                     for (Integer i : stepIds) {
                         alarmScheduler.setStepId(i);
                         alarmScheduler.cancel();
+                        Logger.d(TAG,"Alarm of step "+i+" cancelled");
                     }
                 }
             }
