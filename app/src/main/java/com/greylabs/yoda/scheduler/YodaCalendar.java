@@ -493,6 +493,7 @@ public class YodaCalendar {
         calendar.add(Calendar.HOUR_OF_DAY, slot.getWhen().getStartTime());
         updateStep(ps, slot);
         ps.setStepDate(calendar.getTime());
+        ps.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         ps.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
         slot.save();
         ps.save();
@@ -544,6 +545,12 @@ public class YodaCalendar {
         if(temp!=null){
             pendingStepsList.addAll(temp);
         }
+        temp=pendingStep.getAll(PendingStep.PendingStepStatus.MISSED,
+                PendingStep.PendingStepDeleted.SHOW_NOT_DELETED,goalId);
+        if(temp!=null){
+            pendingStepsList.addAll(temp);
+        }
+
         Collections.sort(pendingStepsList,new SortPendingStepByPriority());
 
         if (pendingStepsList==null) return count;
