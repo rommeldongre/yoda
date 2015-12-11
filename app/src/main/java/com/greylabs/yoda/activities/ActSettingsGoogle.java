@@ -115,7 +115,7 @@ public class ActSettingsGoogle extends AppCompatActivity implements View.OnClick
             emailIdsArrayList.add("Please add an Account first");
             disableAllViews();
         }
-        accountSpinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item,emailIdsArrayList);
+        accountSpinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item,emailIdsArrayList);
         accountSpinner.setAdapter(accountSpinnerAdapter);
         if(isAccountPresent && prefs.getDefaultAccountEmailId()!=null){
             // set selected spinner item from prefs
