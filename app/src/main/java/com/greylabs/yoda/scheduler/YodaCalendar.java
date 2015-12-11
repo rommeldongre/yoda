@@ -467,7 +467,7 @@ public class YodaCalendar {
             Iterator<Slot> it = slots.iterator();
             while (it.hasNext()) {
                 Slot slot = it.next();
-                if (!ps.isSlotAssigned(slot.getId()) && slot.getTimeBoxId()==timeBox.getId()  ) {
+                if (!ps.isSlotAssigned(slot.getId()) && slot.getTimeBoxId()==timeBox.getId() ) {
                     isScheduled=scheduleSingleStep(ps,goal, slot, calendar);
                     break;
                 }

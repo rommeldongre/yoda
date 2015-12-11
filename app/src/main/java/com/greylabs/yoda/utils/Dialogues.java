@@ -22,6 +22,8 @@ import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.scheduler.AlarmScheduler;
 import com.greylabs.yoda.scheduler.YodaCalendar;
 
+import java.util.Date;
+
 public class Dialogues {
 
     Dialog dialog;
@@ -183,6 +185,7 @@ public class Dialogues {
                         else
                             alarmScheduler.initContext(context);
                         alarmScheduler.setStepId(pendingStep.getId());
+                        alarmScheduler.setAlarmDate(new Date());
                         alarmScheduler.postponeAlarm(5);
                     }
                     dialog.dismiss();
