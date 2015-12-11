@@ -24,6 +24,7 @@
     <string name="actionSaveActAddNewGoal">Save</string>
     <string name="msgGoalSavedActAddNewGoal">Goal has been created and has</string>
     <string name="msgEnterGoalNickNameActAddNewGoal">Please Enter Goal Nick Name</string>
+    <string name="msgGoalNickNameExistsActAddNewGoal">This Goal already exists</string>
     <string name="titleActAddNewStep">New Step</string>
     <string name="actionSaveActAddNewStep">Save</string>
     <string name="msgEnterStepNameActAddNewStep">Please Enter Step Name</string>

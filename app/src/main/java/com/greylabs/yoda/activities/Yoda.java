@@ -8,7 +8,7 @@ import com.greylabs.yoda.R;
 import com.greylabs.yoda.scheduler.AlarmScheduler;
 import com.greylabs.yoda.scheduler.YodaCalendar;
 
-import org.acra.ACRA;
+/*import org.acra.ACRA;
 import org.acra.ReportField;
 import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
@@ -31,7 +31,7 @@ import org.acra.sender.HttpSender;
         },
         mode = ReportingInteractionMode.TOAST,
         resToastText = R.string.crashToast
-)
+)*/
 public class Yoda extends Application {
     private static  Context context;
     @Override
@@ -42,7 +42,7 @@ public class Yoda extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        ACRA.init(this);
+        //ACRA.init(this);
         context=getApplicationContext();
 //        AlarmScheduler alarmScheduler=new AlarmScheduler(context);
 //        alarmScheduler.setCalendarUpdateInterval();
