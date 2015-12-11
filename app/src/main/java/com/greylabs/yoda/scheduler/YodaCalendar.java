@@ -345,6 +345,7 @@ public class YodaCalendar {
     public int attachTimeBox(long goalId){
         int slotCount=0;
         slots=slot.getAll(timeBox);
+        removeTodaysPassedSlots();
 //        PendingStep pendingStep=new PendingStep(context);
         if(slots!=null && slots.size()>0) {
             for (Slot slot : slots) {
@@ -466,33 +467,9 @@ public class YodaCalendar {
             Iterator<Slot> it = slots.iterator();
             while (it.hasNext()) {
                 Slot slot = it.next();
-                if (!ps.isSlotAssigned(slot.getId()) && slot.getTimeBoxId()==timeBox.getId()  ) {
-                    slot.setTime(slot.getTime() - ps.getTime());
-                    slot.setGoalId(ps.getGoalId());
-                    ps.setSlotId(slot.getId());
-                    calendar.setTime(slot.getScheduleDate());
-                    calendar.add(Calendar.HOUR_OF_DAY, slot.getWhen().getStartTime());
-                    updateStep(ps, slot);
-                    ps.setStepDate(calendar.getTime());
-                    ps.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
-                    slot.save();
-                    ps.save();
-                    goal.setDueDate(ps.getStepDate());
-                    goal.save();
-                    AlarmScheduler alarmScheduler = new AlarmScheduler(context);
-                    alarmScheduler.setStepId(ps.getId());
-                    alarmScheduler.setSubStepId(ps.getSubStepOf());
-                    alarmScheduler.setPendingStepType(PendingStep.PendingStepType.SUB_STEP);
-                    alarmScheduler.setStartTime(slot.getWhen().getStartTime());
-                    alarmScheduler.setDuration(ps.getTime());
-                    alarmScheduler.setAlarmDate(slot.getScheduleDate());
-                    alarmScheduler.cancel();
-                    alarmScheduler.setAlarm();
-                    isScheduled=true;
+                if (!ps.isSlotAssigned(slot.getId()) && slot.getTimeBoxId()==timeBox.getId() ) {
+                    isScheduled=scheduleSingleStep(ps,goal, slot, calendar);
                     break;
-                }else{
-                    ps.setPendingStepStatus(PendingStep.PendingStepStatus.UNSCHEDULED);
-                    ps.save();
                 }
             }
             sessionCount++;
@@ -508,6 +485,31 @@ public class YodaCalendar {
         return isScheduled;
     }
 
+    private boolean scheduleSingleStep(PendingStep ps,Goal goal,Slot slot,Calendar calendar){
+        slot.setTime(slot.getTime() - ps.getTime());
+        slot.setGoalId(ps.getGoalId());
+        ps.setSlotId(slot.getId());
+        calendar.setTime(slot.getScheduleDate());
+        calendar.add(Calendar.HOUR_OF_DAY, slot.getWhen().getStartTime());
+        updateStep(ps, slot);
+        ps.setStepDate(calendar.getTime());
+        ps.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+        ps.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
+        slot.save();
+        ps.save();
+        goal.setDueDate(ps.getStepDate());
+        goal.save();
+        AlarmScheduler alarmScheduler = new AlarmScheduler(context);
+        alarmScheduler.setStepId(ps.getId());
+        alarmScheduler.setSubStepId(ps.getSubStepOf());
+        alarmScheduler.setPendingStepType(PendingStep.PendingStepType.SUB_STEP);
+        alarmScheduler.setStartTime(slot.getWhen().getStartTime());
+        alarmScheduler.setDuration(ps.getTime());
+        alarmScheduler.setAlarmDate(slot.getScheduleDate());
+        alarmScheduler.cancel();
+        alarmScheduler.setAlarm();
+        return  true;
+    }
     private void updateStep(PendingStep pendingStep, Slot slot) {
         if(pendingStep.getStepDate()!=null && pendingStep.getId()!=0){
             //change updated date,only if step date changed
@@ -543,6 +545,12 @@ public class YodaCalendar {
         if(temp!=null){
             pendingStepsList.addAll(temp);
         }
+        temp=pendingStep.getAll(PendingStep.PendingStepStatus.MISSED,
+                PendingStep.PendingStepDeleted.SHOW_NOT_DELETED,goalId);
+        if(temp!=null){
+            pendingStepsList.addAll(temp);
+        }
+
         Collections.sort(pendingStepsList,new SortPendingStepByPriority());
 
         if (pendingStepsList==null) return count;
@@ -560,26 +568,7 @@ public class YodaCalendar {
                 Slot slot = it.next();
                 slot.setTime(Constants.MAX_SLOT_DURATION);
                 if (ps.getTime() <= slot.getTime() && slot.getTimeBoxId() == timeBox.getId()) {
-                    slot.setTime(slot.getTime() - ps.getTime());
-                    slot.setGoalId(ps.getGoalId());
-                    ps.setSlotId(slot.getId());
-                    ps.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
-                    calendar.setTime(slot.getScheduleDate());
-                    calendar.add(Calendar.HOUR_OF_DAY, slot.getWhen().getStartTime());
-                    updateStep(ps, slot);
-                    ps.setStepDate(calendar.getTime());
-                    ps.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
-                    slot.save();
-                    ps.save();
-                    AlarmScheduler alarmScheduler = new AlarmScheduler(context);
-                    alarmScheduler.setStepId(ps.getId());
-                    alarmScheduler.setSubStepId(ps.getSubStepOf());
-                    alarmScheduler.setPendingStepType(PendingStep.PendingStepType.SUB_STEP);
-                    alarmScheduler.setStartTime(slot.getWhen().getStartTime());
-                    alarmScheduler.setDuration(ps.getTime());
-                    alarmScheduler.setAlarmDate(slot.getScheduleDate());
-                    alarmScheduler.cancel();
-                    alarmScheduler.setAlarm();
+                    scheduleSingleStep(ps,goal,slot,calendar);
                     it.remove();
                     break;
                 }
@@ -631,7 +620,7 @@ public class YodaCalendar {
         return isValid;
     }
 
-    public void removeTodaysPassedSlots(){
+    public  int removeTodaysPassedSlots(){
         //remove today's passed slots
         Calendar cal=Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -641,19 +630,8 @@ public class YodaCalendar {
         String  sqliteDate=CalendarUtils.getSqLiteDateFormat(cal);
         Date date=CalendarUtils.parseDate(sqliteDate);
 
-//       if (slots!=null) {
-//           Slot slot;
-//           Iterator<Slot> itSlots = slots.iterator();
-//           while (itSlots.hasNext()) {
-//               slot = itSlots.next();
-//               if (date.compareTo(slot.getScheduleDate()) == 0) {
-//                   itSlots.remove();
-//               } else {
-//                   break;
-//               }
-//           }
-//       }
-
+        //check for slots
+        int count=0;
         Set<TimeBoxWhen> whens=CalendarUtils.getTodaysPassedSlots();
         if(slots!=null && whens!=null) {
             for (TimeBoxWhen when : whens) {
@@ -663,10 +641,12 @@ public class YodaCalendar {
                     slot = itSlots.next();
                     if (date.compareTo(slot.getScheduleDate()) == 0 && (when == slot.getWhen())) {
                         itSlots.remove();
+                        count++;
                         break;
                     }
                 }
             }
         }
+        return  count;
     }
 }
