@@ -28,24 +28,27 @@ public class FilterUtility {
         String startDate="";
         String endDate="";
 
-        Calendar calStart=Calendar.getInstance();
-        Calendar calEnd=Calendar.getInstance();
-        calStart.set(Calendar.HOUR_OF_DAY, 0);calStart.set(Calendar.MINUTE, 0);calStart.set(Calendar.SECOND, 0);
-        calStart.set(Calendar.MILLISECOND,0);
-
-        calEnd.set(Calendar.HOUR_OF_DAY, 0);calEnd.set(Calendar.MINUTE, 0);calEnd.set(Calendar.SECOND, 0);
-        calEnd.set(Calendar.MILLISECOND,0);
-        calStart.set(Calendar.HOUR_OF_DAY,TimeBoxWhen.EARLY_MORNING.getStartTime());
-        calEnd.set(Calendar.HOUR_OF_DAY, TimeBoxWhen.LATE_NIGHT.getStartTime());
-        calEnd.add(Calendar.MINUTE, 179);
+        Calendar calStart;
+        Calendar calEnd;
+//        calStart.set(Calendar.HOUR_OF_DAY, 0);calStart.set(Calendar.MINUTE, 0);calStart.set(Calendar.SECOND, 0);
+//        calStart.set(Calendar.MILLISECOND,0);
+//
+//        calEnd.set(Calendar.HOUR_OF_DAY, 0);calEnd.set(Calendar.MINUTE, 0);calEnd.set(Calendar.SECOND, 0);
+//        calEnd.set(Calendar.MILLISECOND,0);
+//        calStart.set(Calendar.HOUR_OF_DAY,TimeBoxWhen.EARLY_MORNING.getStartTime());
+//        calEnd.set(Calendar.HOUR_OF_DAY, TimeBoxWhen.LATE_NIGHT.getStartTime());
+//        calEnd.add(Calendar.MINUTE, 179);
 
         switch (stepFilterType){
             case TODAY:
+                calStart=getStartCal();
+                calEnd=getEndCal();
                 startDate=CalendarUtils.getSqLiteDateFormat(calStart);
-
                 endDate=CalendarUtils.getSqLiteDateFormat(calEnd);
                 break;
             case THIS_WEEK:
+                calStart=getStartCal();
+                calEnd=getEndCal();
                 calStart.add(Calendar.DAY_OF_WEEK,1);
                 startDate=CalendarUtils.getSqLiteDateFormat(calStart);
 
@@ -53,7 +56,9 @@ public class FilterUtility {
                 endDate=CalendarUtils.getSqLiteDateFormat(calEnd);
                 break;
             case THIS_MONTH:
-                calStart.add(Calendar.WEEK_OF_MONTH,CalendarUtils.getWeek(calStart.get(Calendar.DATE))-1);
+                calStart=getStartCal();
+                calEnd=getEndCal();
+                calStart.add(Calendar.WEEK_OF_YEAR, 1);
                 calStart.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
                 startDate=CalendarUtils.getSqLiteDateFormat(calStart);
 
@@ -62,6 +67,8 @@ public class FilterUtility {
 
                 break;
             case THIS_QUARTER:
+                calStart=getStartCal();
+                calEnd=getEndCal();
                 calStart.set(Calendar.DAY_OF_MONTH, calStart.getActualMaximum(Calendar.DAY_OF_MONTH));
                 calStart.add(Calendar.DATE, 1);
                 startDate=CalendarUtils.getSqLiteDateFormat(calStart);
@@ -71,6 +78,8 @@ public class FilterUtility {
                 endDate=CalendarUtils.getSqLiteDateFormat(calEnd);
                 break;
             case THIS_YEAR:
+                calStart=getStartCal();
+                calEnd=getEndCal();
                 calStart.set(Calendar.MONTH, CalendarUtils.getLastMonthOfQuarter(calStart.get(Calendar.MONTH))+1);
                 calStart.set(Calendar.DATE,1);
                 startDate=CalendarUtils.getSqLiteDateFormat(calStart);
@@ -84,6 +93,24 @@ public class FilterUtility {
         criteria=" and  ( "+ MetaData.TablePendingStep.stepDate+ ">= '"+startDate+"'"+
                 " and "+MetaData.TablePendingStep.stepDate+" <= '"+endDate+"' )";
         return criteria;
+    }
+    private Calendar getStartCal(){
+        Calendar calStart=Calendar.getInstance();
+        calStart.setFirstDayOfWeek(Calendar.SUNDAY);
+        calStart.set(Calendar.HOUR_OF_DAY, 0);calStart.set(Calendar.MINUTE, 0);calStart.set(Calendar.SECOND, 0);
+        calStart.set(Calendar.MILLISECOND,0);
+        calStart.set(Calendar.HOUR_OF_DAY,TimeBoxWhen.EARLY_MORNING.getStartTime());
+        return calStart;
+    }
+
+    private Calendar getEndCal(){
+        Calendar calEnd=Calendar.getInstance();
+        calEnd.setFirstDayOfWeek(Calendar.SUNDAY);
+        calEnd.set(Calendar.HOUR_OF_DAY, 0);calEnd.set(Calendar.MINUTE, 0);calEnd.set(Calendar.SECOND, 0);
+        calEnd.set(Calendar.MILLISECOND, 0);
+        calEnd.set(Calendar.HOUR_OF_DAY, TimeBoxWhen.LATE_NIGHT.getStartTime());
+        calEnd.add(Calendar.MINUTE, 179);
+        return calEnd;
     }
     public Map<Long, List<PendingStep>> getPendingSteps(StepFilterType stepFilterType){
         Map<Long, List<PendingStep>> filteredSteps=new HashMap<>();
