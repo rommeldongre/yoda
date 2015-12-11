@@ -165,6 +165,7 @@
     <string name="label_comapny_info2">© Grey Labs, LLP. All Rights Reserved.</string>
     <string name="edtExcuseDialogueExcuse">Enter your excuse</string>
     <string name="btnLogDialogueExcuse">Log</string>
+    <string name="btnCancelDialogueExcuse">Cancel</string>
     <string name="titleDialogueExcuse">Log Excuse</string>
     <string name="tvAddNewGoalActHome">New Goal</string>
     <string name="titleActAutoSync">Auto Sync</string>

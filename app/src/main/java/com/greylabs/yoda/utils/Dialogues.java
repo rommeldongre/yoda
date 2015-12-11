@@ -99,6 +99,7 @@ public class Dialogues {
         llButtons = (LinearLayout) viewGroup.findViewById(R.id.llButtonsNowNotification);
         llExcuseLog = (LinearLayout) viewGroup.findViewById(R.id.llLogExcuseNowNotification);
         Button btnLogExcuse = (Button) viewGroup.findViewById(R.id.btnLogExcuseNowNotification);
+        Button btnCancelExcuse = (Button) viewGroup.findViewById(R.id.btnCancelExcuseNowNotification);
 
         tvGoalName.setText(goal.getNickName());
         tvStepName.setText(pendingStep.getNickName());
@@ -117,6 +118,7 @@ public class Dialogues {
 
         MyOnClickListener myOnClickListener = new MyOnClickListener();
         btnLogExcuse.setOnClickListener(myOnClickListener);
+        btnCancelExcuse.setOnClickListener(myOnClickListener);
         llDidIt.setOnClickListener(myOnClickListener);
         llDoingIt.setOnClickListener(myOnClickListener);
         llMissedIt.setOnClickListener(myOnClickListener);
@@ -214,6 +216,9 @@ public class Dialogues {
 //                }
                     dialog.dismiss();
                     break;
+                case R.id.btnCancelExcuseNowNotification:
+                    llButtons.setVisibility(View.VISIBLE);
+                    llExcuseLog.setVisibility(View.GONE);
             }
 //            if(startEnd== PendingStep.PendingStepStartEnd.END){
 //                checkExpiryOfStep();

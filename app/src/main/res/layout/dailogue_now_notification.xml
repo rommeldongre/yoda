@@ -200,14 +200,34 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:layout_marginTop="8dip" />
 
-                <Button
-                    android:id="@+id/btnLogExcuseNowNotification"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/btnLogDialogueExcuse"
-                    android:background="@color/ColorPrimary"
-                    android:textColor="@color/white"
-                    android:layout_marginTop="8dip" />
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btnCancelExcuseNowNotification"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/btnCancelDialogueExcuse"
+                        android:background="@color/ColorPrimary"
+                        android:textColor="@color/white"
+                        android:layout_marginTop="8dip"
+                        android:layout_weight="1"/>
+
+                    <Button
+                        android:id="@+id/btnLogExcuseNowNotification"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/btnLogDialogueExcuse"
+                        android:background="@color/ColorPrimary"
+                        android:textColor="@color/white"
+                        android:layout_marginTop="8dip"
+                        android:layout_weight="1"/>
+
+                </LinearLayout>
+
+
 
             </LinearLayout>
         </LinearLayout>
