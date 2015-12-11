@@ -419,9 +419,8 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                     stepArrayList.addAll(0, subStepsList);
                 } else if ( stepPrioritySpinner.getSelectedItem() != null && stepPrioritySpinner.getSelectedItem().equals(Constants.PENDING_STEP_PRIORITY_BOTTOM_MOST)) {
                     stepArrayList.addAll(subStepsList);
-                }else{
-                    stepArrayList.addAll(currentStep.getPriority(),subStepsList);
                 }
+
                 //}
                 //save all the steps in the array with priorities
                 for (int i = 0; i < stepArrayList.size(); i++) {
