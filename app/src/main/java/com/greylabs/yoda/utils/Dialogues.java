@@ -114,6 +114,8 @@ public class Dialogues {
 //                    if(Dialogues.this.startEnd== PendingStep.PendingStepStartEnd.END){
 //                        checkExpiryOfStep();
 //                    }
+                }else{
+                    checkBackInFiveMins();
                 }
             }
         });
@@ -171,16 +173,7 @@ public class Dialogues {
                     break;
                 case R.id.llDoingItNowNotification:
                     if (pendingStep != null) {
-                        pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.DOING);
-                        pendingStep.save();
-                        Logger.d("TAG", "Alarm Scheduler : " + alarmScheduler);
-                        if (alarmScheduler == null)
-                            alarmScheduler = new AlarmScheduler(context);
-                        else
-                            alarmScheduler.initContext(context);
-                        alarmScheduler.setStepId(pendingStep.getId());
-                        alarmScheduler.setAlarmDate(new Date());
-                        alarmScheduler.postponeAlarm(5);
+                      checkBackInFiveMins();
                     }
                     dialog.dismiss();
                     break;
@@ -224,5 +217,18 @@ public class Dialogues {
 //                checkExpiryOfStep();
 //            }
         }
+    }
+
+    private void checkBackInFiveMins(){
+        pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.DOING);
+        pendingStep.save();
+        Logger.d("TAG", "Alarm Scheduler : " + alarmScheduler);
+        if (alarmScheduler == null)
+            alarmScheduler = new AlarmScheduler(context);
+        else
+            alarmScheduler.initContext(context);
+        alarmScheduler.setStepId(pendingStep.getId());
+        alarmScheduler.setAlarmDate(new Date());
+        alarmScheduler.postponeAlarm(5);
     }
 }
