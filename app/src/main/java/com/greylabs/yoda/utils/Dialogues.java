@@ -3,6 +3,7 @@ package com.greylabs.yoda.utils;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Handler;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,8 @@ import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.scheduler.AlarmScheduler;
 import com.greylabs.yoda.scheduler.YodaCalendar;
+import com.greylabs.yoda.threads.CalendarUpdateAsyncThread;
+import com.greylabs.yoda.threads.InitCalendarAsyncTask;
 
 import java.util.Date;
 
@@ -64,22 +67,21 @@ public class Dialogues {
 
         if (caller.equals(Constants.ALARM_SERVICE) && Dialogues.this.startEnd == PendingStep.PendingStepStartEnd.END) {
             if ((pendingStep.getPendingStepStatus() == PendingStep.PendingStepStatus.TODO ||
-                    pendingStep.getPendingStepStatus() == PendingStep.PendingStepStatus.DOING) &&
-                    pendingStep.isExpire() == PendingStep.PendingStepExpire.EXPIRE) {
-                //delete or mark step as deleted
-                pendingStep.freeSlot();
-                String notesString = pendingStep.getNotes();
-                if (notesString != null)
-                    notesString = notesString + "\n Expired";
-                else
-                    notesString = "Expired";
-                pendingStep.setNotes(notesString);
-                pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
-                pendingStep.setSlotId(0);
-                pendingStep.cancelAlarm();
-                pendingStep.save();
+                    pendingStep.getPendingStepStatus() == PendingStep.PendingStepStatus.DOING)) {
+                if(   pendingStep.isExpire() == PendingStep.PendingStepExpire.EXPIRE) {
+                    pendingStep.freeSlot();
+                    String notesString = pendingStep.getNotes();
+                    if (notesString != null)
+                        notesString = notesString + "\n Expired";
+                    else
+                        notesString = "Expired";
+                    pendingStep.setNotes(notesString);
+                    pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
+                    pendingStep.setSlotId(0);
+                    pendingStep.cancelAlarm();
+                    pendingStep.save();
+                }
             }
-
             return;
         }
         // custom dialog
