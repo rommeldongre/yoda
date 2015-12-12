@@ -203,11 +203,11 @@ public class YodaCalendar {
         if(day.getDate().compareTo(cal.getTime())>0){
             Logger.d(TAG, "First date in yoda calendar is greater than current date");
             //first entry in the Calendar DB  is greater than  current
-            //String startDate=CalendarUtils.getSqLiteDateFormat(cal);
-            cal1.setTime(day.getDate());
-            //String endDate=CalendarUtils.getSqLiteDateFormat(cal1);
-            //daysDeleted=day.deleteNextDays(startDate, endDate);
-            int numberOfDays=cal1.get(Calendar.DAY_OF_YEAR)-cal.get(Calendar.DAY_OF_YEAR);
+//            String startDate=CalendarUtils.getSqLiteDateFormat(cal);
+              cal1.setTime(day.getDate());
+//            String endDate=CalendarUtils.getSqLiteDateFormat(cal1);
+//            daysDeleted=day.deleteNextDays(startDate, endDate);
+            int numberOfDays=CalendarUtils.getDaysCount(cal.getTime(),cal1.getTime());//cal1.get(Calendar.DAY_OF_YEAR)-cal.get(Calendar.DAY_OF_YEAR);
             Logger.d(TAG, "First date:" + day.getDate().toString() + " and Current date:" + cal.getTime().toString() + " " +
                     " and their Difference:" + numberOfDays);
             temp.setTime(cal.getTime());
@@ -532,7 +532,7 @@ public class YodaCalendar {
         Calendar calendar=Calendar.getInstance();
         Goal goal=new Goal(context).get(goalId);
         slots=slot.getAll(timeBox.getId());
-        if(slots==null | slots.size()==0) {
+        if(slots==null || slots.size()==0) {
            return 0;
         }
         removeTodaysPassedSlots();
