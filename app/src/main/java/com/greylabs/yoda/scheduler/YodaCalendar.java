@@ -259,7 +259,7 @@ public class YodaCalendar {
             cal.setTime(days.get(days.size() - 1).getDate());
             cal.add(Calendar.DATE, 1);
             temp.setTime(cal1.getTime());
-            for(int i=1;i<=numberOfDays;i++){
+            for(int i=1;i<=daysDeleted;i++){
                 dayOfWeek=cal.get(Calendar.DAY_OF_WEEK);
                 weekOfMonth= CalendarUtils.getWeek(cal.get(Calendar.DATE));
                 monthOfYear= cal.get(Calendar.MONTH);
@@ -532,6 +532,9 @@ public class YodaCalendar {
         Calendar calendar=Calendar.getInstance();
         Goal goal=new Goal(context).get(goalId);
         slots=slot.getAll(timeBox.getId());
+        if(slots==null | slots.size()==0) {
+           return 0;
+        }
         removeTodaysPassedSlots();
         PendingStep pendingStep=new PendingStep(context);
         List<PendingStep> pendingStepsList=new ArrayList<>();
