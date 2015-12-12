@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
     <RelativeLayout
         android:id="@+id/rlQuickStartActQuickStart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
         android:layout_margin="5dp"
-        android:padding="10dp"
+        android:layout_weight="1"
         android:background="@color/ColorPrimary"
-        android:orientation="horizontal" >
+        android:clickable="true"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
         <Button
             android:id="@+id/btnQuickStartActQuickStart"
             android:layout_width="wrap_content"
@@ -25,29 +28,29 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_toRightOf="@id/btnQuickStartActQuickStart"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:layout_centerVertical="true" >
+            android:layout_marginRight="10dp"
+            android:layout_toRightOf="@id/btnQuickStartActQuickStart"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
                 android:text="@string/btnQuickStartActQuickStart"
-                android:textSize="30sp"
                 android:textColor="@color/white"
-                android:layout_marginLeft="20dp" />
+                android:textSize="30sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:text="@string/subtitleQuickStartActQuickStart"
-                android:layout_marginTop="10dp"
+                android:layout_marginLeft="20dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginLeft="20dp" />
+                android:layout_marginTop="10dp"
+                android:text="@string/subtitleQuickStartActQuickStart"
+                android:textColor="@color/white" />
         </LinearLayout>
     </RelativeLayout>
 
@@ -55,43 +58,44 @@
         android:id="@+id/rlNewStepActQuickStart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
         android:layout_margin="5dp"
-        android:padding="10dp"
-        android:background="@color/background_btnnewstepactquickstart" >
+        android:layout_weight="1"
+        android:background="@color/background_btnnewstepactquickstart"
+        android:clickable="true"
+        android:padding="10dp">
 
         <Button
             android:id="@+id/btnNewStepActQuickStart"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:drawableRight="@drawable/ic_btn_new_step_act_quick_start"
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
-            android:background="@color/transparent" />
+            android:background="@color/transparent"
+            android:drawableRight="@drawable/ic_btn_new_step_act_quick_start" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
             android:layout_toLeftOf="@id/btnNewStepActQuickStart"
-            android:layout_centerVertical="true" >
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/btnNewStepActQuickStart"
-                android:textSize="30sp"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:textSize="30sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:text="@string/subtitleNewStepActQuickStart"
+                android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginRight="10dp" />
+                android:text="@string/subtitleNewStepActQuickStart"
+                android:textColor="@color/white" />
         </LinearLayout>
     </RelativeLayout>
 
@@ -100,11 +104,13 @@
         android:id="@+id/rlImportTaskActQuickStart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
         android:layout_margin="5dp"
-        android:padding="10dp"
+        android:layout_weight="1"
         android:background="@color/background_btnimporttaskactquickstart"
-        android:orientation="horizontal" >
+        android:clickable="true"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
         <Button
             android:id="@+id/btnImportTaskActQuickStart"
             android:layout_width="wrap_content"
@@ -118,29 +124,29 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:layout_alignParentRight="true"
-            android:layout_toRightOf="@id/btnImportTaskActQuickStart"
-            android:layout_marginRight="10dp"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="10dp"
-            android:layout_centerVertical="true">
+            android:layout_marginRight="10dp"
+            android:layout_toRightOf="@id/btnImportTaskActQuickStart"
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
                 android:text="@string/btnImportTaskActQuickStart"
-                android:textSize="30sp"
                 android:textColor="@color/white"
-                android:layout_marginLeft="20dp" />
+                android:textSize="30sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/white"
-                android:text="@string/subtitleImportTaskActQuickStart"
-                android:layout_marginTop="10dp"
+                android:layout_marginLeft="20dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginLeft="20dp" />
+                android:layout_marginTop="10dp"
+                android:text="@string/subtitleImportTaskActQuickStart"
+                android:textColor="@color/white" />
         </LinearLayout>
     </RelativeLayout>
 </LinearLayout>
