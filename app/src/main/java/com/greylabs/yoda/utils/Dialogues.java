@@ -115,7 +115,8 @@ public class Dialogues {
 //                        checkExpiryOfStep();
 //                    }
                 }else{
-                    checkBackInFiveMins();
+                    if(new Date().compareTo(pendingStep.getStepDate())<0)
+                       checkBackInFiveMins();
                 }
             }
         });

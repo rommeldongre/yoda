@@ -551,6 +551,11 @@ public class YodaCalendar {
         temp=pendingStep.getAll(PendingStep.PendingStepStatus.MISSED,
                 PendingStep.PendingStepDeleted.SHOW_NOT_DELETED,goalId);
         if(temp!=null){
+            Iterator<PendingStep> it=temp.iterator();
+            if(it.hasNext()){
+                if(it.next().isExpire()== PendingStep.PendingStepExpire.EXPIRE)
+                    it.remove();
+            }
             pendingStepsList.addAll(temp);
         }
 
