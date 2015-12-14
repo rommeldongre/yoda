@@ -104,8 +104,8 @@ public class ActSettingsGoogle extends AppCompatActivity implements View.OnClick
         GoogleAccount googleAccount = new GoogleAccount(this);
         Account[] accounts = googleAccount.getAccounts(this, GoogleAccount.ACCOUNT_TYPE);
         ArrayList<String> emailIdsArrayList = new ArrayList<>();
-        if(accounts != null){
-            accountArrayList = new ArrayList<Account>(Arrays.asList(accounts));
+        if(accounts.length>0){
+            accountArrayList = new ArrayList<>(Arrays.asList(accounts));
             emailIdsArrayList = new ArrayList();
             for(Account account : accountArrayList){
                 emailIdsArrayList.add(account.name);
@@ -115,7 +115,7 @@ public class ActSettingsGoogle extends AppCompatActivity implements View.OnClick
             emailIdsArrayList.add("Please add an Account first");
             disableAllViews();
         }
-        accountSpinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item,emailIdsArrayList);
+        accountSpinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item,emailIdsArrayList);
         accountSpinner.setAdapter(accountSpinnerAdapter);
         if(isAccountPresent && prefs.getDefaultAccountEmailId()!=null){
             // set selected spinner item from prefs
