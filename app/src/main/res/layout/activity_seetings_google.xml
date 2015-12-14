@@ -1,86 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <include
         android:id="@+id/toolBarActSettingsGoogle"
-        layout="@layout/tool_bar"/>
+        layout="@layout/tool_bar" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_margin="10dp" >
+                android:layout_margin="10dp"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="@string/tvGoogleAccountActSettingsGoogle"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                    android:textStyle="bold"
-                    android:text="@string/tvGoogleAccountActSettingsGoogle" />
+                    android:textStyle="bold" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
-                    android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
                     android:background="@color/button_material_light" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp">
+                    android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:src="@drawable/ic_google"/>
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_google" />
 
                     <Spinner
                         android:id="@+id/spinnerAccountActSettingsGoogle"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_margin="10dp">
+                android:layout_margin="10dp"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="@string/tvAutoSyncGoogleActSettingsGoogle"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                    android:textStyle="bold"
-                    android:text="@string/tvAutoSyncGoogleActSettingsGoogle" />
+                    android:textStyle="bold" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
-                    android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
                     android:background="@color/button_material_light" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
                     android:paddingLeft="30dp"
                     android:paddingRight="30dp">
 
@@ -103,8 +106,8 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
                     android:paddingLeft="30dp"
                     android:paddingRight="30dp">
 
@@ -121,46 +124,46 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        fab:fab_size="mini"
-                        fab:fab_icon="@drawable/ic_btn_auto_sync_act_home"
                         fab:fab_colorNormal="@color/ColorPrimary"
-                        fab:fab_colorPressed="@color/ColorPrimaryDark" />
+                        fab:fab_colorPressed="@color/ColorPrimaryDark"
+                        fab:fab_icon="@drawable/ic_btn_auto_sync_act_home"
+                        fab:fab_size="mini" />
 
                     <ProgressBar
+                        android:id="@+id/pbSyncNowWithGoogleActSettingsGoogle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/pbSyncNowWithGoogleActSettingsGoogle"
-                        android:layout_centerVertical="true"
                         android:layout_alignParentRight="true"
-                        android:visibility="gone"/>
+                        android:layout_centerVertical="true"
+                        android:visibility="gone" />
                 </RelativeLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_margin="10dp">
+                android:layout_margin="10dp"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="@string/tvImportFromGTasksActSettingsGoogle"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                    android:textStyle="bold"
-                    android:text="@string/tvImportFromGTasksActSettingsGoogle" />
+                    android:textStyle="bold" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
-                    android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
                     android:background="@color/button_material_light" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp"
                     android:paddingLeft="30dp"
                     android:paddingRight="30dp">
 
@@ -177,52 +180,52 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
-                        fab:fab_size="mini"
-                        fab:fab_icon="@drawable/ic_btn_import_tasks_act_home"
                         fab:fab_colorNormal="@color/ColorPrimary"
-                        fab:fab_colorPressed="@color/ColorPrimaryDark" />
+                        fab:fab_colorPressed="@color/ColorPrimaryDark"
+                        fab:fab_icon="@drawable/ic_btn_import_tasks_act_home"
+                        fab:fab_size="mini" />
 
                     <ProgressBar
+                        android:id="@+id/pbImportNowFromGTasksActSettingsGoogle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/pbImportNowFromGTasksActSettingsGoogle"
-                        android:layout_centerVertical="true"
                         android:layout_alignParentRight="true"
-                        android:visibility="gone"/>
+                        android:layout_centerVertical="true"
+                        android:visibility="gone" />
                 </RelativeLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_margin="10dp">
+                android:layout_margin="10dp"
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="@string/tvExportToCalActSettingsGoogle"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                    android:textStyle="bold"
-                    android:text="@string/tvExportToCalActSettingsGoogle" />
+                    android:textStyle="bold" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
-                    android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
                     android:background="@color/button_material_light" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical" >
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
+                        android:layout_marginBottom="5dp"
                         android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp">
+                        android:orientation="vertical">
 
                         <TextView
                             android:layout_width="match_parent"
@@ -239,8 +242,8 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp"
+                        android:layout_marginTop="5dp"
                         android:paddingLeft="30dp"
                         android:paddingRight="30dp">
 
@@ -249,7 +252,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:layout_centerVertical="true"
-                            android:text="@string/btnExportNowToGoogleCalActSettingsGoogle"/>
+                            android:text="@string/btnExportNowToGoogleCalActSettingsGoogle" />
 
                         <com.greylabs.yoda.views.MyFloatingActionButton
                             android:id="@+id/btnExportNowToGoogleCalActSettingsGoogle"
@@ -257,27 +260,23 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
                             android:layout_centerVertical="true"
-                            fab:fab_size="mini"
-                            fab:fab_icon="@drawable/ic_btn_export_tasks_act_home"
                             fab:fab_colorNormal="@color/ColorPrimary"
-                            fab:fab_colorPressed="@color/ColorPrimaryDark" />
+                            fab:fab_colorPressed="@color/ColorPrimaryDark"
+                            fab:fab_icon="@drawable/ic_btn_export_tasks_act_home"
+                            fab:fab_size="mini" />
 
                         <ProgressBar
+                            android:id="@+id/pbExportNowToGoogleCalActSettingsGoogle"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/pbExportNowToGoogleCalActSettingsGoogle"
-                            android:layout_centerVertical="true"
                             android:layout_alignParentRight="true"
-                            android:visibility="gone"/>
+                            android:layout_centerVertical="true"
+                            android:visibility="gone" />
                     </RelativeLayout>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
-</LinearLayout>
-<!--<android.support.v7.widget.CardView-->
-<!--android:layout_width="match_parent"-->
-<!--android:layout_height="wrap_content"-->
-<!--android:layout_margin="10dp" >-->
+</LinearLayout><!--<android.support.v7.widget.CardView--><!--android:layout_width="match_parent"--><!--android:layout_height="wrap_content"--><!--android:layout_margin="10dp" >-->
 
-<!--</android.support.v7.widget.CardView>-->
+    <!--</android.support.v7.widget.CardView>-->
