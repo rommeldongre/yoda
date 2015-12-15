@@ -183,6 +183,7 @@
     <string name="msgCannotSaveTimeBoxWithUpdatedValues">Cannot  save TimeBox because this timebox is attached to a Goal and all present Steps in that Goal will not fit after update.Try updating  so that  TimeBox will  have more time Slots.</string>
     <string name="tvErrorViewActGoogleSettings">No Google account found. Please add one.</string>
     <string name="btnAddAccountFlipperEmptyViewActGoogleSettings">Add Account</string>
+    <string name="msgNoAccountActQuickStart">No Google account found. Please add one.</string>
 
     <string-array name="arrayStepTypeActAddNewStep">
         <item>Single Step</item>

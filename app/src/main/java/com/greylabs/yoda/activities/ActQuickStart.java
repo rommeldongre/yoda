@@ -1,6 +1,8 @@
 package com.greylabs.yoda.activities;
 
+import android.accounts.Account;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -45,7 +47,7 @@ public class ActQuickStart extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onResume() {
         super.onResume();
-        if(prefs.isOptionFromActQuickStartSelected()==true){
+        if (prefs.isOptionFromActQuickStartSelected() == true) {
             startActivity(new Intent(ActQuickStart.this, ActHome.class));
             this.finish();
         }
@@ -64,40 +66,49 @@ public class ActQuickStart extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        switch(v.getId()){
-            case R.id.rlQuickStartActQuickStart :
+        switch (v.getId()) {
+            case R.id.rlQuickStartActQuickStart:
                 new QuickStartAsyncTask(this, new MyHandler(this)).execute();
                 break;
 
-            case R.id.rlNewStepActQuickStart :
+            case R.id.rlNewStepActQuickStart:
                 new NewStepAsyncTask(this, new MyHandler(this)).execute();
                 break;
 
-            case R.id.rlImportTaskActQuickStart :
-                if(ConnectionUtils.isNetworkAvailable(this)) {
+            case R.id.rlImportTaskActQuickStart:
+                if (ConnectionUtils.isNetworkAvailable(this)) {
                     final int connectionStatusCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
                     if (GooglePlayServicesUtil.isUserRecoverableError(connectionStatusCode)) {
                         GooglePlayServicesUtil.getErrorDialog(connectionStatusCode, this, 0).show();
-                    }else {
+                    } else {
                         //otherwise doImport
                         final GoogleAccount googleAccount = new GoogleAccount(this);
-                        googleAccount.chooseAccountDialog(GoogleAccount.ACCOUNT_TYPE, "Choose Account", new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                                prefs.setDefaultAccountEmailId(googleAccount.getUsers().get(position));
-                                prefs.setDefaultAccountType(AccountType.GOOGLE.ordinal());
-                                googleAccount.dismissChooseAccountDialog();
-                                new ImportTaskAsyncThread(ActQuickStart.this, new MyHandler(contextActQuickStart)).execute();
-                            }
-                        }, new DialogInterface.OnDismissListener() {
-                            @Override
-                            public void onDismiss(DialogInterface dialogInterface) {
+                        Account[] accounts = googleAccount.getAccounts(this, GoogleAccount.ACCOUNT_TYPE);
+                        if (accounts.length > 0) {
+                            googleAccount.chooseAccountDialog(GoogleAccount.ACCOUNT_TYPE, "Choose Account", new AdapterView.OnItemClickListener() {
+                                @Override
+                                public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                                    prefs.setDefaultAccountEmailId(googleAccount.getUsers().get(position));
+                                    prefs.setDefaultAccountType(AccountType.GOOGLE.ordinal());
+                                    googleAccount.dismissChooseAccountDialog();
+                                    new ImportTaskAsyncThread(ActQuickStart.this, new MyHandler(contextActQuickStart)).execute();
+                                }
+                            }, new DialogInterface.OnDismissListener() {
+                                @Override
+                                public void onDismiss(DialogInterface dialogInterface) {
 //                            new ImportTaskAsyncThread(ActQuickStart.this, new MyHandler()).execute();
-                            }
-                        });
+                                }
+                            });
+                        } else {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//                            builder.setTitle("Alert");
+                            builder.setMessage(getString(R.string.msgNoAccountActQuickStart));
+                            builder.setPositiveButton("Ok", null);
+                            builder.create().show();
+                        }
                     }
-                }else{
-                    ConnectionUtils.showNetworkNotAvailableDialog(this,getString(R.string.msgNoNetworkConnectionActQuiCkStart));
+                } else {
+                    ConnectionUtils.showNetworkNotAvailableDialog(this, getString(R.string.msgNoNetworkConnectionActQuiCkStart));
                 }
                 break;
         }
@@ -114,7 +125,7 @@ public class ActQuickStart extends AppCompatActivity implements View.OnClickList
         @Override
         public void handleMessage(Message msg) {
             prefs.setOptionFromActQuickStartSelected(true);
-            ((Activity)context).finish();
+            ((Activity) context).finish();
             startActivity(new Intent(ActQuickStart.this, ActHome.class));
         }
     }
