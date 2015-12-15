@@ -440,7 +440,8 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                     //yodaCalendar.rescheduleSteps(prefs.getStretchGoalId());
                 } else if ( stepPrioritySpinner.getSelectedItem() != null
                         && stepPrioritySpinner.getSelectedItem().toString().equals(Constants.TEXT_PRIORITY_SPINNER_BOTTOM_MOST)){
-                    yodaCalendar.scheduleStep(currentStep);
+                   // yodaCalendar.scheduleStep(currentStep);
+                    yodaCalendar.rescheduleSteps(goalList.get(goalSpinner.getSelectedItemPosition()).getId());
                 }else{
                     yodaCalendar.rescheduleSteps(goalList.get(goalSpinner.getSelectedItemPosition()).getId());
                 }
