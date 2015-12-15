@@ -20,6 +20,7 @@ public class MyArcProgress extends View {
     float padding;
     private Paint paint;
     protected Paint textPaint;
+    protected Paint goalTextPaint;
     private RectF rectF;
     private RectF arcRectF;
     private float strokeWidth;
@@ -27,6 +28,7 @@ public class MyArcProgress extends View {
     private float bottomTextSize;
     private String bottomText;
     private float textSize;
+    private float goalTextSize;
     private int textColor;
     private int progress;
     private int max;
@@ -119,9 +121,13 @@ public class MyArcProgress extends View {
 
     protected void initPainters() {
         this.textPaint = new TextPaint();
+        this.goalTextPaint = new TextPaint();
         this.textPaint.setColor(this.textColor);
+        this.goalTextPaint.setColor(this.textColor);
         this.textPaint.setTextSize(this.textSize);
+        this.goalTextPaint.setTextSize(this.goalTextSize);
         this.textPaint.setAntiAlias(true);
+        this.goalTextPaint.setAntiAlias(true);
         this.paint = new Paint();
         this.paint.setColor(this.default_unfinished_color);
         this.paint.setAntiAlias(true);
@@ -203,6 +209,10 @@ public class MyArcProgress extends View {
     public void setTextSize(float textSize) {
         this.textSize = textSize;
         this.invalidate();
+    }
+
+    public void setGoalTextSize(float goalTextSize) {
+        this.goalTextSize = goalTextSize;
     }
 
     public int getTextColor() {
@@ -352,7 +362,9 @@ public class MyArcProgress extends View {
         float bottomTextBaseline;
         if(!TextUtils.isEmpty(stepName)) {
             this.textPaint.setColor(this.textColor);
+            this.goalTextPaint.setColor(this.textColor);
             this.textPaint.setTextSize(this.textSize);
+            this.goalTextPaint.setTextSize(this.goalTextSize);
             bottomTextBaseline = this.textPaint.descent() + this.textPaint.ascent();
             float textBaseline = ((float)this.getHeight() - bottomTextBaseline) / 3.0F;
             canvas.drawText(stepName, ((float)this.getWidth() - this.textPaint.measureText(stepName)) / 2.0F, textBaseline, this.textPaint);
@@ -360,7 +372,7 @@ public class MyArcProgress extends View {
             if(goalName==null)
                 goalName="";
 
-            canvas.drawText(goalName, ((float)this.getWidth() - this.textPaint.measureText(goalName)) / 2.0F, this.arcRectF.height()*13/16, this.textPaint);
+            canvas.drawText(goalName, ((float)this.getWidth() - this.goalTextPaint.measureText(goalName)) / 2.0F, this.arcRectF.height()*13/16, this.goalTextPaint);
         }
 
         if(!TextUtils.isEmpty(this.getBottomText())) {

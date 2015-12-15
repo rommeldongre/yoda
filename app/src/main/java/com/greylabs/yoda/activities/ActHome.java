@@ -189,6 +189,7 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
 
         // check for string lengths first and strip accordingly
         arcTotalProgress.setTextSize(50);
+        arcTotalProgress.setGoalTextSize(50);
         arcTotalProgress.setTextColor(getResources().getColor(R.color.white));
         if(nowPendingStep==null || nowPendingStep.getNickName()==null) {
             arcTotalProgress.setStepName("No Step");
