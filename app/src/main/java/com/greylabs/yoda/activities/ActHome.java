@@ -193,7 +193,7 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
 //        arcTotalProgress.setArcAngle(330);
 
         // check for string lengths first and strip accordingly
-        arcTotalProgress.setTextSize(20);
+        arcTotalProgress.setTextSize(50);
         arcTotalProgress.setTextColor(getResources().getColor(R.color.white));
         if(nowPendingStep==null || nowPendingStep.getNickName()==null) {
             arcTotalProgress.setStepName("No Step");
@@ -202,7 +202,7 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
         }
         arcTotalProgress.setGoalName(nowGoal.getNickName());
 
-        arcTotalProgress.setBottomTextSize(30);
+        arcTotalProgress.setBottomTextSize(50);
         arcTotalProgress.setBottomText(String.valueOf(nowGoal.getRemainingStepCount()));
 //        arcTotalProgress.setSuffixTextSize(float suffixTextSize);
 //        arcTotalProgress.setMax(int max);

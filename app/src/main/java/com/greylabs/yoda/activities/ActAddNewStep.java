@@ -439,7 +439,7 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                         //yodaCalendar.rescheduleSteps(prefs.getStretchGoalId());
                     } else if ( stepPrioritySpinner.getSelectedItem() != null
                             && stepPrioritySpinner.getSelectedItem().toString().equals(Constants.TEXT_PRIORITY_SPINNER_BOTTOM_MOST)){
-                        yodaCalendar.scheduleStep(currentStep);
+                        isScheduled = yodaCalendar.scheduleStep(currentStep);
                     }else{
                         yodaCalendar.rescheduleSteps(goalList.get(goalSpinner.getSelectedItemPosition()).getId());
                     }
@@ -455,7 +455,7 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                             ActAddNewStep.this.finish();
                         }
                     });
-                    isScheduled = true;
+                    //isScheduled = true;
                     Date stepDate = new Date();
                     if (subStepsList != null && subStepsList.size() > 0 && (currentStep.getPendingStepType() == PendingStep.PendingStepType.SPLIT_STEP ||
                             currentStep.getPendingStepType() == PendingStep.PendingStepType.SERIES_STEP)) {
@@ -463,9 +463,15 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                     } else {
                         stepDate = currentStep.getStepDate();
                     }
-                    alertStepAdded.setMessage("The Step \'"+currentStep.getNickName()+
-                            "\' has been scheduled with a start date of \'" +
-                            CalendarUtils.getOnlyFormattedDate(stepDate)+"\'");
+                    String message;
+                    if (isScheduled == true){
+                        message = "The entered step is currently unscheduled due to lack of time. It will be scheduled whenever a slot is free";
+                    }else {
+                        message = "The Step \'"+currentStep.getNickName()+
+                                "\' has been scheduled with a start date of \'" +
+                                CalendarUtils.getOnlyFormattedDate(stepDate)+"\'";
+                    }
+                    alertStepAdded.setMessage(message);
                     alertStepAdded.setCancelable(false);
                     alertStepAdded.show();
                 }
