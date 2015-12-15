@@ -327,7 +327,7 @@ public class MyArcProgress extends View {
         Paint paintLine = new Paint();
         paintLine.setColor(this.dividerColor);
         paintLine.setStrokeWidth(2);
-        canvas.drawLine(this.arcRectF.left + this.getStrokeWidth(), this.arcRectF.centerY(), this.arcRectF.right - this.getStrokeWidth(), this.arcRectF.centerY(), paintLine);
+        canvas.drawLine(this.arcRectF.left + this.getStrokeWidth(), this.arcRectF.height()*5/8, this.arcRectF.right - this.getStrokeWidth(), this.arcRectF.height()*5/8, paintLine);
 
         // two arcs
         this.paint.setColor(this.unfinishedStrokeColor);
@@ -359,7 +359,8 @@ public class MyArcProgress extends View {
             textBaseline = ((float)this.getHeight() - bottomTextBaseline) / 1.5F;
             if(goalName==null)
                 goalName="";
-            canvas.drawText(goalName, ((float)this.getWidth() - this.textPaint.measureText(goalName)) / 2.0F, textBaseline, this.textPaint);
+
+            canvas.drawText(goalName, ((float)this.getWidth() - this.textPaint.measureText(goalName)) / 2.0F, this.arcRectF.height()*13/16, this.textPaint);
         }
 
         if(!TextUtils.isEmpty(this.getBottomText())) {
