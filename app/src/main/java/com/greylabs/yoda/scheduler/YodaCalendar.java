@@ -203,11 +203,11 @@ public class YodaCalendar {
         if(day.getDate().compareTo(cal.getTime())>0){
             Logger.d(TAG, "First date in yoda calendar is greater than current date");
             //first entry in the Calendar DB  is greater than  current
-            //String startDate=CalendarUtils.getSqLiteDateFormat(cal);
-            cal1.setTime(day.getDate());
-            //String endDate=CalendarUtils.getSqLiteDateFormat(cal1);
-            //daysDeleted=day.deleteNextDays(startDate, endDate);
-            int numberOfDays=cal1.get(Calendar.DAY_OF_YEAR)-cal.get(Calendar.DAY_OF_YEAR);
+//            String startDate=CalendarUtils.getSqLiteDateFormat(cal);
+              cal1.setTime(day.getDate());
+//            String endDate=CalendarUtils.getSqLiteDateFormat(cal1);
+//            daysDeleted=day.deleteNextDays(startDate, endDate);
+            int numberOfDays=CalendarUtils.getDaysCount(cal.getTime(),cal1.getTime());//cal1.get(Calendar.DAY_OF_YEAR)-cal.get(Calendar.DAY_OF_YEAR);
             Logger.d(TAG, "First date:" + day.getDate().toString() + " and Current date:" + cal.getTime().toString() + " " +
                     " and their Difference:" + numberOfDays);
             temp.setTime(cal.getTime());
@@ -259,7 +259,7 @@ public class YodaCalendar {
             cal.setTime(days.get(days.size() - 1).getDate());
             cal.add(Calendar.DATE, 1);
             temp.setTime(cal1.getTime());
-            for(int i=1;i<=numberOfDays;i++){
+            for(int i=1;i<=daysDeleted;i++){
                 dayOfWeek=cal.get(Calendar.DAY_OF_WEEK);
                 weekOfMonth= CalendarUtils.getWeek(cal.get(Calendar.DATE));
                 monthOfYear= cal.get(Calendar.MONTH);
@@ -467,7 +467,7 @@ public class YodaCalendar {
             Iterator<Slot> it = slots.iterator();
             while (it.hasNext()) {
                 Slot slot = it.next();
-                if (!ps.isSlotAssigned(slot.getId()) && slot.getTimeBoxId()==timeBox.getId()  ) {
+                if (!ps.isSlotAssigned(slot.getId()) && slot.getTimeBoxId()==timeBox.getId() ) {
                     isScheduled=scheduleSingleStep(ps,goal, slot, calendar);
                     break;
                 }
@@ -493,6 +493,7 @@ public class YodaCalendar {
         calendar.add(Calendar.HOUR_OF_DAY, slot.getWhen().getStartTime());
         updateStep(ps, slot);
         ps.setStepDate(calendar.getTime());
+        ps.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         ps.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
         slot.save();
         ps.save();
@@ -531,6 +532,9 @@ public class YodaCalendar {
         Calendar calendar=Calendar.getInstance();
         Goal goal=new Goal(context).get(goalId);
         slots=slot.getAll(timeBox.getId());
+        if(slots==null || slots.size()==0) {
+           return 0;
+        }
         removeTodaysPassedSlots();
         PendingStep pendingStep=new PendingStep(context);
         List<PendingStep> pendingStepsList=new ArrayList<>();
@@ -544,6 +548,17 @@ public class YodaCalendar {
         if(temp!=null){
             pendingStepsList.addAll(temp);
         }
+        temp=pendingStep.getAll(PendingStep.PendingStepStatus.MISSED,
+                PendingStep.PendingStepDeleted.SHOW_NOT_DELETED,goalId);
+        if(temp!=null){
+            Iterator<PendingStep> it=temp.iterator();
+            if(it.hasNext()){
+                if(it.next().isExpire()== PendingStep.PendingStepExpire.EXPIRE)
+                    it.remove();
+            }
+            pendingStepsList.addAll(temp);
+        }
+
         Collections.sort(pendingStepsList,new SortPendingStepByPriority());
 
         if (pendingStepsList==null) return count;

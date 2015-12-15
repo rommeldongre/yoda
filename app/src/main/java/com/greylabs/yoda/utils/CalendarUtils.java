@@ -32,7 +32,7 @@ public class CalendarUtils {
         return  DateTime.parseRfc3339(rfcTimestamp.substring(0,23)+"Z");
     }
     public static String getRFCTimestampToString(DateTime date){
-       return date.toStringRfc3339();
+        return date.toStringRfc3339();
     }
     public static DateTime getUtcDate(DateTime date){
         String ISO_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
@@ -40,7 +40,7 @@ public class CalendarUtils {
         SimpleDateFormat isoFormatter = new SimpleDateFormat(ISO_FORMAT);
         isoFormatter.setTimeZone(utc);
         try {
-             return new DateTime(isoFormatter.parse(CalendarUtils.getRFCTimestampToString(date)));
+            return new DateTime(isoFormatter.parse(CalendarUtils.getRFCTimestampToString(date)));
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -236,4 +236,21 @@ public class CalendarUtils {
         }
         return false;
     }
+    public static int getDaysCount(Date begin, Date end) {
+        Calendar start = Calendar.getInstance();
+        start.setTime(begin);
+        start.set(Calendar.MILLISECOND, 0);
+        start.set(Calendar.SECOND, 0);
+        start.set(Calendar.MINUTE, 0);
+        start.set(Calendar.HOUR_OF_DAY, 0);
+        Calendar finish = Calendar.getInstance();
+        finish.setTime(end);
+        finish.set(Calendar.MILLISECOND, 999);
+        finish.set(Calendar.SECOND, 59);
+        finish.set(Calendar.MINUTE, 59);
+        finish.set(Calendar.HOUR_OF_DAY, 23);
+        return (int) Math.ceil((double) (finish.getTimeInMillis() - start.getTimeInMillis()) / (1000 * 60 * 60 * 24));
+    }
+
+
 }

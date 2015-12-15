@@ -162,6 +162,7 @@ public class AlarmScheduler implements Serializable{
         Logger.d(TAG, "Target date:[Postpone to]" + calTarget.getTime().toString());
         Intent broadcastReceiver = new Intent(context, AlarmReceiver.class);
         broadcastReceiver.putExtra(Constants.ALARM_SCHEDULER, this);
+        broadcastReceiver.putExtra(Constants.STEP_START_END,PendingStep.PendingStepStartEnd.START);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int)stepId,broadcastReceiver,PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calTarget.getTimeInMillis(), pendingIntent);
     }
@@ -172,13 +173,18 @@ public class AlarmScheduler implements Serializable{
      * @return None
      */
     public void cancel(){
-        Intent broadcastReceiver = new Intent(context, AlarmReceiver.class);
-        broadcastReceiver.putExtra(Constants.ALARM_SCHEDULER,this);
-        PendingIntent pendingIntentStart = PendingIntent.getBroadcast(context, (int)stepId,broadcastReceiver,PendingIntent.FLAG_UPDATE_CURRENT);
-        PendingIntent pendingIntentEnd = PendingIntent.getBroadcast(context, -(int)stepId,broadcastReceiver,PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.cancel(pendingIntentStart);
-        alarmManager.cancel(pendingIntentEnd);
+        cancel((int) this.stepId);
+        cancel(-((int) this.stepId));
     }
+
+    private void cancel(int stepId){
+        Intent broadcastReceiver = new Intent(context, AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context,stepId,broadcastReceiver,PendingIntent.FLAG_UPDATE_CURRENT);
+        broadcastReceiver.putExtra(Constants.STEP_START_END,PendingStep.PendingStepStartEnd.END);
+        broadcastReceiver.putExtra(Constants.ALARM_SCHEDULER,this);
+        alarmManager.cancel(pendingIntent);
+    }
+
 
     public  void setCalendarUpdateInterval(){
         Intent broadcastReceiver = new Intent(context, DayChangeReceiver.class);

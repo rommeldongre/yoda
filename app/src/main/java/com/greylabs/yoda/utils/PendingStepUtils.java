@@ -1,6 +1,7 @@
 package com.greylabs.yoda.utils;
 
 import com.google.api.client.util.DateTime;
+import com.greylabs.yoda.database.MetaData;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
 
@@ -12,16 +13,18 @@ import java.util.TimeZone;
  */
 public class PendingStepUtils {
 
+    private static  final String TAG="PendingStepsUt";
     public static  void deletePendingStep(PendingStep pendingStep){
         pendingStep.cancelAlarm();
         pendingStep.freeSlot();
         if (pendingStep.getStringId()==null || pendingStep.getStringId().equals("")){
-            pendingStep.delete();
+            Logger.d(TAG,"Pending step deleted:"+pendingStep.delete());
         }else {
             pendingStep.setDeleted(true);
             pendingStep.setSlotId(0);
             pendingStep.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
             pendingStep.save();
+            Logger.d(TAG,"Delete flag of pending step is set true");
         }
     }
     public static void movePendingStepToStretchGoal(PendingStep pendingStep,Goal stretchGoal){
@@ -33,6 +36,7 @@ public class PendingStepUtils {
         pendingStep.setGoalId(stretchGoal.getId());
         pendingStep.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
         pendingStep.save();
+        Logger.d(TAG,"Pending step "+pendingStep+" moved to goal :"+stretchGoal);
     }
 
     public static void markPendingStepDone(PendingStep pendingStep){
@@ -42,6 +46,7 @@ public class PendingStepUtils {
         pendingStep.setSlotId(0);
         pendingStep.save();
         pendingStep.cancelAlarm();
+        Logger.d(TAG, "Pending step marked done :" + pendingStep);
     }
 
 
@@ -49,6 +54,7 @@ public class PendingStepUtils {
         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
         pendingStep.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
         pendingStep.save();
+        Logger.d(TAG, "Pending step marked undone :" + pendingStep );
     }
 
 }

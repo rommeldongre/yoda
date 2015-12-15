@@ -200,6 +200,8 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                     currentStep = new PendingStep(this);
 
                 } else {
+                    btnShowAdvanced.setVisibility(View.GONE);
+                    cardViewAdvanced.setVisibility(View.VISIBLE);
                     currentStep = (PendingStep) intent.getSerializableExtra(Constants.STEP_OBJECT);
                     currentStep.initDatabase(this);
                     getGoalListFromLocal();
