@@ -31,13 +31,6 @@ public class AlarmService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        try {
-            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-            Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
-            r.play();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         //Toast.makeText(this, "Alarm on start command...", Toast.LENGTH_SHORT).show();
        // YodaNotificationManager yodaNotificationManager=new YodaNotificationManager(this);
         //yodaNotificationManager.showNotification();
@@ -46,6 +39,9 @@ public class AlarmService extends Service {
         if(intent!=null) {
             alarmScheduler = (AlarmScheduler) intent.getSerializableExtra(Constants.ALARM_SCHEDULER);
             startEnd= (PendingStep.PendingStepStartEnd) intent.getSerializableExtra(Constants.STEP_START_END);
+            if(startEnd== PendingStep.PendingStepStartEnd.START){
+                playNotificationSound();
+            }
         }
         if(alarmScheduler!=null) {
             Dialogues dialogues = new Dialogues(this);
@@ -62,6 +58,15 @@ public class AlarmService extends Service {
         return START_STICKY;
     }
 
+    private void playNotificationSound(){
+        try {
+            Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            Ringtone r = RingtoneManager.getRingtone(getApplicationContext(), notification);
+            r.play();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     @Override
     public void onDestroy() {
 
