@@ -3,8 +3,9 @@ package com.greylabs.yoda.utils;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Handler;
+import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -21,6 +22,10 @@ import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.scheduler.AlarmScheduler;
 import com.greylabs.yoda.scheduler.YodaCalendar;
+import com.greylabs.yoda.threads.CalendarUpdateAsyncThread;
+import com.greylabs.yoda.threads.InitCalendarAsyncTask;
+
+import java.util.Date;
 
 public class Dialogues {
 
@@ -39,13 +44,13 @@ public class Dialogues {
         this.context = passedContext;
     }
 
-    public void showNowNotificationDialogue(String CALLER, AlarmScheduler myAlarmScheduler1,PendingStep.PendingStepStartEnd startEnd, PendingStep myPendingStep1) {
+    public void showNowNotificationDialogue(String CALLER, AlarmScheduler myAlarmScheduler1, PendingStep.PendingStepStartEnd startEnd, PendingStep myPendingStep1) {
         if (dialog != null && dialog.isShowing()) {
             dialog.dismiss();
         }
 
         caller = CALLER;
-        this.startEnd=startEnd;
+        this.startEnd = startEnd;
         if (caller.equals(Constants.ALARM_SERVICE)) {
             alarmScheduler = myAlarmScheduler1;
             if (alarmScheduler != null) {
@@ -60,25 +65,23 @@ public class Dialogues {
             goal = new Goal(context).get(pendingStep.getGoalId());
         }
 
-        if(caller.equals(Constants.ALARM_SERVICE) && Dialogues.this.startEnd== PendingStep.PendingStepStartEnd.END)
-        {
-            if((pendingStep.getPendingStepStatus()== PendingStep.PendingStepStatus.TODO ||
-                pendingStep.getPendingStepStatus()== PendingStep.PendingStepStatus.DOING) &&
-                    pendingStep.isExpire()== PendingStep.PendingStepExpire.EXPIRE) {
-                //delete or mark step as deleted
-                pendingStep.freeSlot();
-                String notesString=pendingStep.getNotes();
-                if(notesString!=null)
-                    notesString=notesString+"\n Expired";
-                else
-                    notesString="Expired";
-                pendingStep.setNotes(notesString);
-                pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
-                pendingStep.setSlotId(0);
-                pendingStep.cancelAlarm();
-                pendingStep.save();
+        if (caller.equals(Constants.ALARM_SERVICE) && Dialogues.this.startEnd == PendingStep.PendingStepStartEnd.END) {
+            if ((pendingStep.getPendingStepStatus() == PendingStep.PendingStepStatus.TODO ||
+                    pendingStep.getPendingStepStatus() == PendingStep.PendingStepStatus.DOING)) {
+                if(   pendingStep.isExpire() == PendingStep.PendingStepExpire.EXPIRE) {
+                    pendingStep.freeSlot();
+                    String notesString = pendingStep.getNotes();
+                    if (notesString != null)
+                        notesString = notesString + "\n Expired";
+                    else
+                        notesString = "Expired";
+                    pendingStep.setNotes(notesString);
+                    pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
+                    pendingStep.setSlotId(0);
+                    pendingStep.cancelAlarm();
+                    pendingStep.save();
+                }
             }
-
             return;
         }
         // custom dialog
@@ -112,6 +115,9 @@ public class Dialogues {
 //                    if(Dialogues.this.startEnd== PendingStep.PendingStepStartEnd.END){
 //                        checkExpiryOfStep();
 //                    }
+                }else{
+                    if(new Date().compareTo(pendingStep.getStepDate())<0)
+                       checkBackInFiveMins();
                 }
             }
         });
@@ -123,48 +129,41 @@ public class Dialogues {
         llDoingIt.setOnClickListener(myOnClickListener);
         llMissedIt.setOnClickListener(myOnClickListener);
 
-        edtExcuse.setOnTouchListener(new View.OnTouchListener() {
-
-            public boolean onTouch(View v, MotionEvent event) {
-                edtExcuse.requestLayout();
-                dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_UNSPECIFIED);
-
-                return false;
-            }
-        });
-
         dialog.getWindow().setType(
                 WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         dialog.show();
+//        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+//        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
     }
 
-    public void checkExpiryOfStep(){
-        if(pendingStep.isExpire()== PendingStep.PendingStepExpire.EXPIRE) {
+    public void checkExpiryOfStep() {
+        if (pendingStep.isExpire() == PendingStep.PendingStepExpire.EXPIRE) {
             //delete or mark step as deleted
             pendingStep.freeSlot();
-            String notesString=pendingStep.getNotes();
-            if(notesString!=null)
-                notesString=notesString+"\n Expired";
+            String notesString = pendingStep.getNotes();
+            if (notesString != null)
+                notesString = notesString + "\n Expired";
             else
-                notesString="Expired";
+                notesString = "Expired";
             pendingStep.setNotes(notesString);
             pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
             pendingStep.setSlotId(0);
             pendingStep.cancelAlarm();
             pendingStep.save();
-        }else{
+        } else {
             //reschedule steps set current step as TODO.
             pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
             pendingStep.save();
-            Goal goal=new Goal(context).get(pendingStep.getGoalId());
-            TimeBox timeBox=new TimeBox(context).get(goal.getTimeBoxId());
-            YodaCalendar yodaCalendar=new YodaCalendar(context,timeBox);
+            Goal goal = new Goal(context).get(pendingStep.getGoalId());
+            TimeBox timeBox = new TimeBox(context).get(goal.getTimeBoxId());
+            YodaCalendar yodaCalendar = new YodaCalendar(context, timeBox);
             yodaCalendar.rescheduleSteps(goal.getId());
         }
     }
 
     class MyOnClickListener implements View.OnClickListener {
-        boolean checkExpiry=false;
+        boolean checkExpiry = false;
+
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
@@ -177,35 +176,35 @@ public class Dialogues {
                     break;
                 case R.id.llDoingItNowNotification:
                     if (pendingStep != null) {
-                        pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.DOING);
-                        pendingStep.save();
-                        Logger.d("TAG", "Alarm Scheduler : " + alarmScheduler);
-                        if (alarmScheduler == null)
-                            alarmScheduler = new AlarmScheduler(context);
-                        else
-                            alarmScheduler.initContext(context);
-                        alarmScheduler.setStepId(pendingStep.getId());
-                        alarmScheduler.postponeAlarm(5);
+                      checkBackInFiveMins();
                     }
                     dialog.dismiss();
                     break;
                 case R.id.llMissedNowNotification:
                     if (pendingStep != null) {
+                        //set dialogue's gravity as top
+                        Window window = dialog.getWindow();
+                        WindowManager.LayoutParams wlp = window.getAttributes();
+
+                        wlp.gravity = Gravity.TOP;
+                        wlp.flags &= ~WindowManager.LayoutParams.FLAG_DIM_BEHIND;
+                        window.setAttributes(wlp);
+
                         pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.MISSED);
                         pendingStep.setSkipCount(pendingStep.getSkipCount() + 1);
                         pendingStep.save();
-                        checkExpiry=true;
+                        checkExpiry = true;
                         llButtons.setVisibility(View.GONE);
                         llExcuseLog.setVisibility(View.VISIBLE);
                     }
                     break;
                 case R.id.btnLogExcuseNowNotification:
-                    String notesString=pendingStep.getNotes();
-                    if(notesString!=null)
-                        notesString=notesString+
-                                ((edtExcuse.getText().toString()==null)? "":edtExcuse.getText().toString());
+                    String notesString = pendingStep.getNotes();
+                    if (notesString != null)
+                        notesString = notesString +
+                                ((edtExcuse.getText().toString() == null) ? "" : edtExcuse.getText().toString());
                     else
-                        notesString="";
+                        notesString = "";
                     pendingStep.setNotes(notesString);
                     pendingStep.save();
                     // put this text into the pendingStep
@@ -224,5 +223,18 @@ public class Dialogues {
 //                checkExpiryOfStep();
 //            }
         }
+    }
+
+    private void checkBackInFiveMins(){
+        pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.DOING);
+        pendingStep.save();
+        Logger.d("TAG", "Alarm Scheduler : " + alarmScheduler);
+        if (alarmScheduler == null)
+            alarmScheduler = new AlarmScheduler(context);
+        else
+            alarmScheduler.initContext(context);
+        alarmScheduler.setStepId(pendingStep.getId());
+        alarmScheduler.setAlarmDate(new Date());
+        alarmScheduler.postponeAlarm(5);
     }
 }

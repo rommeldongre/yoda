@@ -72,12 +72,11 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
 //        List<Slot> slots=slot.getAll();
 
 //        YodaCalendar yodaCalendar = new YodaCalendar(this);
-//        yodaCalendar.updateCalendar();
+//        yodaCalendar.uar();
 
 //        //test code end , delete or comment out this before giving to client.
         initialize();
     }
-
 
     private void initialize() {
         layoutToBeHidden = (RelativeLayout) findViewById(R.id.LayoutToBeHiddenActHome);
@@ -124,10 +123,6 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
 //        btnImportGoogleTasks.setOnClickListener(this);
         populateNowInfo();
         setStyleToArcTotalProgress();
-        //Test code ,comment out this code on production.
-        Slot slot=new Slot(this);
-        List<Slot> slots=slot.getAll();
-        Logger.d("ActHome", "" + slots.size());
     }
 
     public void populateNowInfo() {

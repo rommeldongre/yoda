@@ -871,9 +871,9 @@ public class PendingStep implements Serializable {
         List<Integer> stepIds=null;
         String query = " select "+TablePendingStep.id +
                 " " + "from " + TablePendingStep.pendingStep + " " +
-                " " + "where " +TablePendingStep.goalId + "=" + id+" " +
-                " " + " and "+TablePendingStep.type+" != "+PendingStepType.SERIES_STEP.ordinal()+
-                " " + " and "+TablePendingStep.type+" != "+PendingStepType.SPLIT_STEP.ordinal();
+                " " + "where " +TablePendingStep.goalId + "=" + goalId+" " +
+                " " + " and ( "+TablePendingStep.type+" = "+PendingStepType.SINGLE_STEP.ordinal()+
+                " " + " or "+TablePendingStep.type+" = "+PendingStepType.SUB_STEP.ordinal()+" )";
         SQLiteDatabase db=database.getWritableDatabase();
         Cursor c=db.rawQuery(query, null);
         if(c.moveToFirst()){
