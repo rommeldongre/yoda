@@ -600,6 +600,7 @@ public class YodaCalendar {
         //New approach
         Iterator<Slot> it = slots.iterator();
         int i=0;
+        Date lastStepsDate=null;
         while (it.hasNext()) {
             Slot slot = it.next();
             slot.setTime(Constants.MAX_SLOT_DURATION);
@@ -611,6 +612,7 @@ public class YodaCalendar {
                 ps = pendingStepsList.get(j);
                 if(ps.getTime()<=slot.getTime()){
                     updateStep(ps, slot);
+                    lastStepsDate=scheduleDate;
                     ps.setStepDate(scheduleDate);
                     calendar.setTime(scheduleDate);
                     calendar.add(Calendar.HOUR_OF_DAY, ps.getTime());
@@ -623,7 +625,12 @@ public class YodaCalendar {
                     break;
                 }
             }
-
+        }
+        //check any steps remained and if so mark them unscheduled
+        for(int j=i;j<pendingStepsList.size();j++){
+            PendingStep ps1=pendingStepsList.get(j);
+            ps1.setPendingStepStatus(PendingStep.PendingStepStatus.UNSCHEDULED);
+            ps1.save();
         }
         //New approach end
 
@@ -648,7 +655,7 @@ public class YodaCalendar {
 //        }
         //Old appraoch end
         if (ps != null) {
-            goal.setDueDate(ps.getStepDate());
+            goal.setDueDate(lastStepsDate);
             goal.save();
         }
         return count;

@@ -144,15 +144,15 @@ public class GoalUtils {
             for (PendingStep pendingStep : pendingSteps) {
                 switch (pendingStep.getPendingStepType()) {
                     case SERIES_STEP:
-//                        List<PendingStep> subSteps = pendingStep.getAllSubSteps(pendingStep.getId(), goal.getId());
-//                        if(subSteps==null){
-//                            PendingStepUtils.deletePendingStep(pendingStep);
-//                        }else {
-//                            for (PendingStep subStep : subSteps) {
-//                                PendingStepUtils.deletePendingStep(subStep);
-//                            }
-//                            PendingStepUtils.deletePendingStep(pendingStep);
-//                        }
+                        List<PendingStep> subSteps = pendingStep.getAllSubSteps(pendingStep.getId(), goal.getId());
+                        if(subSteps==null){
+                            PendingStepUtils.deletePendingStep(pendingStep);
+                        }else {
+                            for (PendingStep subStep : subSteps) {
+                                PendingStepUtils.deletePendingStep(subStep);
+                            }
+                            PendingStepUtils.deletePendingStep(pendingStep);
+                        }
                         break;
                     case SINGLE_STEP:
                     case SUB_STEP:
@@ -172,5 +172,4 @@ public class GoalUtils {
         yodaCalendar.rescheduleSteps(prefs.getStretchGoalId());
         Logger.d(TAG, "Goal and it's steps are deleted " + pendingSteps);
     }
-
 }

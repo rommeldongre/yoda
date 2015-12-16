@@ -440,7 +440,7 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                     //yodaCalendar.rescheduleSteps(prefs.getStretchGoalId());
                 } else if ( stepPrioritySpinner.getSelectedItem() != null
                         && stepPrioritySpinner.getSelectedItem().toString().equals(Constants.TEXT_PRIORITY_SPINNER_BOTTOM_MOST)){
-                   // yodaCalendar.scheduleStep(currentStep);
+                    // yodaCalendar.scheduleStep(currentStep);
                     yodaCalendar.rescheduleSteps(goalList.get(goalSpinner.getSelectedItemPosition()).getId());
                 }else{
                     yodaCalendar.rescheduleSteps(goalList.get(goalSpinner.getSelectedItemPosition()).getId());
@@ -465,9 +465,14 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                 } else {
                     stepDate = currentStep.getStepDate();
                 }
-                alertStepAdded.setMessage("The Step \'"+currentStep.getNickName()+
-                        "\' has been scheduled with a start date of \'" +
-                        CalendarUtils.getOnlyFormattedDate(stepDate)+"\'");
+                if(stepDate==null){
+                    alertStepAdded.setMessage("Time allotted for this goal is too short for all " +
+                            "steps and hence some steps have remained unscheduled.");
+                }else {
+                    alertStepAdded.setMessage("The Step \'" + currentStep.getNickName() +
+                            "\' has been scheduled with a start date of \'" +
+                            CalendarUtils.getOnlyFormattedDate(stepDate) + "\'");
+                }
                 alertStepAdded.setCancelable(false);
                 alertStepAdded.show();
             }
