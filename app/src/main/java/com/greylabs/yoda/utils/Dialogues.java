@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -201,12 +202,13 @@ public class Dialogues {
                 case R.id.btnLogExcuseNowNotification:
                     String notesString = pendingStep.getNotes();
                     if (notesString != null)
-                        notesString = notesString +
-                                ((edtExcuse.getText().toString() == null) ? "" : edtExcuse.getText().toString());
+                        notesString = notesString + "\r\n" + (edtExcuse.getText().toString());
                     else
                         notesString = "";
+                    Log.i("Excuse entered", notesString);
                     pendingStep.setNotes(notesString);
                     pendingStep.save();
+                    Log.i("Excuse retrieved", new PendingStep(context).get(pendingStep.getId()).getNotes());
                     // put this text into the pendingStep
 //                if(pendingStep!=null){
 //                    pendingStep.sebtPendingStepStatus(PendingStep.PendingStepStatus.MISSED);
