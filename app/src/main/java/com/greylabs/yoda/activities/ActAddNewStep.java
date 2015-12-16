@@ -87,7 +87,7 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
         textPaint = new Paint();
         textPaint.setColor(Color.WHITE);
         textPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
-        textPaint.setTextSize(25);
+        textPaint.setTextSize(getResources().getDimension(R.dimen.textSizeSeekbarBullet));
 
         thumbPaint = new Paint();
         thumbPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
@@ -596,10 +596,10 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
 
         Bitmap bm = BitmapFactory.decodeResource(getResources(), drawableId).copy(Bitmap.Config.ARGB_8888, true);
         Canvas canvas = new Canvas(bm);
-
-
-        canvas.drawCircle(bm.getWidth() / 2, bm.getHeight() / 2, 25, thumbPaint);
-        canvas.drawText(text, bm.getWidth() / 2 - textPaint.measureText(text) / 2, bm.getHeight() / 2 + 7, textPaint);
+        float x = bm.getWidth() / 2;
+        float y = bm.getHeight() / 2;
+        canvas.drawCircle(x, y, getResources().getDimension(R.dimen.seekbarBulletRadius), thumbPaint);
+        canvas.drawText(text, x - textPaint.measureText(text) / 2, y + 7, textPaint);
         return new BitmapDrawable(bm);
     }
 

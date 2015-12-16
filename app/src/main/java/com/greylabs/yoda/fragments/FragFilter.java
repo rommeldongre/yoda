@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+//previously used but not now
 public class FragFilter extends Fragment {
 
     Context context;

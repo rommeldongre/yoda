@@ -157,7 +157,7 @@ public class ActStepList extends AppCompatActivity implements onClickOfRecyclerV
                     pendingStepsArrayList.add(stepArrayList.get(i));
             }
         }
-        checkForEmptyViewVisibility(stepArrayList, getString(R.string.tvEmptyViewActStepList));
+        checkForEmptyViewVisibility(pendingStepsArrayList, getString(R.string.tvEmptyViewActStepList));
     }
 
     private void checkForEmptyViewVisibility(ArrayList<PendingStep> arrayList, String msg) {
@@ -254,10 +254,12 @@ public class ActStepList extends AppCompatActivity implements onClickOfRecyclerV
             case R.id.actionToggleActStepList :
                 if(isShowingPendingSteps){
                     checkForEmptyViewVisibility(stepArrayList, getString(R.string.tvEmptyViewActStepList));
+                    menu.findItem(R.id.actionToggleActStepList).setIcon(R.drawable.ic_btn_toggle_act_step_list_remaining);
                     isShowingPendingSteps = false;
                     mAdapter = new AdapterRecyclerViewActStepList(this, stepArrayList, isOperationEdit, caller);
                     recyclerView.setAdapter(mAdapter);
                 }else {
+                    menu.findItem(R.id.actionToggleActStepList).setIcon(R.drawable.ic_btn_toggle_act_step_list_all);
                     isShowingPendingSteps = true;
                     mAdapter = new AdapterRecyclerViewActStepList(this, pendingStepsArrayList, isOperationEdit, caller);
                     recyclerView.setAdapter(mAdapter);

@@ -1,6 +1,7 @@
 package com.greylabs.yoda.activities;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -17,11 +18,9 @@ import android.widget.TextView;
 
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.greylabs.yoda.R;
-import com.greylabs.yoda.models.Day;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.Slot;
-import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.BitmapUtility;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Dialogues;
@@ -41,7 +40,7 @@ import java.util.List;
 public class ActHome extends AppCompatActivity implements View.OnClickListener, FloatingActionsMenu.OnFloatingActionsMenuUpdateListener, MyFloatingActionsMenu.OnFloatingActionsMenuUpdateListener {
 
     HorizontalScrollView scrollView;
-    LinearLayout linearLayout ;
+    LinearLayout linearLayout;
     RelativeLayout layoutToBeHidden, layoutWallpaper,
             layoutSettingsBackground, layoutOverlapping, llEmptyView;
     ImageView ivWallpaper;
@@ -105,7 +104,7 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
 //        layoutWallpaper.setBackgroundResource(prefs.getWallpaperResourceId());
 //        layoutWallpaper.setBackground(new BitmapDrawable(BitmapUtility.decodeSampledBitmapFromResource(getResources(),prefs.getWallpaperResourceId(),ivWallpaper.getWidth(),ivWallpaper.getHeight())));
 //        ivWallpaper.setImageBitmap(BitmapUtility.decodeSampledBitmapFromResource(getResources(),prefs.getWallpaperResourceId(),100,200));
-        Drawable dr = new BitmapDrawable(BitmapUtility.decodeSampledBitmapFromResource(getResources(),prefs.getWallpaperResourceId(),100,200));
+        Drawable dr = new BitmapDrawable(BitmapUtility.decodeSampledBitmapFromResource(getResources(), prefs.getWallpaperResourceId(), 100, 200));
         layoutWallpaper.setBackgroundDrawable(dr);
 
         getGoalsFromLocalAndPopulate();
@@ -166,10 +165,10 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if(b){
+                if (b) {
                     arcTotalProgress.setVisibility(View.GONE);
                     llEmptyView.setVisibility(View.VISIBLE);
-                }else {
+                } else {
                     arcTotalProgress.setVisibility(View.VISIBLE);
                     llEmptyView.setVisibility(View.GONE);
                 }
@@ -179,7 +178,7 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
 
     private void setStyleToArcTotalProgress() {
         arcTotalProgress.invalidate();
-        arcTotalProgress.setProgress((int)nowGoal.getGoalProgress());
+        arcTotalProgress.setProgress((int) nowGoal.getGoalProgress());
         arcTotalProgress.setStrokeWidth(30);
         arcTotalProgress.setFinishedStrokeColor(getResources().getColor(R.color.luminous_green));
         arcTotalProgress.setUnfinishedStrokeColor(getResources().getColor(R.color.gray_unfinished_progress));
@@ -190,9 +189,9 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
         // check for string lengths first and strip accordingly
         arcTotalProgress.setTextSize(20);
         arcTotalProgress.setTextColor(getResources().getColor(R.color.white));
-        if(nowPendingStep==null || nowPendingStep.getNickName()==null) {
+        if (nowPendingStep == null || nowPendingStep.getNickName() == null) {
             arcTotalProgress.setStepName("No Step");
-        }else{
+        } else {
             arcTotalProgress.setStepName(nowPendingStep.getNickName());
         }
         arcTotalProgress.setGoalName(nowGoal.getNickName());
@@ -206,9 +205,9 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
     }
 
     private void getGoalsFromLocalAndPopulate() {
-        List<Goal> temp=new Goal(this).getAll(Goal.GoalDeleted.SHOW_NOT_DELETED);
-        if(temp!=null){
-            if(goalList != null)
+        List<Goal> temp = new Goal(this).getAll(Goal.GoalDeleted.SHOW_NOT_DELETED);
+        if (temp != null) {
+            if (goalList != null)
                 goalList.clear();
             goalList.addAll(temp);
         }
@@ -217,7 +216,7 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
 
         //add all the goals from db here loop
-        for(int i=0; i < goalList.size(); i++){
+        for (int i = 0; i < goalList.size(); i++) {
             GoalView goalView = new GoalView(this, goalList.get(i));
             linearLayout.addView(goalView);
         }
@@ -251,7 +250,7 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.addNewGoalActHome:
                 Intent intent = new Intent(this, ActAddNewGoal.class);
                 intent.putExtra(Constants.CALLER, Constants.ACT_HOME);
@@ -259,7 +258,7 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
                 this.startActivity(intent);
                 break;
 
-            case R.id.arcTotalProgressActHome :
+            case R.id.arcTotalProgressActHome:
 
                 Dialogues dialogues = new Dialogues(this);
                 dialogues.showNowNotificationDialogue(Constants.ACT_HOME, null, PendingStep.PendingStepStartEnd.START, nowPendingStep);
@@ -270,28 +269,28 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
 //                this.startActivity(intent1);
                 break;
 
-            case R.id.btnAddStepActHome :
+            case R.id.btnAddStepActHome:
                 Intent intent2 = new Intent(this, ActAddNewStep.class);
                 intent2.putExtra(Constants.CALLER, Constants.ACT_HOME);
 //                intent2.putExtra(Constants.STEP_ATTACHED_IN_EXTRAS, false);
                 startActivity(intent2);
                 break;
 
-            case R.id.btnFilterActHome :
+            case R.id.btnFilterActHome:
                 startActivity(new Intent(this, ActFilters.class));
                 break;
 
-            case R.id.btnMyGoalsActHome :
+            case R.id.btnMyGoalsActHome:
                 startActivity(new Intent(this, ActGoalList.class));
                 btnSettings.collapse();
                 break;
 
-            case R.id.btnMyTimeBoxesActHome :
+            case R.id.btnMyTimeBoxesActHome:
                 startActivity(new Intent(this, ActTimeBoxList.class));
                 btnSettings.collapse();
                 break;
 
-            case R.id.btnDefaultDurationActHome :
+            case R.id.btnDefaultDurationActHome:
                 startActivity(new Intent(this, ActSettingDefaultDuration.class));
                 btnSettings.collapse();
                 break;
@@ -300,8 +299,8 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
                 final int connectionStatusCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
                 if (GooglePlayServicesUtil.isUserRecoverableError(connectionStatusCode)) {
                     GooglePlayServicesUtil.getErrorDialog(connectionStatusCode, this, 0).show();
-                }else {
-                   // startActivity(new Intent(this,TasksSample.class));
+                } else {
+                    // startActivity(new Intent(this,TasksSample.class));
                     startActivity(new Intent(this, ActSettingsGoogle.class));
                 }
                 btnSettings.collapse();
@@ -316,7 +315,7 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
 //                btnSettings.collapse();
 //                break;
 
-            case R.id.btnChangeWallpaperActHome :
+            case R.id.btnChangeWallpaperActHome:
                 startActivityForResult(new Intent(this, ActSettingChangeWallpaper.class), 1);
                 btnSettings.collapse();
                 break;
@@ -357,7 +356,7 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == Constants.RESULTCODE_ACT_SETTINGS_CHANGE_WALLPAPER){
+        if (resultCode == Constants.RESULTCODE_ACT_SETTINGS_CHANGE_WALLPAPER) {
 //            prefs = Prefs.getInstance(this);
             layoutWallpaper.setBackgroundResource(prefs.getWallpaperResourceId());
         }
