@@ -5,6 +5,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -23,6 +24,7 @@ import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.Slot;
 import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.BitmapUtility;
+import com.greylabs.yoda.utils.CalendarUtils;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Dialogues;
 import com.greylabs.yoda.utils.Logger;
@@ -34,7 +36,11 @@ import com.greylabs.yoda.views.MyFloatingActionsMenu;
 
 import net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 
@@ -141,8 +147,10 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
                             break;
                         }
                     }
-                    if (nowPendingStep != null && nowPendingStep.getNickName() != null) {
-                        arcTotalProgress.setStepName(nowPendingStep.getNickName());
+                    if (nowPendingStep != null) {
+                        if (nowPendingStep.getNickName() != null)
+                            arcTotalProgress.setStepName(nowPendingStep.getNickName());
+                        else arcTotalProgress.setStepName("Untitled Step");
                         nowGoal = nowGoal.get(nowPendingStep.getGoalId());
                         arcTotalProgress.setGoalName(nowGoal.getNickName());
                         showEmptyView(false);
@@ -167,8 +175,38 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
             @Override
             public void run() {
                 if(b){
-                    arcTotalProgress.setVisibility(View.GONE);
-                    llEmptyView.setVisibility(View.VISIBLE);
+                    Calendar cal = Calendar.getInstance();
+                    Date nowTime = cal.getTime();
+                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                    Date midnight = null; Date morning = null; Date thisTime = null;
+                    try {
+                        midnight = sdf.parse("00:00");
+                        morning = sdf.parse("06:00");
+                        thisTime = sdf.parse(cal.get(Calendar.HOUR_OF_DAY) + ":" + cal.get(Calendar.MINUTE));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    if (thisTime.compareTo(midnight)>=0 && thisTime.compareTo(morning)<=0){
+                        arcTotalProgress.setVisibility(View.GONE);
+                        llEmptyView.setVisibility(View.VISIBLE);
+                        Log.i("ActHome", "Detects night");
+                        Log.i("Hour_of_day", String.valueOf(cal.get(Calendar.HOUR_OF_DAY)));
+
+                    }else{
+
+                        Slot nowSlot = new Slot(getApplicationContext()).get(slot.getActiveSlotId());
+                        if (nowSlot.getGoalId() == prefs.getStretchGoalId()){
+                            arcTotalProgress.setStepName("No Step");
+                            arcTotalProgress.setGoalName(Constants.NICKNAME_STRETCH_GOAL);
+
+                        }else{
+                            arcTotalProgress.setStepName("No Steps");
+                            arcTotalProgress.setGoalName(new Goal(getApplicationContext()).get(nowSlot.getGoalId()).getNickName());
+                        }
+
+                    }
                 }else {
                     arcTotalProgress.setVisibility(View.VISIBLE);
                     llEmptyView.setVisibility(View.GONE);
@@ -191,12 +229,12 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
         arcTotalProgress.setTextSize(50);
         arcTotalProgress.setGoalTextSize(50);
         arcTotalProgress.setTextColor(getResources().getColor(R.color.white));
-        if(nowPendingStep==null || nowPendingStep.getNickName()==null) {
+        /*if(nowPendingStep==null || nowPendingStep.getNickName()==null) {
             arcTotalProgress.setStepName("No Step");
         }else{
             arcTotalProgress.setStepName(nowPendingStep.getNickName());
         }
-        arcTotalProgress.setGoalName(nowGoal.getNickName());
+        arcTotalProgress.setGoalName(nowGoal.getNickName());*/
 
         arcTotalProgress.setBottomTextSize(50);
         arcTotalProgress.setBottomText(String.valueOf(nowGoal.getRemainingStepCount()));
