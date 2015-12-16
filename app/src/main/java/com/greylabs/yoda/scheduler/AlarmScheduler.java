@@ -132,7 +132,7 @@ public class AlarmScheduler implements Serializable{
         calTarget.setTime(alarmDate);
 
         //start Time
-        calTarget.set(Calendar.HOUR_OF_DAY, startTime);
+        //calTarget.set(Calendar.HOUR_OF_DAY,startTime);
         Logger.d(TAG, "Target date:[Start Time]" + calTarget.getTime().toString());
         Intent broadcastReceiver = new Intent(context, AlarmReceiver.class);
         broadcastReceiver.putExtra(Constants.ALARM_SCHEDULER,this);

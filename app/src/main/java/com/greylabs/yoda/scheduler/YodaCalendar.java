@@ -531,7 +531,9 @@ public class YodaCalendar {
         alarmScheduler.setStepId(ps.getId());
         alarmScheduler.setSubStepId(ps.getSubStepOf());
         alarmScheduler.setPendingStepType(PendingStep.PendingStepType.SUB_STEP);
-        alarmScheduler.setStartTime(0);//no need
+        calendar.setTime(ps.getStepDate());
+        calendar.add(Calendar.HOUR_OF_DAY,ps.getTime());
+        alarmScheduler.setStartTime(calendar.get(Calendar.HOUR_OF_DAY));//no need
         alarmScheduler.setDuration(ps.getTime());
         alarmScheduler.setAlarmDate(ps.getStepDate());
         alarmScheduler.cancel();
@@ -597,6 +599,7 @@ public class YodaCalendar {
 
         //New approach
         Iterator<Slot> it = slots.iterator();
+        int i=0;
         while (it.hasNext()) {
             Slot slot = it.next();
             slot.setTime(Constants.MAX_SLOT_DURATION);
@@ -604,8 +607,8 @@ public class YodaCalendar {
             calendar.add(Calendar.HOUR_OF_DAY, slot.getWhen().getStartTime());
             //slot.setScheduleDate(calendar.getTime());
             Date scheduleDate=calendar.getTime();
-            while (pendingSteps.hasNext()) {
-                ps = pendingSteps.next();
+            for(int j=i;j<pendingStepsList.size();j++) {
+                ps = pendingStepsList.get(j);
                 if(ps.getTime()<=slot.getTime()){
                     updateStep(ps, slot);
                     ps.setStepDate(scheduleDate);
@@ -615,7 +618,7 @@ public class YodaCalendar {
                     scheduleDate=calendar.getTime();
                     slot.setTime(slot.getTime() - ps.getTime());
                     scheduleSingleStep(ps, goal, slot, calendar);
-                    pendingSteps.remove();
+                    i++;
                 }else{
                     break;
                 }
