@@ -54,9 +54,10 @@ public class CalendarUpdateAsyncThread extends AsyncTask<Void,Void,Void>{
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
+        progressDialog.dismiss();
         Message msg=new Message();
         msg.obj="";
         handler.handleMessage(msg);
-        progressDialog.dismiss();
+
     }
 }

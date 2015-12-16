@@ -1,9 +1,12 @@
 package com.greylabs.yoda.utils;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Handler;
+import android.os.Message;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +20,8 @@ import android.widget.TextView;
 
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.activities.ActHome;
+import com.greylabs.yoda.apis.Utils;
+import com.greylabs.yoda.models.Day;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.TimeBox;
@@ -29,6 +34,7 @@ import java.util.Date;
 
 public class Dialogues {
 
+    private static final String TAG="Dialog";
     Dialog dialog;
     PendingStep pendingStep = null;
     PendingStep.PendingStepStartEnd startEnd;
@@ -111,12 +117,29 @@ public class Dialogues {
             public void onDismiss(DialogInterface dialogInterface) {
                 if (caller.equals(Constants.ACT_HOME)) {
                     ((ActHome) context).onDialogueClosed();
-//                    if(Dialogues.this.startEnd== PendingStep.PendingStepStartEnd.END){
-//                        checkExpiryOfStep();
-//                    }
+//                    boolean c=pendingStep.getPendingStepStatus()== PendingStep.PendingStepStatus.TODO;
+//                    if(new Date().compareTo(pendingStep.getStepDate())<0 )
+//                        checkBackInFiveMins();
+////                    if(Dialogues.this.startEnd== PendingStep.PendingStepStartEnd.END){
+////                        checkExpiryOfStep();
+////                    }
                 }else{
                     if(new Date().compareTo(pendingStep.getStepDate())<0)
                        checkBackInFiveMins();
+                }
+                Logger.showMsg(context,"in on dismiss ");
+                Day day=new Day(context);
+                if(CalendarUtils.compareOnlyDates(day.getFirstDay(),new Date())==true) {
+                    Goal goal = new Goal(context).get(pendingStep.getGoalId());
+                    TimeBox timeBox = new TimeBox(context).get(goal.getTimeBoxId());
+                    YodaCalendar yodaCalendar = new YodaCalendar(context, timeBox);
+                    yodaCalendar.rescheduleSteps(goal.getId());
+                    Logger.d(TAG, "In Dialog:steps rescheduled");
+                }else{
+                    Logger.d(TAG,"In Dialog: Found calendar not up to date, updating calendar");
+                    YodaCalendar yodaCalendar = new YodaCalendar(context);
+                    yodaCalendar.updateCalendar();
+                    Logger.d(TAG,"In Dialog:steps rescheduled");
                 }
             }
         });
@@ -230,6 +253,7 @@ public class Dialogues {
             alarmScheduler.initContext(context);
         alarmScheduler.setStepId(pendingStep.getId());
         alarmScheduler.setAlarmDate(new Date());
-        alarmScheduler.postponeAlarm(5);
+        alarmScheduler.postponeAlarm(1);
     }
+
 }
