@@ -35,6 +35,7 @@ import java.util.Date;
 public class Dialogues {
 
     private static final String TAG="Dialog";
+    public static boolean isUpdating=false;
     Dialog dialog;
     PendingStep pendingStep = null;
     PendingStep.PendingStepStartEnd startEnd;
@@ -130,16 +131,41 @@ public class Dialogues {
                 Logger.showMsg(context,"in on dismiss ");
                 Day day=new Day(context);
                 if(CalendarUtils.compareOnlyDates(day.getFirstDay(),new Date())==true) {
-                    Goal goal = new Goal(context).get(pendingStep.getGoalId());
-                    TimeBox timeBox = new TimeBox(context).get(goal.getTimeBoxId());
-                    YodaCalendar yodaCalendar = new YodaCalendar(context, timeBox);
-                    yodaCalendar.rescheduleSteps(goal.getId());
-                    Logger.d(TAG, "In Dialog:steps rescheduled");
+                    AsyncTask task=new AsyncTask() {
+                        @Override
+                        protected Object doInBackground(Object[] objects) {
+                            Goal goal = new Goal(context).get(pendingStep.getGoalId());
+                            TimeBox timeBox = new TimeBox(context).get(goal.getTimeBoxId());
+                            YodaCalendar yodaCalendar = new YodaCalendar(context, timeBox);
+                            yodaCalendar.rescheduleSteps(goal.getId());
+                            Logger.d(TAG, "In Dialog:steps rescheduled");
+                            return null;
+                        }
+                    };
+                    task.execute();
                 }else{
-                    Logger.d(TAG,"In Dialog: Found calendar not up to date, updating calendar");
-                    YodaCalendar yodaCalendar = new YodaCalendar(context);
-                    yodaCalendar.updateCalendar();
-                    Logger.d(TAG,"In Dialog:steps rescheduled");
+                    AsyncTask task=new AsyncTask() {
+                        @Override
+                        protected Object doInBackground(Object[] objects) {
+                            isUpdating=true;
+                            Logger.d(TAG,"In Dialog: Found calendar not up to date, updating calendar");
+                            YodaCalendar yodaCalendar = new YodaCalendar(context);
+                            yodaCalendar.updateCalendar();
+                            Logger.d(TAG,"In Dialog:steps rescheduled");
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Object o) {
+                            isUpdating=false;
+                            super.onPostExecute(o);
+                        }
+                    };
+
+                    if(isUpdating==false){
+                        task.execute();
+                        isUpdating=true;
+                    }
                 }
             }
         });
