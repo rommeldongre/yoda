@@ -172,4 +172,17 @@ public class GoalUtils {
         yodaCalendar.rescheduleSteps(prefs.getStretchGoalId());
         Logger.d(TAG, "Goal and it's steps are deleted " + pendingSteps);
     }
+
+    public static void clearAlarms(Goal goal,Context context){
+        PendingStep pendingStep=new PendingStep(context);
+        AlarmScheduler alarmScheduler=new AlarmScheduler(context);
+        List<Integer> stepIds = pendingStep.getStepIds(goal.getId());
+        if (stepIds != null) {
+            for (Integer i : stepIds) {
+                alarmScheduler.setStepId(i);
+                alarmScheduler.cancel();
+                Logger.d(TAG,"Alarm of step "+i+" cancelled");
+            }
+        }
+    }
 }

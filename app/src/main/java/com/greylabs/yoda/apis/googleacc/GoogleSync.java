@@ -21,7 +21,11 @@ import com.greylabs.yoda.utils.ConnectionUtils;
 import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.Prefs;
 
+import org.acra.ACRA;
+
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 /**
  * Created by Jaybhay Vijay on 8/12/2015.
@@ -47,7 +51,7 @@ public class GoogleSync {
 
     public void sync() {
 
-        Prefs prefs=Prefs.getInstance(context);
+        final Prefs prefs=Prefs.getInstance(context);
         if (prefs.getDefaultAccountEmailId()!=null && ConnectionUtils.isNetworkAvailable(context)) {
             if(prefs.getAutoSyncState()) {
                 AsyncTask asyncTask = new AsyncTask() {
@@ -58,6 +62,7 @@ public class GoogleSync {
                           googleAccount.sync();
                         } catch (IOException e) {
                             e.printStackTrace();
+                            ACRA.getErrorReporter().handleException(e);
                         }
                         return null;
                     }

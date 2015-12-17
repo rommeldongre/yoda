@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.google.api.client.util.DateTime;
 import com.greylabs.yoda.R;
 
 import java.text.ParseException;
@@ -188,21 +189,12 @@ public class Prefs  {
         editor.commit();
     }
 
-    public void setLastSyncDate(Date date){
-        editor.putString(Constants.LAST_SYNC_DATE, date.toString());
+    public void setLastSyncDate(DateTime date){
+
+        editor.putString(Constants.LAST_SYNC_DATE, date.toStringRfc3339());
     }
 
-    public Date getLastSyncDate(){
-        String dateStr=systemPrefs.getString(Constants.LAST_SYNC_DATE,null);
-        SimpleDateFormat sdf=new SimpleDateFormat("E MMM dd hh:mm:ss zzz yyyy");
-        Date d=null;
-        try {
-            d=sdf.parse(dateStr);
-        } catch (ParseException e) {
-            Logger.d(TAG, "Unable to parse date. Stacktrace:");
-            e.printStackTrace();
-        }finally {
-            return d;
-        }
+    public DateTime getLastSyncDate(){
+       return CalendarUtils.getStringToRFCTimestamp(systemPrefs.getString(Constants.LAST_SYNC_DATE,null));
     }
 }

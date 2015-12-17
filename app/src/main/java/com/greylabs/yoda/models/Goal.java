@@ -465,8 +465,8 @@ public class Goal implements Serializable{
     }
 
     public List<String> getDistinctGoalStringIds(){
-        String query =" select  distinct("+TablePendingStep.goalStringId+") as stringIds " +
-                     "  from "+TablePendingStep.pendingStep;
+        String query =" select  distinct("+TableGoal.stringId+") as stringIds " +
+                     "  from "+TableGoal.goal ;
         SQLiteDatabase db=database.getWritableDatabase();
         Cursor c = db.rawQuery(query, null);
         List<String> stringGoals=null;
@@ -479,6 +479,18 @@ public class Goal implements Serializable{
         return stringGoals;
     }
 
+    public long getTimeboxIdByGoalId(String id){
+        long tbId=0;
+        String query="select  "+TableGoal.id +" ,"+TableGoal.timeBoxId+" "+
+                " "+" from "+ TableGoal.goal+" " +
+                " "+" where "+ TableGoal.stringId+" = '"+id+"'";
+        SQLiteDatabase db=database.getReadableDatabase();
+        Cursor c=db.rawQuery(query,null);
+        if(c.moveToFirst()){
+            tbId=c.getLong(c.getColumnIndex(TableGoal.timeBoxId));
+        }
+        return tbId;
+    }
     public enum GoalDeleted{
         SHOW_DELETED("("+TableGoal.deleted+"= 1 )"),
         SHOW_NOT_DELETED("("+TableGoal.deleted+"= 0 )"),
@@ -492,4 +504,5 @@ public class Goal implements Serializable{
             return criteria;
         }
     }
+
 }
