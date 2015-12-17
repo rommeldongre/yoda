@@ -128,7 +128,6 @@ public class Dialogues {
                     if(new Date().compareTo(pendingStep.getStepDate())<0)
                        checkBackInFiveMins();
                 }
-                Logger.showMsg(context,"in on dismiss ");
                 Day day=new Day(context);
                 if(CalendarUtils.compareOnlyDates(day.getFirstDay(),new Date())==true) {
                     AsyncTask task=new AsyncTask() {
