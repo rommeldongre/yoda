@@ -28,7 +28,7 @@ public class BootCompleteService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Toast.makeText(this, "BootCompleteService on start command...", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "BootCompleteService on start command...", Toast.LENGTH_SHORT).show();
         //update calendar
         YodaCalendar yodaCalendar=new YodaCalendar(this);
         yodaCalendar.updateCalendar();

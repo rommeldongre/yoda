@@ -116,6 +116,9 @@ public class Dialogues {
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
+                if(pendingStep.getPendingStepStatus()== PendingStep.PendingStepStatus.DOING
+                        || pendingStep.getPendingStepStatus()== PendingStep.PendingStepStatus.TODO)
+                    checkBackInFiveMins();
                 if (caller.equals(Constants.ACT_HOME)) {
                     ((ActHome) context).onDialogueClosed();
 //                    boolean c=pendingStep.getPendingStepStatus()== PendingStep.PendingStepStatus.TODO;
@@ -124,9 +127,6 @@ public class Dialogues {
 ////                    if(Dialogues.this.startEnd== PendingStep.PendingStepStartEnd.END){
 ////                        checkExpiryOfStep();
 ////                    }
-                }else{
-                    if(new Date().compareTo(pendingStep.getStepDate())<0)
-                       checkBackInFiveMins();
                 }
                 Day day=new Day(context);
                 if(CalendarUtils.compareOnlyDates(day.getFirstDay(),new Date())==true) {
@@ -221,9 +221,9 @@ public class Dialogues {
                     dialog.dismiss();
                     break;
                 case R.id.llDoingItNowNotification:
-                    if (pendingStep != null) {
-                      checkBackInFiveMins();
-                    }
+//                    if (pendingStep != null) {
+//                      //checkBackInFiveMins();
+//                    }
                     dialog.dismiss();
                     break;
                 case R.id.llMissedNowNotification:
@@ -278,7 +278,7 @@ public class Dialogues {
             alarmScheduler.initContext(context);
         alarmScheduler.setStepId(pendingStep.getId());
         alarmScheduler.setAlarmDate(new Date());
-        alarmScheduler.postponeAlarm(1);
+        alarmScheduler.postponeAlarm(5);
     }
 
 }
