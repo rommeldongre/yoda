@@ -22,7 +22,7 @@ import com.greylabs.yoda.utils.Prefs;
 import com.greylabs.yoda.utils.ResetYoda;
 
 
-public class ActSettingDefaultDuration extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener, RadioGroup.OnCheckedChangeListener, View.OnClickListener {
+public class ActSettingDefaultDuration extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener, RadioGroup.OnCheckedChangeListener, View.OnClickListener, DialogInterface.OnClickListener {
 
     Toolbar toolbar;
     SeekBar sbStepDuration, sbSessionDuration, sbYodaSaysNotification;//, sbExportToCalendar;
@@ -166,16 +166,26 @@ public class ActSettingDefaultDuration extends AppCompatActivity implements Seek
     @Override
     public void onClick(View v) {
         AlertDialog.Builder alertLogout = new AlertDialog.Builder(this);
-        alertLogout.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                ResetYoda.reset(ActSettingDefaultDuration.this);
-                startActivity(new Intent(ActSettingDefaultDuration.this, ActSplashScreen.class));
-                ActSettingDefaultDuration.this.finish();
-            }
-        });
+//        alertLogout.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialogInterface, int i) {
+//                ResetYoda.reset(ActSettingDefaultDuration.this);
+//                startActivity(new Intent(ActSettingDefaultDuration.this, ActSplashScreen.class));
+//                ActSettingDefaultDuration.this.finish();
+//            }
+//        });
+        alertLogout.setPositiveButton("Yes", this);
         alertLogout.setNegativeButton("Cancel", null);
         alertLogout.setMessage(Constants.MSG_RESET_YODA);
         alertLogout.show();
+    }
+
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+        ResetYoda.reset(ActSettingDefaultDuration.this);
+//        Intent intent = new Intent();
+//        setResult(Constants.RESULT_CODE_ACT_SETTINGS_DEFAULT_DURATION, intent);
+        startActivity(new Intent(ActSettingDefaultDuration.this, ActSplashScreen.class));
+        this.finish();
     }
 }

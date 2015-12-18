@@ -93,10 +93,12 @@ public class Constants {
     public static final int RESULTCODE_OF_ACT_ADD_GOAL = 12;
     public static final int RESULTCODE_OF_ACT_ADD_TIMEBOX = 13;
     public static final int RESULTCODE_ACT_SETTINGS_CHANGE_WALLPAPER = 14;
+    public static final int RESULT_CODE_ACT_SETTINGS_DEFAULT_DURATION = 15;
     public static final int REQUEST_CODE_ACT_ADD_NEW_STEP = 1;
     public static final int REQUEST_CODE_ACT_ACT_ADD_NEW_GOAL = 2;
     public static final int REQUEST_CODE_ACT_ACT_GOAL_DETAILS = 3;
     public static final int REQUEST_CODE_ACT_TIMEBOX_LIST = 4;
+    public static final int REQUEST_CODE_ACT_HOME = 5;
     public static final String ID_UNPLANNED_TIMEBOX ="Unplanned TimeBoxId" ;
     public static final String ID_STRETCH_GOAL ="Stretch GoalId" ;
     public static final String MSG_RESET_YODA = "Resetting App will erase all the data! Are you sure, you want to delete all alarms and start over again?";

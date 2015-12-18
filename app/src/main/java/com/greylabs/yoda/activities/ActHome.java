@@ -1,7 +1,6 @@
 package com.greylabs.yoda.activities;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -24,7 +23,6 @@ import com.greylabs.yoda.models.Slot;
 import com.greylabs.yoda.utils.BitmapUtility;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Dialogues;
-import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.Prefs;
 import com.greylabs.yoda.views.GoalView;
 import com.greylabs.yoda.views.MyArcProgress;
@@ -64,16 +62,6 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        //test code
-//        Day day=new Day(this);
-//        List<Day> days=day.getAll();
-//        Slot slot=new Slot(this);
-//        List<Slot> slots=slot.getAll();
-
-//        YodaCalendar yodaCalendar = new YodaCalendar(this);
-//        yodaCalendar.uar();
-
-//        //test code end , delete or comment out this before giving to client.
         initialize();
     }
 
@@ -291,7 +279,7 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
                 break;
 
             case R.id.btnDefaultDurationActHome:
-                startActivity(new Intent(this, ActSettingDefaultDuration.class));
+                startActivityForResult(new Intent(this, ActSettingDefaultDuration.class), Constants.REQUEST_CODE_ACT_HOME);
                 btnSettings.collapse();
                 break;
 
@@ -316,7 +304,7 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
 //                break;
 
             case R.id.btnChangeWallpaperActHome:
-                startActivityForResult(new Intent(this, ActSettingChangeWallpaper.class), 1);
+                startActivityForResult(new Intent(this, ActSettingChangeWallpaper.class), Constants.REQUEST_CODE_ACT_HOME);
                 btnSettings.collapse();
                 break;
 
@@ -356,9 +344,14 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Constants.RESULTCODE_ACT_SETTINGS_CHANGE_WALLPAPER) {
-//            prefs = Prefs.getInstance(this);
-            layoutWallpaper.setBackgroundResource(prefs.getWallpaperResourceId());
+        switch (resultCode) {
+            case Constants.RESULTCODE_ACT_SETTINGS_CHANGE_WALLPAPER:
+                layoutWallpaper.setBackgroundResource(prefs.getWallpaperResourceId());
+                break;
+
+//            case Constants.RESULT_CODE_ACT_SETTINGS_DEFAULT_DURATION:
+//                this.finish();
+//                break;
         }
     }
 
