@@ -51,6 +51,7 @@ public class ActQuickStart extends AppCompatActivity implements View.OnClickList
         super.onResume();
         if (prefs.isOptionFromActQuickStartSelected() == true) {
             startActivity(new Intent(ActQuickStart.this, ActHome.class));
+            Logger.d(TAG, "FINiSHED 1");
             this.finish();
         }
     }
@@ -95,12 +96,7 @@ public class ActQuickStart extends AppCompatActivity implements View.OnClickList
                                     googleAccount.dismissChooseAccountDialog();
                                     new ImportTaskAsyncThread(ActQuickStart.this, new MyHandlerImportTask(ActQuickStart.this)).execute();
                                 }
-                            }, new DialogInterface.OnDismissListener() {
-                                @Override
-                                public void onDismiss(DialogInterface dialogInterface) {
-//                            new ImportTaskAsyncThread(ActQuickStart.this, new MyHandler()).execute();
-                                }
-                            });
+                            }, null);
                         } else {
                             AlertDialog.Builder builder = new AlertDialog.Builder(this);
 //                            builder.setTitle("Alert");
@@ -128,7 +124,9 @@ public class ActQuickStart extends AppCompatActivity implements View.OnClickList
         public void handleMessage(Message msg) {
             prefs.setOptionFromActQuickStartSelected(true);
             startActivity(new Intent(ActQuickStart.this, ActHome.class));
+            Logger.d(TAG, "FINiSHED 2");
             ((Activity) context).finish();
+
         }
     }
 
@@ -143,6 +141,8 @@ public class ActQuickStart extends AppCompatActivity implements View.OnClickList
         public void handleMessage(Message msg) {
             prefs.setOptionFromActQuickStartSelected(true);
             startActivity(new Intent(ActQuickStart.this, ActHome.class));
+
+            Logger.d(TAG, "FINiSHED 3");
             ((Activity) context).finish();
         }
     }
@@ -157,16 +157,23 @@ public class ActQuickStart extends AppCompatActivity implements View.OnClickList
 
         @Override
         public void handleMessage(Message msg) {
-            Integer success = (Integer) msg.obj;
+            Integer success = msg.arg1;
+            Logger.d(TAG, "Handled message from ImportTask Async,result is :" + success);
             if (success == 1) {
+                Logger.d(TAG, "Handled message from ImportTask Async,inside :" + success);
                 prefs.setOptionFromActQuickStartSelected(true);
                 startActivity(new Intent(ActQuickStart.this, ActHome.class));
+                Logger.d(TAG, "FINiSHED 4");
                 ((Activity) context).finish();
             } else if (success == 2) {
+                Logger.d(TAG, "Handled message from ImportTask Async,inside :" + success);
+                startActivityForResult((Intent) msg.obj, 1);
                 Logger.showMsg(context, "Authenticating...");
             } else {
+                Logger.d(TAG, "Handled message from ImportTask Async,inside :" + success);
                 Logger.showMsg(context, "Failed to sync. Try again.");
             }
+            Logger.d(TAG, "Handled message from ImportTask Async, end of handleMsg");
 
         }
     }
@@ -176,9 +183,15 @@ public class ActQuickStart extends AppCompatActivity implements View.OnClickList
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1 && resultCode == RESULT_OK) {
             Logger.d(TAG, "Authorization Successful and importing tasks from server");
-            rlImport.performClick();
+            new ImportTaskAsyncThread(ActQuickStart.this, new MyHandlerImportTask(ActQuickStart.this)).execute();
         } else {
-            Logger.d(TAG, "Unable to import tasks. ");
+            Logger.showMsg(this, "Unable to import tasks. ");
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Logger.d(TAG, "On Destroy");
     }
 }

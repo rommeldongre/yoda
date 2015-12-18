@@ -20,37 +20,38 @@ import com.greylabs.yoda.utils.Logger;
 
 import java.io.IOException;
 
-public class ImportTaskAsyncThread extends AsyncTask<Void, Void, Integer> {
+public class ImportTaskAsyncThread extends AsyncTask<Void, Void, Object> {
 
     ProgressDialog progressDialog;
     Context context;
     Handler myHandler;
-
+    Integer res=0;
     public ImportTaskAsyncThread(Context activityContext, Handler handler) {
         this.context = activityContext;
         this.myHandler = handler;
     }
 
     @Override
-    protected Integer doInBackground(Void... voids) {
+    protected Object doInBackground(Void... voids) {
         NewStep newStep = new NewStep(context);
         newStep.newStep();
         Slot slot = new Slot(context);
         slot.setDefaultGoalDetails();
         GoogleAccount googleAccount = new GoogleAccount(context);
         googleAccount.authenticate();
-        Integer res=0;
+        Object obj=new Object();
         try {
             googleAccount.doImport();
             res= 1;
         } catch (UserRecoverableAuthIOException e) {
-            ((Activity) context).startActivityForResult(e.getIntent(), 1);
+            e.printStackTrace();
             res= 2;
+            obj=e.getIntent();
         } catch (IOException e) {
             e.printStackTrace();
             res= 0;
         }
-        return res;
+        return obj;
     }
 
     @Override
@@ -64,12 +65,13 @@ public class ImportTaskAsyncThread extends AsyncTask<Void, Void, Integer> {
 
 
     @Override
-    protected void onPostExecute(Integer result) {
+    protected void onPostExecute(Object result) {
         super.onPostExecute(result);
         progressDialog.dismiss();
-        Logger.d("ImportTaskAsyncThread", "Task Imported to stretch Goal");
+        Logger.d("ImportTaskAsyncThread", "Task Imported status:"+result);
         Message message = new Message();
         message.obj = result;
+        message.arg1=res;
         myHandler.sendMessage(message);
     }
 }
