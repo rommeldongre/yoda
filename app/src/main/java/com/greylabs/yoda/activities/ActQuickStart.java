@@ -24,10 +24,12 @@ import com.greylabs.yoda.threads.ImportTaskAsyncThread;
 import com.greylabs.yoda.threads.NewStepAsyncTask;
 import com.greylabs.yoda.threads.QuickStartAsyncTask;
 import com.greylabs.yoda.utils.ConnectionUtils;
+import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.Prefs;
 
 public class ActQuickStart extends AppCompatActivity implements View.OnClickListener {
 
+    private static final String TAG = "ActQuickSt";
     RelativeLayout rlQuickStart, rlImport, rlNewStep;
     Prefs prefs = Prefs.getInstance(this);
     Context contextActQuickStart;
@@ -68,11 +70,11 @@ public class ActQuickStart extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rlQuickStartActQuickStart:
-                new QuickStartAsyncTask(this, new MyHandler(this)).execute();
+                new QuickStartAsyncTask(this, new MyHandlerQuickStart(this)).execute();
                 break;
 
             case R.id.rlNewStepActQuickStart:
-                new NewStepAsyncTask(this, new MyHandler(this)).execute();
+                new NewStepAsyncTask(this, new MyHandlerNewStep(this)).execute();
                 break;
 
             case R.id.rlImportTaskActQuickStart:
@@ -91,7 +93,7 @@ public class ActQuickStart extends AppCompatActivity implements View.OnClickList
                                     prefs.setDefaultAccountEmailId(googleAccount.getUsers().get(position));
                                     prefs.setDefaultAccountType(AccountType.GOOGLE.ordinal());
                                     googleAccount.dismissChooseAccountDialog();
-                                    new ImportTaskAsyncThread(ActQuickStart.this, new MyHandler(contextActQuickStart)).execute();
+                                    new ImportTaskAsyncThread(ActQuickStart.this, new MyHandlerImportTask(ActQuickStart.this)).execute();
                                 }
                             }, new DialogInterface.OnDismissListener() {
                                 @Override
@@ -115,18 +117,68 @@ public class ActQuickStart extends AppCompatActivity implements View.OnClickList
     }
 
 
-    private class MyHandler extends Handler {
+    private class MyHandlerQuickStart extends Handler {
         Context context;
 
-        public MyHandler(Context context) {
+        public MyHandlerQuickStart(Context context) {
             this.context = context;
         }
 
         @Override
         public void handleMessage(Message msg) {
             prefs.setOptionFromActQuickStartSelected(true);
-            ((Activity) context).finish();
             startActivity(new Intent(ActQuickStart.this, ActHome.class));
+            ((Activity) context).finish();
+        }
+    }
+
+    private class MyHandlerNewStep extends Handler {
+        Context context;
+
+        public MyHandlerNewStep(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            prefs.setOptionFromActQuickStartSelected(true);
+            startActivity(new Intent(ActQuickStart.this, ActHome.class));
+            ((Activity) context).finish();
+        }
+    }
+
+
+    private class MyHandlerImportTask extends Handler {
+        Context context;
+
+        public MyHandlerImportTask(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            Integer success = (Integer) msg.obj;
+            if (success == 1) {
+                prefs.setOptionFromActQuickStartSelected(true);
+                startActivity(new Intent(ActQuickStart.this, ActHome.class));
+                ((Activity) context).finish();
+            } else if (success == 2) {
+                Logger.showMsg(context, "Authenticating...");
+            } else {
+                Logger.showMsg(context, "Failed to sync. Try again.");
+            }
+
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            Logger.d(TAG, "Authorization Successful and importing tasks from server");
+            rlImport.performClick();
+        } else {
+            Logger.d(TAG, "Unable to import tasks. ");
         }
     }
 }

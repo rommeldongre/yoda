@@ -1,4 +1,6 @@
 package com.greylabs.yoda.threads;
+
+import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -11,13 +13,13 @@ import com.greylabs.yoda.utils.Logger;
 
 import java.io.IOException;
 
-public class AsyncTaskThread extends AsyncTask<Void, Void, Void> {
+public class AsyncTaskThread extends AsyncTask<Void, Void, Integer> {
 
     Context context;
     Handler myHandler;
     int OPERATION;
 
-    public AsyncTaskThread( Context activityContext, Handler handler, int OPERATION) {
+    public AsyncTaskThread(Context activityContext, Handler handler, int OPERATION) {
         this.context = activityContext;
         this.myHandler = handler;
         this.OPERATION = OPERATION;
@@ -28,12 +30,12 @@ public class AsyncTaskThread extends AsyncTask<Void, Void, Void> {
     }
 
     @Override
-    protected Void doInBackground(Void... params) {
+    protected Integer doInBackground(Void... params) {
         GoogleAccount googleAccount = new GoogleAccount(context);
         googleAccount.authenticate();
         try {
-            switch (OPERATION){
-                case Constants.OPERATION_SYNC_NOW :
+            switch (OPERATION) {
+                case Constants.OPERATION_SYNC_NOW:
                     googleAccount.sync();
                     break;
 
@@ -41,24 +43,27 @@ public class AsyncTaskThread extends AsyncTask<Void, Void, Void> {
                     googleAccount.doImport();
                     break;
 
-                case Constants.OPERATION_EXPORT :
+                case Constants.OPERATION_EXPORT:
                     googleAccount.doExport();
                     break;
             }
-        }catch (UserRecoverableAuthIOException e){
-            context.startActivity(e.getIntent());
-        }catch (IOException e) {
+        } catch (UserRecoverableAuthIOException e) {
+            //context.startActivity(e.getIntent());
+            //Logger.showMsg(context, "Wait authenticating...");
+            ((Activity) context).startActivityForResult(e.getIntent(), 1);
+        } catch (IOException e) {
             e.printStackTrace();
+            OPERATION=4;
         }
-        return null;
+        return OPERATION;
     }
 
     @Override
-    protected void onPostExecute(Void result) {
+    protected void onPostExecute(Integer result) {
         super.onPostExecute(result);
         Logger.d("Import(1) / Export(2) done :", " " + OPERATION);
         Message message = new Message();
-        message.obj = OPERATION;
+        message.obj = result;
         myHandler.sendMessage(message);
     }
 }

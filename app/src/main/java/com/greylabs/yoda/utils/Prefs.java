@@ -169,6 +169,7 @@ public class Prefs  {
 
     public void clear() {
         editor.clear();
+        editor.apply();
         editor.commit();
     }
 

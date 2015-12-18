@@ -33,11 +33,13 @@ import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.Prefs;
 import com.greylabs.yoda.views.MyFloatingActionButton;
 
+import java.security.CodeSigner;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ActSettingsGoogle extends AppCompatActivity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener, CompoundButton.OnCheckedChangeListener, AdapterView.OnItemSelectedListener {
 
+    private static final String TAG="ActSettingG";
     Toolbar toolbar;
     Spinner accountSpinner;
     SwitchCompat autoSyncSwitch;
@@ -53,6 +55,7 @@ public class ActSettingsGoogle extends AppCompatActivity implements View.OnClick
     boolean isAccountPresent = false;
     private ViewFlipper viewFlipper;
     private Button btnAddAccount;
+    private int lastSelectedOperation=Constants.OPERATION_SYNC_NOW;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,16 +170,19 @@ public class ActSettingsGoogle extends AppCompatActivity implements View.OnClick
             switch (v.getId()) {
                 case R.id.btnSyncNowWithGoogleActSettingsGoogle:
                     showSyncProgress(true);
+                    lastSelectedOperation=Constants.OPERATION_SYNC_NOW;
                     new AsyncTaskThread(this, new MyHandler(), Constants.OPERATION_SYNC_NOW).execute();
                     break;
 
                 case R.id.btnImportNowFromGTasksActSettingsGoogle:
                     showImportProgress(true);
+                    lastSelectedOperation= Constants.OPERATION_IMPORT;
                     new AsyncTaskThread(this, new MyHandler(), Constants.OPERATION_IMPORT).execute();
                     break;
 
                 case R.id.btnExportNowToGoogleCalActSettingsGoogle:
                     showExportProgress(true);
+                    lastSelectedOperation=Constants.OPERATION_EXPORT;
                     new AsyncTaskThread(this, new MyHandler(), Constants.OPERATION_EXPORT).execute();
                     break;
 
@@ -264,6 +270,7 @@ public class ActSettingsGoogle extends AppCompatActivity implements View.OnClick
         @Override
         public void handleMessage(Message msg) {
             int OPERATION = (int) msg.obj;
+
             switch (OPERATION) {
                 case Constants.OPERATION_SYNC_NOW:
                     showSyncProgress(false);
@@ -279,7 +286,52 @@ public class ActSettingsGoogle extends AppCompatActivity implements View.OnClick
                     showExportProgress(false);
                     Logger.showSnack(ActSettingsGoogle.this, toolbar, Constants.MSG_EXPORT_DONE);
                     break;
+                default:
+                    hideAllProgressBars();
+                    Logger.showSnack(ActSettingsGoogle.this, toolbar, "Failed to sync. Try again.");
             }
+        }
+    }
+
+
+    private void hideProgress(int operation){
+        switch (operation){
+            case Constants.OPERATION_SYNC_NOW:
+                showSyncProgress(false);
+                break;
+            case Constants.OPERATION_IMPORT:
+                showImportProgress(false);
+                break;
+            case Constants.OPERATION_EXPORT:
+                showExportProgress(false);
+                break;
+        }
+    }
+
+    private void hideAllProgressBars(){
+        showSyncProgress(false);
+        showImportProgress(false);
+        showExportProgress(false);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==1 && resultCode==RESULT_OK){
+            Logger.d(TAG,"Authorization Successful and importing tasks from server");
+            switch (lastSelectedOperation) {
+                case Constants.OPERATION_SYNC_NOW:
+                    btnSyncNow.performClick();
+                    break;
+                case Constants.OPERATION_IMPORT:
+                    btnImportNow.performClick();
+                    break;
+                case Constants.OPERATION_EXPORT:
+                    btnExportNow.performClick();
+                    break;
+            }
+        }else{
+            Logger.d(TAG,"User denied the authentication ");
         }
     }
 }

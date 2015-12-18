@@ -4,12 +4,14 @@ package com.greylabs.yoda.threads;
  * Created by Jaybhay Vijay on 8/12/2015.
  */
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
 import com.greylabs.yoda.apis.googleacc.GoogleAccount;
 import com.greylabs.yoda.database.NewStep;
 import com.greylabs.yoda.models.Slot;
@@ -18,7 +20,7 @@ import com.greylabs.yoda.utils.Logger;
 
 import java.io.IOException;
 
-public class ImportTaskAsyncThread extends AsyncTask<Void, Void, Void> {
+public class ImportTaskAsyncThread extends AsyncTask<Void, Void, Integer> {
 
     ProgressDialog progressDialog;
     Context context;
@@ -30,19 +32,25 @@ public class ImportTaskAsyncThread extends AsyncTask<Void, Void, Void> {
     }
 
     @Override
-    protected Void doInBackground(Void... voids) {
-        NewStep newStep=new NewStep(context);
+    protected Integer doInBackground(Void... voids) {
+        NewStep newStep = new NewStep(context);
         newStep.newStep();
-        Slot slot=new Slot(context);
+        Slot slot = new Slot(context);
         slot.setDefaultGoalDetails();
-        GoogleAccount googleAccount=new GoogleAccount(context);
+        GoogleAccount googleAccount = new GoogleAccount(context);
         googleAccount.authenticate();
+        Integer res=0;
         try {
             googleAccount.doImport();
+            res= 1;
+        } catch (UserRecoverableAuthIOException e) {
+            ((Activity) context).startActivityForResult(e.getIntent(), 1);
+            res= 2;
         } catch (IOException e) {
             e.printStackTrace();
+            res= 0;
         }
-        return null;
+        return res;
     }
 
     @Override
@@ -55,9 +63,8 @@ public class ImportTaskAsyncThread extends AsyncTask<Void, Void, Void> {
     }
 
 
-
     @Override
-    protected void onPostExecute(Void result) {
+    protected void onPostExecute(Integer result) {
         super.onPostExecute(result);
         progressDialog.dismiss();
         Logger.d("ImportTaskAsyncThread", "Task Imported to stretch Goal");
