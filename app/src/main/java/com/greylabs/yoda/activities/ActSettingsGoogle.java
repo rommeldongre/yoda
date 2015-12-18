@@ -2,12 +2,8 @@ package com.greylabs.yoda.activities;
 
 import android.accounts.Account;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -24,6 +20,7 @@ import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.greylabs.yoda.R;
@@ -47,6 +44,7 @@ public class ActSettingsGoogle extends AppCompatActivity implements View.OnClick
     MyFloatingActionButton btnExportNow, btnSyncNow, btnImportNow;
     ProgressBar pbSyncNow, pbImportNow, pbExportNow;
     SeekBar sbExportToCalendar;
+    TextView tvExportToCalendar;
     Paint thumbPaint, textPaint;
     ArrayList<Account> accountArrayList = new ArrayList<>();
     ArrayAdapter<String> accountSpinnerAdapter;
@@ -89,12 +87,13 @@ public class ActSettingsGoogle extends AppCompatActivity implements View.OnClick
         btnExportNow = (MyFloatingActionButton) findViewById(R.id.btnExportNowToGoogleCalActSettingsGoogle);
         btnAddAccount = (Button) findViewById(R.id.btnAddAccountFlipperEmptyViewActGoogleSettings);
         sbExportToCalendar = (SeekBar) findViewById(R.id.sbDefaultExportCalDurationActSettingsGoogle);
+        tvExportToCalendar = (TextView) findViewById(R.id.tvSeekbarDefaultExportCalDurationActSettingsGoogle);
         pbSyncNow = (ProgressBar) findViewById(R.id.pbSyncNowWithGoogleActSettingsGoogle);
         pbImportNow = (ProgressBar) findViewById(R.id.pbImportNowFromGTasksActSettingsGoogle);
         pbExportNow = (ProgressBar) findViewById(R.id.pbExportNowToGoogleCalActSettingsGoogle);
 
         sbExportToCalendar.setProgress(prefs.getExportToCalendarDuration());
-        sbExportToCalendar.setThumb(writeOnDrawable(R.drawable.ic_btn_plus_sign, String.valueOf(prefs.getExportToCalendarDuration())));
+        tvExportToCalendar.setText("" + sbExportToCalendar.getProgress());
         autoSyncSwitch.setChecked(prefs.getAutoSyncState());
 
         sbExportToCalendar.setOnSeekBarChangeListener(this);
@@ -225,20 +224,11 @@ public class ActSettingsGoogle extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        String valueString = String.valueOf(seekBar.getProgress());
-        sbExportToCalendar.setThumb(writeOnDrawable(R.drawable.ic_btn_plus_sign, valueString));
         if (progress < 1) {
-            sbExportToCalendar.setProgress(1);
+            progress = 1;
+            sbExportToCalendar.setProgress(progress);
         }
-    }
-
-    public BitmapDrawable writeOnDrawable(int drawableId, String text) {
-
-        Bitmap bm = BitmapFactory.decodeResource(getResources(), drawableId).copy(Bitmap.Config.ARGB_8888, true);
-        Canvas canvas = new Canvas(bm);
-        canvas.drawCircle(bm.getWidth() / 2, bm.getHeight() / 2, 25, thumbPaint);
-        canvas.drawText(text, bm.getWidth() / 2 - textPaint.measureText(text) / 2, bm.getHeight() / 2 + 7, textPaint);
-        return new BitmapDrawable(bm);
+        tvExportToCalendar.setText("" + progress);
     }
 
     @Override

@@ -27,6 +27,7 @@ import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.google.api.client.util.DateTime;
 import com.greylabs.yoda.R;
@@ -56,6 +57,7 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
     Button btnShowAdvanced, btnHideAdvanced;
     Spinner goalSpinner, stepTypeSpinner, stepPrioritySpinner;
     SeekBar sbNoOfSteps, sbTimeSeriesStep, sbTimeSingleStep;
+    TextView tvTimeSingleStep, tvNoOfSeriesSteps, tvTimeSeriesSteps;
     LinearLayout singleStepPanel, seriesPanel;
     ScrollView scrollView;
     RadioButton rbDontExpire, rbExpire;
@@ -116,6 +118,10 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
         sbTimeSingleStep = (SeekBar) findViewById(R.id.seekbarSingleStepTimeActAddNewStep);
         sbNoOfSteps = (SeekBar) findViewById(R.id.seekbarStepsInSeriesActAddNewStep);
         sbTimeSeriesStep = (SeekBar) findViewById(R.id.seekbarTimeForEachStepActAddNewStep);
+        tvTimeSingleStep = (TextView) findViewById(R.id.tvSeekbarSingleStepTimeActAddNewStep);
+        tvNoOfSeriesSteps = (TextView) findViewById(R.id.tvSeekbarStepsInSeriesActAddNewStep);
+        tvTimeSeriesSteps = (TextView) findViewById(R.id.tvSeekbarTimeForEachStepActAddNewStep);
+
         singleStepPanel = (LinearLayout) findViewById(R.id.SingleStepPanelActAddNewStep);
         seriesPanel = (LinearLayout) findViewById(R.id.SeriesPanelActAddNewStep);
         rbDontExpire = (RadioButton) findViewById(R.id.rbDontExpireActAddNewStep);
@@ -139,10 +145,8 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
 
     private void setDefaultValues() {
         sbTimeSingleStep.setProgress(prefs.getDefaultStepDuration());
-        sbTimeSingleStep.setThumb(writeOnDrawable(R.drawable.ic_btn_plus_sign, String.valueOf(prefs.getDefaultStepDuration())));
         sbNoOfSteps.setProgress(2);
         sbTimeSeriesStep.setProgress(prefs.getDefaultStepDuration());
-        sbTimeSeriesStep.setThumb(writeOnDrawable(R.drawable.ic_btn_plus_sign, String.valueOf(prefs.getDefaultStepDuration())));
         if (prefs.isPriorityNewStepBottomMost()) {
             //choose bottom most
             stepPrioritySpinner.setSelection(1);
@@ -240,13 +244,10 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                             ) {
                         stepTypeSpinner.setSelection(0);
                         sbTimeSingleStep.setProgress(currentStep.getTime());
-                        sbTimeSingleStep.setThumb(writeOnDrawable(R.drawable.ic_btn_plus_sign, String.valueOf(currentStep.getTime())));
                     } else {
                         stepTypeSpinner.setSelection(1);
                         sbTimeSeriesStep.setProgress(currentStep.getTime());
-                        sbTimeSeriesStep.setThumb(writeOnDrawable(R.drawable.ic_btn_plus_sign, String.valueOf(currentStep.getTime())));
                         sbNoOfSteps.setProgress(currentStep.getStepCount());
-                        sbNoOfSteps.setThumb(writeOnDrawable(R.drawable.ic_btn_plus_sign, String.valueOf(currentStep.getStepCount())));
                     }
                 }
                 break;
@@ -558,26 +559,29 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-        String valueString = String.valueOf(seekBar.getProgress());
-        seekBar.setThumb(writeOnDrawable(R.drawable.ic_btn_plus_sign, valueString));
-
         switch (seekBar.getId()) {
             case R.id.seekbarSingleStepTimeActAddNewStep:
                 if (progress < 1) {
-                    sbTimeSingleStep.setProgress(1);
+                    progress=1;
+                    sbTimeSingleStep.setProgress(progress);
                 }
+                tvTimeSingleStep.setText(""+progress);
                 break;
 
             case R.id.seekbarStepsInSeriesActAddNewStep:
                 if (stepTypeSpinner.getSelectedItemPosition() == 1 && progress < 2) {
-                    sbNoOfSteps.setProgress(2);
+                    progress =2;
+                    sbNoOfSteps.setProgress(progress);
                 }
+                tvNoOfSeriesSteps.setText("" + progress);
                 break;
 
             case R.id.seekbarTimeForEachStepActAddNewStep:
                 if (progress < 1) {
-                    sbTimeSeriesStep.setProgress(1);
+                    progress=1;
+                    sbTimeSeriesStep.setProgress(progress);
                 }
+                tvTimeSeriesSteps.setText(""+progress);
                 break;
         }
     }
@@ -590,17 +594,6 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
 
-    }
-
-    public BitmapDrawable writeOnDrawable(int drawableId, String text) {
-
-        Bitmap bm = BitmapFactory.decodeResource(getResources(), drawableId).copy(Bitmap.Config.ARGB_8888, true);
-        Canvas canvas = new Canvas(bm);
-        float x = bm.getWidth() / 2;
-        float y = bm.getHeight() / 2;
-        canvas.drawCircle(x, y, getResources().getDimension(R.dimen.seekbarBulletRadius), thumbPaint);
-        canvas.drawText(text, x - textPaint.measureText(text) / 2, y + 7, textPaint);
-        return new BitmapDrawable(bm);
     }
 
     @Override
