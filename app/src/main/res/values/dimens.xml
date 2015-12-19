@@ -14,4 +14,7 @@
     <dimen name="margin_bottom_progressbar_act_goal_details">15dp</dimen>
     <dimen name="seekbarBulletRadius">25dp</dimen>
     <dimen name="textSizeSeekbarBullet">25sp</dimen>
+    <dimen name="arcTotalProgressStrokeWidth">30dp</dimen>
+    <dimen name="arcTotalProgressTextSize">15sp</dimen>
+    <dimen name="arcTotalProgressLargeTextSize">20sp</dimen>
 </resources>

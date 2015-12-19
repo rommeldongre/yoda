@@ -17,6 +17,7 @@ import com.github.lzyzsd.circleprogress.Utils;
 import com.greylabs.yoda.R;
 
 public class MyArcProgress extends View {
+    private  float myLeft, myTop, myRight, myBottom;
     float padding;
     private Paint paint;
     protected Paint textPaint;
@@ -68,7 +69,7 @@ public class MyArcProgress extends View {
 //    private static final String INSTANCE_SUFFIX = "suffix";
 
     public MyArcProgress(Context context) {
-        this(context, (AttributeSet)null);
+        this(context, (AttributeSet) null);
     }
 
     public MyArcProgress(Context context, AttributeSet attrs) {
@@ -88,7 +89,7 @@ public class MyArcProgress extends View {
         this.default_max = 100;
         this.default_arc_angle = 288.0F;
         this.default_text_size = Utils.sp2px(this.getResources(), 18.0F);
-        this.min_size = (int)Utils.dp2px(this.getResources(), 100.0F);
+        this.min_size = (int) Utils.dp2px(this.getResources(), 100.0F);
         this.default_text_size = Utils.sp2px(this.getResources(), 40.0F);
         this.default_suffix_text_size = Utils.sp2px(this.getResources(), 15.0F);
         this.default_suffix_padding = Utils.dp2px(this.getResources(), 4.0F);
@@ -111,7 +112,7 @@ public class MyArcProgress extends View {
         this.setProgress(attributes.getInt(com.github.lzyzsd.circleprogress.R.styleable.ArcProgress_arc_progress, 0));
         this.strokeWidth = attributes.getDimension(com.github.lzyzsd.circleprogress.R.styleable.ArcProgress_arc_stroke_width, this.default_stroke_width);
         this.suffixTextSize = attributes.getDimension(com.github.lzyzsd.circleprogress.R.styleable.ArcProgress_arc_suffix_text_size, this.default_suffix_text_size);
-        this.suffixText = TextUtils.isEmpty(attributes.getString(com.github.lzyzsd.circleprogress.R.styleable.ArcProgress_arc_suffix_text))?this.default_suffix_text:attributes.getString(com.github.lzyzsd.circleprogress.R.styleable.ArcProgress_arc_suffix_text);
+        this.suffixText = TextUtils.isEmpty(attributes.getString(com.github.lzyzsd.circleprogress.R.styleable.ArcProgress_arc_suffix_text)) ? this.default_suffix_text : attributes.getString(com.github.lzyzsd.circleprogress.R.styleable.ArcProgress_arc_suffix_text);
         this.suffixTextPadding = attributes.getDimension(com.github.lzyzsd.circleprogress.R.styleable.ArcProgress_arc_suffix_text_padding, this.default_suffix_padding);
         this.bottomTextSize = attributes.getDimension(com.github.lzyzsd.circleprogress.R.styleable.ArcProgress_arc_bottom_text_size, this.default_bottom_text_size);
         this.bottomText = attributes.getString(com.github.lzyzsd.circleprogress.R.styleable.ArcProgress_arc_bottom_text);
@@ -168,7 +169,7 @@ public class MyArcProgress extends View {
 
     public void setProgress(int progress) {
         this.progress = progress;
-        if(this.progress > this.getMax()) {
+        if (this.progress > this.getMax()) {
             this.progress %= this.getMax();
         }
 
@@ -180,7 +181,7 @@ public class MyArcProgress extends View {
     }
 
     public void setMax(int max) {
-        if(max > 0) {
+        if (max > 0) {
             this.max = max;
             this.invalidate();
         }
@@ -299,73 +300,119 @@ public class MyArcProgress extends View {
         this.goalName = goalName;
     }
 
+//        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+////        this.rectF.set(this.strokeWidth / 2.0F, this.strokeWidth / 2.0F, (float)MeasureSpec.getSize(widthMeasureSpec) - this.strokeWidth / 2.0F, (float)MeasureSpec.getSize(heightMeasureSpec) - this.strokeWidth / 2.0F);
+//        padding = strokeWidth/2;
+//        this.rectF.set((this.strokeWidth / 2.0F)+padding ,( this.strokeWidth / 2.0F)+padding, ((float)MeasureSpec.getSize(widthMeasureSpec) - this.strokeWidth / 2.0F)-padding, ((float)MeasureSpec.getSize(heightMeasureSpec) - this.strokeWidth / 2.0F)-padding);
+//        this.arcRectF.set(this.rectF.left+padding, rectF.top, this.rectF.right - padding, rectF.bottom);
+//        float radius = (float)this.getWidth() / 2.0F;
+//        float angle = (360.0F - this.arcAngle) / 2.0F;
+//        this.arcBottomHeight = radius * (float)(1.0D - Math.cos((double)(angle / 180.0F) * 3.141592653589793D));
+//        this.setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
+//    }
+//    protected void onDraw(Canvas canvas) {
+//        super.onDraw(canvas);
+//        float startAngle = 270.0F - this.arcAngle / 2.0F;
+//        float finishedSweepAngle = (float) this.progress / (float) this.getMax() * this.arcAngle;
+//
+//        // background circle
+//        Paint paintBackgroundCircle = new Paint();
+//        paintBackgroundCircle.setColor(this.backgroundCircleColor);
+//        canvas.drawCircle((float) this.getWidth() / 2.0F, (float) this.getHeight() / 2.0F, (float) this.getHeight() / 2.0F, paintBackgroundCircle);
+//
+//        // divider line
+//        Paint paintLine = new Paint();
+//        paintLine.setColor(this.dividerColor);
+//        paintLine.setStrokeWidth(2);
+//        canvas.drawLine(this.arcRectF.left + this.getStrokeWidth(), this.arcRectF.centerY(), this.arcRectF.right - this.getStrokeWidth(), this.arcRectF.centerY(), paintLine);
+//
+//        // two arcs
+//        this.paint.setColor(this.unfinishedStrokeColor);
+//        this.paint.setStrokeCap(Paint.Cap.BUTT);
+//        canvas.drawArc(this.arcRectF, startAngle, this.arcAngle, false, this.paint);
+//        this.paint.setColor(this.finishedStrokeColor);
+//        canvas.drawArc(this.arcRectF, startAngle, finishedSweepAngle, false, this.paint);
+//
+//        float bottomTextBaseline;
+//        if (!TextUtils.isEmpty(stepName)) {
+//            this.textPaint.setColor(this.textColor);
+//            this.textPaint.setTextSize(this.textSize);
+//            bottomTextBaseline = this.textPaint.descent() + this.textPaint.ascent();
+//            float textBaseline = ((float) this.getHeight() - bottomTextBaseline) / 3.0F;
+//            canvas.drawText(stepName, ((float) this.getWidth() - this.textPaint.measureText(stepName)) / 2.0F, textBaseline, this.textPaint);
+//            textBaseline = ((float) this.getHeight() - bottomTextBaseline) / 1.5F;
+//            if (goalName == null)
+//                goalName = "";
+//            canvas.drawText(goalName, ((float) this.getWidth() - this.textPaint.measureText(goalName)) / 2.0F, textBaseline, this.textPaint);
+//        }
+//
+//        if (!TextUtils.isEmpty(this.getBottomText())) {
+//            this.textPaint.setTextSize(this.bottomTextSize);
+//            bottomTextBaseline = (float) this.getHeight() - this.arcBottomHeight - (this.textPaint.descent() + this.textPaint.ascent()) / 2.0F;
+//            canvas.drawText(this.getBottomText(), ((float) this.getWidth() - this.textPaint.measureText(this.getBottomText())) / 2.0F, bottomTextBaseline, this.textPaint);
+//        }
+//
+//    }
+
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-//        this.rectF.set(this.strokeWidth / 2.0F, this.strokeWidth / 2.0F, (float)MeasureSpec.getSize(widthMeasureSpec) - this.strokeWidth / 2.0F, (float)MeasureSpec.getSize(heightMeasureSpec) - this.strokeWidth / 2.0F);
-        padding = strokeWidth/2;
-        this.rectF.set((this.strokeWidth / 2.0F)+padding ,( this.strokeWidth / 2.0F)+padding, ((float)MeasureSpec.getSize(widthMeasureSpec) - this.strokeWidth / 2.0F)-padding, ((float)MeasureSpec.getSize(heightMeasureSpec) - this.strokeWidth / 2.0F)-padding);
-        this.arcRectF.set(this.rectF.left+padding, rectF.top, this.rectF.right - padding, rectF.bottom);
-        float radius = (float)this.getWidth() / 2.0F;
-        float angle = (360.0F - this.arcAngle) / 2.0F;
-        this.arcBottomHeight = radius * (float)(1.0D - Math.cos((double)(angle / 180.0F) * 3.141592653589793D));
+        padding = strokeWidth;
+        myLeft = this.strokeWidth/2;
+        myRight = ((float) MeasureSpec.getSize(widthMeasureSpec) - this.strokeWidth/2);
+        float height = (float) MeasureSpec.getSize(heightMeasureSpec);
+        myTop = (height / 2) - ((myRight - myLeft) / 2);
+        myBottom = (height / 2) + ((myRight - myLeft) / 2);
+        this.rectF.set(myLeft, myTop, myRight, myBottom);
+        this.arcRectF.set(myLeft + padding, myTop + padding, myRight - padding, myBottom - padding);
         this.setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
     }
 
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        float startAngle = 270.0F - this.arcAngle / 2.0F;
-        float finishedSweepAngle = (float)this.progress / (float)this.getMax() * this.arcAngle;
+
+        RectF myArcRect = new RectF();
+        myArcRect.left = rectF.left + padding;
+        myArcRect.top = rectF.top + padding;
+        myArcRect.right = rectF.right - padding;
+        myArcRect.bottom = rectF.bottom - padding;
 
         // background circle
         Paint paintBackgroundCircle = new Paint();
         paintBackgroundCircle.setColor(this.backgroundCircleColor);
-        canvas.drawCircle((float) this.getWidth() / 2.0F, (float) this.getHeight() / 2.0F, (float) this.getHeight() / 2.0F, paintBackgroundCircle);
-
-//        this.rectF.left = this.rectF.left+padding;
-//        this.rectF.right = this.rectF.right - padding;
+        canvas.drawCircle(rectF.centerX(), rectF.centerY(), (myBottom - myTop) / 2.0F, paintBackgroundCircle);
 
         // divider line
         Paint paintLine = new Paint();
         paintLine.setColor(this.dividerColor);
         paintLine.setStrokeWidth(2);
-        canvas.drawLine(this.arcRectF.left + this.getStrokeWidth(), this.arcRectF.centerY(), this.arcRectF.right - this.getStrokeWidth(), this.arcRectF.centerY(), paintLine);
+        canvas.drawLine(rectF.left + this.getStrokeWidth() * 2, rectF.centerY(), rectF.right - this.getStrokeWidth() * 2, rectF.centerY(), paintLine);
 
         // two arcs
         this.paint.setColor(this.unfinishedStrokeColor);
         this.paint.setStrokeCap(Paint.Cap.BUTT);
-        canvas.drawArc(this.arcRectF, startAngle, this.arcAngle, false, this.paint);
+        canvas.drawArc(myArcRect, 120, 300, false, this.paint);
         this.paint.setColor(this.finishedStrokeColor);
-        canvas.drawArc(this.arcRectF, startAngle, finishedSweepAngle, false, this.paint);
 
-//        String text = String.valueOf(this.getProgress());
-//        float bottomTextBaseline;
-//        if(!TextUtils.isEmpty(text)) {
-//            this.textPaint.setColor(this.textColor);
-//            this.textPaint.setTextSize(this.textSize);
-//            bottomTextBaseline = this.textPaint.descent() + this.textPaint.ascent();
-//            float textBaseline = ((float)this.getHeight() - bottomTextBaseline) / 3.0F;
-//            canvas.drawText(text, ((float)this.getWidth() - this.textPaint.measureText(text)) / 2.0F, textBaseline, this.textPaint);
-//            this.textPaint.setTextSize(this.suffixTextSize);
-//            float suffixHeight = this.textPaint.descent() + this.textPaint.ascent();
-//            canvas.drawText(this.suffixText, (float)this.getWidth() / 2.0F + this.textPaint.measureText(text) + this.suffixTextPadding, textBaseline + bottomTextBaseline - suffixHeight, this.textPaint);
-//        }
+        float progressAngle = (float) this.progress * 3;
+
+        canvas.drawArc(myArcRect, 120, progressAngle, false, this.paint);
 
         float bottomTextBaseline;
-        if(!TextUtils.isEmpty(stepName)) {
+        if (!TextUtils.isEmpty(stepName)) {
             this.textPaint.setColor(this.textColor);
             this.textPaint.setTextSize(this.textSize);
             bottomTextBaseline = this.textPaint.descent() + this.textPaint.ascent();
-            float textBaseline = ((float)this.getHeight() - bottomTextBaseline) / 3.0F;
-            canvas.drawText(stepName, ((float)this.getWidth() - this.textPaint.measureText(stepName)) / 2.0F, textBaseline, this.textPaint);
-            textBaseline = ((float)this.getHeight() - bottomTextBaseline) / 1.5F;
-            if(goalName==null)
-                goalName="";
-            canvas.drawText(goalName, ((float)this.getWidth() - this.textPaint.measureText(goalName)) / 2.0F, textBaseline, this.textPaint);
+            float textBaseline = (rectF.bottom / 3.0F) - bottomTextBaseline;
+            canvas.drawText(stepName, rectF.centerX() - (this.textPaint.measureText(stepName) / 2.0F), textBaseline, this.textPaint);
+            textBaseline = (rectF.bottom * 2/ 3) - bottomTextBaseline;
+            if (goalName == null)
+                goalName = "";
+            canvas.drawText(goalName, rectF.centerX() - (this.textPaint.measureText(goalName) / 2.0F), textBaseline, this.textPaint);
         }
 
-        if(!TextUtils.isEmpty(this.getBottomText())) {
+        if (!TextUtils.isEmpty(this.getBottomText())) {
             this.textPaint.setTextSize(this.bottomTextSize);
-            bottomTextBaseline = (float)this.getHeight() - this.arcBottomHeight - (this.textPaint.descent() + this.textPaint.ascent()) / 2.0F;
-            canvas.drawText(this.getBottomText(), ((float)this.getWidth() - this.textPaint.measureText(this.getBottomText())) / 2.0F, bottomTextBaseline, this.textPaint);
+            bottomTextBaseline = (rectF.bottom - 2 * strokeWidth) - ((this.textPaint.descent() + this.textPaint.ascent()) / 2.0F);
+            canvas.drawText(this.getBottomText(), (myRight - this.textPaint.measureText(this.getBottomText())) / 2.0F, bottomTextBaseline, this.textPaint);
         }
 
     }
@@ -390,8 +437,8 @@ public class MyArcProgress extends View {
     }
 
     protected void onRestoreInstanceState(Parcelable state) {
-        if(state instanceof Bundle) {
-            Bundle bundle = (Bundle)state;
+        if (state instanceof Bundle) {
+            Bundle bundle = (Bundle) state;
             this.strokeWidth = bundle.getFloat("stroke_width");
             this.suffixTextSize = bundle.getFloat("suffix_text_size");
             this.suffixTextPadding = bundle.getFloat("suffix_text_padding");

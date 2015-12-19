@@ -167,7 +167,7 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
     private void setStyleToArcTotalProgress() {
         arcTotalProgress.invalidate();
         arcTotalProgress.setProgress((int) nowGoal.getGoalProgress());
-        arcTotalProgress.setStrokeWidth(30);
+        arcTotalProgress.setStrokeWidth(getResources().getDimension(R.dimen.arcTotalProgressStrokeWidth));
         arcTotalProgress.setFinishedStrokeColor(getResources().getColor(R.color.luminous_green));
         arcTotalProgress.setUnfinishedStrokeColor(getResources().getColor(R.color.gray_unfinished_progress));
         arcTotalProgress.setBackgroundCircleColor(getResources().getColor(R.color.transparent_total_arc_background));
@@ -175,7 +175,7 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
 //        arcTotalProgress.setArcAngle(330);
 
         // check for string lengths first and strip accordingly
-        arcTotalProgress.setTextSize(20);
+        arcTotalProgress.setTextSize(getResources().getDimension(R.dimen.arcTotalProgressTextSize));
         arcTotalProgress.setTextColor(getResources().getColor(R.color.white));
         if (nowPendingStep == null || nowPendingStep.getNickName() == null) {
             arcTotalProgress.setStepName("No Step");
@@ -184,7 +184,7 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
         }
         arcTotalProgress.setGoalName(nowGoal.getNickName());
 
-        arcTotalProgress.setBottomTextSize(30);
+        arcTotalProgress.setBottomTextSize(getResources().getDimension(R.dimen.arcTotalProgressLargeTextSize));
         arcTotalProgress.setBottomText(String.valueOf(nowGoal.getRemainingStepCount()));
 //        arcTotalProgress.setSuffixTextSize(float suffixTextSize);
 //        arcTotalProgress.setMax(int max);
