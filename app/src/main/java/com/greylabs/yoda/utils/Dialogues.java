@@ -1,10 +1,12 @@
 package com.greylabs.yoda.utils;
 
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Handler;
-import android.util.Log;
+import android.os.Message;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,8 @@ import android.widget.TextView;
 
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.activities.ActHome;
+import com.greylabs.yoda.apis.Utils;
+import com.greylabs.yoda.models.Day;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.TimeBox;
@@ -30,6 +34,8 @@ import java.util.Date;
 
 public class Dialogues {
 
+    private static final String TAG="Dialog";
+    public static boolean isUpdating=false;
     Dialog dialog;
     PendingStep pendingStep = null;
     PendingStep.PendingStepStartEnd startEnd;
@@ -103,7 +109,6 @@ public class Dialogues {
         llButtons = (LinearLayout) viewGroup.findViewById(R.id.llButtonsNowNotification);
         llExcuseLog = (LinearLayout) viewGroup.findViewById(R.id.llLogExcuseNowNotification);
         Button btnLogExcuse = (Button) viewGroup.findViewById(R.id.btnLogExcuseNowNotification);
-        Button btnCancelExcuse = (Button) viewGroup.findViewById(R.id.btnCancelExcuseNowNotification);
 
         tvGoalName.setText(goal.getNickName());
         tvStepName.setText(pendingStep.getNickName());
@@ -111,21 +116,61 @@ public class Dialogues {
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
+                if(pendingStep.getPendingStepStatus()== PendingStep.PendingStepStatus.DOING
+                        || pendingStep.getPendingStepStatus()== PendingStep.PendingStepStatus.TODO)
+                    checkBackInFiveMins();
                 if (caller.equals(Constants.ACT_HOME)) {
                     ((ActHome) context).onDialogueClosed();
-//                    if(Dialogues.this.startEnd== PendingStep.PendingStepStartEnd.END){
-//                        checkExpiryOfStep();
-//                    }
+//                    boolean c=pendingStep.getPendingStepStatus()== PendingStep.PendingStepStatus.TODO;
+//                    if(new Date().compareTo(pendingStep.getStepDate())<0 )
+//                        checkBackInFiveMins();
+////                    if(Dialogues.this.startEnd== PendingStep.PendingStepStartEnd.END){
+////                        checkExpiryOfStep();
+////                    }
+                }
+                Day day=new Day(context);
+                if(CalendarUtils.compareOnlyDates(day.getFirstDay(),new Date())==true) {
+                    AsyncTask task=new AsyncTask() {
+                        @Override
+                        protected Object doInBackground(Object[] objects) {
+                            Goal goal = new Goal(context).get(pendingStep.getGoalId());
+                            TimeBox timeBox = new TimeBox(context).get(goal.getTimeBoxId());
+                            YodaCalendar yodaCalendar = new YodaCalendar(context, timeBox);
+                            yodaCalendar.rescheduleSteps(goal.getId());
+                            Logger.d(TAG, "In Dialog:steps rescheduled");
+                            return null;
+                        }
+                    };
+                    task.execute();
                 }else{
-                    if(new Date().compareTo(pendingStep.getStepDate())<0)
-                       checkBackInFiveMins();
+                    AsyncTask task=new AsyncTask() {
+                        @Override
+                        protected Object doInBackground(Object[] objects) {
+                            isUpdating=true;
+                            Logger.d(TAG,"In Dialog: Found calendar not up to date, updating calendar");
+                            YodaCalendar yodaCalendar = new YodaCalendar(context);
+                            yodaCalendar.updateCalendar();
+                            Logger.d(TAG,"In Dialog:steps rescheduled");
+                            return null;
+                        }
+
+                        @Override
+                        protected void onPostExecute(Object o) {
+                            isUpdating=false;
+                            super.onPostExecute(o);
+                        }
+                    };
+
+                    if(isUpdating==false){
+                        task.execute();
+                        isUpdating=true;
+                    }
                 }
             }
         });
 
         MyOnClickListener myOnClickListener = new MyOnClickListener();
         btnLogExcuse.setOnClickListener(myOnClickListener);
-        btnCancelExcuse.setOnClickListener(myOnClickListener);
         llDidIt.setOnClickListener(myOnClickListener);
         llDoingIt.setOnClickListener(myOnClickListener);
         llMissedIt.setOnClickListener(myOnClickListener);
@@ -176,9 +221,9 @@ public class Dialogues {
                     dialog.dismiss();
                     break;
                 case R.id.llDoingItNowNotification:
-                    if (pendingStep != null) {
-                      checkBackInFiveMins();
-                    }
+//                    if (pendingStep != null) {
+//                      //checkBackInFiveMins();
+//                    }
                     dialog.dismiss();
                     break;
                 case R.id.llMissedNowNotification:
@@ -202,13 +247,12 @@ public class Dialogues {
                 case R.id.btnLogExcuseNowNotification:
                     String notesString = pendingStep.getNotes();
                     if (notesString != null)
-                        notesString = notesString + "\r\n" + (edtExcuse.getText().toString());
+                        notesString = notesString +
+                                ((edtExcuse.getText().toString() == null) ? "" : edtExcuse.getText().toString());
                     else
                         notesString = "";
-                    Log.i("Excuse entered", notesString);
                     pendingStep.setNotes(notesString);
                     pendingStep.save();
-                    Log.i("Excuse retrieved", new PendingStep(context).get(pendingStep.getId()).getNotes());
                     // put this text into the pendingStep
 //                if(pendingStep!=null){
 //                    pendingStep.sebtPendingStepStatus(PendingStep.PendingStepStatus.MISSED);
@@ -217,9 +261,6 @@ public class Dialogues {
 //                }
                     dialog.dismiss();
                     break;
-                case R.id.btnCancelExcuseNowNotification:
-                    llButtons.setVisibility(View.VISIBLE);
-                    llExcuseLog.setVisibility(View.GONE);
             }
 //            if(startEnd== PendingStep.PendingStepStartEnd.END){
 //                checkExpiryOfStep();
@@ -239,4 +280,5 @@ public class Dialogues {
         alarmScheduler.setAlarmDate(new Date());
         alarmScheduler.postponeAlarm(5);
     }
+
 }
