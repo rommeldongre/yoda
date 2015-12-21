@@ -1,0 +1,4 @@
+<resources>
+    <dimen name="expandedTitleMarginBottomActGoalDetails">30dp</dimen>
+    <dimen name="margin_bottom_progressbar_act_goal_details">35dp</dimen>
+</resources>

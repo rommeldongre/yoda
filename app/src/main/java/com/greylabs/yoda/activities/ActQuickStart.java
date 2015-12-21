@@ -24,10 +24,12 @@ import com.greylabs.yoda.threads.ImportTaskAsyncThread;
 import com.greylabs.yoda.threads.NewStepAsyncTask;
 import com.greylabs.yoda.threads.QuickStartAsyncTask;
 import com.greylabs.yoda.utils.ConnectionUtils;
+import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.Prefs;
 
 public class ActQuickStart extends AppCompatActivity implements View.OnClickListener {
 
+    private static final String TAG = "ActQuickSt";
     RelativeLayout rlQuickStart, rlImport, rlNewStep;
     Prefs prefs = Prefs.getInstance(this);
     Context contextActQuickStart;
@@ -49,6 +51,7 @@ public class ActQuickStart extends AppCompatActivity implements View.OnClickList
         super.onResume();
         if (prefs.isOptionFromActQuickStartSelected() == true) {
             startActivity(new Intent(ActQuickStart.this, ActHome.class));
+            Logger.d(TAG, "FINiSHED 1");
             this.finish();
         }
     }
@@ -68,11 +71,11 @@ public class ActQuickStart extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.rlQuickStartActQuickStart:
-                new QuickStartAsyncTask(this, new MyHandler(this)).execute();
+                new QuickStartAsyncTask(this, new MyHandlerQuickStart(this)).execute();
                 break;
 
             case R.id.rlNewStepActQuickStart:
-                new NewStepAsyncTask(this, new MyHandler(this)).execute();
+                new NewStepAsyncTask(this, new MyHandlerNewStep(this)).execute();
                 break;
 
             case R.id.rlImportTaskActQuickStart:
@@ -91,14 +94,9 @@ public class ActQuickStart extends AppCompatActivity implements View.OnClickList
                                     prefs.setDefaultAccountEmailId(googleAccount.getUsers().get(position));
                                     prefs.setDefaultAccountType(AccountType.GOOGLE.ordinal());
                                     googleAccount.dismissChooseAccountDialog();
-                                    new ImportTaskAsyncThread(ActQuickStart.this, new MyHandler(contextActQuickStart)).execute();
+                                    new ImportTaskAsyncThread(ActQuickStart.this, new MyHandlerImportTask(ActQuickStart.this)).execute();
                                 }
-                            }, new DialogInterface.OnDismissListener() {
-                                @Override
-                                public void onDismiss(DialogInterface dialogInterface) {
-//                            new ImportTaskAsyncThread(ActQuickStart.this, new MyHandler()).execute();
-                                }
-                            });
+                            }, null);
                         } else {
                             AlertDialog.Builder builder = new AlertDialog.Builder(this);
 //                            builder.setTitle("Alert");
@@ -115,18 +113,85 @@ public class ActQuickStart extends AppCompatActivity implements View.OnClickList
     }
 
 
-    private class MyHandler extends Handler {
+    private class MyHandlerQuickStart extends Handler {
         Context context;
 
-        public MyHandler(Context context) {
+        public MyHandlerQuickStart(Context context) {
             this.context = context;
         }
 
         @Override
         public void handleMessage(Message msg) {
             prefs.setOptionFromActQuickStartSelected(true);
-            ((Activity) context).finish();
             startActivity(new Intent(ActQuickStart.this, ActHome.class));
+            Logger.d(TAG, "FINiSHED 2");
+            ((Activity) context).finish();
+
         }
+    }
+
+    private class MyHandlerNewStep extends Handler {
+        Context context;
+
+        public MyHandlerNewStep(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            prefs.setOptionFromActQuickStartSelected(true);
+            startActivity(new Intent(ActQuickStart.this, ActHome.class));
+
+            Logger.d(TAG, "FINiSHED 3");
+            ((Activity) context).finish();
+        }
+    }
+
+
+    private class MyHandlerImportTask extends Handler {
+        Context context;
+
+        public MyHandlerImportTask(Context context) {
+            this.context = context;
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            Integer success = msg.arg1;
+            Logger.d(TAG, "Handled message from ImportTask Async,result is :" + success);
+            if (success == 1) {
+                Logger.d(TAG, "Handled message from ImportTask Async,inside :" + success);
+                prefs.setOptionFromActQuickStartSelected(true);
+                startActivity(new Intent(ActQuickStart.this, ActHome.class));
+                Logger.d(TAG, "FINiSHED 4");
+                ((Activity) context).finish();
+            } else if (success == 2) {
+                Logger.d(TAG, "Handled message from ImportTask Async,inside :" + success);
+                startActivityForResult((Intent) msg.obj, 1);
+                Logger.showMsg(context, "Authenticating...");
+            } else {
+                Logger.d(TAG, "Handled message from ImportTask Async,inside :" + success);
+                Logger.showMsg(context, "Failed to sync. Try again.");
+            }
+            Logger.d(TAG, "Handled message from ImportTask Async, end of handleMsg");
+
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            Logger.d(TAG, "Authorization Successful and importing tasks from server");
+            new ImportTaskAsyncThread(ActQuickStart.this, new MyHandlerImportTask(ActQuickStart.this)).execute();
+        } else {
+            Logger.showMsg(this, "Unable to import tasks. ");
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Logger.d(TAG, "On Destroy");
     }
 }

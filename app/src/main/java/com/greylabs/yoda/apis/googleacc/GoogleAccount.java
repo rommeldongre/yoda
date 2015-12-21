@@ -18,6 +18,7 @@ import com.google.api.services.tasks.TasksScopes;
 import com.google.api.services.tasks.model.Task;
 import com.google.api.services.tasks.model.TaskList;
 import com.google.api.services.tasks.model.TaskLists;
+import com.google.api.services.tasks.model.Tasks;
 import com.greylabs.yoda.apis.Sync;
 import com.greylabs.yoda.apis.TaskAccount;
 import com.greylabs.yoda.models.Goal;
@@ -26,6 +27,7 @@ import com.greylabs.yoda.models.TimeBox;
 import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.CalendarUtils;
 import com.greylabs.yoda.utils.Constants;
+import com.greylabs.yoda.utils.GoalUtils;
 import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.Prefs;
 
@@ -36,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.logging.Level;
@@ -55,6 +58,7 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
     GoogleAccountCredential credential;
     com.google.api.services.tasks.Tasks service;
     private Prefs prefs;
+    DateTime lastSyncDate=null;
 
     public GoogleAccount(Context context) {
         super(context);
@@ -245,7 +249,6 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
         List<TaskList> taskLists = result.getItems();
         Goal goal = new Goal(context);
         List<String> serverStringGoalIds = new ArrayList<>();
-
         if (taskLists != null) {
             for (TaskList taskList : taskLists) {
                 serverStringGoalIds.add(taskList.getId());
@@ -260,8 +263,15 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                 yodaCalendar.setTimeBox(timeBox.get(goal.getTimeBoxId()));
                 Logger.d(TAG, "Task List: " + taskList.toString() + "  Goal: " + goal.toString());
                 com.google.api.services.tasks.model.Tasks tasks = null;
-                if (!goal.isDeleted())
-                    tasks = service.tasks().list(taskList.getId()).setShowCompleted(true).setShowDeleted(true).execute();
+                if (!goal.isDeleted()) {
+                    com.google.api.services.tasks.Tasks.TasksOperations.List list
+                            = service.tasks().list(taskList.getId()).setShowCompleted(true).setShowDeleted(true);
+
+                    if(prefs.getLastSyncDate()!=null){
+                        list.setUpdatedMin(prefs.getLastSyncDate().toStringRfc3339());
+                    }
+                    tasks=list.execute();
+                }
                 if (tasks != null) {
                     List<Task> myTasks = tasks.getItems();
                     if (myTasks != null) {
@@ -310,6 +320,7 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                                 }
                             }
                             Logger.d(TAG, "Task : " + task.toString() + "  Pending Step: " + pendingStep.toString());
+                            lastSyncDate=task.getUpdated();
                         }
                     }
                 }
@@ -317,11 +328,16 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                     yodaCalendar.rescheduleSteps(goal.getId());
             }
             List<String> appStringGoalIds = goal.getDistinctGoalStringIds();
+            Logger.d(TAG,"Goals App String Ids:"+appStringGoalIds.toString());
             if (appStringGoalIds != null && serverStringGoalIds != null) {
                 appStringGoalIds.removeAll(serverStringGoalIds);
                 appStringGoalIds.remove("");
                 appStringGoalIds.remove("@default");
                 for (String stringGoalId : appStringGoalIds) {
+                    Logger.d(TAG, "Goal string ID being deleted:" + appStringGoalIds.toString());
+                    Goal g=goal.get(goal.getIdIfExists(stringGoalId));
+                    GoalUtils.clearAlarms(g, context);
+                    yodaCalendar.detachTimeBox(g.getTimeBoxId());
                     goal.deleteAllSteps(stringGoalId);
                     goal.deleteGoal(stringGoalId);
                 }
@@ -335,6 +351,7 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
     }
 
     private void exportGoals() throws IOException {
+        YodaCalendar yodaCalendar = new YodaCalendar(context);
         Goal goal = new Goal(context);
         List<Goal> goals = goal.getAll(Goal.GoalDeleted.SHOW_BOTH);
         if (goals != null) {
@@ -359,6 +376,8 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                             Logger.d(TAG, "Goal:::App has Latest Data: Server Update:" + result.getUpdated() + " App Update:" + g.getUpdated());
                             if (!g.getStringId().equals("@default")) {
                                 if (g.isDeleted()) {
+                                    GoalUtils.clearAlarms(g,context);
+                                    yodaCalendar.detachTimeBox(goal.getTimeBoxId());
                                     g.deletePendingSteps();
                                     g.delete();
                                     service.tasklists().delete(g.getStringId()).execute();
@@ -375,6 +394,8 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                 exportPendingSteps(g);
             }
         }
+        if (lastSyncDate!=null)
+            prefs.setLastSyncDate(lastSyncDate);
     }
 
     private void exportPendingSteps(Goal goal) throws IOException {
@@ -386,6 +407,14 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                     PendingStep.PendingStepDeleted.SHOW_BOTH, goal.getId());
             if (completed != null)
                 pendingSteps.addAll(completed);
+
+            Iterator<PendingStep> it=pendingSteps.iterator();
+            while (it.hasNext()){
+                PendingStep ps=it.next();
+                if(prefs.getLastSyncDate()!=null && compareDateTime(ps.getUpdated(),prefs.getLastSyncDate())==false){
+                    it.remove();
+                }
+            }
 
             for (PendingStep ps : pendingSteps) {
                 Task task = (Task) buildPendingStep(ps);

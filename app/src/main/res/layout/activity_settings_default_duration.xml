@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <include
         android:id="@+id/toolBarActSettingsDefaultDuration"
@@ -12,152 +12,205 @@
         android:id="@+id/scrollViewActSettingsDefaultDuration"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/toolBarActSettingsDefaultDuration" >
+        android:layout_below="@id/toolBarActSettingsDefaultDuration">
 
-        <android.support.v7.widget.CardView
-            xmlns:android="http://schemas.android.com/apk/res/android"
+        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp" >
+            android:layout_margin="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                >
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_margin="10dip" >
+                    android:layout_margin="10dip"
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                        android:textStyle="bold"
                         android:text="@string/tvDefaultStepDurationActSettingsDefaultDuration"
-                        />
-                    <SeekBar
-                        android:id="@+id/sbDefaultStepDurationActSettingsDefaultDuration"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                        android:textStyle="bold" />
+
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dip"
-                        android:layout_marginTop="8dip"
-                        android:max="9"
-                        />
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/tvSbDefaultStepDurationActSettingsDefaultDuration"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_margin="10dp"
+                            android:textStyle="bold" />
+
+                        <SeekBar
+                            android:id="@+id/sbDefaultStepDurationActSettingsDefaultDuration"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="10dip"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="8dip"
+                            android:layout_toLeftOf="@id/tvSbDefaultStepDurationActSettingsDefaultDuration"
+                            android:layout_toStartOf="@id/tvSbDefaultStepDurationActSettingsDefaultDuration"
+                            android:max="9" />
+                    </RelativeLayout>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginTop="8dp"
                         android:layout_marginLeft="20dip"
+                        android:layout_marginTop="8dp"
                         android:background="@color/button_material_light" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_margin="10dip" >
+                    android:layout_margin="10dip"
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:text="@string/tvDefaultSessionDurationActSettingsDefaultDuration"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                        android:textStyle="bold"
-                        android:text="@string/tvDefaultSessionDurationActSettingsDefaultDuration" />
-                    <SeekBar
-                        android:id="@+id/sbDefaultSessionDurationActSettingsDefaultDuration"
+                        android:textStyle="bold" />
+
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dip"
-                        android:layout_marginTop="8dip"
-                        android:max="9" />
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/tvSbDefaultSessionDurationActSettingsDefaultDuration"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_margin="10dp"
+                            android:textStyle="bold" />
+
+                        <SeekBar
+                            android:id="@+id/sbDefaultSessionDurationActSettingsDefaultDuration"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="10dip"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="8dip"
+                            android:layout_toLeftOf="@id/tvSbDefaultSessionDurationActSettingsDefaultDuration"
+                            android:layout_toStartOf="@id/tvSbDefaultSessionDurationActSettingsDefaultDuration"
+                            android:max="9" />
+                    </RelativeLayout>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginTop="8dp"
                         android:layout_marginLeft="20dip"
+                        android:layout_marginTop="8dp"
                         android:background="@color/button_material_light" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_margin="10dip" >
+                    android:layout_margin="10dip"
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                        android:textStyle="bold"
                         android:text="@string/tvDefaultYodaSaysNotificationActSettingsDefaultDuration"
-                        />
-                    <SeekBar
-                        android:id="@+id/sbDefaultYodaSaysNotificationActSettingsDefaultDuration"
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                        android:textStyle="bold" />
+
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dip"
-                        android:layout_marginTop="8dip"
-                        android:progress="3"
-                        android:max="9"
-                        />
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/tvSbDefaultYodaSaysNotificationActSettingsDefaultDuration"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_margin="10dp"
+                            android:textStyle="bold" />
+
+                        <SeekBar
+                            android:id="@+id/sbDefaultYodaSaysNotificationActSettingsDefaultDuration"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="10dip"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="8dip"
+                            android:layout_toLeftOf="@id/tvSbDefaultYodaSaysNotificationActSettingsDefaultDuration"
+                            android:layout_toStartOf="@id/tvSbDefaultYodaSaysNotificationActSettingsDefaultDuration"
+                            android:max="9"
+                            android:progress="3" />
+                    </RelativeLayout>
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginTop="8dp"
                         android:layout_marginLeft="20dip"
+                        android:layout_marginTop="8dp"
                         android:background="@color/button_material_light" />
                 </LinearLayout>
 
                 <!--<LinearLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:orientation="vertical"-->
-                    <!--android:layout_margin="10dip" >-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="vertical"-->
+                <!--android:layout_margin="10dip" >-->
 
-                    <!--<TextView-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"-->
-                        <!--android:textStyle="bold"-->
-                        <!--android:text="@string/tvDefaultExportToCalendarActSettingsDefaultDuration"-->
-                        <!--/>-->
-                    <!--<SeekBar-->
-                        <!--android:id="@+id/sbDefaultExportToCalendarActSettingsDefaultDuration"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_marginLeft="20dip"-->
-                        <!--android:layout_marginTop="8dip"-->
-                        <!--android:max="9"-->
-                        <!--/>-->
+                <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"-->
+                <!--android:textStyle="bold"-->
+                <!--android:text="@string/tvDefaultExportToCalendarActSettingsDefaultDuration"-->
+                <!--/>-->
+                <!--<SeekBar-->
+                <!--android:id="@+id/sbDefaultExportToCalendarActSettingsDefaultDuration"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="20dip"-->
+                <!--android:layout_marginTop="8dip"-->
+                <!--android:max="9"-->
+                <!--/>-->
 
-                    <!--<View-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="1dp"-->
-                        <!--android:layout_marginTop="8dp"-->
-                        <!--android:layout_marginLeft="20dip"-->
-                        <!--android:background="@color/button_material_light" />-->
+                <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="1dp"-->
+                <!--android:layout_marginTop="8dp"-->
+                <!--android:layout_marginLeft="20dip"-->
+                <!--android:background="@color/button_material_light" />-->
                 <!--</LinearLayout>-->
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_margin="10dip" >
+                    android:layout_margin="10dip"
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                        android:textStyle="bold"
                         android:text="@string/tvDefaultPriorityOfNewStepActSettingsDefaultDuration"
-                        />
+                        android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                        android:textStyle="bold" />
 
                     <RadioGroup
                         android:id="@+id/rgPriorityNewStepSettingsDefaultDuration"
@@ -170,8 +223,7 @@
                             android:id="@+id/rbBottomMostActSettingsDefaultDuration"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/rbBottomMostActSettingsDefaultDuration"
-                            />
+                            android:text="@string/rbBottomMostActSettingsDefaultDuration" />
 
                         <RadioButton
                             android:id="@+id/rbTopMostActSettingsDefaultDuration"
@@ -180,77 +232,78 @@
                             android:text="@string/rbTopMostActSettingsDefaultDuration" />
 
                     </RadioGroup>
+
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginTop="8dp"
                         android:layout_marginLeft="20dip"
+                        android:layout_marginTop="8dp"
                         android:background="@color/button_material_light" />
                 </LinearLayout>
 
                 <!--<LinearLayout-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:orientation="vertical"-->
-                    <!--android:layout_margin="10dip" >-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="vertical"-->
+                <!--android:layout_margin="10dip" >-->
 
-                    <!--<TextView-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"-->
-                        <!--android:textStyle="bold"-->
-                        <!--android:text="@string/tvDefaultBehaviourForPassedStepsActSettingsDefaultDuration"-->
-                        <!--/>-->
+                <!--<TextView-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"-->
+                <!--android:textStyle="bold"-->
+                <!--android:text="@string/tvDefaultBehaviourForPassedStepsActSettingsDefaultDuration"-->
+                <!--/>-->
 
-                    <!--<RadioGroup-->
-                        <!--android:id="@+id/rgBehaviourOfExpiredStepsSettingsDefaultDuration"-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--android:layout_marginLeft="20dip"-->
-                        <!--android:layout_marginTop="8dip">-->
+                <!--<RadioGroup-->
+                <!--android:id="@+id/rgBehaviourOfExpiredStepsSettingsDefaultDuration"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginLeft="20dip"-->
+                <!--android:layout_marginTop="8dip">-->
 
-                        <!--<RadioButton-->
-                            <!--android:id="@+id/rbDontExpireActSettingsDefaultDuration"-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:text="@string/rbDontExpireActSettingsDefaultDuration"-->
-                            <!--/>-->
+                <!--<RadioButton-->
+                <!--android:id="@+id/rbDontExpireActSettingsDefaultDuration"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="@string/rbDontExpireActSettingsDefaultDuration"-->
+                <!--/>-->
 
-                        <!--<RadioButton-->
-                            <!--android:id="@+id/rbExpireActSettingsDefaultDuration"-->
-                            <!--android:layout_width="wrap_content"-->
-                            <!--android:layout_height="wrap_content"-->
-                            <!--android:text="@string/rbExpireActSettingsDefaultDuration"-->
-                            <!--/>-->
+                <!--<RadioButton-->
+                <!--android:id="@+id/rbExpireActSettingsDefaultDuration"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="@string/rbExpireActSettingsDefaultDuration"-->
+                <!--/>-->
 
-                    <!--</RadioGroup>-->
-                    <!--<View-->
-                        <!--android:layout_width="match_parent"-->
-                        <!--android:layout_height="1dp"-->
-                        <!--android:layout_marginTop="8dp"-->
-                        <!--android:layout_marginLeft="20dip"-->
-                        <!--android:background="@color/button_material_light" />-->
+                <!--</RadioGroup>-->
+                <!--<View-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="1dp"-->
+                <!--android:layout_marginTop="8dp"-->
+                <!--android:layout_marginLeft="20dip"-->
+                <!--android:background="@color/button_material_light" />-->
                 <!--</LinearLayout>-->
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_margin="10dip" >
+                    android:layout_margin="10dip"
+                    android:orientation="vertical">
 
                     <Button
                         android:id="@+id/btnResetYodaActSettingsDefaultDuration"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@color/btnResetYodaActSettingsDefaultDuration"
                         android:text="@string/btnResetYodaActSettingsDefaultDuration"
-                        android:textColor="@color/white"
-                        android:background="@color/btnResetYodaActSettingsDefaultDuration" />
+                        android:textColor="@color/white" />
 
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_marginTop="8dp"
                         android:layout_marginLeft="20dip"
+                        android:layout_marginTop="8dp"
                         android:background="@color/button_material_light" />
                 </LinearLayout>
 

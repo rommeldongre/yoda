@@ -24,7 +24,7 @@
     <item
         android:id="@+id/actionToggleActStepList"
         android:title="@string/actionToggleSteps"
-        android:icon="@drawable/ic_btn_toggle_act_step_list"
+        android:icon="@drawable/ic_btn_toggle_act_step_list_all"
         app:showAsAction="ifRoom" />
 
 </menu>

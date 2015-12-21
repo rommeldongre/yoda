@@ -20,13 +20,10 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.google.api.client.util.DateTime;
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.apis.googleacc.GoogleSync;
 import com.greylabs.yoda.models.Goal;
-import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.TimeBox;
-import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.BitmapUtility;
 import com.greylabs.yoda.utils.CalendarUtils;
 import com.greylabs.yoda.utils.Constants;
@@ -35,17 +32,11 @@ import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.Prefs;
 import com.greylabs.yoda.views.CircleView;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 public class ActGoalDetails extends AppCompatActivity implements View.OnClickListener {
 
     private CollapsingToolbarLayout collapsingToolbarLayout;
-    private YodaCalendar yodaCalendar;
     private Toolbar toolbar;
     private FloatingActionButton fabStepList;
-//    private MyDonutProgress donutProgress;
     private ProgressBar progressBar;
     private Goal currentGoal;
     private TimeBox currentTimeBox;
@@ -67,7 +58,8 @@ public class ActGoalDetails extends AppCompatActivity implements View.OnClickLis
 //    }
 
     @SuppressWarnings("ConstantConditions")
-    @Override protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         initActivityTransitions();
         setContentView(R.layout.activity_goal_details);
@@ -85,7 +77,7 @@ public class ActGoalDetails extends AppCompatActivity implements View.OnClickLis
     }
 
     private void initialize() {
-        currentGoal  = (Goal)getIntent().getSerializableExtra(Constants.GOAL_OBJECT);
+        currentGoal = (Goal) getIntent().getSerializableExtra(Constants.GOAL_OBJECT);
         currentGoal.initDatabase(this);
 
         ViewCompat.setTransitionName(findViewById(R.id.appBar), currentGoal.getNickName());
@@ -116,23 +108,12 @@ public class ActGoalDetails extends AppCompatActivity implements View.OnClickLis
         tvReward = (TextView) findViewById(R.id.tvGoalRewardActGoalDetailsNew);
         tvBuddy = (TextView) findViewById(R.id.tvGoalBuddyActGoalDetailsNew);
         progressBar = (ProgressBar) findViewById(R.id.pbActGoalDetailsNew);
-//        donutProgress = (MyDonutProgress) findViewById(R.id.donutProgressActGoalDetails);
 
         fabStepList.setOnClickListener(this);
         populateUI();
     }
 
     private void populateUI() {
-
-//        donutProgress.setProgress((int)currentGoal.getGoalProgress());
-//        donutProgress.setTextColor(getResources().getColor(R.color.white));
-//        donutProgress.setTextSize(25);
-//        donutProgress.setSuffixText(String.valueOf(currentGoal.getRemainingStepCount()));
-//        donutProgress.setFinishedStrokeWidth(7);
-//        donutProgress.setUnfinishedStrokeWidth(7);
-//        donutProgress.setFinishedStrokeColor(getResources().getColor(R.color.white));
-//        donutProgress.setUnfinishedStrokeColor(getResources().getColor(R.color.gray));
-
         Bitmap bitmap = BitmapUtility.decodeSampledBitmapFromResource(getResources(), Prefs.getInstance(this).getWallpaperResourceId(), 100, 100);
         Palette.from(bitmap).generate(new Palette.PaletteAsyncListener() {
             public void onGenerated(Palette palette) {
@@ -142,7 +123,7 @@ public class ActGoalDetails extends AppCompatActivity implements View.OnClickLis
 
         collapsingToolbarLayout.setTitle(currentGoal.getNickName().toString());
         tvEta.setText(CalendarUtils.getOnlyFormattedDate(this.currentGoal.getDueDate()));
-        progressBar.setProgress((int)currentGoal.getGoalProgress());
+        progressBar.setProgress((int) currentGoal.getGoalProgress());
         tvNickName.setText(currentGoal.getNickName());
         btnBullet.setFillColor(Integer.parseInt(currentGoal.getColorCode()));
         btnBullet.setShowTitle(false);
@@ -167,8 +148,6 @@ public class ActGoalDetails extends AppCompatActivity implements View.OnClickLis
     private void updateBackground(FloatingActionButton fab, Palette palette) {
         int lightVibrantColor = palette.getLightVibrantColor(getResources().getColor(android.R.color.white));
         fab.setRippleColor(lightVibrantColor);
-//        int vibrantColor = palette.getVibrantColor(primaryColor);
-//        fab.setBackgroundTintList(ColorStateList.valueOf(vibrantColor));
     }
 
     @Override
@@ -179,19 +158,19 @@ public class ActGoalDetails extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home :
+        switch (item.getItemId()) {
+            case android.R.id.home:
                 this.finish();
                 break;
-            case R.id.actionEditActGoalDetails :
-                if(!currentGoal.getNickName().equals(Constants.NICKNAME_STRETCH_GOAL)){
+            case R.id.actionEditActGoalDetails:
+                if (!currentGoal.getNickName().equals(Constants.NICKNAME_STRETCH_GOAL)) {
                     Intent intent = new Intent(this, ActAddNewGoal.class);
                     intent.putExtra(Constants.GOAL_OBJECT, currentGoal);
                     intent.putExtra(Constants.CALLER, Constants.ACT_GOAL_DETAILS);
                     intent.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, true);
                     intent.putExtra(Constants.TIMEBOX_NICK_NAME, currentTimeBox.getNickName());
                     this.startActivityForResult(intent, Constants.REQUEST_CODE_ACT_ACT_GOAL_DETAILS);
-                }else {
+                } else {
                     AlertDialog.Builder alertLogout = new AlertDialog.Builder(this);
                     alertLogout.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
@@ -203,8 +182,8 @@ public class ActGoalDetails extends AppCompatActivity implements View.OnClickLis
                 }
                 break;
 
-            case R.id.actionDeleteActGoalDetails :
-                if(!currentGoal.getNickName().equals(Constants.NICKNAME_STRETCH_GOAL)){
+            case R.id.actionDeleteActGoalDetails:
+                if (!currentGoal.getNickName().equals(Constants.NICKNAME_STRETCH_GOAL)) {
                     AlertDialog.Builder alertLogout = new AlertDialog.Builder(this);
                     alertLogout.setPositiveButton("Move", new DialogInterface.OnClickListener() {
                         @Override
@@ -221,7 +200,7 @@ public class ActGoalDetails extends AppCompatActivity implements View.OnClickLis
                     alertLogout.setNeutralButton("Cancel", null);
                     alertLogout.setMessage(Constants.MSG_DELETE_GOAL);
                     alertLogout.show();
-                }else {
+                } else {
                     AlertDialog.Builder alertLogout = new AlertDialog.Builder(this);
                     alertLogout.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                         @Override
@@ -237,7 +216,7 @@ public class ActGoalDetails extends AppCompatActivity implements View.OnClickLis
     }
 
 
-    private void performActionDeleteGoalYes(){
+    private void performActionDeleteGoalYes() {
         GoalUtils.performActionDeleteGoalYes(currentGoal);
         Logger.showMsg(this, Constants.MSG_GOAL_DELETED);
         //sync code
@@ -245,7 +224,6 @@ public class ActGoalDetails extends AppCompatActivity implements View.OnClickLis
         //sync codr
         this.finish();
     }
-
 
 
     private void performActionDeleteGoalNo() {
@@ -264,15 +242,14 @@ public class ActGoalDetails extends AppCompatActivity implements View.OnClickLis
         if (resultCode == Constants.RESULTCODE_OF_ACT_ADD_GOAL && data.getExtras().getBoolean(Constants.GOAL_UPDATED)) {// result from ActAddNewGoal
             currentGoal = currentGoal.get(currentGoal.getId());
             populateUI();
-        }
-        else if (resultCode == Activity.RESULT_CANCELED) {
+        } else if (resultCode == Activity.RESULT_CANCELED) {
         }
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.btnFabActGoalDetails :
+        switch (v.getId()) {
+            case R.id.btnFabActGoalDetails:
                 Intent i = new Intent(this, ActStepList.class);
                 i.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, true);
                 i.putExtra(Constants.GOAL_OBJECT, currentGoal);

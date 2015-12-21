@@ -223,11 +223,29 @@
                         android:layout_height="wrap_content"
                         android:text="@string/tvDefaultExportToCalendarActSettingsDefaultDuration" />
 
-                    <SeekBar
-                        android:id="@+id/sbDefaultExportCalDurationActSettingsGoogle"
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:max="9" />
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@+id/tvSeekbarDefaultExportCalDurationActSettingsGoogle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_margin="10dp"
+                            android:textStyle="bold" />
+
+                        <SeekBar
+                            android:id="@+id/sbDefaultExportCalDurationActSettingsGoogle"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toLeftOf="@id/tvSeekbarDefaultExportCalDurationActSettingsGoogle"
+                            android:layout_toStartOf="@id/tvSeekbarDefaultExportCalDurationActSettingsGoogle"
+                            android:max="9" />
+                    </RelativeLayout>
                 </LinearLayout>
 
                 <RelativeLayout

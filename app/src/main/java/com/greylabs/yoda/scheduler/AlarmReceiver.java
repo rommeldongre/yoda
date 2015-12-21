@@ -24,18 +24,18 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         if (alarmScheduler == null || startEnd == null) {
             Logger.d(TAG, "AlarmScheduler received null or Step Start End is null");
         } else {
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(Calendar.SECOND, 0);
-            calendar.set(Calendar.MILLISECOND, 0);
-            if (alarmScheduler.getAlarmDate().compareTo(calendar.getTime()) < 0) {
-                Intent alarmService = new Intent(context, AlarmService.class);
-                alarmService.putExtra(Constants.ALARM_SCHEDULER, alarmScheduler);
-                alarmService.putExtra(Constants.STEP_START_END, startEnd);
-                //context.startService(alarmService);
-                startWakefulService(context, alarmService);
-                Logger.d(TAG, "AlarmScheduler is not null:" + alarmScheduler.toString());
-            } else
-                Logger.d(TAG, "Skipping alarm as alarm date is less than today's date");
+//            Calendar calendar = Calendar.getInstance();
+//            calendar.set(Calendar.SECOND, 0);
+//            calendar.set(Calendar.MILLISECOND, 0);
+//            if (alarmScheduler.getAlarmDate().compareTo(calendar.getTime()) < 0) {
+            Intent alarmService = new Intent(context, AlarmService.class);
+            alarmService.putExtra(Constants.ALARM_SCHEDULER, alarmScheduler);
+            alarmService.putExtra(Constants.STEP_START_END, startEnd);
+            //context.startService(alarmService);
+            startWakefulService(context, alarmService);
+            Logger.d(TAG, "AlarmScheduler is not null:" + alarmScheduler.toString());
+//            } else
+//                Logger.d(TAG, "Skipping alarm as alarm date is less than today's date");
         }
     }
 }

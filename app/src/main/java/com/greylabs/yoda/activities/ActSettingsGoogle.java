@@ -2,12 +2,8 @@ package com.greylabs.yoda.activities;
 
 import android.accounts.Account;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -24,6 +20,7 @@ import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.ViewFlipper;
 
 import com.greylabs.yoda.R;
@@ -36,17 +33,20 @@ import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.Prefs;
 import com.greylabs.yoda.views.MyFloatingActionButton;
 
+import java.security.CodeSigner;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class ActSettingsGoogle extends AppCompatActivity implements View.OnClickListener, SeekBar.OnSeekBarChangeListener, CompoundButton.OnCheckedChangeListener, AdapterView.OnItemSelectedListener {
 
+    private static final String TAG="ActSettingG";
     Toolbar toolbar;
     Spinner accountSpinner;
     SwitchCompat autoSyncSwitch;
     MyFloatingActionButton btnExportNow, btnSyncNow, btnImportNow;
     ProgressBar pbSyncNow, pbImportNow, pbExportNow;
     SeekBar sbExportToCalendar;
+    TextView tvExportToCalendar;
     Paint thumbPaint, textPaint;
     ArrayList<Account> accountArrayList = new ArrayList<>();
     ArrayAdapter<String> accountSpinnerAdapter;
@@ -55,6 +55,7 @@ public class ActSettingsGoogle extends AppCompatActivity implements View.OnClick
     boolean isAccountPresent = false;
     private ViewFlipper viewFlipper;
     private Button btnAddAccount;
+    private int lastSelectedOperation=Constants.OPERATION_SYNC_NOW;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,12 +90,13 @@ public class ActSettingsGoogle extends AppCompatActivity implements View.OnClick
         btnExportNow = (MyFloatingActionButton) findViewById(R.id.btnExportNowToGoogleCalActSettingsGoogle);
         btnAddAccount = (Button) findViewById(R.id.btnAddAccountFlipperEmptyViewActGoogleSettings);
         sbExportToCalendar = (SeekBar) findViewById(R.id.sbDefaultExportCalDurationActSettingsGoogle);
+        tvExportToCalendar = (TextView) findViewById(R.id.tvSeekbarDefaultExportCalDurationActSettingsGoogle);
         pbSyncNow = (ProgressBar) findViewById(R.id.pbSyncNowWithGoogleActSettingsGoogle);
         pbImportNow = (ProgressBar) findViewById(R.id.pbImportNowFromGTasksActSettingsGoogle);
         pbExportNow = (ProgressBar) findViewById(R.id.pbExportNowToGoogleCalActSettingsGoogle);
 
         sbExportToCalendar.setProgress(prefs.getExportToCalendarDuration());
-        sbExportToCalendar.setThumb(writeOnDrawable(R.drawable.ic_btn_plus_sign, String.valueOf(prefs.getExportToCalendarDuration())));
+        tvExportToCalendar.setText("" + sbExportToCalendar.getProgress());
         autoSyncSwitch.setChecked(prefs.getAutoSyncState());
 
         sbExportToCalendar.setOnSeekBarChangeListener(this);
@@ -168,16 +170,19 @@ public class ActSettingsGoogle extends AppCompatActivity implements View.OnClick
             switch (v.getId()) {
                 case R.id.btnSyncNowWithGoogleActSettingsGoogle:
                     showSyncProgress(true);
+                    lastSelectedOperation=Constants.OPERATION_SYNC_NOW;
                     new AsyncTaskThread(this, new MyHandler(), Constants.OPERATION_SYNC_NOW).execute();
                     break;
 
                 case R.id.btnImportNowFromGTasksActSettingsGoogle:
                     showImportProgress(true);
+                    lastSelectedOperation= Constants.OPERATION_IMPORT;
                     new AsyncTaskThread(this, new MyHandler(), Constants.OPERATION_IMPORT).execute();
                     break;
 
                 case R.id.btnExportNowToGoogleCalActSettingsGoogle:
                     showExportProgress(true);
+                    lastSelectedOperation=Constants.OPERATION_EXPORT;
                     new AsyncTaskThread(this, new MyHandler(), Constants.OPERATION_EXPORT).execute();
                     break;
 
@@ -225,20 +230,11 @@ public class ActSettingsGoogle extends AppCompatActivity implements View.OnClick
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        String valueString = String.valueOf(seekBar.getProgress());
-        sbExportToCalendar.setThumb(writeOnDrawable(R.drawable.ic_btn_plus_sign, valueString));
         if (progress < 1) {
-            sbExportToCalendar.setProgress(1);
+            progress = 1;
+            sbExportToCalendar.setProgress(progress);
         }
-    }
-
-    public BitmapDrawable writeOnDrawable(int drawableId, String text) {
-
-        Bitmap bm = BitmapFactory.decodeResource(getResources(), drawableId).copy(Bitmap.Config.ARGB_8888, true);
-        Canvas canvas = new Canvas(bm);
-        canvas.drawCircle(bm.getWidth() / 2, bm.getHeight() / 2, 25, thumbPaint);
-        canvas.drawText(text, bm.getWidth() / 2 - textPaint.measureText(text) / 2, bm.getHeight() / 2 + 7, textPaint);
-        return new BitmapDrawable(bm);
+        tvExportToCalendar.setText("" + progress);
     }
 
     @Override
@@ -274,6 +270,7 @@ public class ActSettingsGoogle extends AppCompatActivity implements View.OnClick
         @Override
         public void handleMessage(Message msg) {
             int OPERATION = (int) msg.obj;
+
             switch (OPERATION) {
                 case Constants.OPERATION_SYNC_NOW:
                     showSyncProgress(false);
@@ -289,7 +286,52 @@ public class ActSettingsGoogle extends AppCompatActivity implements View.OnClick
                     showExportProgress(false);
                     Logger.showSnack(ActSettingsGoogle.this, toolbar, Constants.MSG_EXPORT_DONE);
                     break;
+                default:
+                    hideAllProgressBars();
+                    Logger.showSnack(ActSettingsGoogle.this, toolbar, "Failed to sync. Try again.");
             }
+        }
+    }
+
+
+    private void hideProgress(int operation){
+        switch (operation){
+            case Constants.OPERATION_SYNC_NOW:
+                showSyncProgress(false);
+                break;
+            case Constants.OPERATION_IMPORT:
+                showImportProgress(false);
+                break;
+            case Constants.OPERATION_EXPORT:
+                showExportProgress(false);
+                break;
+        }
+    }
+
+    private void hideAllProgressBars(){
+        showSyncProgress(false);
+        showImportProgress(false);
+        showExportProgress(false);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==1 && resultCode==RESULT_OK){
+            Logger.d(TAG,"Authorization Successful and importing tasks from server");
+            switch (lastSelectedOperation) {
+                case Constants.OPERATION_SYNC_NOW:
+                    btnSyncNow.performClick();
+                    break;
+                case Constants.OPERATION_IMPORT:
+                    btnImportNow.performClick();
+                    break;
+                case Constants.OPERATION_EXPORT:
+                    btnExportNow.performClick();
+                    break;
+            }
+        }else{
+            Logger.d(TAG,"User denied the authentication ");
         }
     }
 }

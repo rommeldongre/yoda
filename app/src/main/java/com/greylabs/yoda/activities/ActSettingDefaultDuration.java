@@ -2,24 +2,19 @@ package com.greylabs.yoda.activities;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.utils.Constants;
@@ -27,13 +22,14 @@ import com.greylabs.yoda.utils.Prefs;
 import com.greylabs.yoda.utils.ResetYoda;
 
 
-public class ActSettingDefaultDuration extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener, RadioGroup.OnCheckedChangeListener, View.OnClickListener {
+public class ActSettingDefaultDuration extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener, RadioGroup.OnCheckedChangeListener, View.OnClickListener, DialogInterface.OnClickListener {
 
     Toolbar toolbar;
     SeekBar sbStepDuration, sbSessionDuration, sbYodaSaysNotification;//, sbExportToCalendar;
+    TextView tvStepDuration, tvSessionDuration, tvYodaSaysNotification;
     Paint thumbPaint, textPaint;
-    RadioButton rbTopMost, rbBottomMost;//, rbDontExpire, rbExpire;
-    RadioGroup rgPriorityNewStep;//, rgBehaviourOfExpiredSteps;
+    RadioButton rbTopMost, rbBottomMost;
+    RadioGroup rgPriorityNewStep;
     Button btnResetYoda;
     Prefs prefs;
 
@@ -53,22 +49,19 @@ public class ActSettingDefaultDuration extends AppCompatActivity implements Seek
         sbStepDuration = (SeekBar) findViewById(R.id.sbDefaultStepDurationActSettingsDefaultDuration);
         sbSessionDuration = (SeekBar) findViewById(R.id.sbDefaultSessionDurationActSettingsDefaultDuration);
         sbYodaSaysNotification = (SeekBar) findViewById(R.id.sbDefaultYodaSaysNotificationActSettingsDefaultDuration);
-//        sbExportToCalendar = (SeekBar) findViewById(R.id.sbDefaultExportToCalendarActSettingsDefaultDuration);
+        tvStepDuration = (TextView) findViewById(R.id.tvSbDefaultStepDurationActSettingsDefaultDuration);
+        tvSessionDuration = (TextView) findViewById(R.id.tvSbDefaultSessionDurationActSettingsDefaultDuration);
+        tvYodaSaysNotification = (TextView) findViewById(R.id.tvSbDefaultYodaSaysNotificationActSettingsDefaultDuration);
         rgPriorityNewStep = (RadioGroup) findViewById(R.id.rgPriorityNewStepSettingsDefaultDuration);
-//        rgBehaviourOfExpiredSteps = (RadioGroup) findViewById(R.id.rgBehaviourOfExpiredStepsSettingsDefaultDuration);
         rbTopMost = (RadioButton) findViewById(R.id.rbTopMostActSettingsDefaultDuration);
         rbBottomMost = (RadioButton) findViewById(R.id.rbBottomMostActSettingsDefaultDuration);
-//        rbDontExpire = (RadioButton) findViewById(R.id.rbDontExpireActSettingsDefaultDuration);
-//        rbExpire = (RadioButton) findViewById(R.id.rbExpireActSettingsDefaultDuration);
         btnResetYoda = (Button) findViewById(R.id.btnResetYodaActSettingsDefaultDuration);
 
         sbStepDuration.setOnSeekBarChangeListener(this);
         sbSessionDuration.setOnSeekBarChangeListener(this);
         sbYodaSaysNotification.setOnSeekBarChangeListener(this);
-//        sbExportToCalendar.setOnSeekBarChangeListener(this);
         btnResetYoda.setOnClickListener(this);
         rgPriorityNewStep.setOnCheckedChangeListener(this);
-//        rgBehaviourOfExpiredSteps.setOnCheckedChangeListener(this);
 
         textPaint = new Paint();
         textPaint.setColor(Color.WHITE);
@@ -84,23 +77,17 @@ public class ActSettingDefaultDuration extends AppCompatActivity implements Seek
         sbStepDuration.setProgress(prefs.getDefaultStepDuration());
         sbSessionDuration.setProgress(prefs.getDefaultSessionDuration());
         sbYodaSaysNotification.setProgress(prefs.getYodaSaysNotificationDuration());
-//        sbExportToCalendar.setProgress(prefs.getExportToCalendarDuration());
-        if(prefs.isPriorityNewStepBottomMost()){
+        if (prefs.isPriorityNewStepBottomMost()) {
             rbBottomMost.setChecked(true);
-        }else {
+        } else {
             rbTopMost.setChecked(true);
         }
-//        if(prefs.isBehaviourDoNotExpire()){
-//            rbDontExpire.setChecked(true);
-//        }else {
-//            rbExpire.setChecked(true);
-//        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case android.R.id.home :
+        switch (item.getItemId()) {
+            case android.R.id.home:
                 this.finish();
                 break;
         }
@@ -109,30 +96,31 @@ public class ActSettingDefaultDuration extends AppCompatActivity implements Seek
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        String valueString = String.valueOf(seekBar.getProgress());
-        seekBar.setThumb(writeOnDrawable(R.drawable.ic_btn_plus_sign, valueString));
 
-        switch (seekBar.getId()){
-            case R.id.sbDefaultStepDurationActSettingsDefaultDuration :
-                if(progress<1){
-                    sbStepDuration.setProgress(1);
+        switch (seekBar.getId()) {
+            case R.id.sbDefaultStepDurationActSettingsDefaultDuration:
+                if (progress < 1) {
+                    progress = 1;
+                    sbStepDuration.setProgress(progress);
                 }
+                tvStepDuration.setText("" + progress);
                 break;
 
-            case R.id.sbDefaultSessionDurationActSettingsDefaultDuration :
-                if(progress<1){
-                    sbSessionDuration.setProgress(1);
+            case R.id.sbDefaultSessionDurationActSettingsDefaultDuration:
+                if (progress < 1) {
+                    progress = 1;
+                    sbSessionDuration.setProgress(progress);
                 }
+                tvSessionDuration.setText("" + progress);
                 break;
 
-            case R.id.sbDefaultYodaSaysNotificationActSettingsDefaultDuration :
-                if(progress<1){
+            case R.id.sbDefaultYodaSaysNotificationActSettingsDefaultDuration:
+                if (progress < 1) {
+                    progress = 1;
                     sbYodaSaysNotification.setProgress(1);
                 }
+                tvYodaSaysNotification.setText("" + progress);
                 break;
-
-//            case R.id.sbDefaultExportToCalendarActSettingsDefaultDuration :
-//                break;
         }
     }
 
@@ -143,78 +131,61 @@ public class ActSettingDefaultDuration extends AppCompatActivity implements Seek
 
     @Override
     public void onStopTrackingTouch(SeekBar seekBar) {
-        switch (seekBar.getId()){
-            case R.id.sbDefaultStepDurationActSettingsDefaultDuration :
+        switch (seekBar.getId()) {
+            case R.id.sbDefaultStepDurationActSettingsDefaultDuration:
                 prefs.setDefaultStepDuration(seekBar.getProgress());
                 break;
 
-            case R.id.sbDefaultSessionDurationActSettingsDefaultDuration :
+            case R.id.sbDefaultSessionDurationActSettingsDefaultDuration:
                 prefs.setDefaultSessionDuration(seekBar.getProgress());
                 break;
 
-            case R.id.sbDefaultYodaSaysNotificationActSettingsDefaultDuration :
+            case R.id.sbDefaultYodaSaysNotificationActSettingsDefaultDuration:
                 prefs.setYodaSaysNotificationDuration(seekBar.getProgress());
                 break;
-
-//            case R.id.sbDefaultExportToCalendarActSettingsDefaultDuration :
-//                prefs.setExportToCalendarDuration(seekBar.getProgress());
-//                break;
         }
-    }
-
-    public BitmapDrawable writeOnDrawable(int drawableId, String text){
-
-        Bitmap bm = BitmapFactory.decodeResource(getResources(), drawableId).copy(Bitmap.Config.ARGB_8888, true);
-        Canvas canvas = new Canvas(bm);
-        canvas.drawCircle(bm.getWidth() / 2, bm.getHeight() / 2, 25, thumbPaint);
-        canvas.drawText(text, bm.getWidth()/2 - textPaint.measureText(text)/2, bm.getHeight()/2+7, textPaint);
-        return new BitmapDrawable(bm);
     }
 
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
 
-        switch (checkedId){
+        switch (checkedId) {
 
-            case R.id.rbTopMostActSettingsDefaultDuration :
-                if(rbTopMost.isChecked())
+            case R.id.rbTopMostActSettingsDefaultDuration:
+                if (rbTopMost.isChecked())
                     prefs.setPriorityNewStepBottomMost(false);
                 break;
 
-            case R.id.rbBottomMostActSettingsDefaultDuration :
-                if(rbBottomMost.isChecked())
+            case R.id.rbBottomMostActSettingsDefaultDuration:
+                if (rbBottomMost.isChecked())
                     prefs.setPriorityNewStepBottomMost(true);
                 break;
-
-//            case R.id.rbDontExpireActSettingsDefaultDuration :
-//                if(rbDontExpire.isChecked())
-//                    prefs.setBehaviourDoNotExpire(true);
-//                break;
-//
-//            case R.id.rbExpireActSettingsDefaultDuration :
-//                if(rbExpire.isChecked())
-//                    prefs.setBehaviourDoNotExpire(false);
-//                break;
         }
     }
 
     @Override
     public void onClick(View v) {
-//        switch (v.getId()){
-//            case R.id.btnResetYodaActSettingsDefaultDuration :
         AlertDialog.Builder alertLogout = new AlertDialog.Builder(this);
-        alertLogout.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                ResetYoda.reset(ActSettingDefaultDuration.this);
-                startActivity(new Intent(ActSettingDefaultDuration.this, ActSplashScreen.class));
-                ActSettingDefaultDuration.this.finish();
-            }
-        });
+//        alertLogout.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialogInterface, int i) {
+//                ResetYoda.reset(ActSettingDefaultDuration.this);
+//                startActivity(new Intent(ActSettingDefaultDuration.this, ActSplashScreen.class));
+//                ActSettingDefaultDuration.this.finish();
+//            }
+//        });
+        alertLogout.setPositiveButton("Yes", this);
         alertLogout.setNegativeButton("Cancel", null);
         alertLogout.setMessage(Constants.MSG_RESET_YODA);
         alertLogout.show();
-//                break;
-//        }
+    }
+
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+        ResetYoda.reset(ActSettingDefaultDuration.this);
+//        Intent intent = new Intent();
+//        setResult(Constants.RESULT_CODE_ACT_SETTINGS_DEFAULT_DURATION, intent);
+        startActivity(new Intent(ActSettingDefaultDuration.this, ActSplashScreen.class));
+        this.finish();
     }
 }

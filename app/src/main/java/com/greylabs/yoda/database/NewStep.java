@@ -40,8 +40,10 @@ public final class NewStep {
         if(prefs.getDefaultAccountType()==0)
             prefs.setDefaultAccountType(AccountType.GOOGLE.ordinal());
         prefs.setDefaultAccountType(AccountType.LOCAL.ordinal());
-        addDefaultTimeBoxes();
-        addDefaultsGoals();
+        if(prefs.getStretchGoalId()==0) {
+            addDefaultTimeBoxes();
+            addDefaultsGoals();
+        }
     }
     private void addDefaultTimeBoxes(){
         //unplanned timebox
