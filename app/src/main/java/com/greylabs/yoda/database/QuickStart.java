@@ -72,7 +72,7 @@ public final class QuickStart {
         timeBox.setTimeBoxOn(timeBoxOn);
         //set till
         timeBox.setTillType(TimeBoxTill.YEAR);
-        timeBox.setColorCode(String.valueOf(context.getResources().getColor(R.color.colorcode_red)));
+        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_1));
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
         Logger.d(TAG, "Timebox 1 Added");
@@ -93,7 +93,7 @@ public final class QuickStart {
         timeBox.setTimeBoxWhen(timeBoxWhen);
         //till
         timeBox.setTillType(TimeBoxTill.YEAR);
-        timeBox.setColorCode(String.valueOf(context.getResources().getColor(R.color.colorcode_blue)));
+        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_2));
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
         Logger.d(TAG, "Timebox 2 Added");
@@ -101,7 +101,7 @@ public final class QuickStart {
 
         //3
         timeBox = new TimeBox(context);
-        timeBox.setNickName("Daily evening, till this year");
+        timeBox.setNickName("Week Nights, till this year");
         //on
         timeBoxOn = new com.greylabs.yoda.models.TimeBoxOn(context, TimeBoxOn.WEEKLY);
         timeBoxOns = new TreeSet<>();
@@ -121,7 +121,7 @@ public final class QuickStart {
         timeBox.setTimeBoxWhen(timeBoxWhen);
         //till
         timeBox.setTillType(TimeBoxTill.YEAR);
-        timeBox.setColorCode(String.valueOf(context.getResources().getColor(R.color.colorcode_blue)));
+        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_3));
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
         Logger.d(TAG, "Timebox 3 Added");
@@ -147,7 +147,7 @@ public final class QuickStart {
         timeBox.setTimeBoxWhen(timeBoxWhen);
         //till
         timeBox.setTillType(TimeBoxTill.YEAR);
-        timeBox.setColorCode(String.valueOf(context.getResources().getColor(R.color.colorcode_yellow)));
+        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_4));
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
         Logger.d(TAG, "Timebox 4 Added");
@@ -170,7 +170,7 @@ public final class QuickStart {
         timeBox.setTimeBoxWhen(timeBoxWhen);
         //till
         timeBox.setTillType(TimeBoxTill.YEAR);
-        timeBox.setColorCode(String.valueOf(context.getResources().getColor(R.color.colorcode_orange)));
+        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_5));
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
         Logger.d(TAG, "Timebox 5 Added");
@@ -216,7 +216,7 @@ public final class QuickStart {
         timeBox.setTimeBoxWhen(timeBoxWhen);
         //till
         timeBox.setTillType(TimeBoxTill.YEAR);
-        timeBox.setColorCode(String.valueOf(context.getResources().getColor(R.color.colorcode_yellow)));
+        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_7));
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
         Logger.d(TAG, "Timebox 7 Added");

@@ -46,7 +46,7 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
     ImageView ivWallpaper;
     MyArcProgress arcTotalProgress;
     MyFloatingActionsMenu btnSettings;
-    MyFloatingActionButton btnAddGoal, btnMyGoals, btnMyTimeBoxes, btnDefaultDuration, btnGoogleSettings,
+    MyFloatingActionButton btnAddGoal, btnAddNewGoal, btnMyGoals, btnMyTimeBoxes, btnDefaultDuration, btnGoogleSettings,
             btnChangeWallpaper, btnFilters, btnAddStep; //btnExportToGoogleCalender, btnImportGoogleTasks
     Prefs prefs;
 
@@ -83,6 +83,7 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
         btnSettings = (MyFloatingActionsMenu) findViewById(R.id.btnSettingsActHome);
 
         btnMyGoals = (MyFloatingActionButton) findViewById(R.id.btnMyGoalsActHome);
+        btnAddNewGoal = (MyFloatingActionButton) findViewById(R.id.addNewGoal);
         btnMyTimeBoxes = (MyFloatingActionButton) findViewById(R.id.btnMyTimeBoxesActHome);
         btnDefaultDuration = (MyFloatingActionButton) findViewById(R.id.btnDefaultDurationActHome);
         btnGoogleSettings = (MyFloatingActionButton) findViewById(R.id.btnGoogleSettingsActHome);
@@ -105,6 +106,7 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
         btnSettings.setOnFloatingActionsMenuUpdateListener(this);
 
         btnMyGoals.setOnClickListener(this);
+        btnAddNewGoal.setOnClickListener(this);
         btnMyTimeBoxes.setOnClickListener(this);
         btnDefaultDuration.setOnClickListener(this);
         btnGoogleSettings.setOnClickListener(this);
@@ -234,29 +236,29 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
             GoalView goalView = new GoalView(this, goalList.get(i));
             linearLayout.addView(goalView);
         }
-        TextView tvAddNewGoal = new TextView(this);
+        /*TextView tvAddNewGoal = new TextView(this);
         tvAddNewGoal.setText(getString(R.string.tvAddNewGoalActHome));
         tvAddNewGoal.setTextColor(getResources().getColor(R.color.white));
         tvAddNewGoal.setGravity(Gravity.CENTER);
-        tvAddNewGoal.setSingleLine(true);
+        tvAddNewGoal.setSingleLine(true);*/
 
         // init btnAddGoal
-        btnAddGoal = new MyFloatingActionButton(this);
+        /*btnAddGoal = new MyFloatingActionButton(this);
         btnAddGoal.setId(R.id.addNewGoalActHome);
         btnAddGoal.setIcon(R.drawable.ic_btn_plus_sign);
         btnAddGoal.setColorNormal(getResources().getColor(R.color.transparent_total_arc_background));
         btnAddGoal.setColorPressed(getResources().getColor(R.color.transparent_more));
-        btnAddGoal.setOnClickListener(this);
+        btnAddGoal.setOnClickListener(this);*/
 
         RelativeLayout relativeLayout = new RelativeLayout(this);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         relativeLayout.setGravity(Gravity.CENTER_VERTICAL);
         relativeLayout.setLayoutParams(params);
 
-        relativeLayout.addView(btnAddGoal);
+        //relativeLayout.addView(btnAddGoal);
         final LinearLayout linearLayout1 = new LinearLayout(this);
         linearLayout1.setOrientation(LinearLayout.VERTICAL);
-        linearLayout1.addView(tvAddNewGoal);
+        //linearLayout1.addView(tvAddNewGoal);
         linearLayout1.addView(relativeLayout);
         linearLayout.addView(linearLayout1);
         scrollView.addView(linearLayout);
@@ -298,6 +300,14 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
 
             case R.id.btnMyGoalsActHome:
                 startActivity(new Intent(this, ActGoalList.class));
+                btnSettings.collapse();
+                break;
+
+            case R.id.addNewGoal:
+                Intent newIntent = new Intent(this, ActAddNewGoal.class);
+                newIntent.putExtra(Constants.CALLER, Constants.ACT_HOME);
+                newIntent.putExtra(Constants.GOAL_ATTACHED_IN_EXTRAS, false);
+                startActivity(newIntent);
                 btnSettings.collapse();
                 break;
 
