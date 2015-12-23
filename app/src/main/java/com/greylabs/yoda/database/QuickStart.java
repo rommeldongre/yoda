@@ -372,7 +372,7 @@ public final class QuickStart {
                 PendingStep.PendingStepType.SERIES_STEP,
                 PendingStep.PendingStepExpire.NOT_EXPIRE,
                 3,
-                99,
+                30,
                 Constants.PENDING_STEP_PRIORITY_TOP_MOST);
         Logger.d(TAG, "Step 1 added");
 
@@ -382,7 +382,7 @@ public final class QuickStart {
                 PendingStep.PendingStepType.SERIES_STEP,
                 PendingStep.PendingStepExpire.NOT_EXPIRE,
                 3,
-                99,
+                20,
                 Constants.PENDING_STEP_PRIORITY_TOP_MOST);
         Logger.d(TAG, "Step 2 added");
 
@@ -395,7 +395,7 @@ public final class QuickStart {
                 PendingStep.PendingStepType.SERIES_STEP,
                 PendingStep.PendingStepExpire.NOT_EXPIRE,
                 3,
-                99,
+                20,
                 Constants.PENDING_STEP_PRIORITY_TOP_MOST);
         Logger.d(TAG, "Step 4 added");
 
@@ -405,7 +405,7 @@ public final class QuickStart {
                 PendingStep.PendingStepType.SERIES_STEP,
                 PendingStep.PendingStepExpire.NOT_EXPIRE,
                 3,
-                99,
+                10,
                 Constants.PENDING_STEP_PRIORITY_TOP_MOST);
         Logger.d(TAG, "Step 5 added");
 
@@ -415,7 +415,7 @@ public final class QuickStart {
                 PendingStep.PendingStepType.SERIES_STEP,
                 PendingStep.PendingStepExpire.NOT_EXPIRE,
                 3,
-                99,
+                10,
                 Constants.PENDING_STEP_PRIORITY_TOP_MOST);
         Logger.d(TAG, "Step 6 added");
 
@@ -425,7 +425,7 @@ public final class QuickStart {
                 PendingStep.PendingStepType.SERIES_STEP,
                 PendingStep.PendingStepExpire.NOT_EXPIRE,
                 3,
-                99,
+                10,
                 Constants.PENDING_STEP_PRIORITY_TOP_MOST);
         Logger.d(TAG, "Step 7 added");
     }
