@@ -5,6 +5,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -32,6 +33,7 @@ import com.greylabs.yoda.views.MyFloatingActionsMenu;
 import net.i2p.android.ext.floatingactionbutton.FloatingActionsMenu;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 
@@ -52,6 +54,7 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
     private Slot slot;
     private PendingStep nowPendingStep;
     private Goal nowGoal;
+    private boolean noStep = true;
 
 
     @Override
@@ -125,13 +128,19 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
                     for (PendingStep ps : pendingSteps) {
                         if (ps.isNowStep()) {
                             nowPendingStep = ps;
+                            noStep = false;
                             break;
                         }
                     }
-                    if (nowPendingStep != null && nowPendingStep.getNickName() != null) {
-                        arcTotalProgress.setStepName(nowPendingStep.getNickName());
+                    if (nowPendingStep != null) {
+                        if (nowPendingStep.getNickName() != null){
+                            arcTotalProgress.setStepName(nowPendingStep.getNickName());
+                        }
+                        else arcTotalProgress.setStepName("Untitled Step");
+
                         nowGoal = nowGoal.get(nowPendingStep.getGoalId());
                         arcTotalProgress.setGoalName(nowGoal.getNickName());
+
                         showEmptyView(false);
                     } else {
                         showEmptyView(true);
@@ -153,10 +162,32 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (b) {
-                    arcTotalProgress.setVisibility(View.GONE);
-                    llEmptyView.setVisibility(View.VISIBLE);
-                } else {
+                if(b){
+                    Calendar cal = Calendar.getInstance();
+                    int currentHour = cal.get(Calendar.HOUR_OF_DAY);
+
+                    if (currentHour >= 0 && currentHour <= 5){
+                        arcTotalProgress.setVisibility(View.GONE);
+                        llEmptyView.setVisibility(View.VISIBLE);
+                        Log.i("ActHome", "Detects night");
+                        Log.i("Hour_of_day", String.valueOf(cal.get(Calendar.HOUR_OF_DAY)));
+
+                    }else{
+
+                        Slot nowSlot = new Slot(getApplicationContext()).get(slot.getActiveSlotId());
+                        if (nowSlot.getGoalId() == prefs.getStretchGoalId()){
+                            arcTotalProgress.setStepName("No Step");
+                            arcTotalProgress.setGoalName(Constants.NICKNAME_STRETCH_GOAL);
+                            noStep = true;
+
+                        }else{
+                            arcTotalProgress.setStepName("No Step");
+                            arcTotalProgress.setGoalName(new Goal(getApplicationContext()).get(nowSlot.getGoalId()).getNickName());
+                            noStep = true;
+                        }
+
+                    }
+                }else {
                     arcTotalProgress.setVisibility(View.VISIBLE);
                     llEmptyView.setVisibility(View.GONE);
                 }
@@ -177,12 +208,7 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
         // check for string lengths first and strip accordingly
         arcTotalProgress.setTextSize(getResources().getDimension(R.dimen.arcTotalProgressTextSize));
         arcTotalProgress.setTextColor(getResources().getColor(R.color.white));
-        if (nowPendingStep == null || nowPendingStep.getNickName() == null) {
-            arcTotalProgress.setStepName("No Step");
-        } else {
-            arcTotalProgress.setStepName(nowPendingStep.getNickName());
-        }
-        arcTotalProgress.setGoalName(nowGoal.getNickName());
+
 
         arcTotalProgress.setBottomTextSize(getResources().getDimension(R.dimen.arcTotalProgressLargeTextSize));
         arcTotalProgress.setBottomText(String.valueOf(nowGoal.getRemainingStepCount()));
@@ -248,8 +274,10 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
 
             case R.id.arcTotalProgressActHome:
 
-                Dialogues dialogues = new Dialogues(this);
-                dialogues.showNowNotificationDialogue(Constants.ACT_HOME, null, PendingStep.PendingStepStartEnd.START, nowPendingStep);
+                if (!noStep){
+                    Dialogues dialogues = new Dialogues(this);
+                    dialogues.showNowNotificationDialogue(Constants.ACT_HOME, null, PendingStep.PendingStepStartEnd.START, nowPendingStep);
+                }
 //
 //                Intent intent1 = new Intent(this, ActNowFilter.class);
 //                intent1.putExtra(Constants.CALLER, Constants.ACT_HOME);
