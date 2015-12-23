@@ -121,9 +121,9 @@
     <string name="titleActTimeBoxList">My TimeBoxes</string>
     <string name="titleActAddNewTimeBoxEdit">Edit TimeBox</string>
     <string name="btnSetWallpaperActSettingsChangeWallpaper">Set Wallpaper</string>
-    <string name="msgActCreateTimeBoxSelectWhenTime">Select at least one 'When' time</string>
-    <string name="msgActCreateTimeBoxSelectOnTime">Select 'On' time</string>
-    <string name="msgActCreateTimeBoxSelectTillTime">Select 'Until' time</string>
+    <string name="msgActCreateTimeBoxSelectWhenTime">Select at least one \'When\' time</string>
+    <string name="msgActCreateTimeBoxSelectOnTime">Select \'On\' time</string>
+    <string name="msgActCreateTimeBoxSelectTillTime">Select \'Until\' time</string>
     <string name="titleActFilters">My Lists</string>
     <string name="msgActAddNewGoalTimeBoxNotApplicable">Selected TimeBox overlaps with one of the active TimeBoxes. Please choose a different TimeBox</string>
     <string name="tvEmptyViewFragFilter">No Steps</string>

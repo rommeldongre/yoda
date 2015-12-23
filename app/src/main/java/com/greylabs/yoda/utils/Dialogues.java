@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -109,6 +110,7 @@ public class Dialogues {
         llButtons = (LinearLayout) viewGroup.findViewById(R.id.llButtonsNowNotification);
         llExcuseLog = (LinearLayout) viewGroup.findViewById(R.id.llLogExcuseNowNotification);
         Button btnLogExcuse = (Button) viewGroup.findViewById(R.id.btnLogExcuseNowNotification);
+        Button btnCancelExcuse = (Button) viewGroup.findViewById(R.id.btnCancelExcuseNowNotification);
 
         tvGoalName.setText(goal.getNickName());
         tvStepName.setText(pendingStep.getNickName());
@@ -116,8 +118,8 @@ public class Dialogues {
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
-                if(pendingStep.getPendingStepStatus()== PendingStep.PendingStepStatus.DOING
-                        || pendingStep.getPendingStepStatus()== PendingStep.PendingStepStatus.TODO)
+                if (pendingStep.getPendingStepStatus() == PendingStep.PendingStepStatus.DOING
+                        || pendingStep.getPendingStepStatus() == PendingStep.PendingStepStatus.TODO)
                     checkBackInFiveMins();
                 if (caller.equals(Constants.ACT_HOME)) {
                     ((ActHome) context).onDialogueClosed();
@@ -128,9 +130,9 @@ public class Dialogues {
 ////                        checkExpiryOfStep();
 ////                    }
                 }
-                Day day=new Day(context);
-                if(CalendarUtils.compareOnlyDates(day.getFirstDay(),new Date())==true) {
-                    AsyncTask task=new AsyncTask() {
+                Day day = new Day(context);
+                if (CalendarUtils.compareOnlyDates(day.getFirstDay(), new Date()) == true) {
+                    AsyncTask task = new AsyncTask() {
                         @Override
                         protected Object doInBackground(Object[] objects) {
                             Goal goal = new Goal(context).get(pendingStep.getGoalId());
@@ -142,28 +144,28 @@ public class Dialogues {
                         }
                     };
                     task.execute();
-                }else{
-                    AsyncTask task=new AsyncTask() {
+                } else {
+                    AsyncTask task = new AsyncTask() {
                         @Override
                         protected Object doInBackground(Object[] objects) {
-                            isUpdating=true;
-                            Logger.d(TAG,"In Dialog: Found calendar not up to date, updating calendar");
+                            isUpdating = true;
+                            Logger.d(TAG, "In Dialog: Found calendar not up to date, updating calendar");
                             YodaCalendar yodaCalendar = new YodaCalendar(context);
                             yodaCalendar.updateCalendar();
-                            Logger.d(TAG,"In Dialog:steps rescheduled");
+                            Logger.d(TAG, "In Dialog:steps rescheduled");
                             return null;
                         }
 
                         @Override
                         protected void onPostExecute(Object o) {
-                            isUpdating=false;
+                            isUpdating = false;
                             super.onPostExecute(o);
                         }
                     };
 
-                    if(isUpdating==false){
+                    if (isUpdating == false) {
                         task.execute();
-                        isUpdating=true;
+                        isUpdating = true;
                     }
                 }
             }
@@ -171,6 +173,7 @@ public class Dialogues {
 
         MyOnClickListener myOnClickListener = new MyOnClickListener();
         btnLogExcuse.setOnClickListener(myOnClickListener);
+        btnCancelExcuse.setOnClickListener(myOnClickListener);
         llDidIt.setOnClickListener(myOnClickListener);
         llDoingIt.setOnClickListener(myOnClickListener);
         llMissedIt.setOnClickListener(myOnClickListener);
@@ -247,12 +250,13 @@ public class Dialogues {
                 case R.id.btnLogExcuseNowNotification:
                     String notesString = pendingStep.getNotes();
                     if (notesString != null)
-                        notesString = notesString +
-                                ((edtExcuse.getText().toString() == null) ? "" : edtExcuse.getText().toString());
+                        notesString = notesString + "\r\n" + (edtExcuse.getText().toString());
                     else
                         notesString = "";
+                    Log.i("Excuse entered", notesString);
                     pendingStep.setNotes(notesString);
                     pendingStep.save();
+                    Log.i("Excuse retrieved", new PendingStep(context).get(pendingStep.getId()).getNotes());
                     // put this text into the pendingStep
 //                if(pendingStep!=null){
 //                    pendingStep.sebtPendingStepStatus(PendingStep.PendingStepStatus.MISSED);
@@ -261,6 +265,10 @@ public class Dialogues {
 //                }
                     dialog.dismiss();
                     break;
+
+                case R.id.btnCancelExcuseNowNotification:
+                    llButtons.setVisibility(View.VISIBLE);
+                    llExcuseLog.setVisibility(View.GONE);
             }
 //            if(startEnd== PendingStep.PendingStepStartEnd.END){
 //                checkExpiryOfStep();
