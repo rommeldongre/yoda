@@ -269,6 +269,7 @@ public class Dialogues {
                 case R.id.btnCancelExcuseNowNotification:
                     llButtons.setVisibility(View.VISIBLE);
                     llExcuseLog.setVisibility(View.GONE);
+                    break;
             }
 //            if(startEnd== PendingStep.PendingStepStartEnd.END){
 //                checkExpiryOfStep();
