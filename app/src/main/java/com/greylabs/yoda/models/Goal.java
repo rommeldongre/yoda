@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.google.api.client.util.DateTime;
 import com.greylabs.yoda.database.Database;
@@ -242,6 +243,18 @@ public class Goal implements Serializable{
         }
         c.close();
         return this;
+    }
+
+    public boolean ifGoalNameExists(String goalName){
+        SQLiteDatabase db=database.getReadableDatabase();
+        String query="select * " +
+                " "+" from "+ TableGoal.goal+" " +
+                " "+"where "+ TableGoal.nickName+" =?";
+        Cursor c = db.rawQuery(query, new String[]{goalName});
+        boolean returnValue = (c.getCount() != 0);
+        c.close();
+        Log.i("models.Goal", String.valueOf(returnValue));
+        return returnValue;
     }
 
     public List<Goal> getAll(GoalDeleted deleted){

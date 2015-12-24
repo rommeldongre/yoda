@@ -422,7 +422,7 @@
                             android:background="@color/transparent"
                             android:hint="@string/edtStepNotesHintActAddNewStep"
                             android:maxLines="4"
-                            android:singleLine="true"
+                            android:singleLine="false"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
                         <View

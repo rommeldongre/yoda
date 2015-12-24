@@ -285,6 +285,16 @@ public class PendingStep implements Serializable {
         return pendingSteps;
     }
 
+    public boolean ifStepNameExists(String stepName){
+        SQLiteDatabase db = database.getReadableDatabase();
+        String query = "select id from " + TablePendingStep.pendingStep +
+                 " where " + TablePendingStep.nickName + " =? ";
+        Cursor c = db.rawQuery(query, new String[]{stepName});
+        boolean returnValue = (c.getCount() != 0);
+        c.close();
+        return returnValue;
+    }
+
     public List<PendingStep> getAll(PendingStepStatus status,PendingStepDeleted deleted,long goalId) {
         ArrayList<PendingStep> pendingSteps = null;
         SQLiteDatabase db = database.getReadableDatabase();
@@ -343,6 +353,47 @@ public class PendingStep implements Serializable {
                 " " + " where "+ TablePendingStep.status+"="+status.ordinal()+" " +
                 " " + " and ("+TablePendingStep.type+"!="+PendingStepType.SERIES_STEP.ordinal()+" or " +
                 " " + " "+TablePendingStep.type+"!="+PendingStepType.SPLIT_STEP.ordinal()+" ) " ;
+
+        Cursor c = db.rawQuery(query, null);
+        if (c.moveToFirst()) {
+            pendingSteps = new ArrayList<>();
+            do {
+                PendingStep pendingStep = new PendingStep(context);
+                pendingStep=makePendingStepObject(c,pendingStep);
+                pendingSteps.add(pendingStep);
+            } while (c.moveToNext());
+        }
+        c.close();
+        return pendingSteps;
+    }
+
+    public ArrayList<PendingStep> getAllPendingStepsByStatus(PendingStepStatus status) {
+        ArrayList<PendingStep> pendingSteps = null;
+        SQLiteDatabase db = database.getReadableDatabase();
+        String query = "select * " +
+                " " + " from " + TablePendingStep.pendingStep + " " +
+                " " + " where "+ TablePendingStep.status+"="+status.ordinal();
+
+        Cursor c = db.rawQuery(query, null);
+        if (c.moveToFirst()) {
+            pendingSteps = new ArrayList<>();
+            do {
+                PendingStep pendingStep = new PendingStep(context);
+                pendingStep=makePendingStepObject(c,pendingStep);
+                pendingSteps.add(pendingStep);
+            } while (c.moveToNext());
+        }
+        c.close();
+        return pendingSteps;
+    }
+
+    public ArrayList<PendingStep> getAllPendingStepsByStatus(PendingStepStatus status, String orderParam) {
+        ArrayList<PendingStep> pendingSteps = null;
+        SQLiteDatabase db = database.getReadableDatabase();
+        String query = "select * " +
+                " " + " from " + TablePendingStep.pendingStep + " " +
+                " " + " where "+ TablePendingStep.status+"="+status.ordinal() + " " +
+                " " + " order by " + orderParam;
 
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {

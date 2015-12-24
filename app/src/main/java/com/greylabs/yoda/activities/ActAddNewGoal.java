@@ -20,6 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -70,6 +71,7 @@ public class ActAddNewGoal extends AppCompatActivity implements View.OnClickList
     private YodaCalendar yodaCalendar;
     String caller;
     private long oldSelectedTimeBoxId;
+    private static final String TAG = "activitiesActAddNewGoal";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -262,64 +264,70 @@ public class ActAddNewGoal extends AppCompatActivity implements View.OnClickList
                     alert.setMessage(getString(R.string.msgActAddNewGoalTimeBoxNotApplicable));
                     alert.show();
                 }else if(edtNickName.getText() != null && edtNickName.getText().length() > 0 ){
-                    TimeBox timeBox=timeBoxList.get(timeSpinner.getSelectedItemPosition());
-                    if(timeBox.getId()!=goal.getTimeBoxId()){               // if new timebox selected
-                        PendingStep pendingStep=new PendingStep(this);
-                        Slot slot=new Slot(this);
-                        if(pendingStep.getAllStepCount(goal.getId())<=slot.getPossibleSlotCount(timeBox)) {
-                            yodaCalendar.detachTimeBox(goal.getTimeBoxId());
-                            pendingStep.freeAllSlots(goal.getId());
-                            yodaCalendar.setTimeBox(timeBox);
-                            yodaCalendar.attachTimeBox(goal.getId());
-                            yodaCalendar.rescheduleSteps(goal.getId());
-                            Prefs prefs=Prefs.getInstance(this);
-                            yodaCalendar.setTimeBox(new TimeBox(this).get(prefs.getUnplannedTimeBoxId()));
-                            yodaCalendar.rescheduleSteps(prefs.getStretchGoalId());
-                            isSaved=true;
+                    Log.i(TAG, "267");
+                    if (!new Goal(this).ifGoalNameExists(edtNickName.getText().toString())){
+                        Log.i(TAG, "269");
+                        TimeBox timeBox=timeBoxList.get(timeSpinner.getSelectedItemPosition());
+                        if(timeBox.getId()!=goal.getTimeBoxId()){               // if new timebox selected
+                            PendingStep pendingStep=new PendingStep(this);
+                            Slot slot=new Slot(this);
+                            if(pendingStep.getAllStepCount(goal.getId())<=slot.getPossibleSlotCount(timeBox)) {
+                                yodaCalendar.detachTimeBox(goal.getTimeBoxId());
+                                pendingStep.freeAllSlots(goal.getId());
+                                yodaCalendar.setTimeBox(timeBox);
+                                yodaCalendar.attachTimeBox(goal.getId());
+                                yodaCalendar.rescheduleSteps(goal.getId());
+                                Prefs prefs=Prefs.getInstance(this);
+                                yodaCalendar.setTimeBox(new TimeBox(this).get(prefs.getUnplannedTimeBoxId()));
+                                yodaCalendar.rescheduleSteps(prefs.getStretchGoalId());
+                                isSaved=true;
+                            }else {
+                                AlertDialog.Builder alert=new AlertDialog.Builder(this);
+                                alert.setPositiveButton("Ok", null);
+                                alert.setMessage(getString(R.string.msgCannotSaveGoalWithSelectedTimeBox));
+                                alert.show();
+                                isSaved=false;
+                            }
                         }else {
-                            AlertDialog.Builder alert=new AlertDialog.Builder(this);
-                            alert.setPositiveButton("Ok", null);
-                            alert.setMessage(getString(R.string.msgCannotSaveGoalWithSelectedTimeBox));
-                            alert.show();
-                            isSaved=false;
+                            isSaved=true;
+                        }
+                        if(isSaved) {
+                            goal.initDatabase(this);
+                            goal.setNickName(edtNickName.getText().toString());
+                            long seletedTBId = timeBoxList.get(timeSpinner.getSelectedItemPosition()).getId();
+                            goal.setTimeBoxId(seletedTBId);
+                            goal.setObjective(edtObjective.getText().toString());
+                            goal.setKeyResult(edtKeyResult.getText().toString());
+                            goal.setReason(edtGoalReason.getText().toString());
+                            goal.setReward(edtGoalReward.getText().toString());
+                            goal.setBuddyEmail(edtGoalBuddy.getText().toString());
+                            Prefs prefs = Prefs.getInstance(this);
+                            goal.setAccount(prefs.getDefaultAccountEmailId());
+                            goal.setAccountType(AccountType.getIntegerToEnum(prefs.getDefaultAccountType()));
+                            goal.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
+                            goal.save();
+                            Slot slot = new Slot(this);
+                            int totalHoursAllotted = slot.getTotalSlotCount(seletedTBId)*Constants.MAX_SLOT_DURATION;
+                            Logger.showMsg(this, getString(R.string.msgGoalSavedActAddNewGoal)+" "+totalHoursAllotted+" hour(s) in it");
+                            //sync code
+                            GoogleSync.getInstance(this).sync();
+                            //sync code
+                            switch (caller) {
+                                case Constants.ACT_ADD_NEW_STEP:
+                                    Intent secIntent = new Intent();
+                                    secIntent.putExtra(Constants.GOAL_CREATED, true);
+                                    setResult(Constants.RESULTCODE_OF_ACT_ADD_GOAL, secIntent);
+                                    break;
+
+                                case Constants.ACT_GOAL_DETAILS:
+                                    Intent thirdIntent = new Intent();
+                                    thirdIntent.putExtra(Constants.GOAL_UPDATED, true);
+                                    setResult(Constants.RESULTCODE_OF_ACT_ADD_GOAL, thirdIntent);
+                            }
+                            this.finish();
                         }
                     }else {
-                        isSaved=true;
-                    }
-                    if(isSaved) {
-                        goal.initDatabase(this);
-                        goal.setNickName(edtNickName.getText().toString());
-                        long seletedTBId = timeBoxList.get(timeSpinner.getSelectedItemPosition()).getId();
-                        goal.setTimeBoxId(seletedTBId);
-                        goal.setObjective(edtObjective.getText().toString());
-                        goal.setKeyResult(edtKeyResult.getText().toString());
-                        goal.setReason(edtGoalReason.getText().toString());
-                        goal.setReward(edtGoalReward.getText().toString());
-                        goal.setBuddyEmail(edtGoalBuddy.getText().toString());
-                        Prefs prefs = Prefs.getInstance(this);
-                        goal.setAccount(prefs.getDefaultAccountEmailId());
-                        goal.setAccountType(AccountType.getIntegerToEnum(prefs.getDefaultAccountType()));
-                        goal.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
-                        goal.save();
-                        Slot slot = new Slot(this);
-                        int totalHoursAllotted = slot.getTotalSlotCount(seletedTBId)*Constants.MAX_SLOT_DURATION;
-                        Logger.showMsg(this, getString(R.string.msgGoalSavedActAddNewGoal)+" "+totalHoursAllotted+" hour(s) in it");
-                        //sync code
-                        GoogleSync.getInstance(this).sync();
-                        //sync code
-                        switch (caller) {
-                            case Constants.ACT_ADD_NEW_STEP:
-                                Intent secIntent = new Intent();
-                                secIntent.putExtra(Constants.GOAL_CREATED, true);
-                                setResult(Constants.RESULTCODE_OF_ACT_ADD_GOAL, secIntent);
-                                break;
-
-                            case Constants.ACT_GOAL_DETAILS:
-                                Intent thirdIntent = new Intent();
-                                thirdIntent.putExtra(Constants.GOAL_UPDATED, true);
-                                setResult(Constants.RESULTCODE_OF_ACT_ADD_GOAL, thirdIntent);
-                        }
-                        this.finish();
+                        Logger.showSnack(this, toolbar, getString(R.string.msgGoalNickNameExistsActAddNewGoal));
                     }
                 }else {
 //                    Logger.showMsg(this, getString(R.string.msgEnterGoalNickNameActAddNewGoal));

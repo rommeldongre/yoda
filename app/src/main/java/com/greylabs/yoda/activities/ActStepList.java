@@ -204,8 +204,11 @@ public class ActStepList extends AppCompatActivity implements onClickOfRecyclerV
 //                    mAdapter = new AdapterRecyclerViewActStepList(this, stepArrayList, isOperationEdit, caller);
 //                    recyclerView.setAdapter(mAdapter);
 //                }else {
-                    this.finish();
+//                    this.finish();
 //                }
+                onBackButtonPressed();
+
+
                 break;
 //            case R.id.actionEditActStepList :
 //                menu.findItem(R.id.actionEditActStepList).setVisible(false);
@@ -226,11 +229,13 @@ public class ActStepList extends AppCompatActivity implements onClickOfRecyclerV
                             // notify adapter
                             getStepArrayFromLocal();
                             mAdapter.notifyDataSetChanged();
+                            isPriorityChanged = false;
                         }else {
                             saveStepsByNewOrder(stepArrayList);
                             // notify adapter
                             getStepArrayFromLocal();
                             mAdapter.notifyDataSetChanged();
+                            isPriorityChanged = false;
                         }
                         break;
 
@@ -411,5 +416,50 @@ public class ActStepList extends AppCompatActivity implements onClickOfRecyclerV
         // notify adapter
         getStepArrayFromLocal();
         mAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onBackPressed() {
+        onBackButtonPressed();
+    }
+
+    private void onBackButtonPressed(){
+        if(!isPriorityChanged) {
+            ActStepList.super.onBackPressed();
+            return;
+        }
+
+
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.titleAlertStepsReprioritized))
+                .setMessage(getString(R.string.msgAlertStepsReprioritized))
+                .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // continue with changes
+                        if(isShowingPendingSteps){
+                            saveStepsByNewOrder(pendingStepsArrayList);
+                            // notify adapter
+                            getStepArrayFromLocal();
+                            mAdapter.notifyDataSetChanged();
+                            isPriorityChanged = false;
+                        }else {
+                            saveStepsByNewOrder(stepArrayList);
+                            // notify adapter
+                            getStepArrayFromLocal();
+                            mAdapter.notifyDataSetChanged();
+                            isPriorityChanged = false;
+                        }
+                        ActStepList.super.onBackPressed();
+
+                    }
+                })
+                .setNegativeButton(R.string.discard, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                        ActStepList.super.onBackPressed();
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 }

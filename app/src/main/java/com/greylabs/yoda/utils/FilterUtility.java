@@ -86,8 +86,10 @@ public class FilterUtility {
 
                 calEnd.set(Calendar.MONTH, Calendar.DECEMBER);
                 calEnd.set(Calendar.DAY_OF_MONTH,31);
-                endDate=CalendarUtils.getSqLiteDateFormat(calEnd);;
+                endDate=CalendarUtils.getSqLiteDateFormat(calEnd);
                 break;
+            case NEVER:
+
         }
 
         criteria=" and  ( "+ MetaData.TablePendingStep.stepDate+ ">= '"+startDate+"'"+
@@ -146,6 +148,17 @@ public class FilterUtility {
     }
 
     public ArrayList<PendingStep> getPendingStepsArrayList(StepFilterType stepFilterType){
+
+        if (stepFilterType == StepFilterType.DONE){
+            ArrayList<PendingStep> pendingSteps= new PendingStep(context).getAllPendingStepsByStatus(PendingStep.PendingStepStatus.COMPLETED, MetaData.TablePendingStep.stepDate+" desc ");
+            return  pendingSteps;
+        }
+
+        if (stepFilterType == StepFilterType.NEVER){
+            ArrayList<PendingStep> pendingSteps= new PendingStep(context).getAllPendingStepsByStatus(PendingStep.PendingStepStatus.UNSCHEDULED, MetaData.TablePendingStep.priority + " asc ");
+            return  pendingSteps;
+        }
+
         ArrayList<PendingStep> pendingSteps= new PendingStep(context).getAllStepsArrayList(buildCriteria(stepFilterType));
         return  pendingSteps;
     }

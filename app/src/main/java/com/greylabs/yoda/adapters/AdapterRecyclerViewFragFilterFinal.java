@@ -1,6 +1,8 @@
 package com.greylabs.yoda.adapters;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -56,7 +58,13 @@ public class AdapterRecyclerViewFragFilterFinal extends RecyclerView.Adapter<Ada
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.checkBox.setCircleColor(Integer.valueOf(stepsArrayList.get(position).getColorCode()));
         holder.tvStepName.setText(stepsArrayList.get(position).getNickName());
-        holder.tvETAOfStep.setText(CalendarUtils.getFormattedDateWithSlot(stepsArrayList.get(position).getStepDate()));
+
+        if (scope == StepFilterType.NEVER){
+            holder.tvETAOfStep.setText(context.getString(R.string.priorityLabel) + stepsArrayList.get(position).getPriority());
+        }
+        else{
+            holder.tvETAOfStep.setText(CalendarUtils.getFormattedDateWithSlot(stepsArrayList.get(position).getStepDate()));
+        }
     }
 
     @Override
@@ -87,6 +95,10 @@ public class AdapterRecyclerViewFragFilterFinal extends RecyclerView.Adapter<Ada
             tvETAOfStep = (TextView) itemView.findViewById(R.id.tvETAOfStepRecyclerItemFragFilterNew);
             cardView = (CardView) itemView.findViewById(R.id.cvRecyclerItemFragFilterNew);
 
+            if (scope == StepFilterType.DONE) {
+                checkBox.setChecked(true);
+            }
+
             checkBox.setOnCheckedChangeListener(this);
         }
 
@@ -99,15 +111,44 @@ public class AdapterRecyclerViewFragFilterFinal extends RecyclerView.Adapter<Ada
                         + " must implement OnClickOfRecyclerViewFragFilterFinal");
             }
 
-            PendingStep currentPendingStep = stepsArrayList.get(getPosition());
-            stepsArrayList.remove(getPosition());
-            setEmptyViewVisibility();
-            notifyItemRemoved(getPosition());
-            PendingStepUtils.markPendingStepDone(currentPendingStep);
-            rescheduleStepsOfCurrentGoal(currentPendingStep);
-            //sync code
-            GoogleSync.getInstance(contxt).sync();
-            myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_MARK_STEP_DONE, scope);
+            final PendingStep currentPendingStep = stepsArrayList.get(getPosition());
+
+            if (scope == StepFilterType.DONE){
+                checkBox.setChecked(false);
+
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        stepsArrayList.remove(getPosition());
+                        setEmptyViewVisibility();
+                        notifyItemRemoved(getPosition());
+                        PendingStepUtils.markPendingStepUnDone(currentPendingStep);
+                        rescheduleStepsOfCurrentGoal(currentPendingStep);
+                        //sync code
+                        GoogleSync.getInstance(contxt).sync();
+                        myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_MARK_STEP_UNDONE, scope);
+                    }
+                }, 100);
+            }
+            else {
+
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        checkBox.setChecked(true);
+                        stepsArrayList.remove(getPosition());
+                        setEmptyViewVisibility();
+                        notifyItemRemoved(getPosition());
+                        PendingStepUtils.markPendingStepDone(currentPendingStep);
+                        rescheduleStepsOfCurrentGoal(currentPendingStep);
+                        //sync code
+                        GoogleSync.getInstance(contxt).sync();
+                        myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_MARK_STEP_DONE, scope);
+                    }
+                }, 100);
+            }
+
+
         }
 
         private void rescheduleStepsOfCurrentGoal(PendingStep currentPendingStep) {
