@@ -60,7 +60,7 @@ public class AdapterRecyclerViewFragFilterFinal extends RecyclerView.Adapter<Ada
         holder.tvStepName.setText(stepsArrayList.get(position).getNickName());
 
         if (scope == StepFilterType.NEVER){
-            holder.tvETAOfStep.setText("Priority: " + stepsArrayList.get(position).getPriority());
+            holder.tvETAOfStep.setText(context.getString(R.string.priorityLabel) + stepsArrayList.get(position).getPriority());
         }
         else{
             holder.tvETAOfStep.setText(CalendarUtils.getFormattedDateWithSlot(stepsArrayList.get(position).getStepDate()));
@@ -168,14 +168,5 @@ public class AdapterRecyclerViewFragFilterFinal extends RecyclerView.Adapter<Ada
                 tvEmptyView.setVisibility(View.GONE);
             }
         }
-    }
-
-    public void addDelayOnUIThread(int milliseconds){
-        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //Do something here
-            }
-        }, milliseconds);
     }
 }

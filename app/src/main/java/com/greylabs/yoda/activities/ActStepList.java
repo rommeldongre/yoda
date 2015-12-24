@@ -431,8 +431,8 @@ public class ActStepList extends AppCompatActivity implements onClickOfRecyclerV
 
 
         new AlertDialog.Builder(this)
-                .setTitle("Steps Re-prioritized")
-                .setMessage("Order of Steps has been changed. Save changes?")
+                .setTitle(getString(R.string.titleAlertStepsReprioritized))
+                .setMessage(getString(R.string.msgAlertStepsReprioritized))
                 .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // continue with changes

@@ -236,28 +236,36 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
             GoalView goalView = new GoalView(this, goalList.get(i));
             linearLayout.addView(goalView);
         }
-        /*TextView tvAddNewGoal = new TextView(this);
+
+        /* TextView for btnAddGoal removed from HorizontalScrollView
+        TextView tvAddNewGoal = new TextView(this);
         tvAddNewGoal.setText(getString(R.string.tvAddNewGoalActHome));
         tvAddNewGoal.setTextColor(getResources().getColor(R.color.white));
         tvAddNewGoal.setGravity(Gravity.CENTER);
-        tvAddNewGoal.setSingleLine(true);*/
+        tvAddNewGoal.setSingleLine(true);
+        */
 
+        /* btnAddGoal removed from HorizontalScrollView
         // init btnAddGoal
-        /*btnAddGoal = new MyFloatingActionButton(this);
+        btnAddGoal = new MyFloatingActionButton(this);
         btnAddGoal.setId(R.id.addNewGoalActHome);
         btnAddGoal.setIcon(R.drawable.ic_btn_plus_sign);
         btnAddGoal.setColorNormal(getResources().getColor(R.color.transparent_total_arc_background));
         btnAddGoal.setColorPressed(getResources().getColor(R.color.transparent_more));
-        btnAddGoal.setOnClickListener(this);*/
+        btnAddGoal.setOnClickListener(this);
+        */
 
         RelativeLayout relativeLayout = new RelativeLayout(this);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         relativeLayout.setGravity(Gravity.CENTER_VERTICAL);
         relativeLayout.setLayoutParams(params);
 
+        //btnAddGoal not added to relative layout
         //relativeLayout.addView(btnAddGoal);
         final LinearLayout linearLayout1 = new LinearLayout(this);
         linearLayout1.setOrientation(LinearLayout.VERTICAL);
+
+        //TextView for btnAddGoal not added to relativelayout
         //linearLayout1.addView(tvAddNewGoal);
         linearLayout1.addView(relativeLayout);
         linearLayout.addView(linearLayout1);

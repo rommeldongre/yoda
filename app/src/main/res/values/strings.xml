@@ -190,6 +190,9 @@
     <string name="tvErrorViewActGoogleSettings">No Google account found. Please add one.</string>
     <string name="btnAddAccountFlipperEmptyViewActGoogleSettings">Add Account</string>
     <string name="msgNoAccountActQuickStart">No Google account found. Please add one.</string>
+    <string name="titleAlertStepsReprioritized">Steps Re-prioritized</string>
+    <string name="msgAlertStepsReprioritized">Order of Steps has been changed. Save changes?</string>
+    <string name="priorityLabel">Priority: </string>
 
     <string-array name="arrayStepTypeActAddNewStep">
         <item>Single Step</item>
