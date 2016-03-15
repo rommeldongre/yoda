@@ -1,6 +1,8 @@
 package com.greylabs.yoda.adapters;
 
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -155,9 +157,19 @@ public class AdapterRecyclerViewActStepList extends RecyclerView.Adapter<Adapter
                         + " must implement OnHeadlineSelectedListener");
             }
             if(buttonView.isPressed()&&isChecked){
-                myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_MARK_STEP_DONE);
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_MARK_STEP_DONE);
+                    }
+                }, 100);
             }else if(buttonView.isPressed()&& !isChecked){
-                myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_MARK_STEP_UNDONE);
+                new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        myOnClickRecyclerView.onClickRecyclerView(getPosition(), Constants.OPERATION_MARK_STEP_UNDONE);
+                    }
+                }, 100);
             }
         }
     }
