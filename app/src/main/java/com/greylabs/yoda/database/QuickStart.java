@@ -55,7 +55,7 @@ public final class QuickStart {
         Set<TimeBoxWhen> timeBoxWhens;
         Set<SubValue> timeBoxOns;
 
-        //1
+        //1 Health
         timeBox = new TimeBox(context);
         timeBox.setNickName("Early Morning-Daily till this year");
         ////set when
@@ -77,58 +77,9 @@ public final class QuickStart {
         timeBoxIds.add(timeBox.getId());
         Logger.d(TAG, "Timebox 1 Added");
 
-        //2
+        //2 Wise
         timeBox = new TimeBox(context);
-        timeBox.setNickName("Daily evening, till this year");
-        //on
-        timeBoxOn = new com.greylabs.yoda.models.TimeBoxOn(context, TimeBoxOn.DAILY);
-        timeBoxOns = new TreeSet<>();
-        timeBoxOn.setSubValues(timeBoxOns);
-        timeBox.setTimeBoxOn(timeBoxOn);
-        //when
-        timeBoxWhen = new com.greylabs.yoda.models.TimeBoxWhen(context);
-        timeBoxWhens = new TreeSet<>();
-        timeBoxWhens.add(TimeBoxWhen.EVENING);
-        timeBoxWhen.setWhenValues(timeBoxWhens);
-        timeBox.setTimeBoxWhen(timeBoxWhen);
-        //till
-        timeBox.setTillType(TimeBoxTill.YEAR);
-        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_2));
-        timeBox.save();
-        timeBoxIds.add(timeBox.getId());
-        Logger.d(TAG, "Timebox 2 Added");
-
-
-        //3
-        timeBox = new TimeBox(context);
-        timeBox.setNickName("Week Nights, till this year");
-        //on
-        timeBoxOn = new com.greylabs.yoda.models.TimeBoxOn(context, TimeBoxOn.WEEKLY);
-        timeBoxOns = new TreeSet<>();
-        timeBoxOns.add(WeekDay.MONDAY);
-        timeBoxOns.add(WeekDay.TUESDAY);
-        timeBoxOns.add(WeekDay.WEDNESDAY);
-        timeBoxOns.add(WeekDay.THURSDAY);
-        timeBoxOns.add(WeekDay.FRIDAY);
-        timeBoxOn.setSubValues(timeBoxOns);
-        timeBox.setTimeBoxOn(timeBoxOn);
-        //when
-        timeBoxWhen = new com.greylabs.yoda.models.TimeBoxWhen(context);
-        timeBoxWhens = new TreeSet<>();
-        timeBoxWhens.add(TimeBoxWhen.MORNING);
-        timeBoxWhens.add(TimeBoxWhen.AFTERNOON);
-        timeBoxWhen.setWhenValues(timeBoxWhens);
-        timeBox.setTimeBoxWhen(timeBoxWhen);
-        //till
-        timeBox.setTillType(TimeBoxTill.YEAR);
-        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_3));
-        timeBox.save();
-        timeBoxIds.add(timeBox.getId());
-        Logger.d(TAG, "Timebox 3 Added");
-
-        //4 Wise
-        timeBox = new TimeBox(context);
-        timeBox.setNickName("Week nights till this year");
+        timeBox.setNickName("Week nights till this month");
         //on
         timeBoxOn = new com.greylabs.yoda.models.TimeBoxOn(context, TimeBoxOn.WEEKLY);
         timeBoxOns = new TreeSet<>();
@@ -146,36 +97,13 @@ public final class QuickStart {
         timeBoxWhen.setWhenValues(timeBoxWhens);
         timeBox.setTimeBoxWhen(timeBoxWhen);
         //till
-        timeBox.setTillType(TimeBoxTill.YEAR);
+        timeBox.setTillType(TimeBoxTill.MONTH);
         timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_4));
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
-        Logger.d(TAG, "Timebox 4 Added");
+        Logger.d(TAG, "Timebox 2 Added");
 
-        //5 Social
-        timeBox = new TimeBox(context);
-        timeBox.setNickName("Weekend Nights till this year");
-        //on
-        timeBoxOn = new com.greylabs.yoda.models.TimeBoxOn(context, TimeBoxOn.WEEKLY);
-        timeBoxOns = new TreeSet<>();
-        timeBoxOns.add(WeekDay.SATURDAY);
-        timeBoxOns.add(WeekDay.SUNDAY);
-        timeBoxOn.setSubValues(timeBoxOns);
-        timeBox.setTimeBoxOn(timeBoxOn);
-        //when
-        timeBoxWhen = new com.greylabs.yoda.models.TimeBoxWhen(context);
-        timeBoxWhens = new TreeSet<>();
-        timeBoxWhens.add(TimeBoxWhen.LATE_NIGHT);
-        timeBoxWhen.setWhenValues(timeBoxWhens);
-        timeBox.setTimeBoxWhen(timeBoxWhen);
-        //till
-        timeBox.setTillType(TimeBoxTill.YEAR);
-        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_5));
-        timeBox.save();
-        timeBoxIds.add(timeBox.getId());
-        Logger.d(TAG, "Timebox 5 Added");
-
-        //6 Housekeeping
+        //3 Organise
         timeBox = new TimeBox(context);
         timeBox.setNickName("Weekend, Afternoon");
         //on
@@ -196,30 +124,7 @@ public final class QuickStart {
         timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_6));
         timeBox.save();
         timeBoxIds.add(timeBox.getId());
-        Logger.d(TAG, "Timebox 6 Added");
-
-        //7 Hobby
-        timeBox = new TimeBox(context);
-        timeBox.setNickName("Weekend Mornings");
-        //on
-        timeBoxOn = new com.greylabs.yoda.models.TimeBoxOn(context, TimeBoxOn.WEEKLY);
-        timeBoxOns = new TreeSet<>();
-        timeBoxOns.add(WeekDay.SUNDAY);
-        timeBoxOns.add(WeekDay.SATURDAY);
-        timeBoxOn.setSubValues(timeBoxOns);
-        timeBox.setTimeBoxOn(timeBoxOn);
-        //when
-        timeBoxWhen = new com.greylabs.yoda.models.TimeBoxWhen(context);
-        timeBoxWhens = new TreeSet<>();
-        timeBoxWhens.add(TimeBoxWhen.MORNING);
-        timeBoxWhen.setWhenValues(timeBoxWhens);
-        timeBox.setTimeBoxWhen(timeBoxWhen);
-        //till
-        timeBox.setTillType(TimeBoxTill.YEAR);
-        timeBox.setColorCode(String.valueOf(Constants.COLORCODE_TIMEBOX_7));
-        timeBox.save();
-        timeBoxIds.add(timeBox.getId());
-        Logger.d(TAG, "Timebox 7 Added");
+        Logger.d(TAG, "Timebox 3 Added");
 
         //Stretch Goal
         timeBox = new TimeBox(context);
@@ -261,11 +166,11 @@ public final class QuickStart {
         goalIds.add(goal.getId());
         Logger.d(TAG, "Goal 1 added");
 
-        //2 Family
+        //2 Wise
         goal = new Goal(context);
-        goal.setNickName("Family");
-        goal.setObjective("Stay with Family");
-        goal.setKeyResult("Happy Life");
+        goal.setNickName("Wise");
+        goal.setObjective("");
+        goal.setKeyResult("");
         goal.setTimeBoxId(timeBoxIds.get(1));
         goal.setDeleted(false);
         goal.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
@@ -275,10 +180,9 @@ public final class QuickStart {
         goalIds.add(goal.getId());
         Logger.d(TAG, "Goal 2 added");
 
-
-        //3 Career
+        //3 Organise
         goal = new Goal(context);
-        goal.setNickName("Career");
+        goal.setNickName("Organize");
         goal.setObjective("");
         goal.setKeyResult("");
         goal.setTimeBoxId(timeBoxIds.get(2));
@@ -290,68 +194,12 @@ public final class QuickStart {
         goalIds.add(goal.getId());
         Logger.d(TAG, "Goal 3 added");
 
-        //4 Wise
-        goal = new Goal(context);
-        goal.setNickName("Wise");
-        goal.setObjective("");
-        goal.setKeyResult("");
-        goal.setTimeBoxId(timeBoxIds.get(3));
-        goal.setDeleted(false);
-        goal.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
-        goal.setAccount(prefs.getDefaultAccountEmailId());
-        goal.setAccountType(AccountType.getIntegerToEnum(prefs.getDefaultAccountType()));
-        goal.save();
-        goalIds.add(goal.getId());
-        Logger.d(TAG, "Goal 4 added");
-
-        //5 Social
-        goal = new Goal(context);
-        goal.setNickName("Social");
-        goal.setObjective("");
-        goal.setKeyResult("");
-        goal.setTimeBoxId(timeBoxIds.get(4));
-        goal.setDeleted(false);
-        goal.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
-        goal.setAccount(prefs.getDefaultAccountEmailId());
-        goal.setAccountType(AccountType.getIntegerToEnum(prefs.getDefaultAccountType()));
-        goal.save();
-        goalIds.add(goal.getId());
-        Logger.d(TAG, "Goal 5 added");
-
-        //6 Housekeeping
-        goal = new Goal(context);
-        goal.setNickName("Organize");
-        goal.setObjective("");
-        goal.setKeyResult("");
-        goal.setTimeBoxId(timeBoxIds.get(5));
-        goal.setDeleted(false);
-        goal.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
-        goal.setAccount(prefs.getDefaultAccountEmailId());
-        goal.setAccountType(AccountType.getIntegerToEnum(prefs.getDefaultAccountType()));
-        goal.save();
-        goalIds.add(goal.getId());
-        Logger.d(TAG, "Goal 6 added");
-
-        //7 Hobby
-        goal = new Goal(context);
-        goal.setNickName("Hobby");
-        goal.setObjective("");
-        goal.setKeyResult("");
-        goal.setTimeBoxId(timeBoxIds.get(6));
-        goal.setDeleted(false);
-        goal.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
-        goal.setAccount(prefs.getDefaultAccountEmailId());
-        goal.setAccountType(AccountType.getIntegerToEnum(prefs.getDefaultAccountType()));
-        goal.save();
-        goalIds.add(goal.getId());
-        Logger.d(TAG, "Goal 7 added");
-
         //Stretch Goal
         goal = new Goal(context);
         goal.setNickName(Constants.NICKNAME_STRETCH_GOAL);
         goal.setObjective("");
         goal.setKeyResult("");
-        goal.setTimeBoxId(timeBoxIds.get(7));
+        goal.setTimeBoxId(timeBoxIds.get(3));
         goal.setDeleted(false);
         goal.setUpdated(new DateTime(new Date(), TimeZone.getTimeZone("UTC")));
         goal.setAccount(prefs.getDefaultAccountEmailId());
@@ -378,56 +226,23 @@ public final class QuickStart {
 
         //Step for Goal 2:
         createStep(1,
-                "Play with kids",
-                PendingStep.PendingStepType.SERIES_STEP,
-                PendingStep.PendingStepExpire.NOT_EXPIRE,
-                3,
-                20,
-                Constants.PENDING_STEP_PRIORITY_TOP_MOST);
-        Logger.d(TAG, "Step 2 added");
-
-        //Step for Goal 3:
-        //no step
-
-        //Step for Goal 4:
-        createStep(3,
                 "Read a book",
-                PendingStep.PendingStepType.SERIES_STEP,
-                PendingStep.PendingStepExpire.NOT_EXPIRE,
-                3,
-                20,
-                Constants.PENDING_STEP_PRIORITY_TOP_MOST);
-        Logger.d(TAG, "Step 4 added");
-
-        //Step for Goal 5:
-        createStep(4,
-                "Dinner with friends",
                 PendingStep.PendingStepType.SERIES_STEP,
                 PendingStep.PendingStepExpire.NOT_EXPIRE,
                 3,
                 10,
                 Constants.PENDING_STEP_PRIORITY_TOP_MOST);
-        Logger.d(TAG, "Step 5 added");
+        Logger.d(TAG, "Step 2 added");
 
-        //Step for Goal 6:
-        createStep(5,
+        //Step for Goal 3:
+        createStep(2,
                 "Pay bills",
                 PendingStep.PendingStepType.SERIES_STEP,
                 PendingStep.PendingStepExpire.NOT_EXPIRE,
                 3,
                 10,
                 Constants.PENDING_STEP_PRIORITY_TOP_MOST);
-        Logger.d(TAG, "Step 6 added");
-
-        //Step for Goal 7:
-        createStep(6,
-                "Golf",
-                PendingStep.PendingStepType.SERIES_STEP,
-                PendingStep.PendingStepExpire.NOT_EXPIRE,
-                3,
-                10,
-                Constants.PENDING_STEP_PRIORITY_TOP_MOST);
-        Logger.d(TAG, "Step 7 added");
+        Logger.d(TAG, "Step 3 added");
     }
 
 
@@ -528,10 +343,5 @@ public final class QuickStart {
             }
             pendingStep.save();
         }
-
-
-
-
-
     }
 }

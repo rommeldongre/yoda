@@ -888,7 +888,8 @@ public class PendingStep implements Serializable {
 
     public boolean isNowStep(){
         Calendar  cal =Calendar.getInstance();
-        cal.set(Calendar.SECOND,0);cal.set(Calendar.MILLISECOND,0);
+        cal.set(Calendar.SECOND,0);
+        cal.set(Calendar.MILLISECOND,0);
         String currentDate= CalendarUtils.getSqLiteDateFormat(cal);
 
         Calendar calStart=Calendar.getInstance();

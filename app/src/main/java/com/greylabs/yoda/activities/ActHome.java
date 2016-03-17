@@ -1,5 +1,7 @@
 package com.greylabs.yoda.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -14,13 +16,15 @@ import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.greylabs.yoda.R;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.Slot;
+import com.greylabs.yoda.models.TimeBox;
+import com.greylabs.yoda.scheduler.YodaCalendar;
 import com.greylabs.yoda.utils.BitmapUtility;
 import com.greylabs.yoda.utils.Constants;
 import com.greylabs.yoda.utils.Dialogues;
@@ -56,6 +60,9 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
     private Goal nowGoal;
     private boolean noStep = true;
 
+    private Goal currentGoal;
+    private TimeBox timeBox;
+    private YodaCalendar yodaCalendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +122,10 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
 //        btnImportGoogleTasks.setOnClickListener(this);
         populateNowInfo();
         setStyleToArcTotalProgress();
+
+        Slot nowSlot = new Slot(getApplicationContext()).get(slot.getActiveSlotId());
+        currentGoal = new Goal(getApplicationContext()).get(nowSlot.getGoalId());
+        Log.e("Goal Check", " " + currentGoal.getNickName());
     }
 
     public void populateNowInfo() {
@@ -122,9 +133,12 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (slot == null) slot = new Slot(ActHome.this);
-                if (nowPendingStep == null) nowPendingStep = new PendingStep(ActHome.this);
-                if (nowGoal == null) nowGoal = new Goal(ActHome.this);
+                if (slot == null)
+                    slot = new Slot(ActHome.this);
+                if (nowPendingStep == null)
+                    nowPendingStep = new PendingStep(ActHome.this);
+                if (nowGoal == null)
+                    nowGoal = new Goal(ActHome.this);
                 List<PendingStep> pendingSteps = nowPendingStep.getPendingSteps(slot.getActiveSlotId());
                 if (pendingSteps != null && pendingSteps.size() > 0) {
                     for (PendingStep ps : pendingSteps) {
@@ -135,10 +149,9 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
                         }
                     }
                     if (nowPendingStep != null) {
-                        if (nowPendingStep.getNickName() != null){
+                        if (nowPendingStep.getNickName() != null) {
                             arcTotalProgress.setStepName(nowPendingStep.getNickName());
-                        }
-                        else arcTotalProgress.setStepName("Untitled Step");
+                        } else arcTotalProgress.setStepName("Untitled Step");
 
                         nowGoal = nowGoal.get(nowPendingStep.getGoalId());
                         arcTotalProgress.setGoalName(nowGoal.getNickName());
@@ -160,15 +173,15 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
         });
     }
 
-    private void showEmptyView(final boolean b) {
-        runOnUiThread(new Runnable() {
+    private void showEmptyView(final boolean b){
+        runOnUiThread(new Runnable(){
             @Override
-            public void run() {
+            public void run(){
                 if(b){
                     Calendar cal = Calendar.getInstance();
                     int currentHour = cal.get(Calendar.HOUR_OF_DAY);
 
-                    if (currentHour >= 0 && currentHour <= 5){
+                    if(currentHour >= 0 && currentHour <= 5){
                         arcTotalProgress.setVisibility(View.GONE);
                         llEmptyView.setVisibility(View.VISIBLE);
                         Log.i("ActHome", "Detects night");
@@ -177,7 +190,7 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
                     }else{
 
                         Slot nowSlot = new Slot(getApplicationContext()).get(slot.getActiveSlotId());
-                        if (nowSlot.getGoalId() == prefs.getStretchGoalId()){
+                        if(nowSlot.getGoalId() == prefs.getStretchGoalId()){
                             arcTotalProgress.setStepName("No Step");
                             arcTotalProgress.setGoalName(Constants.NICKNAME_STRETCH_GOAL);
                             noStep = true;
@@ -189,7 +202,7 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
                         }
 
                     }
-                }else {
+                }else{
                     arcTotalProgress.setVisibility(View.VISIBLE);
                     llEmptyView.setVisibility(View.GONE);
                 }
@@ -283,10 +296,28 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
                 break;
 
             case R.id.arcTotalProgressActHome:
-
-                if (!noStep){
+                Toast.makeText(ActHome.this, " " + noStep, Toast.LENGTH_SHORT).show();
+                if (!noStep) {
                     Dialogues dialogues = new Dialogues(this);
                     dialogues.showNowNotificationDialogue(Constants.ACT_HOME, null, PendingStep.PendingStepStartEnd.START, nowPendingStep);
+                } else {
+                    new AlertDialog.Builder(this)
+                            .setMessage("Current Slot Is Empty. Pull Back A Step.")
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    ArrayList<PendingStep> list = getStepArrayFromLocal();
+                                    if (!list.isEmpty()) {
+                                        rescheduleStepsOfCurrentGoal();
+                                        saveStepsByNewOrder(list);
+                                        populateNowInfo();
+                                        setStyleToArcTotalProgress();
+                                    } else
+                                        Toast.makeText(ActHome.this, "No Steps To Pull", Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, null)
+                            .show();
                 }
 //
 //                Intent intent1 = new Intent(this, ActNowFilter.class);
@@ -363,6 +394,44 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
 //                }
 //                break;
         }
+    }
+
+    private void rescheduleStepsOfCurrentGoal() {
+        if (timeBox == null) {
+            timeBox = new TimeBox(this);
+        }
+        if (yodaCalendar == null) {
+            yodaCalendar = new YodaCalendar(this, timeBox.get(currentGoal.getTimeBoxId()), true);
+        }
+        yodaCalendar.rescheduleSteps(currentGoal.getId());
+    }
+
+    private void saveStepsByNewOrder(ArrayList<PendingStep> newStepArrayList) {
+        TimeBox timeBox = new TimeBox(this);
+        YodaCalendar yodaCalendar = new YodaCalendar(this, timeBox.get(currentGoal.getTimeBoxId()), true);
+        //save all the steps in the array with priorities
+        for (int i = 0; i < newStepArrayList.size(); i++) {
+            newStepArrayList.get(i).initDatabase(this);
+            newStepArrayList.get(i).setPriority(i + 1);
+            newStepArrayList.get(i).save();
+            newStepArrayList.get(i).updateSubSteps();
+        }
+        yodaCalendar.rescheduleSteps(currentGoal.getId());
+    }
+
+    private ArrayList<PendingStep> getStepArrayFromLocal() {
+        ArrayList<PendingStep> pendingStepsArrayList = new ArrayList<>();
+        ArrayList<PendingStep> stepArrayList = new ArrayList<>();
+        PendingStep pendingStep = new PendingStep(this);
+        List<PendingStep> temp = pendingStep.getAllSingleAndSubSteps(currentGoal.getId());
+        if (temp != null) {
+            stepArrayList.addAll(temp);
+            for (int i = 0; i < stepArrayList.size(); i++) {
+                if (!stepArrayList.get(i).getPendingStepStatus().equals(PendingStep.PendingStepStatus.COMPLETED))
+                    pendingStepsArrayList.add(stepArrayList.get(i));
+            }
+        }
+        return pendingStepsArrayList;
     }
 
     @Override

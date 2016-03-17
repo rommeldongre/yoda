@@ -150,17 +150,17 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
         btnHideAdvanced.setOnClickListener(this);
         goalSpinner.setOnItemSelectedListener(this);
 
-        check();
+        setAdvancedStepRadioButtons();
 
         stepType.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup radioGroup, int id) {
                 switch (id) {
                     case R.id.radioButtonSingleStep:
-                        check();
+                        setAdvancedStepRadioButtons();
                         break;
                     case R.id.radioButtonSeries:
-                        check();
+                        setAdvancedStepRadioButtons();
                         if (btnShowAdvanced.getVisibility() == View.VISIBLE) {
                             btnShowAdvanced.setVisibility(View.GONE);
                             cardViewAdvanced.setVisibility(View.VISIBLE);
@@ -183,7 +183,7 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
         getStepArrayFromLocal();
     }
 
-    private void check() {
+    private void setAdvancedStepRadioButtons() {
         if (((RadioButton) findViewById(stepType.getCheckedRadioButtonId())).getText().equals(Constants.PENDING_STEP_TYPE_SINGLE_STEP)) {
             singleStepPanel.setVisibility(View.VISIBLE);
             seriesPanel.setVisibility(View.GONE);
@@ -547,7 +547,7 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                     }
                 });
                 isScheduled = true;
-                Date stepDate = new Date();
+                Date stepDate;
                 if (subStepsList.size() > 0 && (currentStep.getPendingStepType() == PendingStep.PendingStepType.SPLIT_STEP || currentStep.getPendingStepType() == PendingStep.PendingStepType.SERIES_STEP)) {
                     stepDate = subStepsList.get(0).getTopmostSubstepScheduleDate(currentStep.getId());
                 } else {

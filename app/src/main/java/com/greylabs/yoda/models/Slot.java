@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.greylabs.yoda.database.Database;
 import com.greylabs.yoda.database.MetaData;
@@ -312,9 +313,10 @@ public class Slot {
 
     public long getActiveSlotId(){
         Calendar cal=Calendar.getInstance();
-        cal.set(Calendar.SECOND,0);cal.set(Calendar.MILLISECOND,0);
+        cal.set(Calendar.SECOND,0);cal.set(Calendar.MILLISECOND, 0);
         TimeBoxWhen timeBoxWhen=TimeBoxWhen.getWhen(cal);
         String nowDate=CalendarUtils.getSqLiteDateFormat(cal);
+        Log.e("Check Slot", nowDate);
 
 
         String query="select  "+TableSlot.id+" " +
