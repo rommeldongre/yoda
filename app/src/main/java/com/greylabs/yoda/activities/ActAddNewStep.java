@@ -21,6 +21,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
@@ -58,6 +59,7 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
     RadioGroup priority;
     RadioButton topMost, bottomMost;
 
+    RelativeLayout rlSeekBarPriority;
     SeekBar seekBarPriority;
     TextView tvSeekBarPriority;
 
@@ -129,6 +131,7 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
         topMost = (RadioButton) findViewById(R.id.radioButtonTopMost);
         bottomMost = (RadioButton) findViewById(R.id.radioButtonBottomMost);
 
+        rlSeekBarPriority = (RelativeLayout) findViewById(R.id.rlSeekBarPriority);
         seekBarPriority = (SeekBar) findViewById(R.id.seekBarPriority);
         tvSeekBarPriority = (TextView) findViewById(R.id.tvSeekBarPriority);
 
@@ -287,6 +290,7 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                     // visibility of radio group is set to gone and the priority is shown in the seek bar
 
                     priority.setVisibility(View.GONE);
+                    rlSeekBarPriority.setVisibility(View.VISIBLE);
 
                     currentGoal.setId(currentStep.getGoalId());
                     int count = currentGoal.getRemainingStepCount();
