@@ -210,6 +210,35 @@
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                             android:textStyle="bold" />
 
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/tvSeekBarPriority"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginEnd="10dp"
+                                android:layout_marginRight="10dp"
+                                android:textStyle="bold" />
+
+                            <SeekBar
+                                android:id="@+id/seekBarPriority"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="20dip"
+                                android:layout_marginStart="20dip"
+                                android:layout_marginTop="8dip"
+                                android:layout_toLeftOf="@id/tvSeekBarPriority"
+                                android:layout_toStartOf="@id/tvSeekBarPriority"
+                                android:max="9" />
+                        </RelativeLayout>
+
+
                         <RadioGroup
                             android:id="@+id/radioGroupPriority"
                             android:layout_width="match_parent"
@@ -217,6 +246,7 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_marginLeft="20dip"
                             android:layout_marginTop="8dip"
+                            android:visibility="visible"
                             android:orientation="horizontal">
 
                             <RadioButton
@@ -479,7 +509,6 @@
                             android:layout_marginTop="8dip"
                             android:background="@color/transparent"
                             android:hint="@string/edtStepNotesHintActAddNewStep"
-                            android:maxLines="4"
                             android:singleLine="false"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 

@@ -296,7 +296,6 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
                 break;
 
             case R.id.arcTotalProgressActHome:
-                Toast.makeText(ActHome.this, " " + noStep, Toast.LENGTH_SHORT).show();
                 if (!noStep) {
                     Dialogues dialogues = new Dialogues(this);
                     dialogues.showNowNotificationDialogue(Constants.ACT_HOME, null, PendingStep.PendingStepStartEnd.START, nowPendingStep);
@@ -306,9 +305,15 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    // This is the code to pull back a step when there is no step in the progress arc
+
+                                    Slot nowSlot = new Slot(getApplicationContext()).get(slot.getActiveSlotId());
+                                    currentGoal = new Goal(getApplicationContext()).get(nowSlot.getGoalId());
+
+                                    rescheduleStepsOfCurrentGoal();
                                     ArrayList<PendingStep> list = getStepArrayFromLocal();
                                     if (!list.isEmpty()) {
-                                        rescheduleStepsOfCurrentGoal();
                                         saveStepsByNewOrder(list);
                                         populateNowInfo();
                                         setStyleToArcTotalProgress();

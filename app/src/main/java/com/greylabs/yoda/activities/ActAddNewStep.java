@@ -11,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -57,7 +58,10 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
     RadioGroup priority;
     RadioButton topMost, bottomMost;
 
-    Spinner goalSpinner/*, stepTypeSpinner, stepPrioritySpinner*/;
+    SeekBar seekBarPriority;
+    TextView tvSeekBarPriority;
+
+    Spinner goalSpinner;
     SeekBar sbNoOfSteps, sbTimeSeriesStep, sbTimeSingleStep;
     TextView tvTimeSingleStep, tvNoOfSeriesSteps, tvTimeSeriesSteps;
     LinearLayout singleStepPanel, seriesPanel;
@@ -66,7 +70,6 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
     RadioGroup rgBehaviourOfExpiredSteps;
 
     AdapterGoalSpinner adapterGoalSpinner;
-    //    ArrayAdapter<String> spinnerArrayAdapter;
     List<Goal> goalList = new ArrayList<>();
     ArrayList<String> goalNamesList = new ArrayList<>();
     Goal currentGoal;
@@ -118,7 +121,6 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
 
         cardViewAdvanced = (CardView) findViewById(R.id.cardViewAdvancedActAddNewStep);
         btnHideAdvanced = (Button) findViewById(R.id.btnHideAdvancedActAddNewStep);
-//        stepPrioritySpinner = (Spinner) findViewById(R.id.spinnerPriorityActAddNewStep);
 
         stepType = (RadioGroup) findViewById(R.id.radioGroupStepType);
         singleStep = (RadioButton) findViewById(R.id.radioButtonSingleStep);
@@ -127,8 +129,9 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
         topMost = (RadioButton) findViewById(R.id.radioButtonTopMost);
         bottomMost = (RadioButton) findViewById(R.id.radioButtonBottomMost);
 
-//        stepTypeSpinner = (Spinner) findViewById(R.id.spinnerStepTypeActAddNewStep);
-//        sbTimeSingleStep = (SeekBar) findViewById(R.id.seekbarSingleStepTimeActAddNewStep);
+        seekBarPriority = (SeekBar) findViewById(R.id.seekBarPriority);
+        tvSeekBarPriority = (TextView) findViewById(R.id.tvSeekBarPriority);
+
         sbTimeSingleStep = (SeekBar) findViewById(R.id.seekbarSingleStepTimeActAddNewStep);
         sbNoOfSteps = (SeekBar) findViewById(R.id.seekbarStepsInSeriesActAddNewStep);
         sbTimeSeriesStep = (SeekBar) findViewById(R.id.seekbarTimeForEachStepActAddNewStep);
@@ -175,9 +178,6 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
             }
         });
 
-//        stepTypeSpinner.setOnItemSelectedListener(this);
-//        stepPrioritySpinner.setOnItemSelectedListener(this);
-
         setDefaultValues();
         getGoalListAndPopulate();
         getStepArrayFromLocal();
@@ -205,12 +205,9 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
         if (prefs.isPriorityNewStepBottomMost()) {
             //choose bottom most
             bottomMost.setChecked(true);
-//            stepPrioritySpinner.setSelection(1);
         } else {
             topMost.setChecked(true);
-//            stepPrioritySpinner.setSelection(0);
         }
-//        setWhetherToExpireValue(goalList.get(goalSpinner.getSelectedItemPosition()));
     }
 
 
@@ -287,31 +284,25 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                     goalSpinner.setSelection(oldGoalPosition);
                     goalChosen = oldGoalPosition;
 
-//                    ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, android.R.id.text1);
-//                    spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//                    stepPrioritySpinner.setAdapter(spinnerAdapter);
+                    // visibility of radio group is set to gone and the priority is shown in the seek bar
 
-                    if (currentStep.getPriority() != 1)
-                        topMost.setText(String.valueOf(currentStep.getPriority()));
+                    priority.setVisibility(View.GONE);
 
-                    topMost.setEnabled(false);
-                    bottomMost.setVisibility(View.GONE);
-//                    spinnerAdapter.add(String.valueOf(currentStep.getPriority()));
-//                    spinnerAdapter.add("Top-most");
-//                    spinnerAdapter.add("Bottom-most");
-//                    spinnerAdapter.add("Change Manually");
-//                    stepPrioritySpinner.setSelection(0);
-//                    stepPrioritySpinner.setEnabled(false);
+                    currentGoal.setId(currentStep.getGoalId());
+                    int count = currentGoal.getRemainingStepCount();
+                    seekBarPriority.setMax(count);
+
+                    seekBarPriority.setProgress(currentStep.getPriority());
+                    seekBarPriority.setEnabled(false);
+                    tvSeekBarPriority.setText(String.valueOf(currentStep.getPriority()) + "/" + String.valueOf(count));
 
                     if (currentStep.getPendingStepType() == PendingStep.PendingStepType.SINGLE_STEP
                             || currentStep.getPendingStepType() == PendingStep.PendingStepType.SUB_STEP
                             ) {
                         singleStep.setChecked(true);
-//                        stepTypeSpinner.setSelection(0);
                         sbTimeSingleStep.setProgress(currentStep.getTime());
                     } else {
                         series.setChecked(true);
-//                        stepTypeSpinner.setSelection(1);
                         sbTimeSeriesStep.setProgress(currentStep.getTime());
                         sbNoOfSteps.setProgress(currentStep.getStepCount());
                     }
@@ -406,36 +397,10 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                 currentStep.setStepCount(sbNoOfSteps.getProgress());
             }
 
-            /*if (stepTypeSpinner.getSelectedItem().equals(Constants.PENDING_STEP_TYPE_SINGLE_STEP)) {
-                if (sbTimeSingleStep.getProgress() > 3) {
-                    currentStep.setPendingStepType(PendingStep.PendingStepType.SPLIT_STEP);
-                    currentStep.setStepCount(sbTimeSingleStep.getProgress() / 3);
-                    if (sbTimeSingleStep.getProgress() % 3 >= 1)
-                        currentStep.setStepCount(currentStep.getStepCount() + 1);
-                } else {
-                    currentStep.setPendingStepType(PendingStep.PendingStepType.SINGLE_STEP);
-                    currentStep.setStepCount(1);
-                }
-                currentStep.setTime(sbTimeSingleStep.getProgress());
-            } else {
-                currentStep.setPendingStepType(PendingStep.PendingStepType.SERIES_STEP);
-                currentStep.setTime(sbTimeSeriesStep.getProgress());
-                currentStep.setStepCount(sbNoOfSteps.getProgress());
-            }*/
-//            currentStep.setSkipCount();
             currentStep.setGoalId(currentGoal.getId());
             if (currentStep.getStringId() == null || currentStep.getStringId().equals(""))
                 currentStep.setGoalStringId(currentGoal.getStringId());
 
-
-//            if (stepPrioritySpinner.getSelectedItem().equals(Constants.PENDING_STEP_PRIORITY_TOP_MOST)) {
-//                stepArrayList.add(0, currentStep);
-//            } else if (stepPrioritySpinner.getSelectedItem().equals(Constants.PENDING_STEP_PRIORITY_BOTTOM_MOST)) {
-//                stepArrayList.add(currentStep);
-//            }
-//            else {
-//                stepArrayList.add(Integer.parseInt(stepPrioritySpinner.getSelectedItem().toString()) - 1, currentStep);
-//            }
             TimeBox timeBox = new TimeBox(this);
             timeBox = timeBox.get(currentGoal.getTimeBoxId());
             YodaCalendar yodaCalendar = new YodaCalendar(this, timeBox);
@@ -613,20 +578,6 @@ public class ActAddNewStep extends AppCompatActivity implements View.OnClickList
                     getStepArrayFromLocal();
                 }
                 break;
-            /*case R.id.spinnerStepTypeActAddNewStep:
-                if (position == 0) {
-                    singleStepPanel.setVisibility(View.VISIBLE);
-                    seriesPanel.setVisibility(View.GONE);
-                } else if (position == 1) {
-                    singleStepPanel.setVisibility(View.GONE);
-                    seriesPanel.setVisibility(View.VISIBLE);
-                    scrollView.post(new Runnable() {
-                        public void run() {
-                            scrollView.fullScroll(View.FOCUS_DOWN);
-                        }
-                    });
-                }
-                break;*/
         }
     }
 

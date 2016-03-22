@@ -15,20 +15,25 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginEnd="15dp">
+
         <com.greylabs.yoda.views.MyFloatingActionsMenu
             android:id="@+id/btnSettingsActHome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
             android:elevation="4dip"
-            android:layout_alignParentEnd="true"
             fab:fab_addButtonColorNormal="@color/transparent_total_arc_background"
             fab:fab_addButtonColorPressed="@color/transparent_more"
-            fab:fab_labelStyle="@style/menu_labels_style"
-            android:layout_marginBottom="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginEnd="15dp">
+            fab:fab_labelStyle="@style/menu_labels_style">
             <!--fab:fab_icon="@drawable/ic_btn_settings_act_home"-->
             <!--fab:fab_addButtonColorNormal="@color/white"-->
             <!--fab:fab_addButtonColorPressed="@color/white_pressed"-->
@@ -113,6 +118,17 @@
                 fab:fab_title="@string/btnChangeWallpaperActHome" />
         </com.greylabs.yoda.views.MyFloatingActionsMenu>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:text="Settings"
+                android:layout_height="wrap_content"
+                android:paddingRight="10dp"
+                android:textColor="@color/white"
+                android:layout_gravity="right"
+                />
+
+        </LinearLayout>
+
         <RelativeLayout
             android:id="@+id/LayoutToBeHiddenActHome"
             android:layout_width="match_parent"
@@ -138,6 +154,12 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginRight="76dp" >
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true">
+
                 <com.greylabs.yoda.views.MyFloatingActionButton
                     android:id="@+id/btnAddStepActHome"
                     android:layout_width="wrap_content"
@@ -145,11 +167,26 @@
                     fab:fab_icon="@drawable/ic_btn_plus_sign"
                     fab:fab_colorNormal="@color/ColorPrimary"
                     fab:fab_colorPressed="@color/transparent_more"
-                    android:layout_alignParentLeft="true"
                     />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:text="Add Step"
+                    android:textSize="12sp"
+                    android:layout_gravity="center"
+                    android:textColor="@color/white"
+                    android:layout_height="wrap_content" />
+
+                </LinearLayout>
                 <!--fab:fab_addButtonColorNormal="@color/white"-->
                 <!--fab:fab_addButtonColorPressed="@color/white_pressed"-->
                 <!--fab:fab_addButtonPlusIconColor="@color/half_black"-->
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true">
 
                 <com.greylabs.yoda.views.MyFloatingActionButton
                     android:id="@+id/btnFilterActHome"
@@ -157,8 +194,23 @@
                     android:layout_height="wrap_content"
                     fab:fab_icon="@drawable/ic_btn_filter_act_home"
                     fab:fab_colorNormal="@color/transparent_total_arc_background"
-                    fab:fab_colorPressed="@color/transparent_more"
-                    android:layout_centerInParent="true"/>
+                    fab:fab_colorPressed="@color/transparent_more"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:text="Calendar"
+                        android:textSize="12sp"
+                        android:textColor="@color/white"
+                        android:layout_gravity="center"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true">
 
                 <com.greylabs.yoda.views.MyFloatingActionButton
                     android:id="@+id/btnMyGoalsActHome"
@@ -167,8 +219,17 @@
                     fab:fab_icon="@drawable/ic_btn_my_goals_act_home"
                     fab:fab_colorNormal="@color/transparent_total_arc_background"
                     fab:fab_colorPressed="@color/transparent_more"
-                    fab:fab_title="My Goals"
-                    android:layout_alignParentRight="true"/>
+                    fab:fab_title="My Goals"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:text="My Goals"
+                        android:textSize="12sp"
+                        android:textColor="@color/white"
+                        android:layout_gravity="center"
+                        android:layout_height="wrap_content" />
+
+                </LinearLayout>
             </RelativeLayout>
 
             <LinearLayout

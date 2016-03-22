@@ -276,51 +276,56 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                     List<Task> myTasks = tasks.getItems();
                     if (myTasks != null) {
                         for (Task task : myTasks) {
-                            PendingStep pendingStep = convertToPendingStep(task);
-                            if (pendingStep.getId() == 0 && (pendingStep.isDeleted() == true
-                                    || pendingStep.getPendingStepStatus() == PendingStep.PendingStepStatus.COMPLETED)) {
-                                continue;
-                            }
-                            if (pendingStep.getId() == 0) {
-                                //means that this new step , insert it to our database
-                                pendingStep.setStringId(task.getId());
-                                pendingStep.setGoalStringId(taskList.getId());
-                                pendingStep.setGoalId(goal.getId());
-                                pendingStep.setPriority(goal.getHighestPriority(goal.getId()) + 1);
-                                pendingStep.save();
-                            } else {
-                                if (compareDateTime(task.getUpdated(), pendingStep.getUpdated())) {
-                                    //means server has latest data
-                                    Logger.d(TAG, "PendingStep:::Server has latest data. Server update:" + task.getUpdated() + " App updated:" + pendingStep.getUpdated());
-                                    if (task.getStatus().equals("needsAction")) {
-                                        pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
-                                        //pendingStep.setTime(Constants.MAX_SLOT_DURATION);
-                                    } else {
-                                        pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
-                                        pendingStep.cancelAlarm();
-                                        pendingStep.freeSlot();
-                                        pendingStep.setSlotId(0);
-                                        Logger.d(TAG, "Import: step marked completed in local database");
-                                    }
-                                    //update
-                                    pendingStep.setNickName(task.getTitle());
-                                    pendingStep.setUpdated(task.getUpdated());
-                                    pendingStep.save();
 
-                                    //check for deleted
-                                    if (task.getDeleted() != null) {
-                                        pendingStep.setDeleted(task.getDeleted());
-                                    }
-                                    if (pendingStep.isDeleted()) {
-                                        pendingStep.cancelAlarm();
-                                        pendingStep.freeSlot();
-                                        pendingStep.delete();
-                                        Logger.d(TAG,"Step Deleted"+pendingStep);
+                            // Among all the imported tasks if a tasks title is empty it is not added as a step
+
+                            if(!task.getTitle().isEmpty()) {
+                                PendingStep pendingStep = convertToPendingStep(task);
+                                if (pendingStep.getId() == 0 && (pendingStep.isDeleted()
+                                        || pendingStep.getPendingStepStatus() == PendingStep.PendingStepStatus.COMPLETED)) {
+                                    continue;
+                                }
+                                if (pendingStep.getId() == 0) {
+                                    //means that this new step , insert it to our database
+                                    pendingStep.setStringId(task.getId());
+                                    pendingStep.setGoalStringId(taskList.getId());
+                                    pendingStep.setGoalId(goal.getId());
+                                    pendingStep.setPriority(goal.getHighestPriority(goal.getId()) + 1);
+                                    pendingStep.save();
+                                } else {
+                                    if (compareDateTime(task.getUpdated(), pendingStep.getUpdated())) {
+                                        //means server has latest data
+                                        Logger.d(TAG, "PendingStep:::Server has latest data. Server update:" + task.getUpdated() + " App updated:" + pendingStep.getUpdated());
+                                        if (task.getStatus().equals("needsAction")) {
+                                            pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.TODO);
+                                            //pendingStep.setTime(Constants.MAX_SLOT_DURATION);
+                                        } else {
+                                            pendingStep.setPendingStepStatus(PendingStep.PendingStepStatus.COMPLETED);
+                                            pendingStep.cancelAlarm();
+                                            pendingStep.freeSlot();
+                                            pendingStep.setSlotId(0);
+                                            Logger.d(TAG, "Import: step marked completed in local database");
+                                        }
+                                        //update
+                                        pendingStep.setNickName(task.getTitle());
+                                        pendingStep.setUpdated(task.getUpdated());
+                                        pendingStep.save();
+
+                                        //check for deleted
+                                        if (task.getDeleted() != null) {
+                                            pendingStep.setDeleted(task.getDeleted());
+                                        }
+                                        if (pendingStep.isDeleted()) {
+                                            pendingStep.cancelAlarm();
+                                            pendingStep.freeSlot();
+                                            pendingStep.delete();
+                                            Logger.d(TAG, "Step Deleted" + pendingStep);
+                                        }
                                     }
                                 }
+                                Logger.d(TAG, "Task : " + task.toString() + "  Pending Step: " + pendingStep.toString());
+                                lastSyncDate = task.getUpdated();
                             }
-                            Logger.d(TAG, "Task : " + task.toString() + "  Pending Step: " + pendingStep.toString());
-                            lastSyncDate=task.getUpdated();
                         }
                     }
                 }

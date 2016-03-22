@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -8,13 +9,19 @@
         android:id="@+id/toolBarActFilters"
         layout="@layout/tool_bar" />
 
-    <com.astuetz.PagerSlidingTabStrip
+    <android.support.design.widget.TabLayout
+        style="@style/Base.Widget.Design.TabLayout"
         android:id="@+id/tabBarActFilters"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/ColorPrimary"
         android:textColorPrimary="@color/white"
-        android:elevation="4dp" />
+        android:elevation="4dp"
+        app:tabSelectedTextColor="#FFF"
+        app:tabIndicatorColor="@color/white"
+        app:tabIndicatorHeight="2dp"
+        app:tabTextColor="#8FFF"
+        app:tabMode="scrollable" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPagerActFilters"

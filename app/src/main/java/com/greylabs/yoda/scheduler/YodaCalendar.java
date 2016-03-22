@@ -546,7 +546,11 @@ public class YodaCalendar {
         alarmScheduler.setDuration(ps.getTime());
         alarmScheduler.setAlarmDate(ps.getStepDate());
         alarmScheduler.cancel();
-        alarmScheduler.setAlarm();
+
+        // This prevents the alarm dialog to appear if a step is pulled back
+
+        if(!needCurrentSlot)
+            alarmScheduler.setAlarm();
         return true;
     }
 
