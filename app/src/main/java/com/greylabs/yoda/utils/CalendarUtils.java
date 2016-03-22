@@ -230,7 +230,7 @@ public class CalendarUtils {
         return -1;
     }
 
-    public static Set<TimeBoxWhen> getTodaysPassedSlots() {
+    public static Set<TimeBoxWhen> getTodaysPassedSlots(boolean needCurrentSlot) {
         Calendar cal = Calendar.getInstance();
         Set<TimeBoxWhen> whens = new TreeSet<>();
         whens.add(TimeBoxWhen.EARLY_MORNING);
@@ -243,8 +243,13 @@ public class CalendarUtils {
         int currentHour = cal.get(Calendar.HOUR_OF_DAY);
         while (itWhens.hasNext()) {
             TimeBoxWhen when = itWhens.next();
-            if (when.getStartTime() > currentHour)
-                itWhens.remove();
+            if(needCurrentSlot) {
+                if (when.getEndTime() > currentHour)
+                    itWhens.remove();
+            }else{
+                if (when.getStartTime() > currentHour)
+                    itWhens.remove();
+            }
         }
         return whens;
     }

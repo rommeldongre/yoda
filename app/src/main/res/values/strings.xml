@@ -33,7 +33,8 @@
 
     <!--ActAddNewStep-->
     <string name="tvStepNameActAddNewStep">Nick Name</string>
-    <string name="edtStepNameHintActAddNewStep">Enter Step Nick Name</string>
+    <string name="edtStepNameHintActAddNewStep">eg. Read Newspaper</string>
+    <string name="allowableCharactersForStep">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz 1234567890</string>
     <string name="tvStepNotesActAddNewStep">Notes</string>
     <string name="edtStepNotesHintActAddNewStep">Enter Notes Here</string>
     <string name="tvGoalNameActAddNewStep">Goal Name</string>

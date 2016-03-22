@@ -7,7 +7,6 @@
         android:id="@+id/cvNotEmptyViewNowNotification"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
         android:padding="15dp" >
 
         <LinearLayout
@@ -193,7 +192,10 @@
                     android:id="@+id/edtExcuseNowNotification"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLines="4"
+                    android:singleLine="true"
+                    android:lines="1"
+                    android:scrollHorizontally="true"
+                    android:inputType="textShortMessage"
                     android:textColor="@color/gray"
                     android:textColorHint="@color/gray"
                     android:hint="@string/edtExcuseDialogueExcuse"

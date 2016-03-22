@@ -40,6 +40,8 @@ public class YodaCalendar {
     private List<Slot> slots;
     private TimeBox timeBox;
     private Prefs prefs;
+
+    private boolean needCurrentSlot = false;
     /**********************************************************************************************/
     //Getters and Setters
     /**********************************************************************************************/
@@ -61,6 +63,13 @@ public class YodaCalendar {
         this(context);
         this.timeBox = timeBox;
         slots = slot.getAll(timeBox);
+    }
+
+    public YodaCalendar(Context context, TimeBox timeBox, boolean needCurrentSlot) {
+        this(context);
+        this.timeBox = timeBox;
+        slots = slot.getAll(timeBox);
+        this.needCurrentSlot = needCurrentSlot;
     }
 
     public void setTimeBox(TimeBox timeBox) {
@@ -537,7 +546,11 @@ public class YodaCalendar {
         alarmScheduler.setDuration(ps.getTime());
         alarmScheduler.setAlarmDate(ps.getStepDate());
         alarmScheduler.cancel();
-        alarmScheduler.setAlarm();
+
+        // This prevents the alarm dialog to appear if a step is pulled back
+
+        if(!needCurrentSlot)
+            alarmScheduler.setAlarm();
         return true;
     }
 
@@ -715,7 +728,7 @@ public class YodaCalendar {
 
         //check for slots
         int count = 0;
-        Set<TimeBoxWhen> whens = CalendarUtils.getTodaysPassedSlots();
+        Set<TimeBoxWhen> whens = CalendarUtils.getTodaysPassedSlots(needCurrentSlot);
         if (slots != null && whens != null) {
             for (TimeBoxWhen when : whens) {
                 Slot slot = null;

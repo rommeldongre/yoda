@@ -6,7 +6,7 @@
 
     <include
         android:id="@+id/toolBarActAddNewStep"
-        layout="@layout/tool_bar"></include>
+        layout="@layout/tool_bar" />
 
     <ScrollView
         android:id="@+id/scrollViewAvtAddNewStep"
@@ -16,7 +16,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
@@ -50,6 +50,7 @@
                             android:layout_marginTop="8dip"
                             android:background="@color/transparent"
                             android:hint="@string/edtStepNameHintActAddNewStep"
+                            android:inputType="textAutoCorrect"
                             android:maxLines="4"
                             android:singleLine="true"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
@@ -91,6 +92,64 @@
                             android:layout_marginTop="8dp"
                             android:background="@color/button_material_light" />
                     </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dip"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tvStepTypeActAddNewStep"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                            android:textStyle="bold" />
+
+                        <RadioGroup
+                            android:id="@+id/radioGroupStepType"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginLeft="20dip"
+                            android:layout_marginTop="8dip"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/radioButtonSingleStep"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:checked="true"
+                                android:text="Single Step" />
+
+                            <RadioButton
+                                android:id="@+id/radioButtonSeries"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Series" />
+
+                        </RadioGroup>
+
+                        <!--<Spinner
+                            android:id="@+id/spinnerStepTypeActAddNewStep"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginLeft="20dip"
+                            android:layout_marginTop="8dip"
+                            android:entries="@array/arrayStepTypeActAddNewStep"
+                            android:prompt="@string/edtStepTypeHintActAddNewStep" />-->
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginLeft="20dip"
+                            android:layout_marginTop="8dp"
+                            android:background="@color/button_material_light" />
+                    </LinearLayout>
+
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -151,7 +210,66 @@
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                             android:textStyle="bold" />
 
-                        <Spinner
+                        <RelativeLayout
+                            android:id="@+id/rlSeekBarPriority"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:id="@+id/tvSeekBarPriority"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginEnd="10dp"
+                                android:layout_marginRight="10dp"
+                                android:textStyle="bold" />
+
+                            <SeekBar
+                                android:id="@+id/seekBarPriority"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginLeft="20dip"
+                                android:layout_marginStart="20dip"
+                                android:layout_marginTop="8dip"
+                                android:layout_toLeftOf="@id/tvSeekBarPriority"
+                                android:layout_toStartOf="@id/tvSeekBarPriority"
+                                android:max="9" />
+                        </RelativeLayout>
+
+
+                        <RadioGroup
+                            android:id="@+id/radioGroupPriority"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginLeft="20dip"
+                            android:layout_marginTop="8dip"
+                            android:visibility="visible"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/radioButtonTopMost"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:checked="true"
+                                android:text="@string/rbTopMostActSettingsDefaultDuration" />
+
+                            <RadioButton
+                                android:id="@+id/radioButtonBottomMost"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@string/rbBottomMostActSettingsDefaultDuration" />
+
+                        </RadioGroup>
+
+
+                        <!--<Spinner
                             android:id="@+id/spinnerPriorityActAddNewStep"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -159,39 +277,8 @@
                             android:layout_marginLeft="20dip"
                             android:layout_marginTop="8dip"
                             android:entries="@array/arrayStepPriorityActAddNewStep"
-                            android:prompt="@string/edtPriorityHintActAddNewStep" />
+                            android:prompt="@string/edtPriorityHintActAddNewStep" />-->
                         <!--android:entries="@array/arrayStepTypeActAddNewStep"-->
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginLeft="20dip"
-                            android:layout_marginTop="8dp"
-                            android:background="@color/button_material_light" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="10dip"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/tvStepTypeActAddNewStep"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
-                            android:textStyle="bold" />
-
-                        <Spinner
-                            android:id="@+id/spinnerStepTypeActAddNewStep"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_marginLeft="20dip"
-                            android:layout_marginTop="8dip"
-                            android:entries="@array/arrayStepTypeActAddNewStep"
-                            android:prompt="@string/edtStepTypeHintActAddNewStep" />
 
                         <View
                             android:layout_width="match_parent"
@@ -225,10 +312,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentEnd="true"
-                                android:layout_marginRight="10dp"
-                                android:layout_marginEnd="10dp"
                                 android:layout_alignParentRight="true"
                                 android:layout_centerVertical="true"
+                                android:layout_marginEnd="10dp"
+                                android:layout_marginRight="10dp"
                                 android:textStyle="bold" />
 
 
@@ -284,8 +371,8 @@
                                     android:layout_alignParentEnd="true"
                                     android:layout_alignParentRight="true"
                                     android:layout_centerVertical="true"
-                                    android:layout_marginRight="10dp"
                                     android:layout_marginEnd="10dp"
+                                    android:layout_marginRight="10dp"
                                     android:textStyle="bold" />
 
                                 <SeekBar
@@ -332,9 +419,9 @@
                                     android:layout_height="wrap_content"
                                     android:layout_alignParentEnd="true"
                                     android:layout_alignParentRight="true"
-                                    android:layout_marginRight="10dp"
-                                    android:layout_marginEnd="10dp"
                                     android:layout_centerVertical="true"
+                                    android:layout_marginEnd="10dp"
+                                    android:layout_marginRight="10dp"
                                     android:textStyle="bold" />
 
                                 <SeekBar
@@ -377,18 +464,21 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dip"
-                            android:layout_marginTop="8dip">
+                            android:layout_marginTop="8dip"
+                            android:orientation="horizontal">
 
                             <RadioButton
                                 android:id="@+id/rbDontExpireActAddNewStep"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
+                                android:layout_weight="1"
                                 android:text="@string/rbDontExpireActSettingsDefaultDuration" />
 
                             <RadioButton
                                 android:id="@+id/rbExpireActAddNewStep"
-                                android:layout_width="wrap_content"
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
+                                android:layout_weight="1"
                                 android:text="@string/rbExpireActSettingsDefaultDuration" />
                         </RadioGroup>
 
@@ -421,7 +511,6 @@
                             android:layout_marginTop="8dip"
                             android:background="@color/transparent"
                             android:hint="@string/edtStepNotesHintActAddNewStep"
-                            android:maxLines="4"
                             android:singleLine="false"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 

@@ -17,7 +17,7 @@ import com.github.lzyzsd.circleprogress.Utils;
 import com.greylabs.yoda.R;
 
 public class MyArcProgress extends View {
-    private  float myLeft, myTop, myRight, myBottom;
+    private float myLeft, myTop, myRight, myBottom;
     float padding;
     private Paint paint;
     protected Paint textPaint;
@@ -356,8 +356,8 @@ public class MyArcProgress extends View {
 
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         padding = strokeWidth;
-        myLeft = this.strokeWidth/2;
-        myRight = ((float) MeasureSpec.getSize(widthMeasureSpec) - this.strokeWidth/2);
+        myLeft = this.strokeWidth / 2;
+        myRight = ((float) MeasureSpec.getSize(widthMeasureSpec) - this.strokeWidth / 2);
         float height = (float) MeasureSpec.getSize(heightMeasureSpec);
         myTop = (height / 2) - ((myRight - myLeft) / 2);
         myBottom = (height / 2) + ((myRight - myLeft) / 2);
@@ -401,20 +401,24 @@ public class MyArcProgress extends View {
             this.textPaint.setColor(this.textColor);
             this.textPaint.setTextSize(this.textSize);
             bottomTextBaseline = this.textPaint.descent() + this.textPaint.ascent();
-            float textBaseline = (rectF.bottom / 3.0F) - bottomTextBaseline;
+            float textBaseline = (rectF.bottom / 2.0F) - bottomTextBaseline;
             canvas.drawText(stepName, rectF.centerX() - (this.textPaint.measureText(stepName) / 2.0F), textBaseline, this.textPaint);
-            textBaseline = (rectF.bottom * 2/ 3) - bottomTextBaseline;
+            textBaseline = (rectF.bottom * 3 / 5) - bottomTextBaseline;
             if (goalName == null)
                 goalName = "";
             canvas.drawText(goalName, rectF.centerX() - (this.textPaint.measureText(goalName) / 2.0F), textBaseline, this.textPaint);
         }
 
         if (!TextUtils.isEmpty(this.getBottomText())) {
+            this.textPaint.setTextSize(this.textSize - 10);
+            bottomTextBaseline = this.textPaint.descent() + this.textPaint.ascent();
+            float textBaseline = (rectF.bottom * 6 / 7) - bottomTextBaseline;
+            canvas.drawText("Steps Remaining", rectF.centerX() - (this.textPaint.measureText("Steps Remaining") / 2.0F), textBaseline, this.textPaint);
+
             this.textPaint.setTextSize(this.bottomTextSize);
             bottomTextBaseline = (rectF.bottom - 2 * strokeWidth) - ((this.textPaint.descent() + this.textPaint.ascent()) / 2.0F);
-            canvas.drawText(this.getBottomText(), (myRight - this.textPaint.measureText(this.getBottomText())) / 2.0F, bottomTextBaseline, this.textPaint);
+            canvas.drawText(this.getBottomText(), rectF.centerX() - (this.textPaint.measureText(this.getBottomText()) / 2.0F), bottomTextBaseline, this.textPaint);
         }
-
     }
 
     protected Parcelable onSaveInstanceState() {

@@ -248,11 +248,14 @@ public class Dialogues {
                     }
                     break;
                 case R.id.btnLogExcuseNowNotification:
+
+                    // Logging the missed steps notes along with the date
+
                     String notesString = pendingStep.getNotes();
-                    if (notesString != null)
-                        notesString = notesString + "\r\n" + (edtExcuse.getText().toString());
+                    if(notesString == null)
+                        notesString = (edtExcuse.getText().toString()) + " - " + CalendarUtils.getFormattedDateWithSlot(new Date());
                     else
-                        notesString = "";
+                        notesString = (edtExcuse.getText().toString()) + " - " + CalendarUtils.getFormattedDateWithSlot(new Date()) + "\r\n" + notesString;
                     Log.i("Excuse entered", notesString);
                     pendingStep.setNotes(notesString);
                     pendingStep.save();

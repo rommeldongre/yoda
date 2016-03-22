@@ -11,12 +11,17 @@ import com.greylabs.yoda.utils.Constants;
 
 public class PagerAdapterActFiltersNew extends FragmentPagerAdapter
 {
-    private final String[] titles = {"Done", "Today", "This Week", "This Month", "This Quarter", "This Year", "Never"};
+
+    // The title of the tabs are coming from the class which is calling this adapter
+    // because there the list of titles is needed
+
+    private String[] titles;
 
     FragFilterFinal fragFilter;
 
-    public PagerAdapterActFiltersNew(FragmentManager fm) {
+    public PagerAdapterActFiltersNew(FragmentManager fm, String[] titles) {
         super(fm);
+        this.titles = titles;
     }
 
     public FragFilterFinal getFragFilterNew() { return fragFilter; }
