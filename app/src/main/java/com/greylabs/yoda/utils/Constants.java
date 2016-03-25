@@ -136,4 +136,7 @@ public class Constants {
     public static final String LAST_SYNC_DATE = "lastSyncDate";
     public static final String GOOGLE_TASK_NEEDS_ACTION = "needsAction";
     public static final String GOOGLE_TASK_COMPLETED = "completed";
+
+    public static final String PULL_BACK_A_STEP = "Current Slot Is Empty. Pull Back A Step.";
+    public static final String NUMBER_OF_DAYS_TO_EXPORT = "Number of days to export";
 }

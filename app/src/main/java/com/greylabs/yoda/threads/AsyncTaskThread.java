@@ -3,6 +3,7 @@ package com.greylabs.yoda.threads;
 import android.app.Activity;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 
@@ -18,11 +19,14 @@ public class AsyncTaskThread extends AsyncTask<Void, Void, Integer> {
     Context context;
     Handler myHandler;
     int OPERATION;
+    int NUMBER_OF_DAYS_TO_EXPORT;
 
-    public AsyncTaskThread(Context activityContext, Handler handler, int OPERATION) {
+    public AsyncTaskThread(Context activityContext, Handler handler, int OPERATION, Bundle bundle) {
         this.context = activityContext;
         this.myHandler = handler;
         this.OPERATION = OPERATION;
+        if(bundle != null)
+            NUMBER_OF_DAYS_TO_EXPORT = bundle.getInt(Constants.NUMBER_OF_DAYS_TO_EXPORT);
     }
 
     @Override
@@ -44,7 +48,8 @@ public class AsyncTaskThread extends AsyncTask<Void, Void, Integer> {
                     break;
 
                 case Constants.OPERATION_EXPORT:
-                    googleAccount.doExport();
+                    googleAccount = new GoogleAccount(context, NUMBER_OF_DAYS_TO_EXPORT);
+                    googleAccount.exportToCalendar();
                     break;
             }
         } catch (UserRecoverableAuthIOException e) {
@@ -61,7 +66,6 @@ public class AsyncTaskThread extends AsyncTask<Void, Void, Integer> {
     @Override
     protected void onPostExecute(Integer result) {
         super.onPostExecute(result);
-        Logger.d("Import(1) / Export(2) done :", " " + OPERATION);
         Message message = new Message();
         message.obj = result;
         myHandler.sendMessage(message);

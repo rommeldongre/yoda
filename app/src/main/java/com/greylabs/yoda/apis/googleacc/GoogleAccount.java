@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 
@@ -14,6 +16,9 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.util.DateTime;
+import com.google.api.services.calendar.CalendarScopes;
+import com.google.api.services.calendar.model.Event;
+import com.google.api.services.calendar.model.EventDateTime;
 import com.google.api.services.tasks.TasksScopes;
 import com.google.api.services.tasks.model.Task;
 import com.google.api.services.tasks.model.TaskList;
@@ -21,6 +26,7 @@ import com.google.api.services.tasks.model.TaskLists;
 import com.google.api.services.tasks.model.Tasks;
 import com.greylabs.yoda.apis.Sync;
 import com.greylabs.yoda.apis.TaskAccount;
+import com.greylabs.yoda.database.MetaData;
 import com.greylabs.yoda.models.Goal;
 import com.greylabs.yoda.models.PendingStep;
 import com.greylabs.yoda.models.TimeBox;
@@ -32,9 +38,11 @@ import com.greylabs.yoda.utils.Logger;
 import com.greylabs.yoda.utils.Prefs;
 
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -60,9 +68,17 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
     private Prefs prefs;
     DateTime lastSyncDate=null;
 
+    int NUMBER_OF_DAYS_TO_EXPORT;
+
     public GoogleAccount(Context context) {
         super(context);
         prefs = Prefs.getInstance(context);
+    }
+
+    public GoogleAccount(Context context, int NUMBER_OF_DAYS_TO_EXPORT){
+        super(context);
+        prefs = Prefs.getInstance(context);
+        this.NUMBER_OF_DAYS_TO_EXPORT = NUMBER_OF_DAYS_TO_EXPORT;
     }
 
     public List<String> getUsers() {
@@ -355,6 +371,44 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
         exportGoals();
     }
 
+    public void exportToCalendar() throws IOException{
+
+        credential = GoogleAccountCredential.usingOAuth2(context, Collections.singletonList(CalendarScopes.CALENDAR));
+        credential.setSelectedAccountName(prefs.getDefaultAccountEmailId());
+
+        com.google.api.services.calendar.Calendar calendar = new com.google.api.services.calendar.Calendar.Builder(httpTransport,
+                jsonFactory, credential)
+                .setApplicationName("Yoda").build();
+
+        ArrayList<PendingStep> pendingSteps= new PendingStep(context).getAllPendingStepsByStatus(PendingStep.PendingStepStatus.TODO, MetaData.TablePendingStep.stepDate + " desc ");
+
+        long millisInDay = 60 * 60 * 24 * 1000;
+        long currentTime = new Date().getTime();
+        long dateOnly = (currentTime / millisInDay) * millisInDay;
+
+        for (PendingStep ps : pendingSteps){
+
+            if(compareDateTime(new DateTime(false, (new Date(dateOnly)).getTime() + NUMBER_OF_DAYS_TO_EXPORT * 24 * 60 * 60 * 1000, 0), new DateTime(false, ps.getStepDate().getTime(), 0))) {
+
+                Event event = new Event()
+                        .setSummary(ps.getNickName());
+
+                EventDateTime start = new EventDateTime().setDateTime(new DateTime(false, ps.getStepDate().getTime(), 0));
+                event.setStart(start);
+
+                EventDateTime end = new EventDateTime().setDateTime(new DateTime(false, ps.getStepDate().getTime() + 3 * 3600 * 1000, 0));
+                event.setEnd(end);
+
+                String calendarId = "primary";
+
+                event = calendar.events().insert(calendarId, event).execute();
+                Log.e(TAG, event.getHtmlLink());
+            }
+
+        }
+
+    }
+
     private void exportGoals() throws IOException {
         YodaCalendar yodaCalendar = new YodaCalendar(context);
         Goal goal = new Goal(context);
@@ -375,11 +429,9 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                     g.setPendingStepGoalStringId(g.getStringId());
                 } else {
                     //for old goals that are present at server side,
-                    if (!g.getStringId().equals("@default")) {
                         TaskList result = service.tasklists().get(g.getStringId()).execute();
                         if (compareDateTime(g.getUpdated(), result.getUpdated())) {
                             Logger.d(TAG, "Goal:::App has Latest Data: Server Update:" + result.getUpdated() + " App Update:" + g.getUpdated());
-                            if (!g.getStringId().equals("@default")) {
                                 if (g.isDeleted()) {
                                     GoalUtils.clearAlarms(g,context);
                                     yodaCalendar.detachTimeBox(goal.getTimeBoxId());
@@ -391,10 +443,7 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                                     g.setUpdated(result.getUpdated());
                                     g.save();
                                 }
-                            }
                         }
-
-                    }
                 }
                 exportPendingSteps(g);
             }
@@ -416,7 +465,7 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
             Iterator<PendingStep> it=pendingSteps.iterator();
             while (it.hasNext()){
                 PendingStep ps=it.next();
-                if(prefs.getLastSyncDate()!=null && compareDateTime(ps.getUpdated(),prefs.getLastSyncDate())==false){
+                if(prefs.getLastSyncDate()!=null && !compareDateTime(ps.getUpdated(), prefs.getLastSyncDate())){
                     it.remove();
                 }
             }

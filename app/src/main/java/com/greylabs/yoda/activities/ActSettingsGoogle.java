@@ -167,23 +167,25 @@ public class ActSettingsGoogle extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(final View v) {
         if (ConnectionUtils.isNetworkAvailable(this)) {
+            Bundle bundle = new Bundle();
             switch (v.getId()) {
                 case R.id.btnSyncNowWithGoogleActSettingsGoogle:
                     showSyncProgress(true);
                     lastSelectedOperation=Constants.OPERATION_SYNC_NOW;
-                    new AsyncTaskThread(this, new MyHandler(), Constants.OPERATION_SYNC_NOW).execute();
+                    new AsyncTaskThread(this, new MyHandler(), Constants.OPERATION_SYNC_NOW, bundle).execute();
                     break;
 
                 case R.id.btnImportNowFromGTasksActSettingsGoogle:
                     showImportProgress(true);
                     lastSelectedOperation= Constants.OPERATION_IMPORT;
-                    new AsyncTaskThread(this, new MyHandler(), Constants.OPERATION_IMPORT).execute();
+                    new AsyncTaskThread(this, new MyHandler(), Constants.OPERATION_IMPORT, bundle).execute();
                     break;
 
                 case R.id.btnExportNowToGoogleCalActSettingsGoogle:
                     showExportProgress(true);
                     lastSelectedOperation=Constants.OPERATION_EXPORT;
-                    new AsyncTaskThread(this, new MyHandler(), Constants.OPERATION_EXPORT).execute();
+                    bundle.putInt(Constants.NUMBER_OF_DAYS_TO_EXPORT, sbExportToCalendar.getProgress());
+                    new AsyncTaskThread(this, new MyHandler(), Constants.OPERATION_EXPORT, bundle).execute();
                     break;
 
                 case R.id.btnAddAccountFlipperEmptyViewActGoogleSettings:

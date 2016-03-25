@@ -301,7 +301,7 @@ public class ActHome extends AppCompatActivity implements View.OnClickListener, 
                     dialogues.showNowNotificationDialogue(Constants.ACT_HOME, null, PendingStep.PendingStepStartEnd.START, nowPendingStep);
                 } else {
                     new AlertDialog.Builder(this)
-                            .setMessage("Current Slot Is Empty. Pull Back A Step.")
+                            .setMessage(Constants.PULL_BACK_A_STEP)
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
