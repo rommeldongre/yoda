@@ -3,6 +3,7 @@ package com.greylabs.yoda.utils;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
 
 import com.google.api.client.util.DateTime;
 import com.greylabs.yoda.R;
@@ -10,6 +11,8 @@ import com.greylabs.yoda.R;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Prefs  {
     public static final String TAG="Prefs";
@@ -197,5 +200,19 @@ public class Prefs  {
 
     public DateTime getLastSyncDate(){
        return CalendarUtils.getStringToRFCTimestamp(systemPrefs.getString(Constants.LAST_SYNC_DATE,null));
+    }
+
+    public void setExcuseHistory(Set<String> history){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            editor.putStringSet(Constants.HISTORY_OF_EXCUSE, history);
+            editor.commit();
+        }
+    }
+
+    public Set<String> getExcuseHistory(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            return systemPrefs.getStringSet(Constants.HISTORY_OF_EXCUSE, null);
+        }
+        return null;
     }
 }

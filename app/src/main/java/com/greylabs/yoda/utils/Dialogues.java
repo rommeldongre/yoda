@@ -9,11 +9,15 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -32,6 +36,8 @@ import com.greylabs.yoda.threads.CalendarUpdateAsyncThread;
 import com.greylabs.yoda.threads.InitCalendarAsyncTask;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Dialogues {
 
@@ -45,8 +51,12 @@ public class Dialogues {
     AlarmScheduler alarmScheduler;
     LinearLayout llButtons;
     LinearLayout llExcuseLog;
-    EditText edtExcuse;
+    AutoCompleteTextView edtExcuse;
     String caller;
+
+    private Set<String> history = new HashSet<>();
+    private ArrayAdapter<String> adapter;
+    private Prefs prefs;
 
     public Dialogues(Context passedContext) {
         this.context = passedContext;
@@ -103,7 +113,23 @@ public class Dialogues {
 
         TextView tvGoalName = (TextView) viewGroup.findViewById(R.id.tvGoalNameNowNotification);
         TextView tvStepName = (TextView) viewGroup.findViewById(R.id.tvStepNameNowNotification);
-        edtExcuse = (EditText) viewGroup.findViewById(R.id.edtExcuseNowNotification);
+
+        prefs = Prefs.getInstance(context);
+        if(prefs.getExcuseHistory() != null)
+            history = prefs.getExcuseHistory();
+
+        edtExcuse = (AutoCompleteTextView) viewGroup.findViewById(R.id.edtExcuseNowNotification);
+        adapter = new ArrayAdapter<>(context, android.R.layout.simple_list_item_1, history.toArray(new String[history.size()]));
+        edtExcuse.setAdapter(adapter);
+
+        edtExcuse.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                edtExcuse.showDropDown();
+                return false;
+            }
+        });
+
         LinearLayout llDidIt = (LinearLayout) viewGroup.findViewById(R.id.llDidNowNotification);
         LinearLayout llDoingIt = (LinearLayout) viewGroup.findViewById(R.id.llDoingItNowNotification);
         LinearLayout llMissedIt = (LinearLayout) viewGroup.findViewById(R.id.llMissedNowNotification);
@@ -256,6 +282,10 @@ public class Dialogues {
                         notesString = (edtExcuse.getText().toString()) + " - " + CalendarUtils.getFormattedDateWithSlot(new Date());
                     else
                         notesString = (edtExcuse.getText().toString()) + " - " + CalendarUtils.getFormattedDateWithSlot(new Date()) + "\r\n" + notesString;
+
+                    addSearchInput((edtExcuse.getText().toString()));
+                    prefs.setExcuseHistory(history);
+
                     Log.i("Excuse entered", notesString);
                     pendingStep.setNotes(notesString);
                     pendingStep.save();
@@ -277,6 +307,15 @@ public class Dialogues {
 //            if(startEnd== PendingStep.PendingStepStartEnd.END){
 //                checkExpiryOfStep();
 //            }
+        }
+    }
+
+    private void addSearchInput(String input)
+    {
+        if (!history.contains(input))
+        {
+            history.add(input);
+            adapter.notifyDataSetChanged();
         }
     }
 
