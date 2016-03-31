@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.greylabs.yoda">
+    package="com.greylabs.ydo">
 
     <!-- App Permissions-->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -19,14 +19,14 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
-        android:name=".activities.Yoda"
+        android:name="com.greylabs.ydo.activities.Yoda"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher_yoda"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <!-- Activities -->
         <activity
-            android:name=".activities.ActSplashScreen"
+            android:name="com.greylabs.ydo.activities.ActSplashScreen"
             android:label="@string/app_name"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait">
@@ -37,7 +37,7 @@
         </activity>
 
         <activity
-            android:name=".activities.ActAddNewGoal"
+            android:name="com.greylabs.ydo.activities.ActAddNewGoal"
             android:launchMode="singleTop"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -51,62 +51,62 @@
         </activity>
 
         <activity
-            android:name=".apis.TasksSample"
+            android:name="com.greylabs.ydo.apis.TasksSample"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.ActHome"
+            android:name="com.greylabs.ydo.activities.ActHome"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.ActQuickStart"
+            android:name="com.greylabs.ydo.activities.ActQuickStart"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.ActAddTimeBox"
+            android:name="com.greylabs.ydo.activities.ActAddTimeBox"
             android:screenOrientation="portrait" />
         <!--<activity-->
         <!--android:name=".activities.ActAddNewGoal"-->
         <!--android:screenOrientation="portrait" />-->
         <activity
-            android:name=".activities.ActGoalDetailsOld"
+            android:name="com.greylabs.ydo.activities.ActGoalDetailsOld"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.ActAddNewStep"
+            android:name="com.greylabs.ydo.activities.ActAddNewStep"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateAlwaysHidden" />
         <activity
-            android:name=".activities.ActStepList"
+            android:name="com.greylabs.ydo.activities.ActStepList"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.ActGoalList"
+            android:name="com.greylabs.ydo.activities.ActGoalList"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.ActTimeBoxList"
+            android:name="com.greylabs.ydo.activities.ActTimeBoxList"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.ActFilters"
+            android:name="com.greylabs.ydo.activities.ActFilters"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.ActNowFilter"
+            android:name="com.greylabs.ydo.activities.ActNowFilter"
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@style/MyDialogueTheme" />
         <activity
-            android:name=".activities.ActSettingChangeWallpaper"
+            android:name="com.greylabs.ydo.activities.ActSettingChangeWallpaper"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.ActSettingDefaultDuration"
+            android:name="com.greylabs.ydo.activities.ActSettingDefaultDuration"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.ActSettingsGoogle"
+            android:name="com.greylabs.ydo.activities.ActSettingsGoogle"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activities.ActGoalDetails"
+            android:name="com.greylabs.ydo.activities.ActGoalDetails"
             android:screenOrientation="portrait" />
 
 
         <!-- Receivers and Services-->
-        <service android:name=".scheduler.AlarmService" />
-        <receiver android:name=".scheduler.AlarmReceiver" />
+        <service android:name="com.greylabs.ydo.scheduler.AlarmService" />
+        <receiver android:name="com.greylabs.ydo.scheduler.AlarmReceiver" />
 
         <!--<service android:name=".scheduler.DateChangeService"/>-->
         <!--<receiver android:name=".scheduler.DayChangeReceiver"/>-->
@@ -118,8 +118,8 @@
         <!--</receiver>-->
 
 
-        <service android:name=".scheduler.BootCompleteService" />
-        <receiver android:name=".scheduler.BootCompleteReceiver">
+        <service android:name="com.greylabs.ydo.scheduler.BootCompleteService" />
+        <receiver android:name="com.greylabs.ydo.scheduler.BootCompleteReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>

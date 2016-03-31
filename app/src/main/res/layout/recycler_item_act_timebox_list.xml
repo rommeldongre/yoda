@@ -35,7 +35,7 @@
             android:background="@drawable/ic_btn_delete_gray" />
         <!--android:layout_toLeftOf="@+id/btnEditTimeBoxRecyclerItemActTimeBoxList"-->
 
-        <com.greylabs.yoda.views.CircleView
+        <com.greylabs.ydo.views.CircleView
             android:id="@+id/btnBulletRecyclerItemActTimeBoxList"
             android:layout_width="30dp"
             android:layout_height="30dp"

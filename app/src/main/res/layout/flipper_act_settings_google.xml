@@ -109,7 +109,7 @@
                     android:layout_centerVertical="true"
                     android:text="@string/tvSyncNowActSettingsGoogle" />
 
-                <com.greylabs.yoda.views.MyFloatingActionButton
+                <com.greylabs.ydo.views.MyFloatingActionButton
                     android:id="@+id/btnSyncNowWithGoogleActSettingsGoogle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -165,7 +165,7 @@
                     android:layout_centerVertical="true"
                     android:text="@string/btnImportNowFromGTasksActSettingsGoogle" />
 
-                <com.greylabs.yoda.views.MyFloatingActionButton
+                <com.greylabs.ydo.views.MyFloatingActionButton
                     android:id="@+id/btnImportNowFromGTasksActSettingsGoogle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -263,7 +263,7 @@
                         android:layout_centerVertical="true"
                         android:text="@string/btnExportNowToGoogleCalActSettingsGoogle" />
 
-                    <com.greylabs.yoda.views.MyFloatingActionButton
+                    <com.greylabs.ydo.views.MyFloatingActionButton
                         android:id="@+id/btnExportNowToGoogleCalActSettingsGoogle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

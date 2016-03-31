@@ -45,7 +45,7 @@
             android:background="@drawable/ic_btn_delete_gray" />
         <!--android:background="@android:drawable/ic_menu_delete"-->
 
-        <com.greylabs.yoda.views.CircleView
+        <com.greylabs.ydo.views.CircleView
             android:id="@+id/btnBulletRecyclerItemActGoalList"
             android:layout_width="30dp"
             android:layout_height="30dp"
