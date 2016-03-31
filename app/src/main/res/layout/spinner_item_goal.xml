@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:minHeight="45dp" >
 
-    <com.greylabs.yoda.views.CircleView
+    <com.greylabs.ydo.views.CircleView
         android:id="@+id/btnBulletSpinnerItemActAddNewStep"
         android:layout_width="25dp"
         android:layout_height="25dp"

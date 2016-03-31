@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Yoda</string>
+    <string name="app_name">Y.Do</string>
     <string name="title_activity_act_create_time_box">Create TimeBox</string>
 
     <string name="action_settings">Settings</string>
@@ -162,7 +162,7 @@
     <string name="error_format">[Error] %s</string>
     <string name="btnResetYodaActSettingsDefaultDuration">Reset Application</string>
     <string name="label_loading_act_splash_screen">Loading...</string>
-    <string name="label_comapny_info1">YodA - You can DO Anything</string>
+    <string name="label_comapny_info1">Y.Do - Why DO Anything</string>
     <string name="label_comapny_info2">© Grey Labs, LLP. All Rights Reserved.</string>
     <string name="edtExcuseDialogueExcuse">What\'s your excuse</string>
     <string name="btnLogDialogueExcuse">Log</string>

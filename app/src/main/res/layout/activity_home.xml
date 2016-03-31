@@ -26,7 +26,7 @@
             android:layout_marginRight="15dp"
             android:layout_marginEnd="15dp">
 
-        <com.greylabs.yoda.views.MyFloatingActionsMenu
+        <com.greylabs.ydo.views.MyFloatingActionsMenu
             android:id="@+id/btnSettingsActHome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
                 <!--fab:fab_colorNormal="@color/transperent_total_arc_background"-->
                 <!--fab:fab_colorPressed="@color/transperent_more"-->
                 <!--fab:fab_title="My Goals"/>-->
-            <com.greylabs.yoda.views.MyFloatingActionButton
+            <com.greylabs.ydo.views.MyFloatingActionButton
                 android:id="@+id/addNewGoal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
                 fab:fab_colorPressed="@color/transparent_more"
                 fab:fab_title="New Goal"/>
 
-            <com.greylabs.yoda.views.MyFloatingActionButton
+            <com.greylabs.ydo.views.MyFloatingActionButton
                 android:id="@+id/btnMyTimeBoxesActHome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -67,7 +67,7 @@
                 fab:fab_colorPressed="@color/transparent_more"
                 fab:fab_title="My TimeBoxes"/>
 
-            <com.greylabs.yoda.views.MyFloatingActionButton
+            <com.greylabs.ydo.views.MyFloatingActionButton
                 android:id="@+id/btnDefaultDurationActHome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -77,7 +77,7 @@
                 fab:fab_colorPressed="@color/transparent_more"
                 fab:fab_title="Default Duration"/>
 
-            <com.greylabs.yoda.views.MyFloatingActionButton
+            <com.greylabs.ydo.views.MyFloatingActionButton
                 android:id="@+id/btnGoogleSettingsActHome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -107,7 +107,7 @@
                 <!--fab:fab_colorPressed="@color/transperent_more"-->
                 <!--fab:fab_title="Import from Google Tasks"/>-->
 
-            <com.greylabs.yoda.views.MyFloatingActionButton
+            <com.greylabs.ydo.views.MyFloatingActionButton
                 android:id="@+id/btnChangeWallpaperActHome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -116,7 +116,7 @@
                 fab:fab_colorNormal="@color/transparent_total_arc_background"
                 fab:fab_colorPressed="@color/transparent_more"
                 fab:fab_title="@string/btnChangeWallpaperActHome" />
-        </com.greylabs.yoda.views.MyFloatingActionsMenu>
+        </com.greylabs.ydo.views.MyFloatingActionsMenu>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -160,7 +160,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true">
 
-                <com.greylabs.yoda.views.MyFloatingActionButton
+                <com.greylabs.ydo.views.MyFloatingActionButton
                     android:id="@+id/btnAddStepActHome"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -188,7 +188,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true">
 
-                <com.greylabs.yoda.views.MyFloatingActionButton
+                <com.greylabs.ydo.views.MyFloatingActionButton
                     android:id="@+id/btnFilterActHome"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -212,7 +212,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true">
 
-                <com.greylabs.yoda.views.MyFloatingActionButton
+                <com.greylabs.ydo.views.MyFloatingActionButton
                     android:id="@+id/btnMyGoalsActHome"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -240,7 +240,7 @@
                 android:layout_below="@id/scrollViewActHome"
                 android:layout_margin="10dp">
 
-                <com.greylabs.yoda.views.MyArcProgress
+                <com.greylabs.ydo.views.MyArcProgress
                     android:id="@+id/arcTotalProgressActHome"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />

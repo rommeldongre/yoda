@@ -36,7 +36,7 @@
                         android:text="@string/label_pick_color_act_create_time_box"
                         android:layout_marginBottom="5dp" />
 
-                    <com.greylabs.yoda.utils.colorpicker.LineColorPicker
+                    <com.greylabs.ydo.utils.colorpicker.LineColorPicker
                         android:id="@+id/colorPickerActCreateTimeBox"
                         android:layout_width="match_parent"
                         android:layout_height="30dp"

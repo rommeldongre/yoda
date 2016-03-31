@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:minHeight="60dp">
 
-        <com.greylabs.yoda.views.TouchCheckBox
+        <com.greylabs.ydo.views.TouchCheckBox
             android:id="@+id/cbRecyclerItemFragFilterNew"
             android:layout_width="30dp"
             android:layout_height="30dp"
