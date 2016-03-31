@@ -23,6 +23,8 @@ public enum TimeBoxWhen {
     private int startTime;
     private int endTime;
 
+    static long SLOT_LENGTH = 3 * 3600 * 1000;
+
     /**********************************************************************************************/
     //Getters and Setters
     /**********************************************************************************************/
@@ -117,5 +119,9 @@ public enum TimeBoxWhen {
             case LATE_NIGHT:intValue=5;break;
         }
         return intValue;
+    }
+
+    public static long getSlotLength(){
+        return SLOT_LENGTH;
     }
 }

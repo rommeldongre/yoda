@@ -25,6 +25,7 @@ import com.google.api.services.tasks.model.TaskLists;
 import com.greylabs.ydo.apis.Sync;
 import com.greylabs.ydo.apis.TaskAccount;
 import com.greylabs.ydo.database.MetaData;
+import com.greylabs.ydo.enums.TimeBoxWhen;
 import com.greylabs.ydo.models.Goal;
 import com.greylabs.ydo.models.PendingStep;
 import com.greylabs.ydo.models.TimeBox;
@@ -86,7 +87,7 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
         credential = GoogleAccountCredential.usingOAuth2(context, Collections.singleton(TasksScopes.TASKS));
         credential.setSelectedAccountName(prefs.getDefaultAccountEmailId());
         service = new com.google.api.services.tasks.Tasks.Builder(httpTransport, jsonFactory, credential)
-                .setApplicationName("Yoda").build();
+                .setApplicationName("ydo").build();
         //((Activity)context).startActivity(credential.newChooseAccountIntent());
     }
 
@@ -374,13 +375,16 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
 
         com.google.api.services.calendar.Calendar calendar = new com.google.api.services.calendar.Calendar.Builder(httpTransport,
                 jsonFactory, credential)
-                .setApplicationName("Yoda").build();
+                .setApplicationName("ydo").build();
 
         ArrayList<PendingStep> pendingSteps= new PendingStep(context).getAllPendingStepsByStatus(PendingStep.PendingStepStatus.TODO, MetaData.TablePendingStep.stepDate + " desc ");
 
         long MILLIS_IN_DAY = 60 * 60 * 24 * 1000;
+        long SLOT_LENGTH = TimeBoxWhen.getSlotLength();
         long currentTime = new Date().getTime();
         long dateOnly = (currentTime / MILLIS_IN_DAY) * MILLIS_IN_DAY;
+
+        String CALENDAR_ID = "primary";
 
         for (PendingStep ps : pendingSteps){
 
@@ -395,12 +399,10 @@ public class GoogleAccount extends TaskAccount implements Sync, DialogInterface.
                     EventDateTime start = new EventDateTime().setDateTime(new DateTime(false, ps.getStepDate().getTime(), 0));
                     event.setStart(start);
 
-                    EventDateTime end = new EventDateTime().setDateTime(new DateTime(false, ps.getStepDate().getTime() + 3 * 3600 * 1000, 0));
+                    EventDateTime end = new EventDateTime().setDateTime(new DateTime(false, ps.getStepDate().getTime() + SLOT_LENGTH, 0));
                     event.setEnd(end);
 
-                    String calendarId = "primary";
-
-                    event = calendar.events().insert(calendarId, event).execute();
+                    event = calendar.events().insert(CALENDAR_ID, event).execute();
                     Log.e(TAG, event.getHtmlLink());
                 }
             }catch(Exception e){
