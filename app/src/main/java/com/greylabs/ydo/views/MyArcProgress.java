@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.text.TextPaint;
@@ -380,12 +381,6 @@ public class MyArcProgress extends View {
         paintBackgroundCircle.setColor(this.backgroundCircleColor);
         canvas.drawCircle(rectF.centerX(), rectF.centerY(), (myBottom - myTop) / 2.0F, paintBackgroundCircle);
 
-        // divider line
-        Paint paintLine = new Paint();
-        paintLine.setColor(this.dividerColor);
-        paintLine.setStrokeWidth(2);
-        canvas.drawLine(rectF.left + this.getStrokeWidth() * 2, rectF.centerY(), rectF.right - this.getStrokeWidth() * 2, rectF.centerY(), paintLine);
-
         // two arcs
         this.paint.setColor(this.unfinishedStrokeColor);
         this.paint.setStrokeCap(Paint.Cap.BUTT);
@@ -406,10 +401,14 @@ public class MyArcProgress extends View {
             textBaseline = (rectF.bottom * 3 / 5) - bottomTextBaseline;
             if (goalName == null)
                 goalName = "";
+            // for goal change the font to italics
+            this.textPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.ITALIC));
             canvas.drawText(goalName, rectF.centerX() - (this.textPaint.measureText(goalName) / 2.0F), textBaseline, this.textPaint);
         }
 
         if (!TextUtils.isEmpty(this.getBottomText())) {
+            // change back the typeface to normal
+            this.textPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.NORMAL));
             this.textPaint.setTextSize(this.textSize - 10);
             bottomTextBaseline = this.textPaint.descent() + this.textPaint.ascent();
             float textBaseline = (rectF.bottom * 6 / 7) - bottomTextBaseline;
